@@ -105,7 +105,7 @@ module.exports = function (RED) {
         }
 
         function onInput(msg) {
-            msg.topic = node.topic;
+            //msg.topic = node.topic;
             var _msg = RED.util.cloneMessage(msg);
 
             var FORGE = node.forgeCredentials ? node.forgeCredentials.FORGE : null;

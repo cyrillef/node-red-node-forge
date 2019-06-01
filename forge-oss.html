@@ -76,7 +76,7 @@
             <label for="node-input-bucket"><i class="fa fa-folder"></i> <span data-i18n="forge.label.bucket"></span></label>
             <input type="text" id="node-input-bucket" data-i18n="[placeholder]forge.placeholder.bucket"
                 style="width: 70%;" />
-            <input type="hidden" id="node-input-bucket-Type" />
+            <input type="hidden" id="node-input-bucketType" />
         </div>
         <div id="KeyAttr" class="form-row node-input-key hiddenAttrs">
             <label for="node-input-key"><i class="fa fa-tag"></i> <span data-i18n="forge.label.key"></span></label>
@@ -227,7 +227,17 @@
             },
             bucket: {
                 required: true,
-                value: "FORGE_BUCKET"
+                value: "FORGE_BUCKET",
+                //validate: RED.validators.typedInput("bucketType")
+                validate: function (v) {
+                    var regex = new RegExp('^[-_.a-z0-9]{3,128}$');
+                    var bucketType = $("#node-input-bucketType").val() || this.bucketType;
+                    return (
+                        RED.validators.typedInput("bucketType")() &&
+                        ((bucketType === "str" && regex.test(v)) ||
+                            (bucketType === "env"))
+                    );
+                }
             },
             bucketType: {
                 value: "env"
@@ -278,16 +288,34 @@
                 this.bucketType = "str";
             }
 
-            $("#node-input-bucket-Type").val(this.bucketType);
+            $("#node-input-bucketType").val(this.bucketType);
             $("#node-input-bucket").typedInput({
                 default: 'env',
-                typeField: $("#node-input-bucket-Type"),
-                types: ['str', 'env']
+                typeField: $("#node-input-bucketType"),
+                types: [/*'flow', 'global',*/ 'str', 'env']
             });
             $("#node-input-bucket").typedInput('type', this.bucketType);
         },
         oneditsave: function () {
-            this.bucketType = $("#node-input-bucket-Type").val();
+            //this.bucketType = $("#node-input-bucketType").val();
+
+            var trimFields = [
+                "bucket",
+                "key",
+                "copySource",
+                "limit",
+                "startAt",
+                "localFilename",
+                "range",
+                "ifNoneMatch",
+                "ifModifiedSince"
+            ];
+            // Just in case any whitespace has crept in with the copy-paste of the fields
+            trimFields.forEach(function (field) {
+                var v = $("#node-input-" + field).val();
+                v = v.trim();
+                $("#node-input-" + field).val(v);
+            });
         }
     });
 </script>

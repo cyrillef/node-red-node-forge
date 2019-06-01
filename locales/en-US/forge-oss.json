@@ -1,6 +1,7 @@
 {
 	"forge": {
 		"label": {
+			"forge": "Forge",
 			"name": "Name",
 			"topic": "Topic",
 			"operation": "Operation",
