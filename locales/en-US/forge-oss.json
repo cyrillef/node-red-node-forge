@@ -1,0 +1,62 @@
+{
+	"forge": {
+		"label": {
+			"name": "Name",
+			"operation": "Operation",
+			"bucket": "Bucket",
+			"key": "Key",
+			"copySource": "Source Key",
+			"policyKey": "Policy Key",
+			"limit": "Limit",
+			"startAt": "Start At",
+			"region": "Region",
+			"localFilename": "Local Filename",
+			"range": "Range",
+			"ifNoneMatch": "If-None-Match",
+			"ifModifiedSince": "If-Modified-Since",
+			"acceptEncoding": "Accept-Encoding",
+			"sessionId": "Session ID",
+			"pattern": "Filename Pattern"
+		},
+		"placeholder": {
+			"name": "Name",
+			"bucket": "bucket name",
+			"key": "Key",
+			"copySource": "Source Key",
+			"policyKey": "Policy Key",
+			"limit": "Limit",
+			"startAt": "Start At",
+			"region": "Region",
+			"localFilename": "Local Filename",
+			"range": "Range",
+			"ifNoneMatch": "If-None-Match",
+			"ifModifiedSince": "If-Modified-Since",
+			"acceptEncoding": "Accept-Encoding",
+			"sessionId": "Session ID",
+			"pattern": "Filepattern"
+		},
+		"tip": {
+			"config1": "",
+			"config2": ""
+		},
+		"status": {
+			"initializing": "initializing",
+			"error": "error",
+			"checking-for-changes": "checking for changes",
+			"downloading": "downloading",
+			"checking-credentials": "checking credentials",
+			"uploading": "uploading",
+			"failed": "failed"
+		},
+		"warn": {
+			"missing-credentials": "Missing Forge credentials"
+		},
+		"error": {
+			"failed-to-fetch": "failed to fetch S3 state: __err__",
+			"no-bucket-specified": "No bucket specified",
+			"no-filename-specified": "No filename specified",
+			"download-failed": "download failed: __err__",
+			"aws-s3-error": "Forge error: __err__"
+		}
+	}
+}
