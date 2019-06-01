@@ -2,9 +2,10 @@
 	"forge": {
 		"label": {
 			"name": "Name",
+			"topic": "Topic",
 			"operation": "Operation",
-			"bucket": "Bucket",
-			"key": "Key",
+			"bucket": "Bucket Key",
+			"key": "Object Key",
 			"copySource": "Source Key",
 			"policyKey": "Policy Key",
 			"limit": "Limit",
@@ -20,8 +21,9 @@
 		},
 		"placeholder": {
 			"name": "Name",
-			"bucket": "bucket name",
-			"key": "Key",
+			"topic": "Topic",
+			"bucket": "Bucket Key",
+			"key": "Object Key",
 			"copySource": "Source Key",
 			"policyKey": "Policy Key",
 			"limit": "Limit",
@@ -52,11 +54,12 @@
 			"missing-credentials": "Missing Forge credentials"
 		},
 		"error": {
-			"failed-to-fetch": "failed to fetch S3 state: __err__",
+			"failed-to-fetch": "failed to fetch OSS state: __err__",
 			"no-bucket-specified": "No bucket specified",
 			"no-filename-specified": "No filename specified",
 			"download-failed": "download failed: __err__",
-			"aws-s3-error": "Forge error: __err__"
+			"forge-oss-error": "Forge error: __err__",
+			"unknown-operation": "failed: Operation node defined - __op__"
 		}
 	}
 }

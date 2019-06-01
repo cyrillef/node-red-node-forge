@@ -36,7 +36,8 @@ module.exports = function (RED) {
         // var _outputs = [];
 
         function onInput0(msg) {
-            var _msg = RED.util.cloneMessage(msg);
+            //msg.topic = node.topic;
+            //var _msg = RED.util.cloneMessage(msg);
 
             var FORGE = node.forgeCredentials ? node.forgeCredentials.FORGE : null;
             if (!FORGE) {
@@ -60,6 +61,7 @@ module.exports = function (RED) {
 
                 msg.payload = data;
                 node.status({});
+                msg.topic = node.topic;
                 node.send([msg, null]);
             };
 
@@ -75,9 +77,8 @@ module.exports = function (RED) {
                 });
                 service[node.ossProperties.operation](n, node, FORGE, msg, _cb);
             } else {
-                node.error("failed: Operation node defined - " + node.ossProperties.operation);
+                node.error(RED._("forge.error.unknown-operation", { op: node.ossProperties.operation }));
             }
-
         }
 
         function sendNext(msg, credentials) {
@@ -104,6 +105,7 @@ module.exports = function (RED) {
         }
 
         function onInput(msg) {
+            msg.topic = node.topic;
             var _msg = RED.util.cloneMessage(msg);
 
             var FORGE = node.forgeCredentials ? node.forgeCredentials.FORGE : null;
@@ -131,6 +133,18 @@ module.exports = function (RED) {
     RED.nodes.registerType("forge-oss", ForgeBucketNode);
 
     var service = {};
+
+    service.BucketKey = function (src, out) {
+        try {
+            if ((src.bucketType === null && src.bucket === "") || src.bucketType === 'none') {
+                src.bucketType ="env";
+                src.bucket ="FORGE_BUCKET";
+            }
+            out.bucket =RED.util.evaluateNodeProperty(src.bucket, src.bucketType, src, out);
+        } catch (err) {
+            out.bucket =src.bucket;
+        }
+    };
 
     service.ListBucketsParams = function (n, msg) {
         var params = {};
@@ -175,7 +189,8 @@ module.exports = function (RED) {
 
     service.BucketDetailsParams = function (n, msg) {
         var params = {};
-        service.copyArg(n, "bucket", params, undefined, false);
+        //service.copyArg(n, "bucket", params, undefined, false);
+        service.BucketKey (n, params);
         service.copyArg(msg, "bucket", params, undefined, false);
         return (params);
     };
@@ -192,6 +207,7 @@ module.exports = function (RED) {
             .catch(function (error) {
                 cb(error, null);
             });
+        //cb(null, params);
     };
 
     service.copyArg = function (src, arg, out, outArg, isObject) {

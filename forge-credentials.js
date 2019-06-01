@@ -75,13 +75,13 @@ module.exports = function (RED) {
             // },
             AccessToken: {
                 type: "text"
-            },
-            proxyRequired: {
-                type: "boolean",
-            },
-            proxy: {
-                type: "text"
-            }
+            }//,
+            // proxyRequired: {
+            //     type: "boolean",
+            // },
+            // proxy: {
+            //     type: "text"
+            // }
         }
     });
 

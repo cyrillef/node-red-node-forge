@@ -33,15 +33,12 @@
     </style>
 
     <div class="form-row">
-        <label for="node-input-payload"><i class="fa fa-envelope"></i> <span
-                data-i18n="common.label.payload"></span></label>
-        <input type="text" id="node-input-payload" style="width:70%">
-        <input type="hidden" id="node-input-payloadType">
-    </div>
-
-    <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
+        <input type="text" id="node-input-topic" />
     </div>
     <div class="form-row">
         <label for="node-input-forge"><i class="fa fa-user"></i> <span data-i18n="forge.label.forge"></span></label>
@@ -77,25 +74,27 @@
     <div id="AttrHolder">
         <div id="BucketAttr" class="form-row node-input-bucket hiddenAttrs">
             <label for="node-input-bucket"><i class="fa fa-folder"></i> <span data-i18n="forge.label.bucket"></span></label>
-            <input type="text" id="node-input-bucket" data-i18n="[placeholder]forge.placeholder.bucket">
+            <input type="text" id="node-input-bucket" data-i18n="[placeholder]forge.placeholder.bucket"
+                style="width: 70%;" />
+            <input type="hidden" id="node-input-bucket-Type" />
         </div>
         <div id="KeyAttr" class="form-row node-input-key hiddenAttrs">
             <label for="node-input-key"><i class="fa fa-tag"></i> <span data-i18n="forge.label.key"></span></label>
-            <input type="text" id="node-input-key" data-i18n="[placeholder]forge.placeholder.key">
+            <input type="text" id="node-input-key" data-i18n="[placeholder]forge.placeholder.key" />
         </div>
         <div id="CopySourceAttr" class="form-row hiddenAttrs">
             <label for="node-input-copySource"><i class="fa fa-tag"></i>copySource</label>
-            <input type="text" id="node-input-copySource" placeholder="copySource"></input>
+            <input type="text" id="node-input-copySource" placeholder="copySource" />
         </div>
 
         <div id="LimitAttr" class="form-row node-input-limit hiddenAttrs">
             <label for="node-input-limit"><i class="fa fa-tag"></i> <span data-i18n="forge.label.limit"></span></label>
-            <input type="text" id="node-input-limit" data-i18n="[placeholder]forge.placeholder.limit">
+            <input type="text" id="node-input-limit" data-i18n="[placeholder]forge.placeholder.limit" />
         </div>
         <div id="StartAtAttr" class="form-row node-input-startAt hiddenAttrs">
             <label for="node-input-startAt"><i class="fa fa-tag"></i> <span
                     data-i18n="forge.label.startAt"></span></label>
-            <input type="text" id="node-input-startAt" data-i18n="[placeholder]forge.placeholder.startAt">
+            <input type="text" id="node-input-startAt" data-i18n="[placeholder]forge.placeholder.startAt" />
         </div>
         <div id="PolicyKeyAttr" class="form-row node-input-policyKey hiddenAttrs">
             <label for="node-input-policyKey"><i class="fa fa-tag"></i> <span
@@ -110,23 +109,23 @@
         <div id="LocalFilenameAttr" class="form-row node-input-localFilename hiddenAttrs">
             <label for="node-input-localFilename"><i class="fa fa-file"></i> <span
                     data-i18n="forge.label.localFilename"></span></label>
-            <input type="text" id="node-input-localFilename" data-i18n="[placeholder]forge.placeholder.localFilename">
+            <input type="text" id="node-input-localFilename" data-i18n="[placeholder]forge.placeholder.localFilename" />
         </div>
         <div id="RangeAttr" class="form-row node-input-range hiddenAttrs">
             <label for="node-input-range"><i class="fa fa-file"></i> <span
                     data-i18n="forge.label.range"></span></label>
-            <input type="text" id="node-input-range" data-i18n="[placeholder]forge.placeholder.range">
+            <input type="text" id="node-input-range" data-i18n="[placeholder]forge.placeholder.range" />
         </div>
         <div id="IfNoneMatchAttr" class="form-row node-input-ifNoneMatch hiddenAttrs">
             <label for="node-input-ifNoneMatch"><i class="fa fa-file"></i> <span
                     data-i18n="forge.label.ifNoneMatch"></span></label>
-            <input type="text" id="node-input-ifNoneMatch" data-i18n="[placeholder]forge.placeholder.ifNoneMatch">
+            <input type="text" id="node-input-ifNoneMatch" data-i18n="[placeholder]forge.placeholder.ifNoneMatch" />
         </div>
         <div id="IfModifiedSinceAttr" class="form-row node-input-ifModifiedSince hiddenAttrs">
             <label for="node-input-ifModifiedSince"><i class="fa fa-file"></i> <span
                     data-i18n="forge.label.ifModifiedSince"></span></label>
             <input type="text" id="node-input-ifModifiedSince"
-                data-i18n="[placeholder]forge.placeholder.ifModifiedSince">
+                data-i18n="[placeholder]forge.placeholder.ifModifiedSince" />
         </div>
 
         <div id="AcceptEncodingAttr" class="form-row node-input-acceptEncoding hiddenAttrs">
@@ -216,6 +215,9 @@
             name: {
                 value: ""
             },
+            topic: {
+                value: ""
+            },
             forge: {
                 type: "forge-credentials",
                 required: true
@@ -225,7 +227,10 @@
             },
             bucket: {
                 required: true,
-                value: "$(FORGE_CLIENT_ID)"
+                value: "FORGE_BUCKET"
+            },
+            bucketType: {
+                value: "env"
             },
             key: {
                 value: ""
@@ -262,15 +267,27 @@
             return (this.name || "oss " + this.operation);
         },
         oneditprepare: function () {
-            $("#node-input-payloadType").val(this.payloadType);
+            if (!this.bucketType) {
+                if (this.bucket === "") {
+                    this.bucketType = "env";
+                    this.bucket = "FORGE_BUCKET"
+                } else {
+                    this.bucketType = "str";
+                }
+            } else if (this.bucketType === 'string' || this.bucketType === 'none') {
+                this.bucketType = "str";
+            }
 
-            $("#node-input-payload").typedInput({
-                default: 'str',
-                typeField: $("#node-input-payloadType"),
-                types: ['flow', 'global', 'str', 'env']
+            $("#node-input-bucket-Type").val(this.bucketType);
+            $("#node-input-bucket").typedInput({
+                default: 'env',
+                typeField: $("#node-input-bucket-Type"),
+                types: ['str', 'env']
             });
-
-            $("#node-input-payload").typedInput('type',this.payloadType);
+            $("#node-input-bucket").typedInput('type', this.bucketType);
+        },
+        oneditsave: function () {
+            this.bucketType = $("#node-input-bucket-Type").val();
         }
     });
 </script>
