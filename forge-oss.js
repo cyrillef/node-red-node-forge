@@ -23,6 +23,7 @@ module.exports = function (RED) {
     var url = require('url');
     var fs = require('fs');
     var uuidv4 = require('uuid/v4');
+    var streamBuffers = require('stream-buffers');
     var ForgeAPI = require('forge-apis');
 
     // Forge
@@ -266,7 +267,6 @@ module.exports = function (RED) {
 
     // GET	buckets/:bucketKey/objects/:objectName/details
     // https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-details-GET/
-
     service.ObjectDetailsParams = function (n, msg) {
         var params = {};
         //service.copyArg(n, "bucket", params, undefined, false);
@@ -357,8 +357,9 @@ module.exports = function (RED) {
             contentDisposition: service.defaultNullOrEmptyString
         }, params);
 
-        if (params.localFilename === null || params.localFilename === "" &&
-            (typeof msg.payload === 'string' || typeof msg.payload === 'object' || Buffer.isBuffer(msg.payload))
+        if ((params.localFilename === null || params.localFilename === "") &&
+            ((msg.topic === 'body' || msg.topic === 'content') &&
+                (typeof msg.payload === 'string' || typeof msg.payload === 'object' || Buffer.isBuffer(msg.payload)))
         ) {
             if (typeof msg.payload === "object" && !Buffer.isBuffer(msg.payload))
                 params.buffer = Buffer.from(JSON.stringify(msg.payload), 'utf8');
@@ -366,6 +367,16 @@ module.exports = function (RED) {
                 params.buffer = Buffer.from(msg.payload, 'utf8');
             else
                 params.buffer = msg.payload;
+        } else if ((params.localFilename === null || params.localFilename === "") &&
+            msg.payload.content &&
+            (typeof msg.payload.content === 'string' || typeof msg.payload.content === 'object' || Buffer.isBuffer(msg.payload.content))
+        ) {
+            if (typeof msg.payload.content === "object" && !Buffer.isBuffer(msg.payload.content))
+                params.buffer = Buffer.from(JSON.stringify(msg.payload.content), 'utf8');
+            else if (typeof msg.payload.content === "string")
+                params.buffer = Buffer.from(msg.payload.content, 'utf8');
+            else
+                params.buffer = msg.payload.content;
         }
 
         return (params);
@@ -409,8 +420,8 @@ module.exports = function (RED) {
                         throw new Error('Object size is empty!');
                     if (size <= service.chunkSize) {
                         var rstream = null;
-                        if ( options.localFilename !== "") {
-                            rstream =fs.createReadStream(options.localFilename);
+                        if (options.localFilename !== "") {
+                            rstream = fs.createReadStream(options.localFilename);
                         } else {
                             rstream = new streamBuffers.ReadableStreamBuffer({
                                 frequency: 10, // in milliseconds.
@@ -455,10 +466,19 @@ module.exports = function (RED) {
                             // If still in parallel, but results processed in series with 'utils.promiseSerie', use item.then()
 
                             //console.log (JSON.stringify (item, null, 4)) ;
-                            var rstream = fs.createReadStream(options.localFilename, {
-                                start: item.opts.start,
-                                end: item.opts.end
-                            });
+                            var rstream = null;
+                            if (options.localFilename === "") {
+                                fs.createReadStream(options.localFilename, {
+                                    start: item.opts.start,
+                                    end: item.opts.end
+                                });
+                            } else {
+                                rstream = new streamBuffers.ReadableStreamBuffer({
+                                    frequency: 10, // in milliseconds.
+                                    chunkSize: 2048 // in bytes.
+                                });
+                                rstream.put(options.buffer.slice(item.opts.start, item.opts.end));
+                            }
                             ossObjects.uploadChunk(item.bucket, item.key, item.opts.size, item.opts.ContentRange, item.sessionId, rstream, item.options, item.oa2legged, item.oa2legged.getCredentials())
                                 .then(function (content) {
                                     //console.log('Chunk ' + item.opts.ContentRange + ' accepted...');
@@ -482,6 +502,65 @@ module.exports = function (RED) {
                     rejectMaster(error);
                 });
         }));
+    };
+
+    // DELETE	buckets/:bucketKey/objects/:objectName
+    // https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-DELETE/
+    service.DeleteObjectParams = function (n, msg) {
+        var params = {};
+        //service.copyArg(n, "bucket", params, undefined, false);
+        service.BucketKey(n, params);
+        service.copyArg(msg, "bucket", params, undefined, false);
+
+        service.getParams(n, msg, {
+            key: service.asIs
+        }, params);
+
+        return (params);
+    };
+
+    service.DeleteObject = function (n, node, oa2legged, msg, cb) {
+        var params = service.DeleteObjectParams(n, msg);
+
+        var ossObjects = new ForgeAPI.ObjectsApi();
+        ossObjects.deleteObject(params.bucket, params.key, oa2legged, oa2legged.getCredentials())
+            .then(function (obj) {
+                cb(null, obj);
+            })
+            .catch(function (error) {
+                cb(error, null);
+            });
+        //cb(null, params);
+    };
+
+    // POST	buckets/:bucketKey/objects/:objectName/signed
+    // https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-signed-POST/
+    service.CreateSignatureParams = function (n, msg) {
+        var params = {};
+        //service.copyArg(n, "bucket", params, undefined, false);
+        service.BucketKey(n, params);
+        service.copyArg(msg, "bucket", params, undefined, false);
+
+        service.getParams(n, msg, {
+            key: service.asIs,
+            access: service.asIs
+        }, params);
+
+        return (params);
+    };
+
+    service.CreateSignature = function (n, node, oa2legged, msg, cb) {
+        var params = service.CreateSignatureParams(n, msg);
+
+        var ossObjects = new ForgeAPI.ObjectsApi();
+        ossObjects.createSignedResource(params.bucket, params.key, , params, oa2legged, oa2legged.getCredentials())
+            .then(function (obj) {
+                cb(null, obj);
+            })
+            .catch(function (error) {
+                cb(error, null);
+            });
+        //cb(null, params);
     };
 
     // Utils

@@ -57,17 +57,17 @@
 
             <option value="PutObject">PutObject</option>
             <option value="GetObject">GetObject</option>
-            <option value="DeleteObject">DeleteObject *</option>
+            <option value="DeleteObject">DeleteObject</option>
             <option value="ObjectDetails">ObjectDetails</option>
 
-            <option value="CreateSignature">CreateSignature *</option>
-            <option value="DeleteSignature">SignObject *</option>
+            <option value="CreateSignature">CreateSignature</option>
+            <option value="DeleteSignature">DeleteSignature *</option>
 
             <option value="PutSignedObject">PutSignedObject *</option>
             <option value="GetSignedObject">GetSignedObject *</option>
             <option value="DeleteSignedObject">DeleteSignedObject *</option>
 
-            <option value="CopyObject">CopyObject< */option>
+            <option value="CopyObject">CopyObject *</option>
         </select>
     </div>
 
@@ -182,11 +182,22 @@
             </select>
         </div>
 
+        <div id="AccessAttr" class="form-row node-input-access hiddenAttrs">
+            <label for="node-input-access"><i class="fa fa-tag"></i> <span
+                    data-i18n="forge.label.access"></span></label>
+            <select type="text" id="node-input-access" style="width:72%;">
+                <option selected value="read">read</option>
+                <option value="write">write</option>
+                <option value="readwrite">readwrite</option>
+            </select>
+        </div>
+
         <div id="RegionAttr" class="form-row node-input-region hiddenAttrs">
             <label for="node-input-region"><i class="fa fa-tag"></i> <span data-i18n="forge.label.region"></span></label>
             <select type="text" id="node-input-region" style="width:72%;">
                 <option selected value="US">US</option>
                 <option value="EMEA">EMEA</option>
+
             </select>
         </div>
     </div>
@@ -208,21 +219,21 @@
             ListObjects: [ // GET	buckets/:bucketKey/objects
                 '#BucketAttr', '#LimitAttr', '#StartAtAttr', '#BeginsWithAttr'
             ],
-            PutObject: [
+            PutObject: [ // PUT buckets/:bucketKey/objects/:objectName
                 '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#ContentTypeAttr', '#ContentDispositionAttr'
             ],
-            GetObject: [
+            GetObject: [ // GET buckets/:bucketKey/objects/:objectName
                 '#BucketAttr', '#KeyAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
                 '#AcceptEncodingAttr'
             ],
-            DeleteObject: [
+            DeleteObject: [ // DELETE	buckets/:bucketKey/objects/:objectName
                 '#BucketAttr', '#KeyAttr'
             ],
             ObjectDetails: [ // GET	buckets/:bucketKey/objects/:objectName/details
                 '#BucketAttr', '#KeyAttr', '#WithAttr', '#IfModifiedSinceAttr'
             ],
-            CreateSignature: [
-                '#BucketAttr', '#KeyAttr'
+            CreateSignature: [ // POST buckets/:bucketKey/objects/:objectName/signed
+                '#BucketAttr', '#KeyAttr', '#AccessAttr'
             ],
             DeleteSignature: [
                 '#BucketAttr', '#KeyAttr'
@@ -325,6 +336,9 @@
             },
             range: {
                 value: null
+            },
+            access: {
+                value: "read"
             },
             acceptEncoding: {
                 value: null
