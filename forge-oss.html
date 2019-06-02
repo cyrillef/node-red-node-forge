@@ -49,25 +49,25 @@
         <label for="node-input-operation"><i class="fa fa-wrench"></i> <span
                 data-i18n="forge.label.operation"></span></label>
         <select type="text" id="node-input-operation">
-            <option value="CreateBucket">CreateBucket</option>
+            <option value="CreateBucket">CreateBucket *</option>
             <option value="ListBuckets">ListBuckets</option>
             <option value="BucketDetails">BucketDetails</option>
-            <option value="DeleteBucket">DeleteBucket</option>
+            <option value="DeleteBucket">DeleteBucket *</option>
             <option value="ListObjects">ListObjects</option>
 
             <option value="PutObject">PutObject</option>
             <option value="GetObject">GetObject</option>
-            <option value="DeleteObject">DeleteObject</option>
+            <option value="DeleteObject">DeleteObject *</option>
             <option value="ObjectDetails">ObjectDetails</option>
 
-            <option value="CreateSignature">CreateSignature</option>
-            <option value="DeleteSignature">SignObject</option>
+            <option value="CreateSignature">CreateSignature *</option>
+            <option value="DeleteSignature">SignObject *</option>
 
-            <option value="PutSignedObject">PutSignedObject</option>
-            <option value="GetSignedObject">GetSignedObject</option>
-            <option value="DeleteSignedObject">DeleteSignedObject</option>
+            <option value="PutSignedObject">PutSignedObject *</option>
+            <option value="GetSignedObject">GetSignedObject *</option>
+            <option value="DeleteSignedObject">DeleteSignedObject *</option>
 
-            <option value="CopyObject">CopyObject</option>
+            <option value="CopyObject">CopyObject< */option>
         </select>
     </div>
 
@@ -82,6 +82,37 @@
             <label for="node-input-key"><i class="fa fa-tag"></i> <span data-i18n="forge.label.key"></span></label>
             <input type="text" id="node-input-key" data-i18n="[placeholder]forge.placeholder.key" />
         </div>
+        <div id="ContentTypeAttr" class="form-row hiddenAttrs">
+            <label for="node-input-contentType"><i class="fa fa-arrow-left"></i> <span
+                    data-i18n="forge.label.contentType"></span></label>
+            <select type="text" id="node-input-contentType" style="width:70%;">
+                <!-- option value="text.plain">text.plain</option -->
+                <option selected value="application/octet-stream">application/octet-stream</option>
+                <option value="application/json">application/json</option>
+                <option value="application/pdf">image/pdf</option>
+                <option value="application/xhtml+xml">image/xhtml+xml</option>
+                <option value="application/xml">image/xml</option>
+                <option value="application/zip">image/zip</option>
+                <option value="image/gif">image/gif</option>
+                <option value="image/jpeg">image/jpeg</option>
+                <option value="image/png">image/png</option>
+                <option value="image/tiff">image/tiff</option>
+                <option value="image/vnd.microsoft.icon">image/vnd.microsoft.icon</option>
+                <option value="image/x-icon">image/x-icon</option>
+                <option value="image/vnd.djvu">image/vnd.djvu</option>
+                <option value="image/svg+xml">image/svg+xml</option>
+                <option value="audio/mpeg">image/mpeg</option>
+                <option value="audio/x-ms-wma">image/x-ms-wma</option>
+                <option value="audio/vnd.rn-realaudio">image/vnd.rn-realaudio</option>
+                <option value="audio/x-wav">image/x-wav</option>
+            </select>
+        </div>
+        <div id="ContentDispositionAttr" class="form-row node-input-contentDisposition hiddenAttrs">
+            <label for="node-input-contentDisposition"><i class="fa fa-tag"></i> <span
+                    data-i18n="forge.label.contentDisposition"></span></label>
+            <input type="text" id="node-input-contentDisposition"
+                data-i18n="[placeholder]forge.placeholder.contentDisposition" />
+        </div>
         <div id="CopySourceAttr" class="form-row hiddenAttrs">
             <label for="node-input-copySource"><i class="fa fa-tag"></i>copySource</label>
             <input type="text" id="node-input-copySource" placeholder="copySource" />
@@ -95,6 +126,20 @@
             <label for="node-input-startAt"><i class="fa fa-tag"></i> <span
                     data-i18n="forge.label.startAt"></span></label>
             <input type="text" id="node-input-startAt" data-i18n="[placeholder]forge.placeholder.startAt" />
+        </div>
+        <div id="BeginsWithAttr" class="form-row node-input-beginsWith hiddenAttrs">
+            <label for="node-input-beginsWith"><i class="fa fa-tag"></i> <span
+                    data-i18n="forge.label.beginsWith"></span></label>
+            <input type="text" id="node-input-beginsWith" data-i18n="[placeholder]forge.placeholder.beginsWith" />
+        </div>
+        <div id="WithAttr" class="form-row node-input-with hiddenAttrs">
+            <label for="node-input-with"><i class="fa fa-tag"></i> <span
+                    data-i18n="forge.label.with"></span></label>
+            <select type="text" id="node-input-with" style="width:70%;" multiple>
+                <option value="createdDate">createdDate</option>
+                <option value="lastAccessedDate">lastAccessedDate</option>
+                <option value="lastModifiedDate">lastModifiedDate</option>
+            </select>
         </div>
         <div id="PolicyKeyAttr" class="form-row node-input-policyKey hiddenAttrs">
             <label for="node-input-policyKey"><i class="fa fa-tag"></i> <span
@@ -124,7 +169,7 @@
         <div id="IfModifiedSinceAttr" class="form-row node-input-ifModifiedSince hiddenAttrs">
             <label for="node-input-ifModifiedSince"><i class="fa fa-file"></i> <span
                     data-i18n="forge.label.ifModifiedSince"></span></label>
-            <input type="text" id="node-input-ifModifiedSince"
+            <input type="datetime-local" id="node-input-ifModifiedSince"
                 data-i18n="[placeholder]forge.placeholder.ifModifiedSince" />
         </div>
 
@@ -151,30 +196,30 @@
             CreateBucket: [
                 '#BucketAttr', '#RegionAttr', '#PolicyKeyAttr'
             ],
-            ListBuckets: [
+            ListBuckets: [ // GET	buckets
                 '#Region', '#LimitAttr', '#StartAtAttr'
             ],
-            BucketDetails: [
+            BucketDetails: [ // GET	buckets/:bucketKey/details
                 '#BucketAttr'
             ],
             DeleteBucket: [
                 '#BucketAttr'
             ],
-            ListObjects: [
-                '#BucketAttr'
+            ListObjects: [ // GET	buckets/:bucketKey/objects
+                '#BucketAttr', '#LimitAttr', '#StartAtAttr', '#BeginsWithAttr'
             ],
             PutObject: [
-                '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr'
+                '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#ContentTypeAttr', '#ContentDispositionAttr'
             ],
             GetObject: [
-                '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
+                '#BucketAttr', '#KeyAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
                 '#AcceptEncodingAttr'
             ],
             DeleteObject: [
                 '#BucketAttr', '#KeyAttr'
             ],
-            ObjectDetails: [
-                '#BucketAttr', '#KeyAttr'
+            ObjectDetails: [ // GET	buckets/:bucketKey/objects/:objectName/details
+                '#BucketAttr', '#KeyAttr', '#WithAttr', '#IfModifiedSinceAttr'
             ],
             CreateSignature: [
                 '#BucketAttr', '#KeyAttr'
@@ -183,10 +228,10 @@
                 '#BucketAttr', '#KeyAttr'
             ],
             PutSignedObject: [
-                '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr'
+                '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#ContentTypeAttr', '#ContentDispositionAttr'
             ],
             GetSignedObject: [
-                '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
+                '#BucketAttr', '#KeyAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
                 '#AcceptEncodingAttr'
             ],
             DeleteSignedObject: [
@@ -242,8 +287,17 @@
             bucketType: {
                 value: "env"
             },
+            policyKey: {
+                value: 'transient'
+            },
             key: {
                 value: ""
+            },
+            contentType: {
+                value: 'application/octet-stream'
+            },
+            contentDisposition: {
+                value: null
             },
             copySource: {
                 value: ""
@@ -257,17 +311,31 @@
             startAt: {
                 value: null
             },
-            policyKey: {
-                value: 'transient'
+            beginsWith: {
+                value: null
+            },
+            with: { // Acceptable values: createdDate, lastAccessedDate, lastModifiedDate
+                value: null
+            },
+            ifNoneMatch: {
+                value: null
+            },
+            ifModifiedSince: {
+                value: null
+            },
+            range: {
+                value: null
+            },
+            acceptEncoding: {
+                value: null
             },
             SessionId: {
                 value: ""
             },
-            region: {
+            region: { // Acceptable values: US, EMEA
                 value: "US",
                 required: true
             }
-
         },
         inputs: 1,
         //inputLabels: ["credentials", "in"],
@@ -276,6 +344,11 @@
         label: function () {
             return (this.name || "oss " + this.operation);
         },
+        // oneditprepare is called immediately before the dialog is displayed.
+        // oneditsave is called when the edit dialog is okayed.
+        // oneditcancel is called when the edit dialog is cancelled.
+        // oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
+        // oneditresize is called when the edit dialog is resized.
         oneditprepare: function () {
             if (!this.bucketType) {
                 if (this.bucket === "") {
@@ -292,7 +365,7 @@
             $("#node-input-bucket").typedInput({
                 default: 'env',
                 typeField: $("#node-input-bucketType"),
-                types: [/*'flow', 'global',*/ 'str', 'env']
+                types: [ /*'flow', 'global',*/ 'str', 'env']
             });
             $("#node-input-bucket").typedInput('type', this.bucketType);
         },
@@ -305,10 +378,10 @@
                 "copySource",
                 "limit",
                 "startAt",
+                "beginsWith",
                 "localFilename",
                 "range",
-                "ifNoneMatch",
-                "ifModifiedSince"
+                "ifNoneMatch"
             ];
             // Just in case any whitespace has crept in with the copy-paste of the fields
             trimFields.forEach(function (field) {
