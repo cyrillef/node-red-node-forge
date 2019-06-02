@@ -377,6 +377,8 @@ module.exports = function (RED) {
                 params.buffer = Buffer.from(msg.payload.content, 'utf8');
             else
                 params.buffer = msg.payload.content;
+        } else if ((params.localFilename === null || params.localFilename === "") && Buffer.isBuffer(msg.payload)) {
+            params.buffer = msg.payload;
         }
 
         return (params);
@@ -543,7 +545,9 @@ module.exports = function (RED) {
 
         service.getParams(n, msg, {
             key: service.asIs,
-            access: service.asIs
+            access: service.asIs,
+            singleUse: service.asIs,
+            minutesExpiration: service.asIs
         }, params);
 
         return (params);
@@ -552,15 +556,21 @@ module.exports = function (RED) {
     service.CreateSignature = function (n, node, oa2legged, msg, cb) {
         var params = service.CreateSignatureParams(n, msg);
 
+        var postBucketsSigned ={};
+        service.getParams(n, msg, {
+            singleUse: service.asIs,
+            minutesExpiration: service.asIs
+        }, postBucketsSigned);
+
         var ossObjects = new ForgeAPI.ObjectsApi();
-        ossObjects.createSignedResource(params.bucket, params.key, , params, oa2legged, oa2legged.getCredentials())
+        ossObjects.createSignedResource(params.bucket, params.key, postBucketsSigned, params, oa2legged, oa2legged.getCredentials())
             .then(function (obj) {
                 cb(null, obj);
             })
             .catch(function (error) {
                 cb(error, null);
             });
-        //cb(null, params);
+        // cb(null, params);
     };
 
     // Utils

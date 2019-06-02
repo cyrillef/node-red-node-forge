@@ -191,13 +191,24 @@
                 <option value="readwrite">readwrite</option>
             </select>
         </div>
+        <div id="SingleUseAttr" class="form-row node-input-singleUse hiddenAttrs">
+            <label for="node-input-singleUse"><i class="fa fa-file"></i> <span
+                    data-i18n="forge.label.singleUse"></span></label>
+            <input type="checkbox" id="node-input-singleUse"
+                data-i18n="[placeholder]forge.placeholder.singleUse" />
+        </div>
+        <div id="MinutesExpirationAttr" class="form-row node-input-minutesExpiration hiddenAttrs">
+            <label for="node-input-minutesExpiration"><i class="fa fa-file"></i> <span
+                    data-i18n="forge.label.minutesExpiration"></span></label>
+            <input type="number" id="node-input-minutesExpiration" min="0"
+                data-i18n="[placeholder]forge.placeholder.minutesExpiration" />
+        </div>
 
         <div id="RegionAttr" class="form-row node-input-region hiddenAttrs">
             <label for="node-input-region"><i class="fa fa-tag"></i> <span data-i18n="forge.label.region"></span></label>
             <select type="text" id="node-input-region" style="width:72%;">
                 <option selected value="US">US</option>
                 <option value="EMEA">EMEA</option>
-
             </select>
         </div>
     </div>
@@ -233,7 +244,7 @@
                 '#BucketAttr', '#KeyAttr', '#WithAttr', '#IfModifiedSinceAttr'
             ],
             CreateSignature: [ // POST buckets/:bucketKey/objects/:objectName/signed
-                '#BucketAttr', '#KeyAttr', '#AccessAttr'
+                '#BucketAttr', '#KeyAttr', '#AccessAttr', '#SingleUseAttr', '#MinutesExpirationAttr'
             ],
             DeleteSignature: [
                 '#BucketAttr', '#KeyAttr'
@@ -340,6 +351,12 @@
             access: {
                 value: "read"
             },
+            singleUse: {
+                value: false
+            },
+            minutesExpiration: {
+                value: 60
+            },
             acceptEncoding: {
                 value: null
             },
@@ -390,7 +407,6 @@
                 "bucket",
                 "key",
                 "copySource",
-                "limit",
                 "startAt",
                 "beginsWith",
                 "localFilename",
