@@ -49,23 +49,22 @@
         <label for="node-input-operation"><i class="fa fa-wrench"></i> <span
                 data-i18n="forge.label.operation"></span></label>
         <select type="text" id="node-input-operation">
-            <option value="CreateBucket">CreateBucket *</option>
-            <option value="ListBuckets">ListBuckets</option>
-            <option value="BucketDetails">BucketDetails</option>
-            <option value="DeleteBucket">DeleteBucket *</option>
-            <option value="ListObjects">ListObjects</option>
+            <option value="CreateBucket">Create Bucket *</option>
+            <option value="ListBuckets">List Buckets</option>
+            <option value="BucketDetails">Bucket Details</option>
+            <option value="DeleteBucket">Delete Bucket *</option>
+            <option value="ListObjects">List Objects</option>
 
-            <option value="PutObject">PutObject</option>
-            <option value="GetObject">GetObject</option>
-            <option value="DeleteObject">DeleteObject</option>
-            <option value="ObjectDetails">ObjectDetails</option>
+            <option value="PutObject">Upload Object</option>
+            <option value="GetObject">Download Object</option>
+            <option value="DeleteObject">Delete Object</option>
+            <option value="ObjectDetails">Object Details</option>
 
-            <option value="CreateSignature">CreateSignature</option>
-            <option value="DeleteSignature">DeleteSignature *</option>
+            <option value="CreateSignature">Create Signature</option>
 
-            <option value="PutSignedObject">PutSignedObject *</option>
-            <option value="GetSignedObject">GetSignedObject *</option>
-            <option value="DeleteSignedObject">DeleteSignedObject *</option>
+            <option value="PutSignedObject">Upload Signed Object</option>
+            <option value="GetSignedObject">Get Signed Object</option>
+            <option value="DeleteSignedObject">Delete Signed Object</option>
 
             <option value="CopyObject">CopyObject *</option>
         </select>
@@ -166,6 +165,11 @@
                     data-i18n="forge.label.ifNoneMatch"></span></label>
             <input type="text" id="node-input-ifNoneMatch" data-i18n="[placeholder]forge.placeholder.ifNoneMatch" />
         </div>
+        <div id="IfMatchAttr" class="form-row node-input-ifMatch hiddenAttrs">
+            <label for="node-input-ifMatch"><i class="fa fa-file"></i> <span
+                    data-i18n="forge.label.ifMatch"></span></label>
+            <input type="text" id="node-input-ifMatch" data-i18n="[placeholder]forge.placeholder.ifMatch" />
+        </div>
         <div id="IfModifiedSinceAttr" class="form-row node-input-ifModifiedSince hiddenAttrs">
             <label for="node-input-ifModifiedSince"><i class="fa fa-file"></i> <span
                     data-i18n="forge.label.ifModifiedSince"></span></label>
@@ -198,12 +202,17 @@
                 data-i18n="[placeholder]forge.placeholder.singleUse" />
         </div>
         <div id="MinutesExpirationAttr" class="form-row node-input-minutesExpiration hiddenAttrs">
-            <label for="node-input-minutesExpiration"><i class="fa fa-file"></i> <span
+            <label for="node-input-minutesExpiration"><i class="fa fa-stopwatch"></i> <span
                     data-i18n="forge.label.minutesExpiration"></span></label>
             <input type="number" id="node-input-minutesExpiration" min="0"
                 data-i18n="[placeholder]forge.placeholder.minutesExpiration" />
         </div>
 
+        <div id="GUIDAttr" class="form-row node-input-guid hiddenAttrs">
+            <label for="node-input-guid"><i class="fa fa-tag"></i> <span
+                    data-i18n="forge.label.guid"></span></label>
+            <input type="text" id="node-input-guid" data-i18n="[placeholder]forge.placeholder.guid" />
+        </div>
         <div id="RegionAttr" class="form-row node-input-region hiddenAttrs">
             <label for="node-input-region"><i class="fa fa-tag"></i> <span data-i18n="forge.label.region"></span></label>
             <select type="text" id="node-input-region" style="width:72%;">
@@ -231,7 +240,8 @@
                 '#BucketAttr', '#LimitAttr', '#StartAtAttr', '#BeginsWithAttr'
             ],
             PutObject: [ // PUT buckets/:bucketKey/objects/:objectName
-                '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#ContentTypeAttr', '#ContentDispositionAttr'
+                '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#ContentTypeAttr', '#ContentDispositionAttr',
+                '#IfMatchAttr'
             ],
             GetObject: [ // GET buckets/:bucketKey/objects/:objectName
                 '#BucketAttr', '#KeyAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
@@ -246,20 +256,17 @@
             CreateSignature: [ // POST buckets/:bucketKey/objects/:objectName/signed
                 '#BucketAttr', '#KeyAttr', '#AccessAttr', '#SingleUseAttr', '#MinutesExpirationAttr'
             ],
-            DeleteSignature: [
-                '#BucketAttr', '#KeyAttr'
+            PutSignedObject: [ // PUT	signedresources/:id
+                '#GUIDAttr', '#RegionAttr', '#LocalFilenameAttr', '#ContentDispositionAttr', '#IfMatchAttr'
             ],
-            PutSignedObject: [
-                '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#ContentTypeAttr', '#ContentDispositionAttr'
-            ],
-            GetSignedObject: [
-                '#BucketAttr', '#KeyAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
+            GetSignedObject: [ // GET	signedresources/:id
+                '#GUIDAttr', '#RegionAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
                 '#AcceptEncodingAttr'
             ],
-            DeleteSignedObject: [
-                '#BucketAttr', '#KeyAttr'
+            DeleteSignedObject: [ // DELETE	signedresources/:id
+                '#GUIDAttr', '#RegionAttr'
             ],
-            CopyObject: [
+            CopyObject: [ // PUT	buckets/:bucketKey/objects/:objectName/copyto/:newObjectName
                 '#BucketAttr', '#KeyAttr', '#CopySourceAttr'
             ]
         };
@@ -339,6 +346,9 @@
             with: { // Acceptable values: createdDate, lastAccessedDate, lastModifiedDate
                 value: null
             },
+            ifMatch: {
+                value: null
+            },
             ifNoneMatch: {
                 value: null
             },
@@ -362,6 +372,9 @@
             },
             SessionId: {
                 value: ""
+            },
+            guid: {
+                value: null
             },
             region: { // Acceptable values: US, EMEA
                 value: "US",
@@ -411,7 +424,8 @@
                 "beginsWith",
                 "localFilename",
                 "range",
-                "ifNoneMatch"
+                "ifNoneMatch",
+                "guid"
             ];
             // Just in case any whitespace has crept in with the copy-paste of the fields
             trimFields.forEach(function (field) {

@@ -556,7 +556,7 @@ module.exports = function (RED) {
     service.CreateSignature = function (n, node, oa2legged, msg, cb) {
         var params = service.CreateSignatureParams(n, msg);
 
-        var postBucketsSigned ={};
+        var postBucketsSigned = {};
         service.getParams(n, msg, {
             singleUse: service.asIs,
             minutesExpiration: service.asIs
@@ -565,6 +565,9 @@ module.exports = function (RED) {
         var ossObjects = new ForgeAPI.ObjectsApi();
         ossObjects.createSignedResource(params.bucket, params.key, postBucketsSigned, params, oa2legged, oa2legged.getCredentials())
             .then(function (obj) {
+                var url_parts = url.parse(obj.body.signedUrl, true);
+                obj.body.guid = url_parts.pathname.split('/').pop();
+                obj.body.region = url_parts.query.region || 'US';
                 cb(null, obj);
             })
             .catch(function (error) {
@@ -572,6 +575,230 @@ module.exports = function (RED) {
             });
         // cb(null, params);
     };
+
+    // PUT	signedresources/:id
+    // https://forge.autodesk.com/en/docs/data/v2/reference/http/signedresources-:id-PUT/
+    service.PutSignedObjectParams = function (n, msg) {
+        var params = {};
+
+        service.getParams(n, msg, {
+            guid: service.asIs,
+            localFilename: service.asIs,
+            ifMatch: service.defaultNullOrEmptyString,
+            contentDisposition: service.defaultNullOrEmptyString,
+            region: {
+                rename: 'xAdsRegion'
+            }
+        }, params);
+
+        if ((params.localFilename === null || params.localFilename === "") &&
+            ((msg.topic === 'body' || msg.topic === 'content') &&
+                (typeof msg.payload === 'string' || typeof msg.payload === 'object' || Buffer.isBuffer(msg.payload)))
+        ) {
+            if (typeof msg.payload === "object" && !Buffer.isBuffer(msg.payload))
+                params.buffer = Buffer.from(JSON.stringify(msg.payload), 'utf8');
+            else if (typeof msg.payload === "string")
+                params.buffer = Buffer.from(msg.payload, 'utf8');
+            else
+                params.buffer = msg.payload;
+        } else if ((params.localFilename === null || params.localFilename === "") &&
+            msg.payload.content &&
+            (typeof msg.payload.content === 'string' || typeof msg.payload.content === 'object' || Buffer.isBuffer(msg.payload.content))
+        ) {
+            if (typeof msg.payload.content === "object" && !Buffer.isBuffer(msg.payload.content))
+                params.buffer = Buffer.from(JSON.stringify(msg.payload.content), 'utf8');
+            else if (typeof msg.payload.content === "string")
+                params.buffer = Buffer.from(msg.payload.content, 'utf8');
+            else
+                params.buffer = msg.payload.content;
+        } else if ((params.localFilename === null || params.localFilename === "") && Buffer.isBuffer(msg.payload)) {
+            params.buffer = msg.payload;
+        }
+
+        return (params);
+    };
+
+    service.PutSignedObject = function (n, node, oa2legged, msg, cb) {
+        var params = service.PutSignedObjectParams(n, msg);
+
+        service.PutSignedObject_put(oa2legged, params)
+            .then(function (obj) {
+                cb(null, obj);
+            })
+            .catch(function (error) {
+                cb(error, null);
+            });
+        //cb(null, params);
+    };
+
+    service.PutSignedObject_full = function (oa2legged, options, size, rstream) {
+        return (new Promise(function (fulfill, reject) {
+            var ossObjects = new ForgeAPI.ObjectsApi();
+            ossObjects.uploadSignedResource(options.guid, size, rstream, options, oa2legged, oa2legged.getCredentials())
+                .then(function (result) {
+                    fulfill(result);
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+        }));
+    };
+
+    service.PutSignedObject_put = function (oa2legged, options) {
+        return (new Promise(function (fulfillMaster, rejectMaster) {
+            var ossObjects = new ForgeAPI.ObjectsApi();
+            service.filesize(options.localFilename, options.buffer)
+                .then(function (size) {
+                    if (size <= 0)
+                        throw new Error('Object size is empty!');
+                    if (size <= service.chunkSize) {
+                        var rstream = null;
+                        if (options.localFilename !== "") {
+                            rstream = fs.createReadStream(options.localFilename);
+                        } else {
+                            rstream = new streamBuffers.ReadableStreamBuffer({
+                                frequency: 10, // in milliseconds.
+                                chunkSize: 2048 // in bytes.
+                            });
+                            rstream.put(options.buffer);
+                        }
+                        return (service.PutSignedObject_full(oa2legged, options, size, rstream));
+                    }
+                    var nb = Math.floor(size / service.chunkSize);
+                    if ((size % service.chunkSize) !== 0)
+                        nb++;
+                    var arr = [];
+                    var uuid = uuidv4();
+                    for (var i = 0; i < nb; i++) {
+                        var start = i * service.chunkSize;
+                        var end = start + service.chunkSize - 1;
+                        if (end > size - 1)
+                            end = size - 1;
+                        var opts = {
+                            ContentRange: 'bytes ' + start + '-' + end + '/' + size,
+                            size: end - start + 1,
+                            start: start,
+                            end: end
+                        };
+
+                        // Still in parallel, but results processed in series with 'utils.promiseSerie'
+                        //arr.push (ossObjects.uploadChunk (bucketKey, ossname, service.chunkSize, opts.ContentRange, sessionId, rstream, {}, oa2legged, oa2legged.getCredentials ())) ;
+
+                        arr.push({
+                            opts: opts,
+                            options: options,
+                            bucket: options.bucket,
+                            key: options.key,
+                            sessionId: uuid,
+                            oa2legged: oa2legged
+                        });
+                    }
+
+                    return (service.promiseSerie(arr, function (item, index) {
+                        return (new Promise(function (fulfill, reject) {
+                            // If still in parallel, but results processed in series with 'utils.promiseSerie', use item.then()
+
+                            //console.log (JSON.stringify (item, null, 4)) ;
+                            var rstream = null;
+                            if (options.localFilename === "") {
+                                fs.createReadStream(options.localFilename, {
+                                    start: item.opts.start,
+                                    end: item.opts.end
+                                });
+                            } else {
+                                rstream = new streamBuffers.ReadableStreamBuffer({
+                                    frequency: 10, // in milliseconds.
+                                    chunkSize: 2048 // in bytes.
+                                });
+                                rstream.put(options.buffer.slice(item.opts.start, item.opts.end));
+                            }
+                            ossObjects.uploadSignedResourcesChunk(item.guid, item.opts.ContentRange, item.sessionId, rstream, item.options, item.oa2legged, item.oa2legged.getCredentials())
+                                .then(function (content) {
+                                    //console.log('Chunk ' + item.opts.ContentRange + ' accepted...');
+                                    if (content.statusCode === 202)
+                                        return (fulfill(item.opts.ContentRange));
+                                    fulfill(content);
+                                })
+                                .catch(function (error) {
+                                    reject(error);
+                                });
+                        }));
+                    }));
+
+                })
+                .then(function (info) {
+                    if (Array.isArray(info))
+                        info = info.pop();
+                    fulfillMaster(info);
+                })
+                .catch(function (error) {
+                    rejectMaster(error);
+                });
+        }));
+    };
+
+    // GET	signedresources/:id
+    // https://forge.autodesk.com/en/docs/data/v2/reference/http/signedresources-:id-GET/
+    service.GetSignedObjectParams = function (n, msg) {
+        var params = {};
+        //service.copyArg(n, "bucket", params, undefined, false);
+        service.BucketKey(n, params);
+        service.copyArg(msg, "bucket", params, undefined, false);
+
+        service.getParams(n, msg, {
+            guid: service.asIs,
+            range: service.defaultNullOrEmptyString,
+            ifNoneMatch: service.defaultNullOrEmptyString,
+            ifModifiedSince: service.defaultNullOrEmptyDate,
+            acceptEncoding: service.defaultNullOrEmptyString,
+            region: service.asIs
+        }, params);
+
+        return (params);
+    };
+
+    service.GetSignedObject = function (n, node, oa2legged, msg, cb) {
+        var params = service.GetSignedObjectParams(n, msg);
+
+        var ossObjects = new ForgeAPI.ObjectsApi();
+        ossObjects.getSignedResource(params.guid, params, oa2legged, oa2legged.getCredentials())
+            .then(function (obj) {
+                cb(null, obj);
+            })
+            .catch(function (error) {
+                cb(error, null);
+            });
+    };
+
+    // DELETE	signedresources/:id
+    // https://forge.autodesk.com/en/docs/data/v2/reference/http/signedresources-:id-DELETE/
+    service.DeleteSignedObjectParams = function (n, msg) {
+        var params = {};
+
+        service.getParams(n, msg, {
+            guid: service.asIs,
+            region: service.asIs
+        }, params);
+
+        return (params);
+    };
+
+    service.DeleteSignedObject = function (n, node, oa2legged, msg, cb) {
+        var params = service.DeleteSignedObjectParams(n, msg);
+
+        var ossObjects = new ForgeAPI.ObjectsApi();
+        ossObjects.deleteSignedResource(params.guid, params, oa2legged, oa2legged.getCredentials())
+            .then(function (obj) {
+                cb(null, obj);
+            })
+            .catch(function (error) {
+                cb(error, null);
+            });
+        // cb(null, params);
+    };
+
+    // PUT	buckets/:bucketKey/objects/:objectName/copyto/:newObjectName
+    // https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-copyto-:newObjectName-PUT/
 
     // Utils
     service.asIs = {};
