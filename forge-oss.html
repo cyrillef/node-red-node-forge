@@ -49,10 +49,10 @@
         <label for="node-input-operation"><i class="fa fa-wrench"></i> <span
                 data-i18n="forge.label.operation"></span></label>
         <select type="text" id="node-input-operation">
-            <option value="CreateBucket">Create Bucket *</option>
+            <option value="CreateBucket">Create Bucket</option>
             <option value="ListBuckets">List Buckets</option>
             <option value="BucketDetails">Bucket Details</option>
-            <option value="DeleteBucket">Delete Bucket *</option>
+            <option value="DeleteBucket">Delete Bucket</option>
             <option value="ListObjects">List Objects</option>
 
             <option value="PutObject">Upload Object</option>
@@ -113,8 +113,8 @@
                 data-i18n="[placeholder]forge.placeholder.contentDisposition" />
         </div>
         <div id="CopySourceAttr" class="form-row hiddenAttrs">
-            <label for="node-input-copySource"><i class="fa fa-tag"></i>copySource</label>
-            <input type="text" id="node-input-copySource" placeholder="copySource" />
+            <label for="node-input-copySource"><i class="fa fa-tag"></i> <span data-i18n="forge.label.copySource"></span></label>
+            <input type="text" id="node-input-copySource" data-i18n="[placeholder]forge.placeholder.copySource" />
         </div>
 
         <div id="LimitAttr" class="form-row node-input-limit hiddenAttrs">
@@ -224,7 +224,7 @@
 
     <script type="text/javascript">
         var nodeOps = {
-            CreateBucket: [
+            CreateBucket: [ // POST	buckets
                 '#BucketAttr', '#RegionAttr', '#PolicyKeyAttr'
             ],
             ListBuckets: [ // GET	buckets
@@ -233,7 +233,7 @@
             BucketDetails: [ // GET	buckets/:bucketKey/details
                 '#BucketAttr'
             ],
-            DeleteBucket: [
+            DeleteBucket: [ // DELETE	buckets/:bucketKey
                 '#BucketAttr'
             ],
             ListObjects: [ // GET	buckets/:bucketKey/objects

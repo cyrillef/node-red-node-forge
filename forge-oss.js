@@ -219,6 +219,69 @@ module.exports = function (RED) {
         //cb(null, params);
     };
 
+    // POST	buckets
+    // https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-details-GET/
+    service.CreateBucketParams = function (n, msg) {
+        var params = {};
+        //service.copyArg(n, "bucket", params, undefined, false);
+        service.BucketKey(n, params);
+        service.copyArg(msg, "bucket", params, undefined, false);
+
+        service.getParams(n, msg, {
+            policyKey: service.asIs,
+            region: {
+                rename: 'xAdsRegion'
+            }
+        }, params);
+
+        return (params);
+    };
+
+    service.CreateBucket = function (n, node, oa2legged, msg, cb) {
+        var params = service.CreateBucketParams(n, msg);
+
+        var postBuckets = {
+            bucketKey: params.bucket,
+            policyKey: params.policyKey
+        };
+
+        var ossBuckets = new ForgeAPI.BucketsApi();
+        ossBuckets.createBucket(postBuckets, params, oa2legged, oa2legged.getCredentials())
+            .then(function (bucket) {
+                //console.log(JSON.stringify(buckets.body.items, null, 4));
+                cb(null, bucket);
+            })
+            .catch(function (error) {
+                cb(error, null);
+            });
+        //cb(null, params);
+    };
+
+    // DELETE	buckets/:bucketKey
+    // undocumented
+    service.DeleteBucketParams = function (n, msg) {
+        var params = {};
+        //service.copyArg(n, "bucket", params, undefined, false);
+        service.BucketKey(n, params);
+        service.copyArg(msg, "bucket", params, undefined, false);
+        return (params);
+    };
+
+    service.DeleteBucket = function (n, node, oa2legged, msg, cb) {
+        var params = service.DeleteBucketParams(n, msg);
+
+        var ossBuckets = new ForgeAPI.BucketsApi();
+        ossBuckets.deleteBucket(params.bucket, oa2legged, oa2legged.getCredentials())
+            .then(function (bucket) {
+                //console.log(JSON.stringify(buckets.body.items, null, 4));
+                cb(null, bucket);
+            })
+            .catch(function (error) {
+                cb(error, null);
+            });
+        //cb(null, params);
+    };
+
     // GET	buckets/:bucketKey/objects
     // https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-GET/
     service.ListObjectsParams = function (n, msg) {
@@ -799,6 +862,32 @@ module.exports = function (RED) {
 
     // PUT	buckets/:bucketKey/objects/:objectName/copyto/:newObjectName
     // https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-copyto-:newObjectName-PUT/
+    service.CopyObjectParams = function (n, msg) {
+        var params = {};
+        //service.copyArg(n, "bucket", params, undefined, false);
+        service.BucketKey(n, params);
+        service.copyArg(msg, "bucket", params, undefined, false);
+
+        service.getParams(n, msg, {
+            key: service.asIs,
+            copySource: service.asIs
+        }, params);
+
+        return (params);
+    };
+
+    service.CopyObject = function (n, node, oa2legged, msg, cb) {
+        var params = service.CopyObjectParams(n, msg);
+
+        var ossObjects = new ForgeAPI.ObjectsApi();
+        ossObjects.copyTo(params.bucket, params.copySource, params.key, oa2legged, oa2legged.getCredentials())
+            .then(function (obj) {
+                cb(null, obj);
+            })
+            .catch(function (error) {
+                cb(error, null);
+            });
+    };
 
     // Utils
     service.asIs = {};
