@@ -99,6 +99,7 @@ module.exports = function (RED) {
                 default: [false]
             },
             rootFilename: service.defaultNullOrEmptyString,
+            checkReferences: service.defaultNullOrEmptyString,
             region: service.asIs
         }, params);
         if (params.hasOwnProperty('rootFilename'))
@@ -114,7 +115,8 @@ module.exports = function (RED) {
             input: {
                 urn: params.urn,
                 // compressedUrn: params.compressedUrn,
-                // rootFilename: params.rootFilename
+                // rootFilename: params.rootFilename,
+                checkReferences: params.checkReferences,
             },
             output: {
                 destination: {
@@ -288,6 +290,44 @@ module.exports = function (RED) {
     };
 
     // POST	references
+    // https://forge.autodesk.com/en/docs/model-derivative/v2/reference/http/urn-references-POST/
+    service.SetReferencesParams = function (n, msg) {
+        var params = {};
+
+        //service.getParamsSimple(n, msg, ['limit', 'startAt', 'region'], params);
+        service.getParams(n, msg, {
+            urn: service.asIs,
+            region: service.asIs,
+            rootFilename: {
+                rename: 'filename'
+            },
+            references: service.defaultNullOrEmptyString,
+        }, params);
+
+        return (params);
+    };
+
+    service.SetReferences = function (n, node, oa2legged, msg, cb) {
+        var params = service.SetReferencesParams(n, msg);
+
+        var returnType = null;
+
+        var apis = new ForgeAPI.DerivativesApi();
+        apis.apiClient.callApi(
+            '/modelderivative/v2/designdata/{urn}/references', 'POST',
+            {}, {}, {}, {}, params,
+            ['application/json'], ['application/vnd.api+json', 'application/json'],
+            returnType, oa2legged, oa2legged.getCredentials()
+        )
+        // apis.getModelviewProperties(params.urn, params.guid, params, oa2legged, oa2legged.getCredentials())
+            .then(function (response) {
+                //console.log(JSON.stringify(response.body, null, 4));
+                cb(null, response);
+            })
+            .catch(function (error) {
+                cb(error, null);
+            });
+    };
 
     // GET	:urn/thumbnail
     // https://forge.autodesk.com/en/docs/model-derivative/v2/reference/http/urn-thumbnail-GET/

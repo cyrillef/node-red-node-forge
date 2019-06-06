@@ -32,7 +32,8 @@
             "ifModifiedSince": "If-Modified-Since",
             "range": "Range",
             "width": "Width",
-            "height": "Height"
+            "height": "Height",
+            "checkReferences": "Check References"
 		},
 		"placeholder": {
 			"name": "Name",

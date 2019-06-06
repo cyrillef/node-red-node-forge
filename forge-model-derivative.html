@@ -50,6 +50,7 @@
 				data-i18n="forge.label.operation"></span></label>
 		<select type="text" id="node-input-operation">
 			<option value="Translate">Translate Model</option>
+			<option value="SetReferences">Set References</option>
 			<option value="GetManifest">Get Manifest</option>
 			<option value="DeleteManifest">Delete Model</option>
 			<option value="GetMetadata">Get Metadata</option>
@@ -83,6 +84,11 @@
 			<label for="node-input-forceget"><i class="fa fa-file"></i> <span
 					data-i18n="forge.label.forceget"></span></label>
 			<input type="checkbox" id="node-input-forceget" />
+		</div>
+		<div id="CheckReferencesAttr" class="form-row node-input-checkReferences hiddenAttrs">
+			<label for="node-input-checkReferences"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.checkReferences"></span></label>
+			<input type="checkbox" id="node-input-checkReferences" />
 		</div>
 
 		<div id="RootFilenameAttr" class="form-row node-input-rootFilename hiddenAttrs">
@@ -151,12 +157,29 @@
 				<ol id="node-input-job-container"></ol>
 			</div>
 		</div>
+
+		<div id="ReferencesEditorAttr" class="form-row hiddenAttrs">
+			<div class="form-row" style="margin-bottom: 0px;">
+				<label for="node-input-func"><i class="fa fa-wrench"></i> <span
+						data-i18n="function.label.function"></span></label>
+				<input type="hidden" id="node-input-func" autofocus="autofocus">
+				<input type="hidden" id="node-input-noerr">
+			</div>
+			<div class="form-row node-text-editor-row" style="position:relative">
+				<div style="position: absolute; right:0; bottom:calc(100% + 3px);"><button id="node-function-expand-js"
+						class="editor-button editor-button-small"><i class="fa fa-expand"></i></button></div>
+				<div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-func-editor"></div>
+			</div>
+		</div>
 	</div>
 
 	<script type="text/javascript">
 		var nodeOps = {
 			Translate: [
-				'#URNAttr', '#ForceAttr', '#RootFilenameAttr', '#JobsAttr'
+				'#URNAttr', '#ForceAttr', '#CheckReferencesAttr', '#RootFilenameAttr', '#JobsAttr'
+			],
+			SetReferences: [
+				'#URNAttr', '#RootFilenameAttr', '#RegionAttr', '#ReferencesEditorAttr'
 			],
 			GetManifest: [
 				'#URNAttr', '#AcceptEncodingAttr'
@@ -911,6 +934,12 @@
 						switchLoader: false
 					}
 				}]
+			},
+			checkReferences: {
+				value: false
+			},
+			func: {
+				value: "\nreturn msg;"
 			},
 
 			ifModifiedSince: {
