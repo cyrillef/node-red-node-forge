@@ -52,7 +52,13 @@
 			<option value="Translate">Translate Model</option>
 			<option value="GetManifest">Get Manifest</option>
 			<option value="DeleteManifest">Delete Model</option>
+			<option value="GetMetadata">Get Metadata</option>
+			<option value="GetObjectTree">Get Object Tree</option>
+			<option value="GetProperties">Get Properties</option>
+			<option value="GetDerivativeManifest">Get Derivative Manifest</option>
+			<option value="GetThumbnail">Get Thumbnail</option>GetThumbnail
 
+			<option value="GetFormats">Get Formats</option>
 		</select>
 	</div>
 
@@ -62,11 +68,21 @@
 					data-i18n="forge.label.urn"></span></label>
 			<input type="text" id="node-input-urn" data-i18n="[placeholder]forge.placeholder.urn" />
 		</div>
+		<div id="DerivativeURNAttr" class="form-row node-input-derivativeurn hiddenAttrs">
+			<label for="node-input-derivativeurn"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.derivativeurn"></span></label>
+			<input type="text" id="node-input-derivativeurn" data-i18n="[placeholder]forge.placeholder.derivativeurn" />
+		</div>
 
 		<div id="ForceAttr" class="form-row node-input-xAdsForce hiddenAttrs">
 			<label for="node-input-xAdsForce"><i class="fa fa-file"></i> <span
 					data-i18n="forge.label.xAdsForce"></span></label>
 			<input type="checkbox" id="node-input-xAdsForce" />
+		</div>
+		<div id="ForceGetAttr" class="form-row node-input-forceget hiddenAttrs">
+			<label for="node-input-forceget"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.forceget"></span></label>
+			<input type="checkbox" id="node-input-forceget" />
 		</div>
 
 		<div id="RootFilenameAttr" class="form-row node-input-rootFilename hiddenAttrs">
@@ -74,7 +90,26 @@
 					data-i18n="forge.label.rootFilename"></span></label>
 			<input type="text" id="node-input-rootFilename" data-i18n="[placeholder]forge.placeholder.rootFilename" />
 		</div>
+		<div id="GUIDAttr" class="form-row node-input-guid hiddenAttrs">
+			<label for="node-input-guid"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.guid"></span></label>
+			<input type="text" id="node-input-guid" data-i18n="[placeholder]forge.placeholder.guid" />
+		</div>
+		<div id="ObjectIDAttr" class="form-row node-input-objectid hiddenAttrs">
+			<label for="node-input-objectid"><i class="fa fa-file"></i> <span data-i18n="forge.label.objectid"></span></label>
+			<input type="text" id="node-input-objectid" data-i18n="[placeholder]forge.placeholder.objectid" />
+		</div>
+		<div id="RangeAttr" class="form-row node-input-range hiddenAttrs">
+			<label for="node-input-range"><i class="fa fa-file"></i> <span data-i18n="forge.label.range"></span></label>
+			<input type="text" id="node-input-range" data-i18n="[placeholder]forge.placeholder.range" />
+		</div>
 
+		<div id="IfModifiedSinceAttr" class="form-row node-input-ifModifiedSince hiddenAttrs">
+			<label for="node-input-ifModifiedSince"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.ifModifiedSince"></span></label>
+			<input type="datetime-local" id="node-input-ifModifiedSince"
+				data-i18n="[placeholder]forge.placeholder.ifModifiedSince" />
+		</div>
 		<div id="AcceptEncodingAttr" class="form-row node-input-acceptEncoding hiddenAttrs">
 			<label for="node-input-acceptEncoding"><i class="fa fa-tag"></i> <span
 					data-i18n="forge.label.acceptEncoding"></span></label>
@@ -88,6 +123,23 @@
 			<select type="text" id="node-input-region" style="width:72%;">
 				<option selected value="US">US</option>
 				<option value="EMEA">EMEA</option>
+			</select>
+		</div>
+		<div id="WidthAttr" class="form-row node-input-width hiddenAttrs">
+			<label for="node-input-width"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.width"></span></label>
+			<select type="text" id="node-input-width" style="width:72%;">
+				<option value="100">100</option>
+				<option selected value="200">200</option>
+				<option value="400">400</option>
+			</select>
+		</div>
+		<div id="HeightAttr" class="form-row node-input-height hiddenAttrs">
+			<label for="node-input-height"><i class="fa fa-tag"></i> <span data-i18n="forge.label.height"></span></label>
+			<select type="text" id="node-input-height" style="width:72%;">
+				<option value="100">100</option>
+				<option selected value="200">200</option>
+				<option value="400">400</option>
 			</select>
 		</div>
 
@@ -111,6 +163,25 @@
 			],
 			DeleteManifest: [
 				'#URNAttr'
+			],
+			GetMetadata: [
+				'#URNAttr', '#AcceptEncodingAttr'
+			],
+			GetObjectTree: [
+				'#URNAttr', '#GUIDAttr', '#ForceGetAttr', '#AcceptEncodingAttr'
+			],
+			GetProperties: [
+				'#URNAttr', '#GUIDAttr', '#ObjectIDAttr', '#ForceGetAttr', '#AcceptEncodingAttr'
+			],
+			GetDerivativeManifest: [
+				'#URNAttr', '#DerivativeURNAttr', '#RangeAttr'
+			],
+			GetThumbnail: [
+				'#URNAttr', '#WidthAttr' , '#HeightAttr'
+			],
+
+			GetFormats: [
+				'#IfModifiedSinceAttr', '#AcceptEncodingAttr'
 			]
 		};
 		$('#node-input-operation').on('change', function () {
@@ -297,7 +368,8 @@
 			_defaults: function (job) {
 				job.type = job.type || this.type;
 				job.advanced = job.advanced || {};
-				job.advanced.exportFileStructure = job.advanced.exportFileStructure || this.exportFileStructure[0];
+				job.advanced.exportFileStructure = job.advanced.exportFileStructure || this
+					.exportFileStructure[0];
 				job.advanced.unit = job.advanced.unit || this.unit[0];
 				job.advanced.modelGuid = job.advanced.modelGuid || this.modelGuid;
 				job.advanced.objectIds = job.advanced.objectIds || this.objectIds;
@@ -400,7 +472,10 @@
 						exportFileStructure: $(job).find('.node-input-job-exportFileStructure').val(),
 						unit: $(job).find('.node-input-job-unit').val(),
 						modelGuid: $(job).find('.node-input-job-modelGuid').val(),
-						objectIds: $(job).find('.node-input-job-objectIds').val().split(',').map((elt) => { return (elt.trim()); })
+						objectIds: $(job).find('.node-input-job-objectIds').val()
+							.split(',').map((elt) => {
+								return (parseInt(elt.trim()));
+							})
 					}
 				};
 				return (result);
@@ -421,7 +496,8 @@
 			_defaults: function (job) {
 				job.type = job.type || this.type;
 				job.advanced = job.advanced || {}
-				job.advanced.applicationProtocol = job.advanced.applicationProtocol || this.applicationProtocol[0];
+				job.advanced.applicationProtocol = job.advanced.applicationProtocol || this
+					.applicationProtocol[0];
 				job.advanced.tolerance = job.advanced.tolerance || this.tolerance;
 				return (job);
 			},
@@ -495,7 +571,8 @@
 				job.advanced = job.advanced || {};
 				job.advanced.advanced.format = job.advanced.format || this.format[1];
 				job.advanced.exportColor = job.advanced.exportColor === true;
-				job.advanced.exportFileStructure = job.advanced.exportFileStructure || this.exportFileStructure[0];
+				job.advanced.exportFileStructure = job.advanced.exportFileStructure || this
+					.exportFileStructure[0];
 				return (job);
 			},
 			_create: function (rows) {
@@ -798,11 +875,32 @@
 			urn: {
 				value: ''
 			},
+			derivativeurn: {
+				value: ''
+			},
+			guid: {
+				value: ''
+			},
+			objectid: {
+				value: ''
+			},
 			xAdsForce: {
+				value: false
+			},
+			forceget: {
 				value: false
 			},
 			rootFilename: {
 				value: null
+			},
+			range: {
+				value: null
+			},
+			width: {
+				value: 200
+			},
+			height: {
+				value: 200
 			},
 
 			jobs: {
@@ -815,6 +913,9 @@
 				}]
 			},
 
+			ifModifiedSince: {
+				value: null
+			},
 			acceptEncoding: {
 				value: null
 			},
@@ -973,7 +1074,11 @@
 			}));
 
 			var trimFields = [
-				'urn'
+				'urn',
+				'derivativeurn',
+				'range',
+				'objectid',
+				'guid'
 			];
 			// Just in case any whitespace has crept in with the copy-paste of the fields
 			trimFields.forEach(function (field) {
