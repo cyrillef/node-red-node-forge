@@ -1,23 +1,21 @@
 {
-    "name": "node-red-node-forge",
-    "version": "0.0.1",
-    "description": "Forge Node Red nodes",
-    "keywords": [
-        "node-red",
-        "forge"
-    ],
-    "node-red": {
-        "nodes": {
-            "forge-credentials": "forge-credentials.js",
-            "forge-oss": "forge-oss.js",
-            "lower-case": "lower-case.js",
-            "oauth-credentials": "oauth-credentials.js",
-            "oAuth-2Legged": "oauth-2legged.js"
-        }
-    },
-    "dependencies": {
-        "forge-apis": "^0.4.5",
-        "stream-buffers": "^3.0.2",
-        "uuid": "^3.3.2"
-    }
+	"name": "node-red-node-forge",
+	"version": "0.0.1",
+	"description": "Forge Node Red nodes",
+	"keywords": [
+		"node-red",
+		"forge"
+	],
+	"node-red": {
+		"nodes": {
+			"forge-credentials": "forge-credentials.js",
+			"forge-oss": "forge-oss.js",
+			"forge-model-derivative": "forge-model-derivative.js"
+		}
+	},
+	"dependencies": {
+		"forge-apis": "^0.4.5",
+		"stream-buffers": "^3.0.2",
+		"uuid": "^3.3.2"
+	}
 }

@@ -1,0 +1,63 @@
+{
+	"forge": {
+		"label": {
+			"forge": "Forge",
+			"name": "Name",
+			"topic": "Topic",
+			"operation": "Operation",
+			"urn": "base64 URN",
+			"force": "Force translation",
+			"region": "Region",
+			"jobs": "Format(s)",
+            "acceptEncoding": "Accept-Encoding",
+            "exportSettingName": "Export Setting Name",
+            "modelGuid": "Model GUID",
+            "objectIds": "Object Ids",
+            "exportFileStructure": "File Structure",
+            "unit": "Unit",
+            "tolerance": "Tolerance",
+            "applicationProtocol": "Protocol",
+            "format": "Format",
+            "exportColor": "Export color",
+            "surfaceType": "Surface Type",
+            "sheetType": "Sheet Type",
+            "solidType": "Solid Type",
+            "size": "Size",
+            "switchLoader": "Switch IFC Loader"
+		},
+		"placeholder": {
+			"name": "Name",
+			"topic": "Topic",
+			"urn": "Safe base64 URN",
+			"region": "Region",
+            "acceptEncoding": "Accept-Encoding",
+            "exportSettingName": "Export Setting Name",
+            "modelGuid": "Model GUID",
+            "objectIds": "Object Ids (comma separated)"
+		},
+		"tip": {
+			"config1": "",
+			"config2": ""
+		},
+		"status": {
+			"initializing": "initializing",
+			"error": "error",
+			"checking-for-changes": "checking for changes",
+			"downloading": "downloading",
+			"checking-credentials": "checking credentials",
+			"uploading": "uploading",
+			"failed": "failed"
+		},
+		"warn": {
+			"missing-credentials": "Missing Forge credentials"
+		},
+		"error": {
+			"failed-to-fetch": "failed to fetch OSS state: __err__",
+			"no-bucket-specified": "No bucket specified",
+			"no-filename-specified": "No filename specified",
+			"download-failed": "download failed: __err__",
+			"forge-oss-error": "Forge error: __err__",
+			"unknown-operation": "failed: Operation node defined - __op__"
+		}
+	}
+}

@@ -22,417 +22,417 @@
 
 <!-- forge-oss -->
 <script type="text/x-red" data-template-name="forge-oss">
-    <style scoped>
-        .hiddenAttrs {
-            display: none;
-        }
+	<style scoped>
+		.hiddenAttrs {
+			display: none;
+		}
 
-        .visibleAttrs {
-            display: block;
-        }
-    </style>
+		.visibleAttrs {
+			display: block;
+		}
+	</style>
 
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
-        <input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
-    </div>
-    <div class="form-row">
-        <label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
-        <input type="text" id="node-input-topic" />
-    </div>
-    <div class="form-row">
-        <label for="node-input-forge"><i class="fa fa-user"></i> <span data-i18n="forge.label.forge"></span></label>
-        <input type="text" id="node-input-forge">
-    </div>
+	<div class="form-row">
+		<label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
+		<input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
+	</div>
+	<div class="form-row">
+		<label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
+		<input type="text" id="node-input-topic" />
+	</div>
+	<div class="form-row">
+		<label for="node-input-forge"><i class="fa fa-user"></i> <span data-i18n="forge.label.forge"></span></label>
+		<input type="text" id="node-input-forge">
+	</div>
 
-    <div class="form-row">
-        <label for="node-input-operation"><i class="fa fa-wrench"></i> <span
-                data-i18n="forge.label.operation"></span></label>
-        <select type="text" id="node-input-operation">
-            <option value="CreateBucket">Create Bucket</option>
-            <option value="ListBuckets">List Buckets</option>
-            <option value="BucketDetails">Bucket Details</option>
-            <option value="DeleteBucket">Delete Bucket</option>
-            <option value="ListObjects">List Objects</option>
+	<div class="form-row">
+		<label for="node-input-operation"><i class="fa fa-wrench"></i> <span
+				data-i18n="forge.label.operation"></span></label>
+		<select type="text" id="node-input-operation">
+			<option value="CreateBucket">Create Bucket</option>
+			<option value="ListBuckets">List Buckets</option>
+			<option value="BucketDetails">Bucket Details</option>
+			<option value="DeleteBucket">Delete Bucket</option>
+			<option value="ListObjects">List Objects</option>
 
-            <option value="PutObject">Upload Object</option>
-            <option value="GetObject">Download Object</option>
-            <option value="DeleteObject">Delete Object</option>
-            <option value="ObjectDetails">Object Details</option>
+			<option value="PutObject">Upload Object</option>
+			<option value="GetObject">Download Object</option>
+			<option value="DeleteObject">Delete Object</option>
+			<option value="ObjectDetails">Object Details</option>
 
-            <option value="CreateSignature">Create Signature</option>
+			<option value="CreateSignature">Create Signature</option>
 
-            <option value="PutSignedObject">Upload Signed Object</option>
-            <option value="GetSignedObject">Get Signed Object</option>
-            <option value="DeleteSignedObject">Delete Signed Object</option>
+			<option value="PutSignedObject">Upload Signed Object</option>
+			<option value="GetSignedObject">Get Signed Object</option>
+			<option value="DeleteSignedObject">Delete Signed Object</option>
 
-            <option value="CopyObject">CopyObject *</option>
-        </select>
-    </div>
+			<option value="CopyObject">CopyObject *</option>
+		</select>
+	</div>
 
-    <div id="AttrHolder">
-        <div id="BucketAttr" class="form-row node-input-bucket hiddenAttrs">
-            <label for="node-input-bucket"><i class="fa fa-folder"></i> <span data-i18n="forge.label.bucket"></span></label>
-            <input type="text" id="node-input-bucket" data-i18n="[placeholder]forge.placeholder.bucket"
-                style="width: 70%;" />
-            <input type="hidden" id="node-input-bucketType" />
-        </div>
-        <div id="KeyAttr" class="form-row node-input-key hiddenAttrs">
-            <label for="node-input-key"><i class="fa fa-tag"></i> <span data-i18n="forge.label.key"></span></label>
-            <input type="text" id="node-input-key" data-i18n="[placeholder]forge.placeholder.key" />
-        </div>
-        <div id="ContentTypeAttr" class="form-row hiddenAttrs">
-            <label for="node-input-contentType"><i class="fa fa-arrow-left"></i> <span
-                    data-i18n="forge.label.contentType"></span></label>
-            <select type="text" id="node-input-contentType" style="width:70%;">
-                <!-- option value="text.plain">text.plain</option -->
-                <option selected value="application/octet-stream">application/octet-stream</option>
-                <option value="application/json">application/json</option>
-                <option value="application/pdf">image/pdf</option>
-                <option value="application/xhtml+xml">image/xhtml+xml</option>
-                <option value="application/xml">image/xml</option>
-                <option value="application/zip">image/zip</option>
-                <option value="image/gif">image/gif</option>
-                <option value="image/jpeg">image/jpeg</option>
-                <option value="image/png">image/png</option>
-                <option value="image/tiff">image/tiff</option>
-                <option value="image/vnd.microsoft.icon">image/vnd.microsoft.icon</option>
-                <option value="image/x-icon">image/x-icon</option>
-                <option value="image/vnd.djvu">image/vnd.djvu</option>
-                <option value="image/svg+xml">image/svg+xml</option>
-                <option value="audio/mpeg">image/mpeg</option>
-                <option value="audio/x-ms-wma">image/x-ms-wma</option>
-                <option value="audio/vnd.rn-realaudio">image/vnd.rn-realaudio</option>
-                <option value="audio/x-wav">image/x-wav</option>
-            </select>
-        </div>
-        <div id="ContentDispositionAttr" class="form-row node-input-contentDisposition hiddenAttrs">
-            <label for="node-input-contentDisposition"><i class="fa fa-tag"></i> <span
-                    data-i18n="forge.label.contentDisposition"></span></label>
-            <input type="text" id="node-input-contentDisposition"
-                data-i18n="[placeholder]forge.placeholder.contentDisposition" />
-        </div>
-        <div id="CopySourceAttr" class="form-row hiddenAttrs">
-            <label for="node-input-copySource"><i class="fa fa-tag"></i> <span data-i18n="forge.label.copySource"></span></label>
-            <input type="text" id="node-input-copySource" data-i18n="[placeholder]forge.placeholder.copySource" />
-        </div>
+	<div id="AttrHolder">
+		<div id="BucketAttr" class="form-row node-input-bucket hiddenAttrs">
+			<label for="node-input-bucket"><i class="fa fa-folder"></i> <span data-i18n="forge.label.bucket"></span></label>
+			<input type="text" id="node-input-bucket" data-i18n="[placeholder]forge.placeholder.bucket"
+				style="width: 70%;" />
+			<input type="hidden" id="node-input-bucketType" />
+		</div>
+		<div id="KeyAttr" class="form-row node-input-key hiddenAttrs">
+			<label for="node-input-key"><i class="fa fa-tag"></i> <span data-i18n="forge.label.key"></span></label>
+			<input type="text" id="node-input-key" data-i18n="[placeholder]forge.placeholder.key" />
+		</div>
+		<div id="ContentTypeAttr" class="form-row hiddenAttrs">
+			<label for="node-input-contentType"><i class="fa fa-arrow-left"></i> <span
+					data-i18n="forge.label.contentType"></span></label>
+			<select type="text" id="node-input-contentType" style="width:70%;">
+				<!-- option value="text.plain">text.plain</option -->
+				<option selected value="application/octet-stream">application/octet-stream</option>
+				<option value="application/json">application/json</option>
+				<option value="application/pdf">image/pdf</option>
+				<option value="application/xhtml+xml">image/xhtml+xml</option>
+				<option value="application/xml">image/xml</option>
+				<option value="application/zip">image/zip</option>
+				<option value="image/gif">image/gif</option>
+				<option value="image/jpeg">image/jpeg</option>
+				<option value="image/png">image/png</option>
+				<option value="image/tiff">image/tiff</option>
+				<option value="image/vnd.microsoft.icon">image/vnd.microsoft.icon</option>
+				<option value="image/x-icon">image/x-icon</option>
+				<option value="image/vnd.djvu">image/vnd.djvu</option>
+				<option value="image/svg+xml">image/svg+xml</option>
+				<option value="audio/mpeg">image/mpeg</option>
+				<option value="audio/x-ms-wma">image/x-ms-wma</option>
+				<option value="audio/vnd.rn-realaudio">image/vnd.rn-realaudio</option>
+				<option value="audio/x-wav">image/x-wav</option>
+			</select>
+		</div>
+		<div id="ContentDispositionAttr" class="form-row node-input-contentDisposition hiddenAttrs">
+			<label for="node-input-contentDisposition"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.contentDisposition"></span></label>
+			<input type="text" id="node-input-contentDisposition"
+				data-i18n="[placeholder]forge.placeholder.contentDisposition" />
+		</div>
+		<div id="CopySourceAttr" class="form-row hiddenAttrs">
+			<label for="node-input-copySource"><i class="fa fa-tag"></i> <span data-i18n="forge.label.copySource"></span></label>
+			<input type="text" id="node-input-copySource" data-i18n="[placeholder]forge.placeholder.copySource" />
+		</div>
 
-        <div id="LimitAttr" class="form-row node-input-limit hiddenAttrs">
-            <label for="node-input-limit"><i class="fa fa-tag"></i> <span data-i18n="forge.label.limit"></span></label>
-            <input type="text" id="node-input-limit" data-i18n="[placeholder]forge.placeholder.limit" />
-        </div>
-        <div id="StartAtAttr" class="form-row node-input-startAt hiddenAttrs">
-            <label for="node-input-startAt"><i class="fa fa-tag"></i> <span
-                    data-i18n="forge.label.startAt"></span></label>
-            <input type="text" id="node-input-startAt" data-i18n="[placeholder]forge.placeholder.startAt" />
-        </div>
-        <div id="BeginsWithAttr" class="form-row node-input-beginsWith hiddenAttrs">
-            <label for="node-input-beginsWith"><i class="fa fa-tag"></i> <span
-                    data-i18n="forge.label.beginsWith"></span></label>
-            <input type="text" id="node-input-beginsWith" data-i18n="[placeholder]forge.placeholder.beginsWith" />
-        </div>
-        <div id="WithAttr" class="form-row node-input-with hiddenAttrs">
-            <label for="node-input-with"><i class="fa fa-tag"></i> <span
-                    data-i18n="forge.label.with"></span></label>
-            <select type="text" id="node-input-with" style="width:70%;" multiple>
-                <option value="createdDate">createdDate</option>
-                <option value="lastAccessedDate">lastAccessedDate</option>
-                <option value="lastModifiedDate">lastModifiedDate</option>
-            </select>
-        </div>
-        <div id="PolicyKeyAttr" class="form-row node-input-policyKey hiddenAttrs">
-            <label for="node-input-policyKey"><i class="fa fa-tag"></i> <span
-                    data-i18n="forge.label.policyKey"></span></label>
-            <select type="text" id="node-input-policyKey">
-                <option selected value="transient">transient</option>
-                <option value="temporary">temporary</option>
-                <option value="persistent">persistent</option>
-            </select>
-        </div>
+		<div id="LimitAttr" class="form-row node-input-limit hiddenAttrs">
+			<label for="node-input-limit"><i class="fa fa-tag"></i> <span data-i18n="forge.label.limit"></span></label>
+			<input type="text" id="node-input-limit" data-i18n="[placeholder]forge.placeholder.limit" />
+		</div>
+		<div id="StartAtAttr" class="form-row node-input-startAt hiddenAttrs">
+			<label for="node-input-startAt"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.startAt"></span></label>
+			<input type="text" id="node-input-startAt" data-i18n="[placeholder]forge.placeholder.startAt" />
+		</div>
+		<div id="BeginsWithAttr" class="form-row node-input-beginsWith hiddenAttrs">
+			<label for="node-input-beginsWith"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.beginsWith"></span></label>
+			<input type="text" id="node-input-beginsWith" data-i18n="[placeholder]forge.placeholder.beginsWith" />
+		</div>
+		<div id="WithAttr" class="form-row node-input-with hiddenAttrs">
+			<label for="node-input-with"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.with"></span></label>
+			<select type="text" id="node-input-with" style="width:70%;" multiple>
+				<option value="createdDate">createdDate</option>
+				<option value="lastAccessedDate">lastAccessedDate</option>
+				<option value="lastModifiedDate">lastModifiedDate</option>
+			</select>
+		</div>
+		<div id="PolicyKeyAttr" class="form-row node-input-policyKey hiddenAttrs">
+			<label for="node-input-policyKey"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.policyKey"></span></label>
+			<select type="text" id="node-input-policyKey">
+				<option selected value="transient">transient</option>
+				<option value="temporary">temporary</option>
+				<option value="persistent">persistent</option>
+			</select>
+		</div>
 
-        <div id="LocalFilenameAttr" class="form-row node-input-localFilename hiddenAttrs">
-            <label for="node-input-localFilename"><i class="fa fa-file"></i> <span
-                    data-i18n="forge.label.localFilename"></span></label>
-            <input type="text" id="node-input-localFilename" data-i18n="[placeholder]forge.placeholder.localFilename" />
-        </div>
-        <div id="RangeAttr" class="form-row node-input-range hiddenAttrs">
-            <label for="node-input-range"><i class="fa fa-file"></i> <span
-                    data-i18n="forge.label.range"></span></label>
-            <input type="text" id="node-input-range" data-i18n="[placeholder]forge.placeholder.range" />
-        </div>
-        <div id="IfNoneMatchAttr" class="form-row node-input-ifNoneMatch hiddenAttrs">
-            <label for="node-input-ifNoneMatch"><i class="fa fa-file"></i> <span
-                    data-i18n="forge.label.ifNoneMatch"></span></label>
-            <input type="text" id="node-input-ifNoneMatch" data-i18n="[placeholder]forge.placeholder.ifNoneMatch" />
-        </div>
-        <div id="IfMatchAttr" class="form-row node-input-ifMatch hiddenAttrs">
-            <label for="node-input-ifMatch"><i class="fa fa-file"></i> <span
-                    data-i18n="forge.label.ifMatch"></span></label>
-            <input type="text" id="node-input-ifMatch" data-i18n="[placeholder]forge.placeholder.ifMatch" />
-        </div>
-        <div id="IfModifiedSinceAttr" class="form-row node-input-ifModifiedSince hiddenAttrs">
-            <label for="node-input-ifModifiedSince"><i class="fa fa-file"></i> <span
-                    data-i18n="forge.label.ifModifiedSince"></span></label>
-            <input type="datetime-local" id="node-input-ifModifiedSince"
-                data-i18n="[placeholder]forge.placeholder.ifModifiedSince" />
-        </div>
+		<div id="LocalFilenameAttr" class="form-row node-input-localFilename hiddenAttrs">
+			<label for="node-input-localFilename"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.localFilename"></span></label>
+			<input type="text" id="node-input-localFilename" data-i18n="[placeholder]forge.placeholder.localFilename" />
+		</div>
+		<div id="RangeAttr" class="form-row node-input-range hiddenAttrs">
+			<label for="node-input-range"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.range"></span></label>
+			<input type="text" id="node-input-range" data-i18n="[placeholder]forge.placeholder.range" />
+		</div>
+		<div id="IfNoneMatchAttr" class="form-row node-input-ifNoneMatch hiddenAttrs">
+			<label for="node-input-ifNoneMatch"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.ifNoneMatch"></span></label>
+			<input type="text" id="node-input-ifNoneMatch" data-i18n="[placeholder]forge.placeholder.ifNoneMatch" />
+		</div>
+		<div id="IfMatchAttr" class="form-row node-input-ifMatch hiddenAttrs">
+			<label for="node-input-ifMatch"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.ifMatch"></span></label>
+			<input type="text" id="node-input-ifMatch" data-i18n="[placeholder]forge.placeholder.ifMatch" />
+		</div>
+		<div id="IfModifiedSinceAttr" class="form-row node-input-ifModifiedSince hiddenAttrs">
+			<label for="node-input-ifModifiedSince"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.ifModifiedSince"></span></label>
+			<input type="datetime-local" id="node-input-ifModifiedSince"
+				data-i18n="[placeholder]forge.placeholder.ifModifiedSince" />
+		</div>
 
-        <div id="AcceptEncodingAttr" class="form-row node-input-acceptEncoding hiddenAttrs">
-            <label for="node-input-acceptEncoding"><i class="fa fa-tag"></i> <span
-                    data-i18n="forge.label.acceptEncoding"></span></label>
-            <select type="text" id="node-input-acceptEncoding" style="width:72%;">
-                <option selected value=""></option>
-                <option value="gzip">gzip</option>
-            </select>
-        </div>
+		<div id="AcceptEncodingAttr" class="form-row node-input-acceptEncoding hiddenAttrs">
+			<label for="node-input-acceptEncoding"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.acceptEncoding"></span></label>
+			<select type="text" id="node-input-acceptEncoding" style="width:72%;">
+				<option selected value=""></option>
+				<option value="gzip">gzip</option>
+			</select>
+		</div>
 
-        <div id="AccessAttr" class="form-row node-input-access hiddenAttrs">
-            <label for="node-input-access"><i class="fa fa-tag"></i> <span
-                    data-i18n="forge.label.access"></span></label>
-            <select type="text" id="node-input-access" style="width:72%;">
-                <option selected value="read">read</option>
-                <option value="write">write</option>
-                <option value="readwrite">readwrite</option>
-            </select>
-        </div>
-        <div id="SingleUseAttr" class="form-row node-input-singleUse hiddenAttrs">
-            <label for="node-input-singleUse"><i class="fa fa-file"></i> <span
-                    data-i18n="forge.label.singleUse"></span></label>
-            <input type="checkbox" id="node-input-singleUse"
-                data-i18n="[placeholder]forge.placeholder.singleUse" />
-        </div>
-        <div id="MinutesExpirationAttr" class="form-row node-input-minutesExpiration hiddenAttrs">
-            <label for="node-input-minutesExpiration"><i class="fa fa-stopwatch"></i> <span
-                    data-i18n="forge.label.minutesExpiration"></span></label>
-            <input type="number" id="node-input-minutesExpiration" min="0"
-                data-i18n="[placeholder]forge.placeholder.minutesExpiration" />
-        </div>
+		<div id="AccessAttr" class="form-row node-input-access hiddenAttrs">
+			<label for="node-input-access"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.access"></span></label>
+			<select type="text" id="node-input-access" style="width:72%;">
+				<option selected value="read">read</option>
+				<option value="write">write</option>
+				<option value="readwrite">readwrite</option>
+			</select>
+		</div>
+		<div id="SingleUseAttr" class="form-row node-input-singleUse hiddenAttrs">
+			<label for="node-input-singleUse"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.singleUse"></span></label>
+			<input type="checkbox" id="node-input-singleUse"
+				data-i18n="[placeholder]forge.placeholder.singleUse" />
+		</div>
+		<div id="MinutesExpirationAttr" class="form-row node-input-minutesExpiration hiddenAttrs">
+			<label for="node-input-minutesExpiration"><i class="fa fa-stopwatch"></i> <span
+					data-i18n="forge.label.minutesExpiration"></span></label>
+			<input type="number" id="node-input-minutesExpiration" min="0"
+				data-i18n="[placeholder]forge.placeholder.minutesExpiration" />
+		</div>
 
-        <div id="GUIDAttr" class="form-row node-input-guid hiddenAttrs">
-            <label for="node-input-guid"><i class="fa fa-tag"></i> <span
-                    data-i18n="forge.label.guid"></span></label>
-            <input type="text" id="node-input-guid" data-i18n="[placeholder]forge.placeholder.guid" />
-        </div>
-        <div id="RegionAttr" class="form-row node-input-region hiddenAttrs">
-            <label for="node-input-region"><i class="fa fa-tag"></i> <span data-i18n="forge.label.region"></span></label>
-            <select type="text" id="node-input-region" style="width:72%;">
-                <option selected value="US">US</option>
-                <option value="EMEA">EMEA</option>
-            </select>
-        </div>
-    </div>
+		<div id="GUIDAttr" class="form-row node-input-guid hiddenAttrs">
+			<label for="node-input-guid"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.guid"></span></label>
+			<input type="text" id="node-input-guid" data-i18n="[placeholder]forge.placeholder.guid" />
+		</div>
+		<div id="RegionAttr" class="form-row node-input-region hiddenAttrs">
+			<label for="node-input-region"><i class="fa fa-tag"></i> <span data-i18n="forge.label.region"></span></label>
+			<select type="text" id="node-input-region" style="width:72%;">
+				<option selected value="US">US</option>
+				<option value="EMEA">EMEA</option>
+			</select>
+		</div>
+	</div>
 
-    <script type="text/javascript">
-        var nodeOps = {
-            CreateBucket: [ // POST	buckets
-                '#BucketAttr', '#RegionAttr', '#PolicyKeyAttr'
-            ],
-            ListBuckets: [ // GET	buckets
-                '#Region', '#LimitAttr', '#StartAtAttr'
-            ],
-            BucketDetails: [ // GET	buckets/:bucketKey/details
-                '#BucketAttr'
-            ],
-            DeleteBucket: [ // DELETE	buckets/:bucketKey
-                '#BucketAttr'
-            ],
-            ListObjects: [ // GET	buckets/:bucketKey/objects
-                '#BucketAttr', '#LimitAttr', '#StartAtAttr', '#BeginsWithAttr'
-            ],
-            PutObject: [ // PUT buckets/:bucketKey/objects/:objectName
-                '#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#ContentTypeAttr', '#ContentDispositionAttr',
-                '#IfMatchAttr'
-            ],
-            GetObject: [ // GET buckets/:bucketKey/objects/:objectName
-                '#BucketAttr', '#KeyAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
-                '#AcceptEncodingAttr'
-            ],
-            DeleteObject: [ // DELETE	buckets/:bucketKey/objects/:objectName
-                '#BucketAttr', '#KeyAttr'
-            ],
-            ObjectDetails: [ // GET	buckets/:bucketKey/objects/:objectName/details
-                '#BucketAttr', '#KeyAttr', '#WithAttr', '#IfModifiedSinceAttr'
-            ],
-            CreateSignature: [ // POST buckets/:bucketKey/objects/:objectName/signed
-                '#BucketAttr', '#KeyAttr', '#AccessAttr', '#SingleUseAttr', '#MinutesExpirationAttr'
-            ],
-            PutSignedObject: [ // PUT	signedresources/:id
-                '#GUIDAttr', '#RegionAttr', '#LocalFilenameAttr', '#ContentDispositionAttr', '#IfMatchAttr'
-            ],
-            GetSignedObject: [ // GET	signedresources/:id
-                '#GUIDAttr', '#RegionAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
-                '#AcceptEncodingAttr'
-            ],
-            DeleteSignedObject: [ // DELETE	signedresources/:id
-                '#GUIDAttr', '#RegionAttr'
-            ],
-            CopyObject: [ // PUT	buckets/:bucketKey/objects/:objectName/copyto/:newObjectName
-                '#BucketAttr', '#KeyAttr', '#CopySourceAttr'
-            ]
-        };
-        $('#node-input-operation').on('change', function () {
-            $('#AttrHolder').children().addClass('hiddenAttrs').removeClass('visibleAttrs');
-            if (nodeOps[this.value])
-                $(nodeOps[this.value].join()).addClass('visibleAttrs').removeClass('hiddenAttrs');
-        });
+	<script type="text/javascript">
+		var nodeOps = {
+			CreateBucket: [ // POST	buckets
+				'#BucketAttr', '#RegionAttr', '#PolicyKeyAttr'
+			],
+			ListBuckets: [ // GET	buckets
+				'#Region', '#LimitAttr', '#StartAtAttr'
+			],
+			BucketDetails: [ // GET	buckets/:bucketKey/details
+				'#BucketAttr'
+			],
+			DeleteBucket: [ // DELETE	buckets/:bucketKey
+				'#BucketAttr'
+			],
+			ListObjects: [ // GET	buckets/:bucketKey/objects
+				'#BucketAttr', '#LimitAttr', '#StartAtAttr', '#BeginsWithAttr'
+			],
+			PutObject: [ // PUT buckets/:bucketKey/objects/:objectName
+				'#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#ContentTypeAttr', '#ContentDispositionAttr',
+				'#IfMatchAttr'
+			],
+			GetObject: [ // GET buckets/:bucketKey/objects/:objectName
+				'#BucketAttr', '#KeyAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
+				'#AcceptEncodingAttr'
+			],
+			DeleteObject: [ // DELETE	buckets/:bucketKey/objects/:objectName
+				'#BucketAttr', '#KeyAttr'
+			],
+			ObjectDetails: [ // GET	buckets/:bucketKey/objects/:objectName/details
+				'#BucketAttr', '#KeyAttr', '#WithAttr', '#IfModifiedSinceAttr'
+			],
+			CreateSignature: [ // POST buckets/:bucketKey/objects/:objectName/signed
+				'#BucketAttr', '#KeyAttr', '#AccessAttr', '#SingleUseAttr', '#MinutesExpirationAttr'
+			],
+			PutSignedObject: [ // PUT	signedresources/:id
+				'#GUIDAttr', '#RegionAttr', '#LocalFilenameAttr', '#ContentDispositionAttr', '#IfMatchAttr'
+			],
+			GetSignedObject: [ // GET	signedresources/:id
+				'#GUIDAttr', '#RegionAttr', '#RangeAttr', '#IfNoneMatchAttr', '#IfModifiedSinceAttr',
+				'#AcceptEncodingAttr'
+			],
+			DeleteSignedObject: [ // DELETE	signedresources/:id
+				'#GUIDAttr', '#RegionAttr'
+			],
+			CopyObject: [ // PUT	buckets/:bucketKey/objects/:objectName/copyto/:newObjectName
+				'#BucketAttr', '#KeyAttr', '#CopySourceAttr'
+			]
+		};
+		$('#node-input-operation').on('change', function () {
+			$('#AttrHolder').children().addClass('hiddenAttrs').removeClass('visibleAttrs');
+			if (nodeOps[this.value])
+				$(nodeOps[this.value].join()).addClass('visibleAttrs').removeClass('hiddenAttrs');
+		});
 
-    </script>
+	</script>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('forge-oss', {
-        category: 'forge',
-        color: "#0696D7",
-        icon: "forge.png",
-        align: "right",
-        defaults: {
-            name: {
-                value: ""
-            },
-            topic: {
-                value: ""
-            },
-            forge: {
-                type: "forge-credentials",
-                required: true
-            },
-            operation: {
-                value: "GetObject"
-            },
-            bucket: {
-                required: true,
-                value: "FORGE_BUCKET",
-                //validate: RED.validators.typedInput("bucketType")
-                validate: function (v) {
-                    var regex = new RegExp('^[-_.a-z0-9]{3,128}$');
-                    var bucketType = $("#node-input-bucketType").val() || this.bucketType;
-                    return (
-                        RED.validators.typedInput("bucketType")() &&
-                        ((bucketType === "str" && regex.test(v)) ||
-                            (bucketType === "env"))
-                    );
-                }
-            },
-            bucketType: {
-                value: "env"
-            },
-            policyKey: {
-                value: 'transient'
-            },
-            key: {
-                value: ""
-            },
-            contentType: {
-                value: 'application/octet-stream'
-            },
-            contentDisposition: {
-                value: null
-            },
-            copySource: {
-                value: ""
-            },
-            localFilename: {
-                value: ""
-            },
-            limit: {
-                value: 10
-            },
-            startAt: {
-                value: null
-            },
-            beginsWith: {
-                value: null
-            },
-            with: { // Acceptable values: createdDate, lastAccessedDate, lastModifiedDate
-                value: null
-            },
-            ifMatch: {
-                value: null
-            },
-            ifNoneMatch: {
-                value: null
-            },
-            ifModifiedSince: {
-                value: null
-            },
-            range: {
-                value: null
-            },
-            access: {
-                value: "read"
-            },
-            singleUse: {
-                value: false
-            },
-            minutesExpiration: {
-                value: 60
-            },
-            acceptEncoding: {
-                value: null
-            },
-            SessionId: {
-                value: ""
-            },
-            guid: {
-                value: null
-            },
-            region: { // Acceptable values: US, EMEA
-                value: "US",
-                required: true
-            }
-        },
-        inputs: 1,
-        //inputLabels: ["credentials", "in"],
-        outputs: 2,
-        outputLabels: ["response", "err"],
-        label: function () {
-            return (this.name || "oss " + this.operation);
-        },
-        // oneditprepare is called immediately before the dialog is displayed.
-        // oneditsave is called when the edit dialog is okayed.
-        // oneditcancel is called when the edit dialog is cancelled.
-        // oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
-        // oneditresize is called when the edit dialog is resized.
-        oneditprepare: function () {
-            if (!this.bucketType) {
-                if (this.bucket === "") {
-                    this.bucketType = "env";
-                    this.bucket = "FORGE_BUCKET"
-                } else {
-                    this.bucketType = "str";
-                }
-            } else if (this.bucketType === 'string' || this.bucketType === 'none') {
-                this.bucketType = "str";
-            }
+	RED.nodes.registerType('forge-oss', {
+		category: 'forge',
+		color: '#0696D7',
+		icon: 'forge.png',
+		align: 'right',
+		defaults: {
+			name: {
+				value: ''
+			},
+			topic: {
+				value: ''
+			},
+			forge: {
+				type: 'forge-credentials',
+				required: true
+			},
+			operation: {
+				value: 'GetObject'
+			},
+			bucket: {
+				required: true,
+				value: 'FORGE_BUCKET',
+				//validate: RED.validators.typedInput('bucketType')
+				validate: function (v) {
+					var regex = new RegExp('^[-_.a-z0-9]{3,128}$');
+					var bucketType = $('#node-input-bucketType').val() || this.bucketType;
+					return (
+						RED.validators.typedInput('bucketType')() &&
+						((bucketType === 'str' && regex.test(v)) ||
+							(bucketType === 'env'))
+					);
+				}
+			},
+			bucketType: {
+				value: 'env'
+			},
+			policyKey: {
+				value: 'transient'
+			},
+			key: {
+				value: ''
+			},
+			contentType: {
+				value: 'application/octet-stream'
+			},
+			contentDisposition: {
+				value: null
+			},
+			copySource: {
+				value: ''
+			},
+			localFilename: {
+				value: ''
+			},
+			limit: {
+				value: 10
+			},
+			startAt: {
+				value: null
+			},
+			beginsWith: {
+				value: null
+			},
+			with: { // Acceptable values: createdDate, lastAccessedDate, lastModifiedDate
+				value: null
+			},
+			ifMatch: {
+				value: null
+			},
+			ifNoneMatch: {
+				value: null
+			},
+			ifModifiedSince: {
+				value: null
+			},
+			range: {
+				value: null
+			},
+			access: {
+				value: 'read'
+			},
+			singleUse: {
+				value: false
+			},
+			minutesExpiration: {
+				value: 60
+			},
+			acceptEncoding: {
+				value: null
+			},
+			SessionId: {
+				value: ''
+			},
+			guid: {
+				value: null
+			},
+			region: { // Acceptable values: US, EMEA
+				value: 'US',
+				required: true
+			}
+		},
+		inputs: 1,
+		//inputLabels: ['credentials', 'in'],
+		outputs: 2,
+		outputLabels: ['response', 'err'],
+		label: function () {
+			return (this.name || 'oss ' + this.operation);
+		},
+		// oneditprepare is called immediately before the dialog is displayed.
+		// oneditsave is called when the edit dialog is okayed.
+		// oneditcancel is called when the edit dialog is cancelled.
+		// oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
+		// oneditresize is called when the edit dialog is resized.
+		oneditprepare: function () {
+			if (!this.bucketType) {
+				if (this.bucket === '') {
+					this.bucketType = 'env';
+					this.bucket = 'FORGE_BUCKET'
+				} else {
+					this.bucketType = 'str';
+				}
+			} else if (this.bucketType === 'string' || this.bucketType === 'none') {
+				this.bucketType = 'str';
+			}
 
-            $("#node-input-bucketType").val(this.bucketType);
-            $("#node-input-bucket").typedInput({
-                default: 'env',
-                typeField: $("#node-input-bucketType"),
-                types: [ /*'flow', 'global',*/ 'str', 'env']
-            });
-            $("#node-input-bucket").typedInput('type', this.bucketType);
-        },
-        oneditsave: function () {
-            //this.bucketType = $("#node-input-bucketType").val();
+			$('#node-input-bucketType').val(this.bucketType);
+			$('#node-input-bucket').typedInput({
+				default: 'env',
+				typeField: $('#node-input-bucketType'),
+				types: [ /*'flow', 'global',*/ 'str', 'env']
+			});
+			$('#node-input-bucket').typedInput('type', this.bucketType);
+		},
+		oneditsave: function () {
+			//this.bucketType = $('#node-input-bucketType').val();
 
-            var trimFields = [
-                "bucket",
-                "key",
-                "copySource",
-                "startAt",
-                "beginsWith",
-                "localFilename",
-                "range",
-                "ifNoneMatch",
-                "guid"
-            ];
-            // Just in case any whitespace has crept in with the copy-paste of the fields
-            trimFields.forEach(function (field) {
-                var v = $("#node-input-" + field).val();
-                v = v.trim();
-                $("#node-input-" + field).val(v);
-            });
-        }
-    });
+			var trimFields = [
+				'bucket',
+				'key',
+				'copySource',
+				'startAt',
+				'beginsWith',
+				'localFilename',
+				'range',
+				'ifNoneMatch',
+				'guid'
+			];
+			// Just in case any whitespace has crept in with the copy-paste of the fields
+			trimFields.forEach(function (field) {
+				var v = $('#node-input-' + field).val();
+				v = v.trim();
+				$('#node-input-' + field).val(v);
+			});
+		}
+	});
 </script>

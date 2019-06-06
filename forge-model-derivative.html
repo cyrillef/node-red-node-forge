@@ -1,0 +1,990 @@
+<!--
+  Copyright (c) Autodesk, Inc.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+-->
+
+<!-- forge-model-derivative -->
+<script type="text/x-red" data-template-name="forge-model-derivative">
+	<style scoped>
+		.hiddenAttrs {
+			display: none;
+		}
+
+		.visibleAttrs {
+			display: block;
+		}
+	</style>
+
+	<div class="form-row">
+		<label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
+		<input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
+	</div>
+	<div class="form-row">
+		<label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
+		<input type="text" id="node-input-topic" />
+	</div>
+	<div class="form-row">
+		<label for="node-input-forge"><i class="fa fa-user"></i> <span data-i18n="forge.label.forge"></span></label>
+		<input type="text" id="node-input-forge">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-operation"><i class="fa fa-wrench"></i> <span
+				data-i18n="forge.label.operation"></span></label>
+		<select type="text" id="node-input-operation">
+			<option value="Translate">Translate Model</option>
+			<option value="GetManifest">Get Manifest</option>
+			<option value="DeleteManifest">Delete Model</option>
+
+		</select>
+	</div>
+
+	<div id="AttrHolder">
+		<div id="URNAttr" class="form-row node-input-urn hiddenAttrs">
+			<label for="node-input-urn"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.urn"></span></label>
+			<input type="text" id="node-input-urn" data-i18n="[placeholder]forge.placeholder.urn" />
+		</div>
+
+		<div id="ForceAttr" class="form-row node-input-force hiddenAttrs">
+			<label for="node-input-force"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.force"></span></label>
+			<input type="checkbox" id="node-input-force" />
+		</div>
+
+		<div id="AcceptEncodingAttr" class="form-row node-input-acceptEncoding hiddenAttrs">
+			<label for="node-input-acceptEncoding"><i class="fa fa-tag"></i> <span
+					data-i18n="forge.label.acceptEncoding"></span></label>
+			<select type="text" id="node-input-acceptEncoding" style="width:72%;">
+				<option selected value=""></option>
+				<option value="gzip">gzip</option>
+			</select>
+		</div>
+		<div id="RegionAttr" class="form-row node-input-region hiddenAttrs">
+			<label for="node-input-region"><i class="fa fa-tag"></i> <span data-i18n="forge.label.region"></span></label>
+			<select type="text" id="node-input-region" style="width:72%;">
+				<option selected value="US">US</option>
+				<option value="EMEA">EMEA</option>
+			</select>
+		</div>
+
+		<div id="JobsAttr" class="form-row hiddenAttrs">
+			<div class="form-row" style="margin-bottom:0;">
+				<label><i class="fa fa-list"></i> <span data-i18n="forge.label.jobs"></span></label>
+			</div>
+			<div class="form-row node-input-job-container-row">
+				<ol id="node-input-job-container"></ol>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var nodeOps = {
+			Translate: [
+				'#URNAttr', '#ForceAttr', '#JobsAttr'
+			],
+			GetManifest: [
+				'#URNAttr', '#AcceptEncodingAttr'
+			],
+			DeleteManifest: [
+				'#URNAttr'
+			]
+		};
+		$('#node-input-operation').on('change', function () {
+			$('#AttrHolder').children().addClass('hiddenAttrs').removeClass('visibleAttrs');
+			if (nodeOps[this.value])
+				$(nodeOps[this.value].join()).addClass('visibleAttrs').removeClass('hiddenAttrs');
+		});
+
+	</script>
+</script>
+
+<script type="text/javascript">
+	function svf() {
+		return ({
+			type: 'svf',
+			views: ['2d', '3d'],
+			switchLoader: false,
+			_defaults: function (job) {
+				job.type = job.type || this.type;
+				job.views = job.views || this.views;
+				job.advanced = job.advanced || {};
+				job.advanced.switchLoader = job.advanced.switchLoader === true;
+				return (job);
+			},
+			_create: function (rows) {
+				//debugger;
+				var label = $('<label />', {
+						width: '40px;'
+					})
+					.text('2d')
+					.appendTo(rows[1]);
+				$('<input />', {
+						class: 'node-input-job-2d',
+						type: 'checkbox',
+						width: '20px',
+						value: '2d'
+					})
+					.prependTo(label);
+				label = $('<label />', {
+					width: '40px;'
+				}).text('3d').appendTo(rows[1]);
+				$('<input />', {
+						class: 'node-input-job-3d',
+						type: 'checkbox',
+						width: '20px',
+						value: '3d'
+					})
+					.prependTo(label);
+
+				$('<div />', {
+						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
+					})
+					.text(' ')
+					.appendTo(rows[2]);
+				label = $('<label />', {
+						//width: '40px;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.switchLoader)
+					.appendTo(rows[2]);
+				$('<input />', {
+						class: 'node-input-job-switchLoader',
+						type: 'checkbox',
+						width: '20px'
+					})
+					.prependTo(label);
+			},
+			_fill: function (job, rows) {
+				//debugger;
+				var parent = rows[1].parent().parent();
+				$(parent).find('.node-input-job-2d').prop('checked', job.views.includes('2d'));
+				$(parent).find('.node-input-job-3d').prop('checked', job.views.includes('3d'));
+				$(parent).find('.node-input-job-switchLoader').prop('checked', job.advanced.switchLoader);
+			},
+			_save: function (job, type) {
+				var result = {
+					type: type,
+					views: [],
+					advanced: {
+						switchLoader: job.find('.node-input-job-switchLoader').is(':checked')
+					}
+				};
+				if ($(job).find('.node-input-job-2d').is(':checked'))
+					result.views.push($(job).find('.node-input-job-2d').val());
+				if ($(job).find('.node-input-job-3d').is(':checked'))
+					result.views.push($(job).find('.node-input-job-3d').val());
+				return (result);
+			}
+		});
+	}
+
+	function dwg() {
+		return ({
+			type: 'dwg',
+			exportSettingName: '',
+			_defaults: function (job) {
+				job.type = job.type || this.type;
+				job.advanced = job.advanced || {};
+				job.advanced.exportSettingName = job.advanced.exportSettingName || this.exportSettingName;
+				return (job);
+			},
+			_create: function (rows) {
+				var propertyValue = $('<input />', {
+						class: 'node-input-job-exportSettingName',
+						type: 'text',
+						'data-i18n': '[placeholder]forge.placeholder.exportSettingName'
+					})
+					.prop({
+						placeholder: i18n.getResourceBundle(
+								'en-US',
+								'node-red-node-forge/forge-model-derivative')
+							.forge.placeholder.exportSettingName
+					})
+					.appendTo(rows[1]);
+			},
+			_fill: function (job, rows) {
+				var parent = rows[1].parent().parent();
+				$(parent).find('.node-input-job-exportSettingName').val(job.advanced.exportSettingName);
+			},
+			_save: function (job, type) {
+				var result = {
+					type: type,
+					advanced: {
+						exportSettingName: $(job).find('.node-input-job-exportSettingName').val()
+					}
+				};
+				return (result);
+			}
+		});
+	}
+
+	function ifc() {
+		return ({
+			type: 'ifc',
+			exportSettingName: '',
+			_defaults: function (job) {
+				job.type = job.type || this.type;
+				job.advanced = job.advanced || {};
+				job.advanced.exportSettingName = job.advanced.exportSettingName || this.exportSettingName;
+				return (job);
+			},
+			_create: function (rows) {
+				//debugger;
+				var propertyValue = $('<input />', {
+						class: 'node-input-job-exportSettingName',
+						type: 'text'
+					})
+					.prop({
+						placeholder: i18n.getResourceBundle(
+								'en-US',
+								'node-red-node-forge/forge-model-derivative')
+							.forge.placeholder.exportSettingName
+					})
+					.appendTo(rows[1]);
+			},
+			_fill: function (job, rows) {
+				var parent = rows[1].parent().parent();
+				$(parent).find('.node-input-job-exportSettingName').val(job.advanced.exportSettingName);
+			},
+			_save: function (job, type) {
+				var result = {
+					type: type,
+					advanced: {
+						exportSettingName: $(job).find('.node-input-job-exportSettingName').val()
+					}
+				};
+				return (result);
+			}
+		});
+	}
+
+	function obj() {
+		return ({
+			type: 'obj',
+			exportFileStructure: ['single', 'mutiple'],
+			unit: ['', 'meter', 'decimeter', 'centimeter', 'millimeter',
+				'micrometer', 'nanometer',
+				'yard', 'foot', 'inch', 'mil', 'microinch'
+			],
+			modelGuid: '',
+			objectIds: [-1],
+			_defaults: function (job) {
+				job.type = job.type || this.type;
+				job.advanced = job.advanced || {};
+				job.advanced.exportFileStructure = job.advanced.exportFileStructure || this.exportFileStructure[0];
+				job.advanced.unit = job.advanced.unit || this.unit[0];
+				job.advanced.modelGuid = job.advanced.modelGuid || this.modelGuid;
+				job.advanced.objectIds = job.advanced.objectIds || this.objectIds;
+				return (job);
+			},
+			_create: function (rows) {
+				//debugger;
+				var label = $('<label />', {
+						width: '40px;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.exportFileStructure)
+					.appendTo(rows[1]);
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: 'node-input-job-exportFileStructure',
+					style: 'width: 110px; margin-right: 10px;'
+				}).appendTo(rows [1]);
+				/* beautify preserve:end */
+				for (var i = 0; i < this.exportFileStructure.length; i++) {
+					selectField.append($('<option> </option>')
+						.val(this.exportFileStructure[i])
+						.text(this.exportFileStructure[i]));
+				}
+
+				$('<div />', {
+						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.unit)
+					.appendTo(rows[2]);
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: 'node-input-job-unit',
+					style: 'width: calc(94% - 110px); margin-right: 10px;'
+				}).appendTo(rows [2]);
+				/* beautify preserve:end */
+				for (var i = 0; i < this.unit.length; i++) {
+					selectField.append($('<option> </option>')
+						.val(this.unit[i])
+						.text(this.unit[i]));
+				}
+
+				$('<div />', {
+						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.modelGuid)
+					.appendTo(rows[3]);
+				$('<input />', {
+						class: 'node-input-job-modelGuid',
+						type: 'text'
+					})
+					.prop({
+						placeholder: i18n.getResourceBundle(
+								'en-US',
+								'node-red-node-forge/forge-model-derivative')
+							.forge.placeholder.modelGuid
+					})
+					.appendTo(rows[3]);
+
+				$('<div />', {
+						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.objectIds)
+					.appendTo(rows[4]);
+				$('<input />', {
+						class: 'node-input-job-objectIds',
+						type: 'text'
+					})
+					.prop({
+						placeholder: i18n.getResourceBundle(
+								'en-US',
+								'node-red-node-forge/forge-model-derivative')
+							.forge.placeholder.objectIds
+					})
+					.appendTo(rows[4]);
+			},
+			_fill: function (job, rows) {
+				//debugger;
+				var parent = rows[1].parent().parent();
+				$(parent).find('.node-input-job-exportFileStructure').val(job.advanced.exportFileStructure);
+				$(parent).find('.node-input-job-unit').val(job.advanced.unit);
+				$(parent).find('.node-input-job-modelGuid').val(job.advanced.modelGuid);
+				$(parent).find('.node-input-job-objectIds').val(job.advanced.objectIds.join(','));
+			},
+			_save: function (job, type) {
+				var result = {
+					type: type,
+					advanced: {
+						exportFileStructure: $(job).find('.node-input-job-exportFileStructure').val(),
+						unit: $(job).find('.node-input-job-unit').val(),
+						modelGuid: $(job).find('.node-input-job-modelGuid').val(),
+						objectIds: $(job).find('.node-input-job-objectIds').val().split(',').map((elt) => { return (elt.trim()); })
+					}
+				};
+				return (result);
+			}
+		});
+	}
+
+	function step() {
+		return ({
+			type: 'step',
+			applicationProtocol: [214, 203, 242],
+			applicationProtocolLabels: [
+				'214 - core data for automotive mechanical design processes',
+				'203 - configuration controlled design',
+				'242 - managed model based 3D engineering'
+			],
+			tolerance: 0.001,
+			_defaults: function (job) {
+				job.type = job.type || this.type;
+				job.advanced = job.advanced || {}
+				job.advanced.applicationProtocol = job.advanced.applicationProtocol || this.applicationProtocol[0];
+				job.advanced.tolerance = job.advanced.tolerance || this.tolerance;
+				return (job);
+			},
+			_create: function (rows) {
+				//debugger;
+				var label = $('<label />', {
+						width: '40px;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.tolerance)
+					.appendTo(rows[1]);
+				$('<input />', {
+						class: 'node-input-job-tolerance',
+						type: 'text',
+						width: '100px'
+					})
+					.prop({
+						placeholder: this.tolerance
+					})
+					.appendTo(rows[1]);
+
+				$('<div />', {
+						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.applicationProtocol)
+					.appendTo(rows[2]);
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: 'node-input-job-applicationProtocol',
+					style: 'width: calc(94% - 110px); margin-right: 10px;'
+				}).appendTo(rows [2]);
+				/* beautify preserve:end */
+				for (var i = 0; i < this.applicationProtocol.length; i++) {
+					selectField.append($('<option> </option>')
+						.val(this.applicationProtocol[i])
+						.text(this.applicationProtocolLabels[i]));
+				}
+			},
+			_fill: function (job, rows) {
+				//debugger;
+				var parent = rows[1].parent().parent();
+				$(parent).find('.node-input-job-applicationProtocol').val(job.advanced.applicationProtocol);
+				$(parent).find('.node-input-job-tolerance').val(job.advanced.tolerance);
+			},
+			_save: function (job, type) {
+				var result = {
+					type: type,
+					advanced: {
+						applicationProtocol: $(job).find('.node-input-job-applicationProtocol').val(),
+						tolerance: $(job).find('.node-input-job-tolerance').val()
+					}
+				};
+				return (result);
+			}
+		});
+	}
+
+	function stl() {
+		return ({
+			type: 'stl',
+			format: ['ascii', 'binary'],
+			exportColor: true,
+			exportFileStructure: ['single', 'multiple'],
+			_defaults: function (job) {
+				job.type = job.type || this.type;
+				job.advanced = job.advanced || {};
+				job.advanced.advanced.format = job.advanced.format || this.format[1];
+				job.advanced.exportColor = job.advanced.exportColor === true;
+				job.advanced.exportFileStructure = job.advanced.exportFileStructure || this.exportFileStructure[0];
+				return (job);
+			},
+			_create: function (rows) {
+				//debugger;
+				var label = $('<label />', {
+						width: '40px;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.format)
+					.appendTo(rows[1]);
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: 'node-input-job-stlformat',
+					style: 'width: 110px; margin-right: 10px;'
+				}).appendTo(rows [1]);
+				/* beautify preserve:end */
+				for (var i = 0; i < this.format.length; i++) {
+					selectField.append($('<option> </option>')
+						.val(this.format[i])
+						.text(this.format[i]));
+				}
+
+				$('<div />', {
+						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
+					})
+					.text(' ')
+					.appendTo(rows[2]);
+				label = $('<label />', {
+						//width: '40px;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.exportColor)
+					.appendTo(rows[2]);
+				$('<input />', {
+						class: 'node-input-job-exportColor',
+						type: 'checkbox',
+						width: '20px'
+					})
+					.prependTo(label);
+
+				$('<div />', {
+						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
+					})
+					.text(' ')
+					.appendTo(rows[3]);
+				label = $('<label />', {
+						width: '40px;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.exportFileStructure)
+					.appendTo(rows[3]);
+				/* beautify preserve:start */
+					var selectField = $('<select />', {
+						class: 'node-input-job-exportFileStructure',
+						style: 'width: 110px; margin-right: 10px;'
+					}).appendTo(rows [3]);
+					/* beautify preserve:end */
+				for (var i = 0; i < this.exportFileStructure.length; i++) {
+					selectField.append($('<option> </option>')
+						.val(this.exportFileStructure[i])
+						.text(this.exportFileStructure[i]));
+				}
+			},
+			_fill: function (job, rows) {
+				//debugger;
+				var parent = rows[1].parent().parent();
+				$(parent).find('.node-input-job-stlformat').val(job.advanced.format);
+				$(parent).find('.node-input-job-exportColor').prop('checked', job.advanced.exportColor);
+				$(parent).find('.node-input-job-exportFileStructure').val(job.advanced.exportFileStructure);
+			},
+			_save: function (job, type) {
+				var result = {
+					type: type,
+					advanced: {
+						format: $(job).find('.node-input-job-stlformat').val(),
+						exportColor: $(job).find('.node-input-job-exportColor').is(':checked'),
+						exportFileStructure: $(job).find('.node-input-job-exportFileStructure').val()
+					}
+				};
+				return (result);
+			}
+		});
+	}
+
+	function iges() {
+		return ({
+			type: 'iges',
+			tolerance: 0.001,
+			surfaceType: ['bounded', 'trimmed', 'wireframe'],
+			sheetType: ['surface', 'open', 'shell', 'wireframe'],
+			solidType: ['solid', 'surface', 'wireframe'],
+			_defaults: function (job) {
+				job.type = job.type || this.type;
+				job.advanced = job.advanced || {};
+				job.advanced.tolerance = job.advanced.tolerance || this.tolerance;
+				job.advanced.surfaceType = job.advanced.surfaceType || this.surfaceType[0];
+				job.advanced.sheetType = job.advanced.sheetType || this.sheetType[0];
+				job.advanced.solidType = job.advanced.solidType || this.solidType[0];
+				return (job);
+			},
+			_create: function (rows) {
+				//debugger;
+				var label = $('<label />', {
+						width: '40px;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.tolerance)
+					.appendTo(rows[1]);
+				$('<input />', {
+						class: 'node-input-job-tolerance',
+						type: 'text',
+						width: '100px'
+					})
+					.prop({
+						placeholder: this.tolerance
+					})
+					.appendTo(rows[1]);
+
+				$('<div />', {
+						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.surfaceType)
+					.appendTo(rows[2]);
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: 'node-input-job-surfaceType',
+					style: 'width: calc(94% - 110px); margin-right: 10px;'
+				}).appendTo(rows [2]);
+				/* beautify preserve:end */
+				for (var i = 0; i < this.surfaceType.length; i++) {
+					selectField.append($('<option> </option>')
+						.val(this.surfaceType[i])
+						.text(this.surfaceType[i]));
+				}
+
+				$('<div />', {
+						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.sheetType)
+					.appendTo(rows[3]);
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: 'node-input-job-sheetType',
+					style: 'width: calc(94% - 110px); margin-right: 10px;'
+				}).appendTo(rows [3]);
+				/* beautify preserve:end */
+				for (var i = 0; i < this.sheetType.length; i++) {
+					selectField.append($('<option> </option>')
+						.val(this.sheetType[i])
+						.text(this.sheetType[i]));
+				}
+
+				$('<div />', {
+						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.solidType)
+					.appendTo(rows[4]);
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: 'node-input-job-solidType',
+					style: 'width: calc(94% - 110px); margin-right: 10px;'
+				}).appendTo(rows [4]);
+				/* beautify preserve:end */
+				for (var i = 0; i < this.solidType.length; i++) {
+					selectField.append($('<option> </option>')
+						.val(this.solidType[i])
+						.text(this.solidType[i]));
+				}
+			},
+			_fill: function (job, rows) {
+				//debugger;
+				var parent = rows[1].parent().parent();
+				$(parent).find('.node-input-job-tolerance').val(job.advanced.tolerance);
+				$(parent).find('.node-input-job-surfaceType').val(job.advanced.surfaceType);
+				$(parent).find('.node-input-job-sheetType').val(job.advanced.sheetType);
+				$(parent).find('.node-input-job-solidType').val(job.advanced.solidType);
+			},
+			_save: function (job, type) {
+				var result = {
+					type: type,
+					advanced: {
+						tolerance: $(job).find('.node-input-job-tolerance').val(),
+						surfaceType: $(job).find('.node-input-job-surfaceType').val(),
+						sheetType: $(job).find('.node-input-job-sheetType').val(),
+						solidType: $(job).find('.node-input-job-solidType').val()
+					}
+				};
+				return (result);
+			}
+		});
+	}
+
+	function thumbnail() {
+		return ({
+			type: 'thumbnail',
+			//width: [100, 200, 400],
+			//height: [100, 200, 400],
+			size: [100, 200, 400],
+			_defaults: function (job) {
+				job.type = job.type || this.type;
+				job.advanced = job.advanced || {};
+				job.advanced.width = job.advanced.height = job.advanced.width || 400;
+				return (job);
+			},
+			_create: function (rows) {
+				//debugger;
+				var label = $('<label />', {
+						width: '40px;'
+					})
+					.text(i18n.getResourceBundle(
+							'en-US',
+							'node-red-node-forge/forge-model-derivative')
+						.forge.label.size)
+					.appendTo(rows[1]);
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: 'node-input-job-dim',
+					style: 'width: 110px; margin-right: 10px;'
+				}).appendTo(rows [1]);
+				/* beautify preserve:end */
+				for (var i = 0; i < this.size.length; i++) {
+					selectField.append($('<option> </option>')
+						.val(this.size[i])
+						.text(this.size[i]));
+				}
+			},
+			_fill: function (job, rows) {
+				//debugger;
+				var parent = rows[1].parent().parent();
+				$(parent).find('.node-input-job-dim').val(job.advanced.width);
+			},
+			_save: function (job, type) {
+				//debugger;
+				var result = {
+					type: type,
+					advanced: {
+						width: $(job).find('.node-input-job-dim').val(),
+						height: $(job).find('.node-input-job-dim').val()
+					}
+				};
+				return (result);
+			}
+		});
+	}
+
+	function fbx() {
+		return ({
+			type: 'fbx',
+			_defaults: function (job) {
+				job.type = job.type || this.type;
+				return (job);
+			},
+			_create: function (rows) {},
+			_fill: function (job, rows) {},
+			_save: function (job, type) {
+				var result = {
+					type: type
+				};
+				return (result);
+			}
+		});
+	}
+
+	RED.nodes.registerType('forge-model-derivative', {
+		category: 'forge',
+		color: '#0696D7',
+		icon: 'forge.png',
+		align: 'right',
+		defaults: {
+			name: {
+				value: ''
+			},
+			topic: {
+				value: ''
+			},
+			forge: {
+				type: 'forge-credentials',
+				required: true
+			},
+			operation: {
+				value: 'GetManifest'
+			},
+			urn: {
+				value: ''
+			},
+			xAdsForce: {
+				value: false
+			},
+			rootFilename: {
+				value: null
+			},
+
+			jobs: {
+				value: [{
+					type: 'svf',
+					views: ['2d', '3d'],
+					advanced: {
+						switchLoader: false
+					}
+				}]
+			},
+
+			acceptEncoding: {
+				value: null
+			},
+			region: { // Acceptable values: US, EMEA
+				value: 'US',
+				required: true
+			}
+		},
+		inputs: 1,
+		//inputLabels: ['credentials', 'in'],
+		outputs: 2,
+		outputLabels: ['response', 'err'],
+		label: function () {
+			return (this.name || 'md ' + this.operation);
+		},
+		// oneditprepare is called immediately before the dialog is displayed.
+		// oneditsave is called when the edit dialog is okayed.
+		// oneditcancel is called when the edit dialog is cancelled.
+		// oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
+		// oneditresize is called when the edit dialog is resized.
+		oneditprepare: function () {
+
+			function resizeJob(job) {
+				var newWidth = job.width();
+				job.find('.red-ui-typedInput').typedInput("width", newWidth - 130);
+			}
+
+			function cleanupRows(rows) {
+				rows[1].children().not(':first').remove();
+				for (var i = 2; i < rows.length; i++)
+					$(rows[i]).empty();
+			}
+
+			$('#node-input-job-container')
+				.css('min-height', '300px')
+				.css('min-width', '450px')
+				.editableList({
+					addItem: function (container, i, opt) {
+						var job = opt;
+						if (!job.hasOwnProperty('type'))
+							job = svf()._defaults(job);
+						//debugger;
+
+						container.css({
+							overflow: 'hidden',
+							whiteSpace: 'nowrap'
+						});
+
+						/* beautify preserve:start */
+						var row1 = $('<div />').appendTo(container);
+						var row2 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
+						var row3 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
+						var row4 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
+						var rows =['', row1, row2, row3, row4 ];
+						/* beautify preserve:end */
+
+						/* beautify preserve:start */
+						var selectField = $('<select />', {
+							class: 'node-input-job-type',
+							style: 'width: 110px; margin-right: 10px;'
+						}).appendTo(row1);
+						/* beautify preserve:end */
+
+						var selectOptions = {
+							svf: svf(),
+							dwg: dwg(),
+							ifc: ifc(),
+							obj: obj(),
+							step: step(),
+							stl: stl(),
+							iges: iges(),
+							thumbnail: thumbnail(),
+							fbx: fbx()
+						};
+
+						//debugger;
+						var items = Object.values(selectOptions);
+						for (var i = 0; i < items.length; i++) {
+							selectField.append(
+								$('<option></option>').val(items[i].type).text(
+									items[i].type)
+							);
+						}
+
+						//debugger;
+						selectField.change(function () {
+							//debugger;
+							var width = $("#node-input-job-container").width();
+							var formatType = $(this.selectField).val();
+
+							cleanupRows(rows);
+							this.selectOptions[formatType]._create(rows);
+							job = this.selectOptions[formatType]._defaults(job);
+							this.selectOptions[formatType]._fill(job, rows);
+
+							resizeJob(container);
+						}.bind({
+							selectOptions: selectOptions,
+							rows: rows,
+							selectField: selectField,
+							job: job
+						}));
+
+						//debugger;
+						selectField.val(job.type);
+						// selectOptions[job.type]._fill(job, rows);
+						selectField.change();
+
+						var newWidth = $("#node-input-job-container").width();
+						resizeJob(container);
+					},
+					resizeItem: resizeJob,
+					removable: true,
+					sortable: true
+				});
+
+			if (!this.jobs)
+				this.jobs = [{
+					type: 'svf',
+					views: ['2d', '3d'],
+					advanced: {
+						switchLoader: false
+					}
+				}];
+
+			for (var i = 0; i < this.jobs.length; i++)
+				$('#node-input-job-container').editableList('addItem', this.jobs[i]);
+		},
+		oneditsave: function () {
+			var jobs = $("#node-input-job-container").editableList('items');
+			var node = this;
+			//debugger;
+
+			var selectOptions = {
+				svf: svf(),
+				dwg: dwg(),
+				ifc: ifc(),
+				obj: obj(),
+				step: step(),
+				stl: stl(),
+				iges: iges(),
+				thumbnail: thumbnail(),
+				fbx: fbx()
+			};
+
+			node.jobs = [];
+			//debugger;
+			jobs.each(function (i) {
+				var job = $(jobs[i]);
+				var formatType = job.find('.node-input-job-type').val();
+				var result = this.selectOptions[formatType]._save(job, formatType);
+				node.jobs.push(result);
+			}.bind({
+				jobs: jobs,
+				selectOptions: selectOptions
+			}));
+
+			var trimFields = [
+				'urn'
+			];
+			// Just in case any whitespace has crept in with the copy-paste of the fields
+			trimFields.forEach(function (field) {
+				var v = $('#node-input-' + field).val();
+				v = v.trim();
+				$('#node-input-' + field).val(v);
+			});
+		},
+		oneditresize: function (size) {
+			var rows = $('#dialog-form>div:not(.node-input-job-container-row)');
+			var height = size.height;
+			for (var i = 0; i < rows.size(); i++)
+				height -= $(rows[i]).outerHeight(true);
+			var editorRow = $('#dialog-form>div.node-input-job-container-row');
+			height -= (parseInt(editorRow.css('marginTop')) + parseInt(editorRow.css('marginBottom')));
+
+			$('#node-input-job-container').editableList('height', height);
+		}
+	});
+</script>

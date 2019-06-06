@@ -1,0 +1,14 @@
+
+Node Red is a flow based rapid prototyping solution for javascript originally developed
+by IBM b at non has a large of contributing community.
+
+In simple terms 'nodes' (blocks) are wired together to enable messages to pass between them.
+The functionality of the nodes is where the power of Node Red comes into play.
+The blocks in side simple value setting and condition checking up to integrations with external
+services such as sending tweets via the twitter api or posting to slack for example.
+The ability for users to create their own nodes and distribute them through the NPM system
+further expands the capabilities to interacting with pretty much anything that has an API.
+
+'Node-Red-Contrib-Forge' is one such package which is a collection of nodes with the sole
+purpose of simplifying the interaction with various Forge services (like OSS,
+Data Managment, Model Derivative, etc).
