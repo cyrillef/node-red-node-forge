@@ -63,10 +63,16 @@
 			<input type="text" id="node-input-urn" data-i18n="[placeholder]forge.placeholder.urn" />
 		</div>
 
-		<div id="ForceAttr" class="form-row node-input-force hiddenAttrs">
-			<label for="node-input-force"><i class="fa fa-file"></i> <span
-					data-i18n="forge.label.force"></span></label>
-			<input type="checkbox" id="node-input-force" />
+		<div id="ForceAttr" class="form-row node-input-xAdsForce hiddenAttrs">
+			<label for="node-input-xAdsForce"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.xAdsForce"></span></label>
+			<input type="checkbox" id="node-input-xAdsForce" />
+		</div>
+
+		<div id="RootFilenameAttr" class="form-row node-input-rootFilename hiddenAttrs">
+			<label for="node-input-rootFilename"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.rootFilename"></span></label>
+			<input type="text" id="node-input-rootFilename" data-i18n="[placeholder]forge.placeholder.rootFilename" />
 		</div>
 
 		<div id="AcceptEncodingAttr" class="form-row node-input-acceptEncoding hiddenAttrs">
@@ -98,7 +104,7 @@
 	<script type="text/javascript">
 		var nodeOps = {
 			Translate: [
-				'#URNAttr', '#ForceAttr', '#JobsAttr'
+				'#URNAttr', '#ForceAttr', '#RootFilenameAttr', '#JobsAttr'
 			],
 			GetManifest: [
 				'#URNAttr', '#AcceptEncodingAttr'

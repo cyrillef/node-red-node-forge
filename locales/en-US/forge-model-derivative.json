@@ -6,7 +6,7 @@
 			"topic": "Topic",
 			"operation": "Operation",
 			"urn": "base64 URN",
-			"force": "Force translation",
+			"xAdsForce": "Force translation",
 			"region": "Region",
 			"jobs": "Format(s)",
             "acceptEncoding": "Accept-Encoding",
@@ -23,7 +23,8 @@
             "sheetType": "Sheet Type",
             "solidType": "Solid Type",
             "size": "Size",
-            "switchLoader": "Switch IFC Loader"
+            "switchLoader": "Switch IFC Loader",
+            "rootFilename": "Root Filename"
 		},
 		"placeholder": {
 			"name": "Name",
@@ -33,7 +34,8 @@
             "acceptEncoding": "Accept-Encoding",
             "exportSettingName": "Export Setting Name",
             "modelGuid": "Model GUID",
-            "objectIds": "Object Ids (comma separated)"
+            "objectIds": "Object Ids (comma separated)",
+            "rootFilename": "Root Filename"
 		},
 		"tip": {
 			"config1": "",

@@ -113,8 +113,8 @@ module.exports = function (RED) {
 		var jobs = {
 			input: {
 				urn: params.urn,
-				// compressedUrn: true,
-				// rootFilename: 'A5.iam'
+				// compressedUrn: params.compressedUrn,
+				// rootFilename: params.rootFilename
 			},
 			output: {
 				destination: {
@@ -122,12 +122,13 @@ module.exports = function (RED) {
 				},
 				formats: node.mdProperties.jobs
 			}
-		};
+        };
+        if (params.hasOwnProperty('rootFilename')) {
+            jobs.input.compressedUrn =params.compressedUrn;
+            jobs.input.rootFilename = params.rootFilename;
+        }
 
-cb(null, jobs);
-return;
-
-		var apis = new ForgeAPI.DerivativesApi();
+    	var apis = new ForgeAPI.DerivativesApi();
 		apis.translate(jobs, params, oa2legged, oa2legged.getCredentials())
 			.then(function (response) {
 				//console.log(JSON.stringify(response.body, null, 4));
