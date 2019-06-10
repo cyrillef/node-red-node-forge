@@ -129,6 +129,15 @@ module.exports = function (service) {
 			}.bind(undefined, i));
 		}
 		return (Promise.all(results));
-	};
+    };
+
+    service.safeBase64decode = function (base64) {
+        // Add removed at end '='
+        base64 += Array(5 - base64.length % 4).join('=');
+        base64 = base64
+            .replace(/\-/g, '+') // Convert '-' to '+'
+            .replace(/\_/g, '/'); // Convert '_' to '/'
+        return (new Buffer(base64, 'base64').toString());
+    };
 
 };

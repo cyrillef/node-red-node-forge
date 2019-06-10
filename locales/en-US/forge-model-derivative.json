@@ -33,7 +33,8 @@
             "range": "Range",
             "width": "Width",
             "height": "Height",
-            "checkReferences": "Check References"
+            "checkReferences": "Check References",
+            "references": "References"
 		},
 		"placeholder": {
 			"name": "Name",

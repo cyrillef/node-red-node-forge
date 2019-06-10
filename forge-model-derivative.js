@@ -42,15 +42,30 @@ module.exports = function (RED) {
 
             node.sendMsg = function (err, data) {
                 if (err) {
+                    var text = 'error';
+                    if (err.statusCode)
+                        text = `${err.statusCode}: ${err.statusMessage}`;
+                    else if (err.message)
+                        text = err.message;
+
                     node.status({
                         fill: 'red',
                         shape: 'ring',
-                        text: 'error'
+                        text: text
                     });
                     //node.error('failed: ' + err.toString(), msg);
-                    node.send([null, {
+                    var msgErr = {
                         err: err
-                    }]);
+                    };
+                    var keys = Object.keys(msg);
+                    for (var i = 0; i < keys.length; i++) {
+                        var key = keys[i];
+                        if (['payload', '_msgid', '__proto__'].includes(key) || msgErr.hasOwnProperty(key))
+                            continue;
+                        msgErr[key] = msg[key];
+                    }
+                    msgErr.err.op = 'oss:' + node.mdProperties.operation;
+                    node.send([null, msgErr]);
                     return;
                 }
 
@@ -303,6 +318,12 @@ module.exports = function (RED) {
             },
             references: service.defaultNullOrEmptyString,
         }, params);
+        try {
+            if (params.references)
+                params.references = JSON.parse(params.references);
+        } catch (ex) {
+            delete params.references;
+        }
 
         return (params);
     };
@@ -311,15 +332,16 @@ module.exports = function (RED) {
         var params = service.SetReferencesParams(n, msg);
 
         var returnType = null;
+        var urn = params.urn;
+        params.urn = service.safeBase64decode(params.urn);
 
         var apis = new ForgeAPI.DerivativesApi();
         apis.apiClient.callApi(
-            '/modelderivative/v2/designdata/{urn}/references', 'POST',
-            {}, {}, {}, {}, params,
-            ['application/json'], ['application/vnd.api+json', 'application/json'],
-            returnType, oa2legged, oa2legged.getCredentials()
-        )
-        // apis.getModelviewProperties(params.urn, params.guid, params, oa2legged, oa2legged.getCredentials())
+                '/modelderivative/v2/designdata/' + urn + '/references', 'POST', {}, {}, {}, {}, params,
+                ['application/json'], ['application/vnd.api+json', 'application/json'],
+                returnType, oa2legged, oa2legged.getCredentials()
+            )
+            // apis.getModelviewProperties(params.urn, params.guid, params, oa2legged, oa2legged.getCredentials())
             .then(function (response) {
                 //console.log(JSON.stringify(response.body, null, 4));
                 cb(null, response);

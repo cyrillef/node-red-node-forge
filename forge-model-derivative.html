@@ -52,7 +52,7 @@
 			<option value="Translate">Translate Model</option>
 			<option value="SetReferences">Set References</option>
 			<option value="GetManifest">Get Manifest</option>
-			<option value="DeleteManifest">Delete Model</option>
+			<option value="DeleteManifest">Delete Manifest</option>
 			<option value="GetMetadata">Get Metadata</option>
 			<option value="GetObjectTree">Get Object Tree</option>
 			<option value="GetProperties">Get Properties</option>
@@ -160,15 +160,15 @@
 
 		<div id="ReferencesEditorAttr" class="form-row hiddenAttrs">
 			<div class="form-row" style="margin-bottom: 0px;">
-				<label for="node-input-func"><i class="fa fa-wrench"></i> <span
-						data-i18n="function.label.function"></span></label>
-				<input type="hidden" id="node-input-func" autofocus="autofocus">
+				<label for="node-input-references"><i class="fa fa-wrench"></i> <span
+						data-i18n="forge.label.references"></span></label>
+				<input type="hidden" id="node-input-references" autofocus="autofocus">
 				<input type="hidden" id="node-input-noerr">
 			</div>
 			<div class="form-row node-text-editor-row" style="position:relative">
-				<div style="position: absolute; right:0; bottom:calc(100% + 3px);"><button id="node-function-expand-js"
+				<div style="position: absolute; right:0; bottom:calc(100% + 3px);"><button id="node-references-expand-js"
 						class="editor-button editor-button-small"><i class="fa fa-expand"></i></button></div>
-				<div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-func-editor"></div>
+				<div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-references-editor"></div>
 			</div>
 		</div>
 	</div>
@@ -176,7 +176,7 @@
 	<script type="text/javascript">
 		var nodeOps = {
 			Translate: [
-				'#URNAttr', '#ForceAttr', '#CheckReferencesAttr', '#RootFilenameAttr', '#JobsAttr'
+				'#URNAttr', '#ForceAttr', '#CheckReferencesAttr', '#RootFilenameAttr', '#JobsAttr', '#RegionAttr'
 			],
 			SetReferences: [
 				'#URNAttr', '#RootFilenameAttr', '#RegionAttr', '#ReferencesEditorAttr'
@@ -938,8 +938,15 @@
 			checkReferences: {
 				value: false
 			},
-			func: {
-				value: "\nreturn msg;"
+			references: {
+				value: "[]"
+			},
+			noerr: {
+				value: 0,
+				required: true,
+				validate: function (v) {
+					return (!v);
+				}
 			},
 
 			ifModifiedSince: {
@@ -969,7 +976,7 @@
 
 			function resizeJob(job) {
 				var newWidth = job.width();
-				job.find('.red-ui-typedInput').typedInput("width", newWidth - 130);
+				job.find('.red-ui-typedInput').typedInput('width', newWidth - 130);
 			}
 
 			function cleanupRows(rows) {
@@ -1032,7 +1039,7 @@
 						//debugger;
 						selectField.change(function () {
 							//debugger;
-							var width = $("#node-input-job-container").width();
+							var width = $('#node-input-job-container').width();
 							var formatType = $(this.selectField).val();
 
 							cleanupRows(rows);
@@ -1053,7 +1060,7 @@
 						// selectOptions[job.type]._fill(job, rows);
 						selectField.change();
 
-						var newWidth = $("#node-input-job-container").width();
+						var newWidth = $('#node-input-job-container').width();
 						resizeJob(container);
 					},
 					resizeItem: resizeJob,
@@ -1072,9 +1079,63 @@
 
 			for (var i = 0; i < this.jobs.length; i++)
 				$('#node-input-job-container').editableList('addItem', this.jobs[i]);
+
+			// Set references editor
+			var that = this;
+			this.editor = RED.editor.createEditor({
+				id: 'node-input-references-editor',
+				mode: 'ace/mode/nrjavascript',
+				value: $('#node-input-references').val(),
+				globals: {
+					msg: true,
+					context: true,
+					RED: true,
+					util: true,
+					flow: true,
+					global: true,
+					console: true,
+					Buffer: true,
+					setTimeout: true,
+					clearTimeout: true,
+					setInterval: true,
+					clearInterval: true
+				}
+			});
+
+			//debugger;
+			RED.library.create({
+				url: 'functions', // where to get the data from
+				type: 'function', // the type of object the library is for
+				editor: this.editor, // the field name the main text body goes to
+				mode: 'ace/mode/json', //'ace/mode/nrjavascript',
+				fields: ['name', 'outputs']
+			});
+			this.editor.focus();
+
+			$('#node-references-expand-js').click(function (e) {
+				e.preventDefault();
+				var value = that.editor.getValue();
+				RED.editor.editJavaScript({
+					value: value,
+					width: 'Infinity',
+					cursor: that.editor.getCursorPosition(),
+					mode: 'ace/mode/nrjavascript',
+					complete: function (v, cursor) {
+						that.editor.setValue(v, -1);
+						that.editor.gotoLine(cursor.row + 1, cursor.column, false);
+						setTimeout(function () {
+							that.editor.focus();
+						}, 300);
+					}
+				})
+			})
+		},
+		oneditcancel: function () {
+			this.editor.destroy();
+			delete this.editor;
 		},
 		oneditsave: function () {
-			var jobs = $("#node-input-job-container").editableList('items');
+			var jobs = $('#node-input-job-container').editableList('items');
 			var node = this;
 			//debugger;
 
@@ -1115,6 +1176,21 @@
 				v = v.trim();
 				$('#node-input-' + field).val(v);
 			});
+
+			// Set References
+			var annot = this.editor.getSession().getAnnotations();
+			this.noerr = 0;
+			$('#node-input-noerr').val(0);
+			for (var k = 0; k < annot
+				.length; k++) { //console.log(annot[k].type,':',annot[k].text, 'on line' , annot[k].row);
+				if (annot[k].type === 'error') {
+					$('#node-input-noerr').val(annot.length);
+					this.noerr = annot.length;
+				}
+			}
+			$('#node-input-references').val(this.editor.getValue());
+			this.editor.destroy();
+			delete this.editor;
 		},
 		oneditresize: function (size) {
 			var rows = $('#dialog-form>div:not(.node-input-job-container-row)');
@@ -1125,6 +1201,17 @@
 			height -= (parseInt(editorRow.css('marginTop')) + parseInt(editorRow.css('marginBottom')));
 
 			$('#node-input-job-container').editableList('height', height);
+
+			// Set References
+			var rows = $('#dialog-form>div:not(.node-text-editor-row)');
+			var height = $('#dialog-form').height();
+			for (var i = 0; i < rows.size(); i++) {
+				height -= $(rows[i]).outerHeight(true);
+			}
+			var editorRow = $('#dialog-form>div.node-text-editor-row');
+			height -= (parseInt(editorRow.css('marginTop')) + parseInt(editorRow.css('marginBottom')));
+			$('.node-text-editor').css('height', height + 'px');
+			this.editor.resize();
 		}
 	});
 </script>

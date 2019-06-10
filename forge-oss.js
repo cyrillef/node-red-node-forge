@@ -50,15 +50,30 @@ module.exports = function (RED) {
 
 			node.sendMsg = function (err, data) {
 				if (err) {
+                    var text ='error';
+                    if (err.statusCode)
+                        text = `${err.statusCode}: ${err.statusMessage}`;
+                    else if (err.message)
+                        text = err.message;
+
 					node.status({
 						fill: 'red',
 						shape: 'ring',
-						text: 'error'
+						text: text
 					});
-					//node.error('failed: ' + err.toString(), msg);
-					node.send([null, {
-						err: err
-					}]);
+                    //node.error('failed: ' + err.toString(), msg);
+                    var msgErr = {
+                        err: err
+                    };
+                    var keys =Object.keys (msg);
+                    for ( var i =0 ; i < keys.length;i++) {
+                        var key =keys[i];
+                        if (['payload', '_msgid', '__proto__'].includes(key) || msgErr.hasOwnProperty(key))
+                            continue;
+                        msgErr[key] = msg[key];
+                    }
+                    msgErr.err.op = 'oss:' + node.ossProperties.operation;
+					node.send([null, msgErr]);
 					return;
 				}
 
@@ -532,17 +547,19 @@ module.exports = function (RED) {
 
 							//console.log (JSON.stringify (item, null, 4)) ;
 							var rstream = null;
-							if (options.localFilename === '') {
-								fs.createReadStream(options.localFilename, {
+							if (options.localFilename !== '') {
+								rstream =fs.createReadStream(options.localFilename, {
 									start: item.opts.start,
 									end: item.opts.end
 								});
 							} else {
 								rstream = new streamBuffers.ReadableStreamBuffer({
-									frequency: 10, // in milliseconds.
-									chunkSize: 2048 // in bytes.
+                                    initialSize: item.opts.size,
+                                    frequency: streamBuffers.DEFAULT_FREQUENCY, // in milliseconds.
+                                    chunkSize: 8 * streamBuffers.DEFAULT_CHUNK_SIZE // in bytes.
 								});
-								rstream.put(options.buffer.slice(item.opts.start, item.opts.end));
+                                rstream.put(options.buffer.slice(item.opts.start, item.opts.end + 1));
+                                rstream.stop();
 							}
 							ossObjects.uploadChunk(item.bucket, item.key, item.opts.size, item.opts.ContentRange, item.sessionId, rstream, item.options, item.oa2legged, item.oa2legged.getCredentials())
 								.then(function (content) {
@@ -763,8 +780,8 @@ module.exports = function (RED) {
 
 							//console.log (JSON.stringify (item, null, 4)) ;
 							var rstream = null;
-							if (options.localFilename === '') {
-								fs.createReadStream(options.localFilename, {
+							if (options.localFilename !== '') {
+								rstream =fs.createReadStream(options.localFilename, {
 									start: item.opts.start,
 									end: item.opts.end
 								});
@@ -773,7 +790,7 @@ module.exports = function (RED) {
 									frequency: 10, // in milliseconds.
 									chunkSize: 2048 // in bytes.
 								});
-								rstream.put(options.buffer.slice(item.opts.start, item.opts.end));
+								rstream.put(options.buffer.slice(item.opts.start, item.opts.end + 1));
 							}
 							ossObjects.uploadSignedResourcesChunk(item.guid, item.opts.ContentRange, item.sessionId, rstream, item.options, item.oa2legged, item.oa2legged.getCredentials())
 								.then(function (content) {

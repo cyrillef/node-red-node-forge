@@ -35,9 +35,15 @@ module.exports = function (RED) {
 		this.CallbackURL = n.CallbackURL; // || process.env.FORGE_CALLBACK;
 		try {
 			var out ={};
-			this.ClientID = RED.util.evaluateNodeProperty(this.ClientID, this.credentials.ClientIDType, this.credentials, out);
-			this.ClientSecret = RED.util.evaluateNodeProperty(this.ClientSecret, this.credentials.ClientSecretType, this.credentials, out);
-			this.CallbackURL = RED.util.evaluateNodeProperty(this.CallbackURL, this.credentials.CallbackURLType, this.credentials, out);
+			if (this.payloadType !== 'flow' && this.payloadType !== 'global') {
+				this.ClientID = RED.util.evaluateNodeProperty(this.ClientID, this.credentials.ClientIDType, this.credentials, out);
+				this.ClientSecret = RED.util.evaluateNodeProperty(this.ClientSecret, this.credentials.ClientSecretType, this.credentials, out);
+				this.CallbackURL = RED.util.evaluateNodeProperty(this.CallbackURL, this.credentials.CallbackURLType, this.credentials, out);
+			} else {
+				RED.util.evaluateNodeProperty(this.ClientID, this.credentials.ClientIDType, this.credentials, out);
+				RED.util.evaluateNodeProperty(this.ClientSecret, this.credentials.ClientSecretType, this.credentials, out);
+				RED.util.evaluateNodeProperty(this.CallbackURL, this.credentials.CallbackURLType, this.credentials, out);
+			}
 		} catch (err) {
 		}
 

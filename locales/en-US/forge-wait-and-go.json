@@ -1,0 +1,37 @@
+{
+	"forge": {
+		"label": {
+			"name": "Name",
+            "topic": "Topic",
+            "combine": "Combine all payloads"
+		},
+		"placeholder": {
+			"name": "Name",
+			"topic": "Topic"
+		},
+		"tip": {
+			"config1": "",
+			"config2": ""
+		},
+		"status": {
+			"initializing": "initializing",
+			"error": "error",
+			"checking-for-changes": "checking for changes",
+			"downloading": "downloading",
+			"checking-credentials": "checking credentials",
+			"uploading": "uploading",
+			"failed": "failed"
+		},
+		"warn": {
+			"missing-credentials": "Missing Forge credentials"
+		},
+		"error": {
+			"failed-to-fetch": "failed to fetch OSS state: __err__",
+			"no-bucket-specified": "No bucket specified",
+			"no-filename-specified": "No filename specified",
+			"download-failed": "download failed: __err__",
+			"forge-oss-error": "Forge error: __err__",
+			"unknown-operation": "failed: Operation node defined - __op__"
+		}
+	}
+}

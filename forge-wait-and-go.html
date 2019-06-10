@@ -1,0 +1,65 @@
+<!--
+  Copyright (c) Autodesk, Inc.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+-->
+
+<!-- forge-model-derivative -->
+<script type="text/x-red" data-template-name="forge-wait-and-go">
+	<div class="form-row">
+	    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
+	    <input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
+	</div>
+	<div class="form-row">
+	    <label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
+	    <input type="text" id="node-input-topic" />
+    </div>
+    <div id="CombineAttr" class="form-row node-input-combine hiddenAttrs">
+        <label for="node-input-combine"><i class="fa fa-file"></i> <span
+                data-i18n="forge.label.combine"></span></label>
+        <input type="checkbox" id="node-input-combine" />
+    </div>
+	</script>
+</script>
+
+<script type="text/javascript">
+	RED.nodes.registerType('forge-wait-and-go', {
+		category: 'forge',
+		color: '#0696D7',
+		icon: 'forge.png',
+		align: 'left',
+		defaults: {
+			name: {
+				value: ''
+			},
+			topic: {
+				value: ''
+            },
+            combine: {
+                value: true
+            }
+		},
+		inputs: 1,
+		outputs: 1,
+		label: function () {
+			return (this.name || 'Wait');
+		}
+
+	});
+</script>
