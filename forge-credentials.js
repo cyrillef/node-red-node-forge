@@ -30,22 +30,52 @@ module.exports = function (RED) {
 		RED.nodes.createNode(this, n);
 		this.name = n.name;
 		//this.AppName = n.AppName;
-		this.ClientID = this.credentials.ClientID; // || process.env.FORGE_CLIENT_ID; //'${FORGE_CLIENT_ID}';
-		this.ClientSecret = this.credentials.ClientSecret; // || process.env.FORGE_CLIENT_SECRET;
-		this.CallbackURL = n.CallbackURL; // || process.env.FORGE_CALLBACK;
+		var node = this;
+		var promises = [];
 		try {
-			var out ={};
-			if (this.payloadType !== 'flow' && this.payloadType !== 'global') {
-				this.ClientID = RED.util.evaluateNodeProperty(this.ClientID, this.credentials.ClientIDType, this.credentials, out);
-				this.ClientSecret = RED.util.evaluateNodeProperty(this.ClientSecret, this.credentials.ClientSecretType, this.credentials, out);
-				this.CallbackURL = RED.util.evaluateNodeProperty(this.CallbackURL, this.credentials.CallbackURLType, this.credentials, out);
-			} else {
-				RED.util.evaluateNodeProperty(this.ClientID, this.credentials.ClientIDType, this.credentials, out);
-				RED.util.evaluateNodeProperty(this.ClientSecret, this.credentials.ClientSecretType, this.credentials, out);
-				RED.util.evaluateNodeProperty(this.CallbackURL, this.credentials.CallbackURLType, this.credentials, out);
-			}
-		} catch (err) {
-		}
+			var out = {};
+			if (this.credentials.ClientIDType !== 'flow' && this.credentials.ClientIDType !== 'global')
+				this.ClientID = RED.util.evaluateNodeProperty(this.credentials.ClientID, this.credentials.ClientIDType, this.credentials, out);
+			else
+				promises.push(new Promise(function (fulfill, reject) {
+					// Access the node's context object
+					var nodeContext = node.context();
+					var flowContext = node.context().flow;
+					var globalContext = node.context().global;
+					//node.ClientID = (node.credentials.ClientIDType === 'global' ? globalContext : flowContext).get('FORGE_CLIENT_ID', 'forge')
+
+					//var redContext = require(require.main.path + "/../@node-red/runtime/lib/nodes/context");
+					if ( !/^#:\((\S+?)\)::(.*)$/.test(node.credentials.ClientID) )
+						node.credentials.ClientID ='#:(forge)::' + node.credentials.ClientID;
+					
+					RED.util.evaluateNodeProperty(node.credentials.ClientID, node.credentials.ClientIDType, node, out, function (err, res) {
+						node.ClientID = err ? '' : res;
+						fulfill(node.ClientID);
+					});
+				}));
+			if (this.credentials.ClientSecretType !== 'flow' && this.credentials.ClientSecretType !== 'global')
+				this.ClientSecret = RED.util.evaluateNodeProperty(this.credentials.ClientSecret, this.credentials.ClientSecretType, this.credentials, out);
+			else
+				promises.push(new Promise(function (fulfill, reject) {
+					if ( !/^#:\((\S+?)\)::(.*)$/.test(node.credentials.ClientSecret) )
+						node.credentials.ClientSecret ='#:(forge)::' + node.credentials.ClientSecret;
+					RED.util.evaluateNodeProperty(node.credentials.ClientSecret, node.credentials.ClientSecretType, node, out, function (err, res) {
+						node.ClientSecret = err ? '' : res;
+						fulfill(node.ClientSecret);
+					});
+				}));
+			if (this.credentials.CallbackURLType !== 'flow' && this.credentials.CallbackURLType !== 'global')
+				this.CallbackURL = RED.util.evaluateNodeProperty(this.credentials.CallbackURL, this.credentials.CallbackURLType, this, out);
+			else
+				promises.push(new Promise(function (fulfill, reject) {
+					if ( !/^#:\((\S+?)\)::(.*)$/.test(node.credentials.CallbackURL) )
+						node.credentials.CallbackURL ='#:(forge)::' + node.credentials.CallbackURL;
+					RED.util.evaluateNodeProperty(node.credentials.CallbackURL, node.credentials.CallbackURLType, node.credentials, out, function (err, res) {
+						node.CallbackURL = err ? '' : res;
+						fulfill(node.CallbackURL);
+					});
+				}));
+		} catch (err) {}
 
 		this.Scope = n.Scope;
 		this.State = n.State;
@@ -53,16 +83,30 @@ module.exports = function (RED) {
 		this.proxyRequired = n.proxyRequired;
 		this.proxy = n.proxy;
 
-		var self = this;
-		if (!this.FORGE) {
-			this.FORGE = callOauth2Legged(this.ClientID, this.ClientSecret, this.Scope);
-			this.FORGE
+		if (promises.length == 0)
+			runOauth(node);
+		else
+			Promise.all(promises)
+			.then(function (values) {
+				runOauth(node);
+			})
+			.catch(function (error) {
+				// Nevers called
+				console.log(error);
+			});
+
+	}
+
+	function runOauth(node) {
+		if (!node.FORGE) {
+			node.FORGE = callOauth2Legged(node.ClientID, node.ClientSecret, node.Scope);
+			node.FORGE
 				.then((response) => {
-					self.FORGE = response;
+					node.FORGE = response;
 				})
 				.catch((error) => {
-					self.FORGE = undefined;
-					self.warn('Forge credentials error' + error);
+					node.FORGE = undefined;
+					node.error('Forge credentials error' + error);
 				});
 		}
 	}
@@ -83,7 +127,7 @@ module.exports = function (RED) {
 			},
 			ClientSecretType: {
 				type: 'text',
-					value: 'env'
+				value: 'env'
 			},
 			AccessToken: {
 				type: 'text'

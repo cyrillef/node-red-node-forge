@@ -27,52 +27,89 @@ module.exports = function (RED) {
 	var ForgeAPI = require('forge-apis');
 
 	// Forge
-	function ForgeBucketNode(n) {
+	function ForgeOSSNode(n) {
 		RED.nodes.createNode(this, n);
 		this.forgeCredentials = RED.nodes.getNode(n.forge);
 		this.ossProperties = n;
 		var node = this;
 
-		// Internal state
-		// var _processing = false;
-		// var _originalParams = null;
-		// var _outputs = [];
-
-		function onInput0(msg) {
+		function onInput(msg) {
 			//msg.topic = node.topic;
 			//var _msg = RED.util.cloneMessage(msg);
 
+			// Access the node's context object
+			// var nodeContext = node.context();
+			// var flowContext = node.context().flow;
+			// var globalContext = node.context().global;
+
+			if (msg.nodeFlowId) {
+				var flowNode = RED.nodes.getNode(msg.nodeFlowId);
+				if (flowNode) {
+					msg.flowid = flowNode.z;
+					delete msg.nodeFlowId;
+				}
+			}
+
 			var FORGE = node.forgeCredentials ? node.forgeCredentials.FORGE : null;
+			//RED.nodes.getNode('forge-credentials');
 			if (!FORGE) {
-				node.warn(RED._('forge.warn.missing-credentials'));
+				if (node._forgeCredentials) {
+					delete node._forgeCredentials;
+					node.warn(RED._('forge.warn.missing-credentials'));
+					return;
+				}
+				node._forgeCredentials = true;
+				var forgeDefaultCredentials = null;
+				RED.nodes.eachNode((elt) => { // elt.type === 'forge-*'
+					// https://discourse.nodered.org/t/how-to-get-flow-id-by-function-node/9889
+					if (node._forgeCredentials && elt.type === 'forge-default-credentials') {
+						if (![node.z, msg.flowid].includes(elt.z)) {
+							forgeDefaultCredentials = elt.id;
+							return;
+						}
+						node.forgeCredentials = RED.nodes.getNode(elt.id).forgeCredentials;
+						onInput(msg);
+						if (node.forgeCredentials.FORGE) {
+							delete node._forgeCredentials;
+							forgeDefaultCredentials = null;
+						}
+					}
+				});
+				if (forgeDefaultCredentials) {
+					node.forgeCredentials = RED.nodes.getNode(forgeDefaultCredentials).forgeCredentials;
+					onInput(msg);
+					forgeDefaultCredentials = null;
+				}
+				if (node._forgeCredentials)
+					delete node._forgeCredentials;
 				return;
 			}
 
 			node.sendMsg = function (err, data) {
 				if (err) {
-                    var text ='error';
-                    if (err.statusCode)
-                        text = `${err.statusCode}: ${err.statusMessage}`;
-                    else if (err.message)
-                        text = err.message;
+					var text = 'error';
+					if (err.statusCode)
+						text = `${err.statusCode}: ${err.statusMessage}`;
+					else if (err.message)
+						text = err.message;
 
 					node.status({
 						fill: 'red',
 						shape: 'ring',
 						text: text
 					});
-                    //node.error('failed: ' + err.toString(), msg);
-                    var msgErr = {
-                        err: err
-                    };
-                    var keys =Object.keys (msg);
-                    for ( var i =0 ; i < keys.length;i++) {
-                        var key =keys[i];
-                        if (['payload', '_msgid', '__proto__'].includes(key) || msgErr.hasOwnProperty(key))
-                            continue;
-                        msgErr[key] = msg[key];
-                    }
-                    msgErr.err.op = 'oss:' + node.ossProperties.operation;
+					//node.error('failed: ' + err.toString(), msg);
+					var msgErr = {
+						err: err
+					};
+					var keys = Object.keys(msg);
+					for (var i = 0; i < keys.length; i++) {
+						var key = keys[i];
+						if (['payload', '_msgid', '__proto__'].includes(key) || msgErr.hasOwnProperty(key))
+							continue;
+						msgErr[key] = msg[key];
+					}
+					msgErr.err.op = 'oss:' + node.ossProperties.operation;
 					node.send([null, msgErr]);
 					return;
 				}
@@ -101,56 +138,10 @@ module.exports = function (RED) {
 			}
 		}
 
-		function sendNext(msg, credentials) {
-			//var output = RED.util.cloneMessage(_originalMsg);
-
-			var _cb = function (err, data) {
-				//node.sendMsg(err, data);
-				msg.payload = data;
-				node.send([msg, null]);
-			};
-
-			if (_processing === false || msg.payload.startAt !== undefined) {
-				_processing = true;
-				//node.send([output, null]);
-				service[node.ossProperties.operation](n, node, credentials, msg, _cb);
-			} else { // Finished
-				_processing = false;
-				_originalParams = null;
-
-				msg.payload = _outputs;
-
-				node.send([null, msg]);
-			}
-		}
-
-		function onInput(msg) {
-			//msg.topic = node.topic;
-			var _msg = RED.util.cloneMessage(msg);
-
-			var FORGE = node.forgeCredentials ? node.forgeCredentials.FORGE : null;
-			if (!FORGE) {
-				node.warn(RED._('forge.warn.missing-credentials'));
-				return;
-			}
-
-			if (!_processing) {
-				_originalParams = service[node.ossProperties.operation + 'Params'](n, msg);
-				_outputs = [];
-			} else {
-				_outputs.push(_msg.payload);
-				_originalParams.startAt = _msg.payload.body.nextKey;
-				msg.payload = _originalParams;
-			}
-
-			sendNext(msg, FORGE);
-		}
-
-		node.on('input', onInput0);
-
+		node.on('input', onInput);
 	}
 
-	RED.nodes.registerType('forge-oss', ForgeBucketNode);
+	RED.nodes.registerType('forge-oss', ForgeOSSNode);
 
 	var service = {};
 
@@ -548,18 +539,18 @@ module.exports = function (RED) {
 							//console.log (JSON.stringify (item, null, 4)) ;
 							var rstream = null;
 							if (options.localFilename !== '') {
-								rstream =fs.createReadStream(options.localFilename, {
+								rstream = fs.createReadStream(options.localFilename, {
 									start: item.opts.start,
 									end: item.opts.end
 								});
 							} else {
 								rstream = new streamBuffers.ReadableStreamBuffer({
-                                    initialSize: item.opts.size,
-                                    frequency: streamBuffers.DEFAULT_FREQUENCY, // in milliseconds.
-                                    chunkSize: 8 * streamBuffers.DEFAULT_CHUNK_SIZE // in bytes.
+									initialSize: item.opts.size,
+									frequency: streamBuffers.DEFAULT_FREQUENCY, // in milliseconds.
+									chunkSize: 8 * streamBuffers.DEFAULT_CHUNK_SIZE // in bytes.
 								});
-                                rstream.put(options.buffer.slice(item.opts.start, item.opts.end + 1));
-                                rstream.stop();
+								rstream.put(options.buffer.slice(item.opts.start, item.opts.end + 1));
+								rstream.stop();
 							}
 							ossObjects.uploadChunk(item.bucket, item.key, item.opts.size, item.opts.ContentRange, item.sessionId, rstream, item.options, item.oa2legged, item.oa2legged.getCredentials())
 								.then(function (content) {
@@ -781,7 +772,7 @@ module.exports = function (RED) {
 							//console.log (JSON.stringify (item, null, 4)) ;
 							var rstream = null;
 							if (options.localFilename !== '') {
-								rstream =fs.createReadStream(options.localFilename, {
+								rstream = fs.createReadStream(options.localFilename, {
 									start: item.opts.start,
 									end: item.opts.end
 								});

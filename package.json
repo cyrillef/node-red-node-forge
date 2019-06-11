@@ -8,7 +8,8 @@
     ],
     "node-red": {
         "nodes": {
-            "forge-credentials": "forge-credentials.js",
+			"forge-credentials": "forge-credentials.js",
+			"forge-default-credentials": "forge-default-credentials.js",
             "forge-oss": "forge-oss.js",
             "forge-model-derivative": "forge-model-derivative.js",
             "forge-wait-and-go": "forge-wait-and-go.js",
