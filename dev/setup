@@ -1,0 +1,51 @@
+#!/bin/bash
+
+ROOT="`dirname \"$0\"`" # Relative
+export ROOT="`( cd \"$ROOT\" && pwd )`" # Absolutized and normalized
+
+if type xcode-select >&- && xpath=$( xcode-select --print-path ) && test -d "${xpath}" && test -x "${xpath}" ; then
+   #... is correctly installed
+   echo "Xcode installed"
+else
+   #... isn't correctly installed
+   echo "You need Xcode!"
+   exit 0
+fi
+
+export NODE_RED_USER_DIR="${ROOT}/cyrille"
+
+#sudo npm install --global node-gyp
+#sudo npm install --global grunt
+
+if [ ! -d "node-red-node-forge" ]; then
+	git clone https://github.com/cyrillef/node-red-node-forge.git
+	pushd node-red-node-forge
+	npm install
+	popd
+fi
+
+if [ ! -d "node-red" ]; then
+	git clone https://github.com/node-red/node-red.git
+
+	pushd node-red
+	npm install
+	npm run build
+	#npm install node-red-node-base64
+	#npm install node-red-contrib-loop-processing
+	#npm install node-red-dashboard
+	#npm install node-red-contrib-ui_list
+	#npm install ../node-red-node-forge
+	npm install node-red-node-base64 node-red-contrib-loop-processing node-red-dashboard node-red-contrib-ui_list ../node-red-node-forge
+	#NODE_ENV=development node packages/node_modules/node-red/red.js --userDir "$NODE_RED_USER_DIR"
+	popd
+else
+	pushd node-red
+	#npm update
+	popd
+fi
+
+
+shopt -s expand_aliases
+xsetup dev
+pushd "${ROOT}/node-red"
+vscode
