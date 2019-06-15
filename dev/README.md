@@ -59,7 +59,17 @@ Mainly for the UI component and is a set of 2 files [in this folder](../locales/
 
 - the [json file](../locales/en-US/forge-wait-and-go.json) is the catalog of UI messages / labels for controls, etc... It use the i18n library to render the messages in the UI.
 
-### VS Code configuratio example
+#### Forge specific implementation
+
+One downside in Node-RED today is that copying nodes, or instancing subflows reset the crendentials parameter. And it is not really easy / convenient to reinitialize all the node' credentials. Moreover, if a subflow is instantiated multiple times, you may want to use different credentials for each of them, and that's not possible. Last, Node-RED does not allow retrieving flows' ID during initialization.
+
+For that reason, the Forge nodes accepts an additional parameter 'nodeFlowId', and/or a default flow credential setup.
+
+When using the 'nodeFlowId', a node will try to retrieve a default 'forge-default-credentials' node sitting within the same flow as the node is running into. If that 'nodeFlowId' parameter is missing, the node will try to find any initialized 'forge-default-credentials' node.
+
+The 'nodeFlowId' parameter is handled [here](../forge-oss.js#L45), and the 'forge-default-credentials' [here](../forge-oss.js#L63).
+
+### VS Code configuration example
 
 ```
 {
