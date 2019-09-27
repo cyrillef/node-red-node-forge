@@ -1,0 +1,165 @@
+<!-- Copyright (c) Autodesk, Inc.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+-->
+<!-- forge-da -->
+<script type="text/x-red" data-template-name="forge-da">
+  <style scoped>
+  	.hiddenAttrs {
+  		display: none;
+  	}
+  	.visibleAttrs {
+  		display: block;
+  	}
+  </style>
+  <div class="form-row">
+  	<label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
+  	<input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
+  </div>
+  <div class="form-row">
+  	<label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
+  	<input type="text" id="node-input-topic" />
+  </div>
+  <div class="form-row">
+		<label for="node-input-forge"><i class="fa fa-user"></i> <span data-i18n="forge.label.forge"></span></label>
+		<input type="text" id="node-input-forge">
+	</div>
+  <div class="form-row">
+  	<label for="node-input-operation"><i class="fa fa-wrench"></i> <span
+  			data-i18n="forge.label.operation"></span></label>
+  	<select type="text" id="node-input-operation">  	
+      <option value="ListEngines">List Engines</option>
+      <option value="GetEngine">Get Engine</option>
+      <option value="ListAppbundles">List Appbundles</option>
+      <option value="GetAppbundle">Get Appbundle</option>
+      <option value="CreateOrUpdateAppbundle">Create or Update Appbundle</option>   
+      <option value="ListAppbundleVersions">List Appbundle Versions</option>
+      <option value="ListAppbundleAliases">List Appbundle Aliases</option>
+      <option value="create-appbundle-alias">create-appbundle-alias</option>
+      <option value="update-appbundle-alias">update-appbundle-alias</option>
+      <option value="delete-appbundle">delete-appbundle</option>
+      <option value="delete-appbundle-alias">delete-appbundle-alias</option>
+      <option value="delete-appbundle-version">delete-appbundle-version</option>        
+      <option value="list-activities">list-activities</option>
+      <option value="get-activity">get-activity</option>
+      <option value="create-activity">create-activity</option>
+      <option value="update-activity">update-activity</option>
+      <option value="list-activity-versions">list-activity-versions</option>
+      <option value="list-activity-aliases">list-activity-aliases</option>
+      <option value="create-activity-alias">create-activity-alias</option>
+      <option value="update-activity-alias">update-activity-alias</option>
+      <option value="delete-activity">delete-activity</option>
+      <option value="delete-activity-alias">delete-activity-alias</option>
+      <option value="delete-activity-version">delete-activity-version</option>
+      <option value="create-workitem">create-workitem</option>
+      <option value="get-workitem">get-workitem</option>
+      <option value="delete-workitem">delete-workitem</option>
+  	</select>
+  </div>
+  <div id="AttrHolder">    	
+  	<div id="EngineAttr" class="form-row node-input-engine hiddenAttrs">
+  		<label for="node-input-engine"><i class="fa fa-tag"></i> <span data-i18n="forge.label.engine"></span></label>
+  		<input type="text" id="node-input-engine" data-i18n="[placeholder]forge.placeholder.engine" />
+    </div>
+    <div id="BundleIdAttr" class="form-row node-input-bundleId hiddenAttrs">
+  		<label for="node-input-bundleId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.bundleId"></span></label>
+  		<input type="text" id="node-input-bundleId" data-i18n="[placeholder]forge.placeholder.bundleId" />
+    </div>
+    <div id="BundleAliasAttr" class="form-row node-input-bundleAlias hiddenAttrs">
+  		<label for="node-input-bundleAlias"><i class="fa fa-tag"></i> <span data-i18n="forge.label.bundleAlias"></span></label>
+  		<input type="text" id="node-input-bundleAlias" data-i18n="[placeholder]forge.placeholder.bundleAlias" />
+    </div>   
+  </div>
+<script type="text/javascript">
+  var nodeOps = {
+    GetEngine : [
+    //Engine id
+    "#EngineAttr"
+    ],
+    GetAppbundle :[
+    //App Bundle Short id and BundleAlias
+    "#BundleIdAttr",
+    "#BundleAliasAttr"    
+    ],
+    CreateAppbundle : [
+    "#BundleIdAttr",
+    "#BundleAliasAttr"
+    
+    ]
+  };
+  $("#node-input-operation").on("change", function() {
+    $("#AttrHolder")
+      .children()
+      .addClass("hiddenAttrs")
+      .removeClass("visibleAttrs");
+    if (nodeOps[this.value])
+      $(nodeOps[this.value].join())
+        .addClass("visibleAttrs")
+        .removeClass("hiddenAttrs");
+  });
+</script>
+</script>
+
+<script type="text/javascript">
+ RED.nodes.registerType("forge-da", {
+    category: "forge",
+    color: "#0696D7",
+    icon: "forge.png",
+    align: "right",
+    defaults: {
+      name: {
+        value: "forge-da"
+      },
+      topic: {
+        value: ""
+      },
+      forge: {
+        type: "forge-credentials"       
+      },
+      operation: {
+        value: "ListEngines"
+      },
+      engine:{
+        value:""
+      },
+      bundleId :{
+        value:""
+      },
+      bundleAlias :{
+        value:""
+      }
+    },
+    inputs: 1,
+    outputs: 2,
+    outputLabels: ["response", "err"],
+    label: function() {
+      return this.name || "DA " + this.operation;
+    },
+    // oneditprepare is called immediately before the dialog is displayed.
+    // oneditsave is called when the edit dialog is okayed.
+    // oneditcancel is called when the edit dialog is cancelled.
+    // oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
+    // oneditresize is called when the edit dialog is resized.
+    oneditprepare: function(){     
+    },
+    oneditsave: function(){
+    }
+
+  });
+</script>
