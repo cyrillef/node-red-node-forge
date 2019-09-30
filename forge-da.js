@@ -10,6 +10,7 @@ module.exports = function(RED) {
     DataManagementClient
   } = require("forge-server-utils");
 
+  //Utils:
   function uploadAppBundleFile(appBundle, appBundleFilename) {
     const uploadParameters = appBundle.uploadParameters.formData;
     const form = new FormData();
@@ -45,6 +46,14 @@ module.exports = function(RED) {
           resolve(res);
         }
       });
+    });
+  }
+
+  function sleep(ms) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve();
+      }, ms);
     });
   }
 
@@ -614,7 +623,7 @@ module.exports = function(RED) {
     let workitem;
     try {
       workitem = await client.createWorkItem(
-        activityId,
+        activityId.toString(),
         workitemInputs,
         workitemOutputs
       );
@@ -625,10 +634,26 @@ module.exports = function(RED) {
       ) {
         await sleep(5000);
         workitem = await client.workItemDetails(workitem.id);
-        cb(null, workitem.status);
+        workitem.outputSignedUrl = outputSignedUrl.signedUrl;
+        cb(null, workitem);
       }
     } catch (err) {
-      cb("Could not run work item", null);
+      cb(err.stack, null);
+    }
+  };
+
+  service.GetWorkitem = async function(n, node, oa2legged, msg, cb) {
+    const { FORGE_CLIENT_ID, FORGE_CLIENT_SECRET } = process.env;
+    const client = new DesignAutomationClient({
+      client_id: FORGE_CLIENT_ID,
+      client_secret: FORGE_CLIENT_SECRET
+    });
+    let workitem;
+    try {
+      workitem = await client.workItemDetails(n.workitemId);
+      cb(null, workitem);
+    } catch (error) {
+      cb(error.stack, null);
     }
   };
 };
