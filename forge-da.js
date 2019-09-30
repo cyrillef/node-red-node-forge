@@ -1,14 +1,52 @@
 module.exports = function(RED) {
   "use strict";
-  var url = require("url");
-  var fs = require("fs");
-  var uuidv4 = require("uuid/v4");
-  var streamBuffers = require("stream-buffers");
-  var ForgeAPI = require("forge-apis");
+  const fs = require("fs");
+  const FormData = require("form-data");
+  const path = require("path");
+
   const {
     DesignAutomationClient,
-    DesignAutomationID
+    DesignAutomationID,
+    DataManagementClient
   } = require("forge-server-utils");
+
+  function uploadAppBundleFile(appBundle, appBundleFilename) {
+    const uploadParameters = appBundle.uploadParameters.formData;
+    const form = new FormData();
+    form.append("key", uploadParameters["key"]);
+    form.append("policy", uploadParameters["policy"]);
+    form.append("content-type", uploadParameters["content-type"]);
+    form.append(
+      "success_action_status",
+      uploadParameters["success_action_status"]
+    );
+    form.append(
+      "success_action_redirect",
+      uploadParameters["success_action_redirect"]
+    );
+    form.append("x-amz-signature", uploadParameters["x-amz-signature"]);
+    form.append("x-amz-credential", uploadParameters["x-amz-credential"]);
+    form.append("x-amz-algorithm", uploadParameters["x-amz-algorithm"]);
+    form.append("x-amz-date", uploadParameters["x-amz-date"]);
+    form.append(
+      "x-amz-server-side-encryption",
+      uploadParameters["x-amz-server-side-encryption"]
+    );
+    form.append(
+      "x-amz-security-token",
+      uploadParameters["x-amz-security-token"]
+    );
+    form.append("file", fs.createReadStream(appBundleFilename));
+    return new Promise(function(resolve, reject) {
+      form.submit(appBundle.uploadParameters.endpointURL, function(err, res) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  }
 
   // Forge
   function ForgeDANode(n) {
@@ -193,5 +231,404 @@ module.exports = function(RED) {
       .catch(function(error) {
         cb(error, null);
       });
+  };
+
+  service.CreateOrUpdateAppbundle = async function(
+    n,
+    node,
+    oa2legged,
+    msg,
+    cb
+  ) {
+    const client = new DesignAutomationClient({
+      token: oa2legged.credentials.access_token
+    });
+
+    const APPBUNDLE_NAME = n.bundleId;
+    const APPBUNDLE_ALIAS = n.bundleAlias;
+    const APPBUNDLE_ENGINE = n.engine;
+    let APPBUNDLE_FILE = n.bundleFile;
+    const APPBUNDLE_DESCRIPTIION = n.bundleDesc;
+    const allAppBundles = await client.listAppBundles();
+    const matchingAppBundles = allAppBundles.filter(
+      item => item.indexOf(APPBUNDLE_NAME) !== -1
+    );
+    let appBundle;
+    try {
+      if (matchingAppBundles.length === 0) {
+        appBundle = await client.createAppBundle(
+          APPBUNDLE_NAME,
+          APPBUNDLE_ENGINE,
+          APPBUNDLE_DESCRIPTIION
+        );
+      } else {
+        appBundle = await client.updateAppBundle(
+          APPBUNDLE_NAME,
+          APPBUNDLE_ENGINE,
+          APPBUNDLE_DESCRIPTIION
+        );
+      }
+      cb(null, appBundle);
+    } catch (err) {
+      cb(err, null);
+    }
+
+    // Upload appbundle zip file
+    try {
+      var file = path.normalize(APPBUNDLE_FILE);
+      if (!path.isAbsolute(APPBUNDLE_FILE)) {
+        node.error("Absolute Path Required");
+        return;
+      }
+      var res = await uploadAppBundleFile(appBundle, file);
+      cb(null, `File Upload is ${res.statusMessage} and ${res.statusCode}`);
+    } catch (err) {
+      cb(err, null);
+    }
+
+    // Create or update an appbundle alias
+    const allAppBundleAliases = await client.listAppBundleAliases(
+      APPBUNDLE_NAME
+    );
+    const matchingAppBundleAliases = allAppBundleAliases.filter(
+      item => item.id === APPBUNDLE_ALIAS
+    );
+    let appBundleAlias;
+    try {
+      if (matchingAppBundleAliases.length === 0) {
+        appBundleAlias = await client.createAppBundleAlias(
+          APPBUNDLE_NAME,
+          APPBUNDLE_ALIAS,
+          appBundle.version
+        );
+      } else {
+        appBundleAlias = await client.updateAppBundleAlias(
+          APPBUNDLE_NAME,
+          APPBUNDLE_ALIAS,
+          appBundle.version
+        );
+      }
+    } catch (err) {
+      //.error('Could not create or update appbundle alias', err);
+      cb(err, null);
+    }
+    // console.log('AppBundle alias', appBundleAlias);
+    cb(null, appBundleAlias);
+  };
+
+  service.ListAppbundleVersions = async function(n, node, oa2legged, msg, cb) {
+    const client = new DesignAutomationClient({
+      token: oa2legged.credentials.access_token
+    });
+    try {
+      let versions = await client.listAppBundleVersions(n.bundleId);
+      cb(null, versions);
+    } catch (err) {
+      cb(err, null);
+    }
+  };
+
+  service.ListAppbundleAliases = async function(n, node, oa2legged, msg, cb) {
+    const client = new DesignAutomationClient({
+      token: oa2legged.credentials.access_token
+    });
+    try {
+      let aliases = await client.listAppBundleAliases(n.bundleId);
+      cb(null, Object.assign({}, aliases));
+    } catch (error) {
+      cb(error, null);
+    }
+  };
+
+  service.DeleteAppbundle = async function(n, node, oa2legged, msg, cb) {
+    const client = new DesignAutomationClient({
+      token: oa2legged.credentials.access_token
+    });
+    try {
+      let res = await client.deleteAppBundle(n.bundleId);
+      cb(null, res);
+    } catch (error) {
+      cb(error, null);
+    }
+  };
+
+  service.DeleteAppbundleAlias = async function(n, node, oa2legged, msg, cb) {
+    const client = new DesignAutomationClient({
+      token: oa2legged.credentials.access_token
+    });
+    try {
+      let res = await client.deleteAppBundleAlias(n.bundleId, n.bundleAlias);
+      cb(null, res);
+    } catch (error) {
+      cb(error, null);
+    }
+  };
+  service.DeleteAppbundleVersion = async function(n, node, oa2legged, msg, cb) {
+    const client = new DesignAutomationClient({
+      token: oa2legged.credentials.access_token
+    });
+    try {
+      let res = await client.deleteAppBundleVersion(
+        n.bundleId,
+        n.bundleVersion
+      );
+      cb(null, res);
+    } catch (error) {
+      cb(error, null);
+    }
+  };
+  service.ListActivities = async function(n, node, oa2legged, msg, cb) {
+    const client = new DesignAutomationClient({
+      token: oa2legged.credentials.access_token
+    });
+    try {
+      let activities = await client.listActivities();
+      cb(null, activities);
+    } catch (error) {
+      cb(error, null);
+    }
+  };
+
+  service.GetActivity = async function(n, node, oa2legged, msg, cb) {
+    const client = new DesignAutomationClient({
+      token: oa2legged.credentials.access_token
+    });
+    const designAutomationId = new DesignAutomationID(
+      oa2legged.clientId,
+      n.activityId,
+      n.activityAlias
+    );
+    let qualifiedId = designAutomationId.toString();
+    if (msg.hasOwnProperty("payload") && typeof msg.payload !== "undefined") {
+      qualifiedId = msg.payload;
+    }
+    try {
+      let activityDetail = await client.getActivity(qualifiedId);
+      cb(null, activityDetail);
+    } catch (error) {
+      cb(error, null);
+    }
+  };
+
+  service.CreateorUpdateActivity = async function(n, node, oa2legged, msg, cb) {
+    const { FORGE_CLIENT_ID, FORGE_CLIENT_SECRET } = process.env;
+    const client = new DesignAutomationClient({
+      client_id: FORGE_CLIENT_ID,
+      client_secret: FORGE_CLIENT_SECRET
+    });
+    const ACTIVITY_NAME = n.activityId;
+    const ACTIVITY_DESCRIPTION = n.activityDesc;
+    const ACTIVITY_ALIAS = n.activityAlias;
+    const APPBUNDLE_NAME = n.bundleId;
+    const APPBUNDLE_ALIAS = n.bundleAlias;
+    const APPBUNDLE_ENGINE = n.engine;
+    const allActivities = await client.listActivities();
+    const matchingActivities = allActivities.filter(
+      item => item.indexOf("." + ACTIVITY_NAME + "+") !== -1
+    );
+    let activityInputs = [
+      {
+        name: "inputFile",
+        description: "Host Drawing",
+        zip: false,
+        ondemand: false,
+        verb: "get",
+        localName: "$(inputFile)"
+      },
+      {
+        name: "inputJson",
+        description: "input json",
+        zip: false,
+        ondemand: false,
+        verb: "get",
+        localName: "params.json"
+      }
+    ];
+    let activityOutputs = [
+      {
+        name: "outputFile",
+        description: "output file",
+        zip: false,
+        ondemand: false,
+        verb: "put",
+        localName: "outputFile.dwg",
+        required: true
+      }
+    ];
+    let script = "UpdateParam\n";
+    if (msg.hasOwnProperty("payload") && typeof msg.payload !== "undefined") {
+      if (msg.payload.activityInputs) {
+        activityInputs = msg.payload.activityInputs;
+      }
+      if (msg.payload.activityOutputs) {
+        activityOutputs = msg.payload.activityOutputs;
+      }
+      if (msg.payload.script) {
+        script = msg.payload.script;
+      }
+    }
+    let activity;
+    try {
+      if (matchingActivities.length === 0) {
+        activity = await client.createActivity(
+          ACTIVITY_NAME,
+          ACTIVITY_DESCRIPTION,
+          APPBUNDLE_NAME,
+          APPBUNDLE_ALIAS,
+          APPBUNDLE_ENGINE,
+          activityInputs,
+          activityOutputs,
+          script
+        );
+      } else {
+        activity = await client.updateActivity(
+          ACTIVITY_NAME,
+          ACTIVITY_DESCRIPTION,
+          APPBUNDLE_NAME,
+          APPBUNDLE_ALIAS,
+          APPBUNDLE_ENGINE,
+          activityInputs,
+          activityOutputs,
+          script
+        );
+      }
+    } catch (err) {
+      cb("Could not create or update activity", null);
+    }
+    cb(null, activity);
+
+    // Create or update an activity alias
+    const allActivityAliases = await client.listActivityAliases(ACTIVITY_NAME);
+    const matchingActivityAliases = allActivityAliases.filter(
+      item => item.id === ACTIVITY_ALIAS
+    );
+    let activityAlias;
+    try {
+      if (matchingActivityAliases.length === 0) {
+        activityAlias = await client.createActivityAlias(
+          ACTIVITY_NAME,
+          ACTIVITY_ALIAS,
+          activity.version
+        );
+      } else {
+        activityAlias = await client.updateActivityAlias(
+          ACTIVITY_NAME,
+          ACTIVITY_ALIAS,
+          activity.version
+        );
+      }
+    } catch (err) {
+      cb("Could not create or update activity alias", null);
+    }
+    cb(null, activityAlias);
+  };
+
+  service.CreateWorkitem = async function(n, node, oa2legged, msg, cb) {
+    const FORGE_BUCKET = n.bucket;
+    const INPUT_FILE_PATH = n.inputFile;
+    const INPUT_OBJECT_KEY = n.inputObjectKey;
+    const OUTPUT_OBJECT_KEY = n.outputObjectKey;
+
+    const { FORGE_CLIENT_ID, FORGE_CLIENT_SECRET } = process.env;
+    // Create bucket if it doesn't exist
+    const dm = new DataManagementClient({
+      client_id: FORGE_CLIENT_ID,
+      client_secret: FORGE_CLIENT_SECRET
+    });
+    const allBuckets = await dm.listBuckets();
+    console.log(allBuckets);
+    const matchingBuckets = allBuckets.filter(
+      item => item.bucketKey === FORGE_BUCKET
+    );
+    if (matchingBuckets.length === 0) {
+      try {
+        let bucketDetail = await dm.createBucket(FORGE_BUCKET, "persistent");
+        cb(null, bucketDetail);
+      } catch (err) {
+        cb("Could not create bucket", null);
+      }
+    }
+
+    // Upload Drawing file and create a placeholder for the output result drawing file
+    const inputObjectBuff = fs.readFileSync(INPUT_FILE_PATH);
+    try {
+      let objectDetail = await dm.uploadObject(
+        FORGE_BUCKET,
+        INPUT_OBJECT_KEY,
+        "application/octet-stream",
+        inputObjectBuff
+      );
+      cb(null, objectDetail);
+    } catch (err) {
+      cb("Could not upload input file", null);
+    }
+
+    // Generate signed URLs for all input and output files
+    let inputFileSignedUrl;
+    let outputSignedUrl;
+    try {
+      inputFileSignedUrl = await dm.createSignedUrl(
+        FORGE_BUCKET,
+        INPUT_OBJECT_KEY,
+        "read"
+      );
+      outputSignedUrl = await dm.createSignedUrl(
+        FORGE_BUCKET,
+        OUTPUT_OBJECT_KEY,
+        "readwrite"
+      );
+    } catch (err) {
+      console.error("Could not generate signed URLs", err);
+      process.exit(1);
+    }
+
+    const client = new DesignAutomationClient({
+      client_id: FORGE_CLIENT_ID,
+      client_secret: FORGE_CLIENT_SECRET
+    });
+    // Create work item and poll the results
+    const activityId = new DesignAutomationID(
+      oa2legged.clientId,
+      n.activityId,
+      n.activityAlias
+    );
+    let workitemInputs = [
+      { name: "inputFile", url: inputFileSignedUrl.signedUrl },
+      {
+        name: "inputJson",
+        url: 'data:application/json,{"Width":"40","Height":"80"}'
+      }
+    ];
+    let workitemOutputs = [
+      { name: "outputFile", url: outputSignedUrl.signedUrl }
+    ];
+
+    /*if (msg.hasOwnProperty("payload") && typeof msg.payload !== "undefined") {
+      if (payload.workitemInputs) {
+        workitemInputs = payload.workitemInputs;
+      }
+      if (payload.workitemOutputs) {
+        workitemOutputs = payload.workitemOutputs;
+      }
+    }*/
+    let workitem;
+    try {
+      workitem = await client.createWorkItem(
+        activityId,
+        workitemInputs,
+        workitemOutputs
+      );
+      console.log("Workitem", workitem);
+      while (
+        workitem.status === "inprogress" ||
+        workitem.status === "pending"
+      ) {
+        await sleep(5000);
+        workitem = await client.workItemDetails(workitem.id);
+        cb(null, workitem.status);
+      }
+    } catch (err) {
+      cb("Could not run work item", null);
+    }
   };
 };

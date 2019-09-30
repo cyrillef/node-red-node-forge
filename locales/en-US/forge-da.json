@@ -30,7 +30,18 @@
       "pattern": "Filename Pattern",
       "engine": "Engine Id",
       "bundleId": "Bundle Short Id",
-      "bundleAlias": "Bundle Alias"
+      "bundleAlias": "Bundle Alias",
+      "bundleFile": "Zip Package",
+      "bundleDesc": "App Description",
+      "bundleVersion": "App Bundle Version",
+      "activityId": "Activity Short Id",
+      "activityVersion": "Activity Version",
+      "activityAlias": "Activity Alias",
+      "activityDesc": "Activity Description",
+      "inputFile": "Input Source File",
+      "inputObjectKey": "Input Object Key",
+      "outputObjectKey": "Output Object Key",
+      "workitemId": "Workitem Id"
     },
     "placeholder": {
       "name": "Name",
@@ -60,7 +71,18 @@
       "pattern": "Filepattern",
       "engine": "Engine Id",
       "bundleId": "Bundle Short Id",
-      "bundleAlias": "Bundle Alias"
+      "bundleAlias": "Bundle Alias",
+      "bundleFile": "Zip Package",
+      "bundleDesc": "App Description",
+      "bundleVersion": "App Bundle Version",
+      "activityId": "Activity Short Id",
+      "activityVersion": "Activity Version",
+      "activityAlias": "Activity Alias",
+      "activityDesc": "Activity Description",
+      "inputFile": "Input Source File",
+      "inputObjectKey": "Input Object Key",
+      "outputObjectKey": "Output Object Key",
+      "workitemId": "Workitem Id"
     },
     "tip": {
       "config1": "",

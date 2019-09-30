@@ -41,7 +41,7 @@
 		<input type="text" id="node-input-forge">
 	</div>
   <div class="form-row">
-  	<label for="node-input-operation"><i class="fa fa-wrench"></i> <span
+  	<label for="node-input-operation"><i class="fa fa-wrench"></i><span
   			data-i18n="forge.label.operation"></span></label>
   	<select type="text" id="node-input-operation">  	
       <option value="ListEngines">List Engines</option>
@@ -50,26 +50,23 @@
       <option value="GetAppbundle">Get Appbundle</option>
       <option value="CreateOrUpdateAppbundle">Create or Update Appbundle</option>   
       <option value="ListAppbundleVersions">List Appbundle Versions</option>
-      <option value="ListAppbundleAliases">List Appbundle Aliases</option>
-      <option value="create-appbundle-alias">create-appbundle-alias</option>
-      <option value="update-appbundle-alias">update-appbundle-alias</option>
-      <option value="delete-appbundle">delete-appbundle</option>
-      <option value="delete-appbundle-alias">delete-appbundle-alias</option>
-      <option value="delete-appbundle-version">delete-appbundle-version</option>        
-      <option value="list-activities">list-activities</option>
-      <option value="get-activity">get-activity</option>
-      <option value="create-activity">create-activity</option>
-      <option value="update-activity">update-activity</option>
-      <option value="list-activity-versions">list-activity-versions</option>
-      <option value="list-activity-aliases">list-activity-aliases</option>
-      <option value="create-activity-alias">create-activity-alias</option>
-      <option value="update-activity-alias">update-activity-alias</option>
-      <option value="delete-activity">delete-activity</option>
-      <option value="delete-activity-alias">delete-activity-alias</option>
-      <option value="delete-activity-version">delete-activity-version</option>
-      <option value="create-workitem">create-workitem</option>
-      <option value="get-workitem">get-workitem</option>
-      <option value="delete-workitem">delete-workitem</option>
+      <option value="ListAppbundleAliases">List Appbundle Aliases</option>           
+      <option value="DeleteAppbundle">Delete Appbundle</option>
+      <option value="DeleteAppbundleAlias">Delete Appbundle Alias</option>
+      <option value="DeleteAppbundleVersion">Delete Appbundle Version</option>        
+      <option value="ListActivities">List Activities</option>
+      <option value="GetActivity">Get Activity</option>
+      <option value="CreateorUpdateActivity">Create or Update Activity</option>
+      <option value="ListActivityVersions">List Activity Versions</option>
+      <option value="ListActivityAliases">List Activity Aliases</option>
+      <option value="CreateActivityAlias">Create Activity Alias</option>
+      <option value="UpdateActivityAlias">Update Activity Alias</option>
+      <option value="DeleteActivity">Delete Activity</option>
+      <option value="DeleteActivityAlias">Delete Activity Alias</option>
+      <option value="DeleteActivityVersion">Delete Activity Version</option>
+      <option value="CreateWorkitem">Create Workitem</option>
+      <option value="GetWorkitem">Get Workitem</option>
+      <option value="DeleteWorkitem">Delete Workitem</option>
   	</select>
   </div>
   <div id="AttrHolder">    	
@@ -84,7 +81,58 @@
     <div id="BundleAliasAttr" class="form-row node-input-bundleAlias hiddenAttrs">
   		<label for="node-input-bundleAlias"><i class="fa fa-tag"></i> <span data-i18n="forge.label.bundleAlias"></span></label>
   		<input type="text" id="node-input-bundleAlias" data-i18n="[placeholder]forge.placeholder.bundleAlias" />
-    </div>   
+    </div> 
+    <div id="BundleFileAttr" class="form-row node-input-bundleFile hiddenAttrs">
+  		<label for="node-input-bundleFile"><i class="fa fa-suitcase"></i> <span data-i18n="forge.label.bundleFile"></span></label>
+      <input type="text" id="node-input-bundleFile" data-i18n="[placeholder]forge.placeholder.bundleFile" />
+      <div class="form-tips"><b>Tip:</b> Absolute File Path.</div>
+    </div>
+    <div id="BundleDescAttr" class="form-row node-input-bundleDesc hiddenAttrs">
+  		<label for="node-input-bundleDesc"><i class="fa fa-pencil-square"></i> <span data-i18n="forge.label.bundleDesc"></span></label>
+  		<input type="text" id="node-input-bundleDesc" data-i18n="[placeholder]forge.placeholder.bundleDesc" />
+    </div>
+    <div id="BundleVersionAttr" class="form-row node-input-bundleVersion hiddenAttrs">
+  		<label for="node-input-bundleVersion"><i class="fa fa-tag"></i> <span data-i18n="forge.label.bundleVersion"></span></label>
+  		<input type="number" id="node-input-bundleVersion" data-i18n="[placeholder]forge.placeholder.bundleVersion" />
+    </div> 
+    <div id="ActivityIdAttr" class="form-row node-input-activityId hiddenAttrs">
+  		<label for="node-input-activityId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.activityId"></span></label>
+  		<input type="text" id="node-input-activityId" data-i18n="[placeholder]forge.placeholder.activityId" />
+    </div>
+    <div id="ActivityAliasAttr" class="form-row node-input-activityAlias hiddenAttrs">
+  		<label for="node-input-activityAlias"><i class="fa fa-tag"></i> <span data-i18n="forge.label.activityAlias"></span></label>
+  		<input type="text" id="node-input-activityAlias" data-i18n="[placeholder]forge.placeholder.activityAlias" />
+    </div> 
+    <div id="ActivityVersionAttr" class="form-row node-input-activityVersion hiddenAttrs">
+  		<label for="node-input-activityVersion"><i class="fa fa-tag"></i> <span data-i18n="forge.label.activityVersion"></span></label>
+  		<input type="text" id="node-input-activityVersion" data-i18n="[placeholder]forge.placeholder.activityVersion" />
+    </div> 
+    <div id="ActivityDescAttr" class="form-row node-input-activityDesc hiddenAttrs">
+  		<label for="node-input-activityDesc"><i class="fa fa-pencil-square"></i> <span data-i18n="forge.label.activityDesc"></span></label>
+  		<input type="text" id="node-input-activityDesc" data-i18n="[placeholder]forge.placeholder.activityDesc" />
+    </div> 
+
+
+    <div id="BucketKeyAttr" class="form-row node-input-bucket hiddenAttrs">
+  		<label for="node-input-bucket"><i class="fa fa-archive"></i> <span data-i18n="forge.label.bucket"></span></label>
+  		<input type="text" id="node-input-bucket" data-i18n="[placeholder]forge.placeholder.bucket" />
+    </div> 
+    <div id="InputFileAttr" class="form-row node-input-inputFile hiddenAttrs">
+  		<label for="node-input-inputFile"><i class="fa fa-file"></i> <span data-i18n="forge.label.inputFile"></span></label>
+  		<input type="text" id="node-input-inputFile" data-i18n="[placeholder]forge.placeholder.inputFile" />
+    </div> 
+    <div id="InputObjectKeyAttr" class="form-row node-input-inputObjectKey hiddenAttrs">
+  		<label for="node-input-inputObjectKey"><i class="fa fa-tag"></i> <span data-i18n="forge.label.inputObjectKey"></span></label>
+  		<input type="text" id="node-input-inputObjectKey" data-i18n="[placeholder]forge.placeholder.inputObjectKey" />
+    </div> 
+    <div id="OutputObjectKeyAttr" class="form-row node-input-outputObjectKey hiddenAttrs">
+  		<label for="node-input-outputObjectKey"><i class="fa fa-tag"></i> <span data-i18n="forge.label.outputObjectKey"></span></label>
+  		<input type="text" id="node-input-outputObjectKey" data-i18n="[placeholder]forge.placeholder.outputObjectKey" />
+    </div> 
+    <div id="WorkItemIdAttr" class="form-row node-input-workitemId hiddenAttrs">
+  		<label for="node-input-workitemId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.workitemId"></span></label>
+  		<input type="text" id="node-input-workitemId" data-i18n="[placeholder]forge.placeholder.workitemId" />
+    </div>
   </div>
 <script type="text/javascript">
   var nodeOps = {
@@ -97,12 +145,54 @@
     "#BundleIdAttr",
     "#BundleAliasAttr"    
     ],
-    CreateAppbundle : [
+    CreateOrUpdateAppbundle : [
+    "#EngineAttr",
+    "#BundleIdAttr",
+    "#BundleAliasAttr",
+    "#BundleFileAttr",
+    "#BundleDescAttr"    
+    ],
+    ListAppbundleVersions:[
+    "#BundleIdAttr"
+    ],
+    ListAppbundleAliases:[
+    "#BundleIdAttr"
+    ],
+    DeleteAppbundle:[
+    "#BundleIdAttr"
+    ],
+    DeleteAppbundleAlias:[
     "#BundleIdAttr",
     "#BundleAliasAttr"
-    
+    ],
+    DeleteAppbundleVersion:[
+    "#BundleIdAttr",
+    "#BundleVersionAttr"
+    ],
+    GetActivity:[
+    "#ActivityIdAttr",
+    "#ActivityAliasAttr"
+    ],
+    CreateorUpdateActivity:[
+    "#ActivityIdAttr",
+    "#ActivityAliasAttr",
+    "#ActivityDescAttr",
+    "#BundleIdAttr",
+    "#BundleAliasAttr",
+    "#EngineAttr"
+    ],
+    CreateWorkitem :[
+    "#ActivityIdAttr",
+    "#ActivityAliasAttr",
+    "#BucketKeyAttr",
+    "#InputFileAttr",
+    "#InputObjectKeyAttr",
+    "#OutputObjectKeyAttr"
+    ],
+    GetWorkitem:[
+    "#WorkItemIdAttr"
     ]
-  };
+    };
   $("#node-input-operation").on("change", function() {
     $("#AttrHolder")
       .children()
@@ -143,7 +233,42 @@
       },
       bundleAlias :{
         value:""
+      },
+      bundleFile :{
+        value:""
+      },
+      bundleDesc :{
+        value:""
+      },
+      bundleVersion:{
+        value: -1
+      },
+      activityId:{
+        value:""
+      },
+      activityAlias:{
+        value:""
+      },
+      activityDesc:{
+        value:""
+      },
+      bucket:{
+        value:""
+      },
+      inputFile:{
+        value:""
+      },
+      inputObjectKey:{
+        value:""
+      },
+      outputObjectKey:{
+        value:""
+      },
+      workitemId:{
+        value:""
       }
+
+
     },
     inputs: 1,
     outputs: 2,
@@ -160,6 +285,5 @@
     },
     oneditsave: function(){
     }
-
   });
 </script>
