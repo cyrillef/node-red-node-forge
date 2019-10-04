@@ -21,19 +21,29 @@
         "rest",
         "api"
     ],
+    "scripts": {
+        "start": "NODE_ENV=production node start.js",
+        "dev": "node start.js",
+        "nodemon": "nodemon start.js --ignore public/"
+    },
     "node-red": {
         "nodes": {
             "forge-credentials": "forge-credentials.js",
             "forge-default-credentials": "forge-default-credentials.js",
             "forge-oss": "forge-oss.js",
             "forge-model-derivative": "forge-model-derivative.js",
-            "forge-wait-and-go": "forge-wait-and-go.js"
+            "forge-wait-and-go": "forge-wait-and-go.js",
+            "forge-commands": "forge-commands.js"
         }
     },
     "dependencies": {
+        "cookie-parser": "^1.4.4",
+        "cryptiles": "^4.1.3",
+        "express": "^4.17.1",
+        "express-session": "^1.16.2",
         "forge-apis": "^0.4.5",
         "stream-buffers": "^3.0.2",
-        "uuid": "^3.3.2"
+        "uuid": "^3.3.3"
     },
     "engines": {
         "node": ">=8.0.0"

@@ -1,0 +1,216 @@
+<!--
+  Copyright (c) Autodesk, Inc.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+-->
+
+<!-- forge-oss -->
+<script type="text/x-red" data-template-name="forge-commands">
+	<style scoped>
+		.hiddenAttrs {
+			display: none;
+		}
+
+		.visibleAttrs {
+			display: block;
+		}
+	</style>
+
+	<div class="form-row">
+		<label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
+		<input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
+	</div>
+	<div class="form-row">
+		<label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
+		<input type="text" id="node-input-topic" />
+	</div>
+	<div class="form-row">
+		<label for="node-input-forge"><i class="fa fa-user"></i> <span data-i18n="forge.label.forge"></span></label>
+		<input type="text" id="node-input-forge">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-operation"><i class="fa fa-wrench"></i> <span
+				data-i18n="forge.label.operation"></span></label>
+		<select type="text" id="node-input-operation">
+			<option value="ListHubs">List Hubs</option>
+			<option value="ListProjects">List Projects</option>
+			<option value="SearchFolders">Search Folders</option>
+			<option value="Publish">Publish</option>
+		</select>
+	</div>
+
+	<div id="AttrHolder">
+		<div id="LimitAttr" class="form-row node-input-limit hiddenAttrs">
+			<label for="node-input-limit"><i class="fa fa-tag"></i> <span data-i18n="forge.label.limit"></span></label>
+			<input type="text" id="node-input-limit" data-i18n="[placeholder]forge.placeholder.limit" />
+	</div>
+	<div id="StartAtAttr" class="form-row node-input-startAt hiddenAttrs">
+			<label for="node-input-startAt"><i class="fa fa-tag"></i> <span
+							data-i18n="forge.label.startAt"></span></label>
+			<input type="text" id="node-input-startAt" data-i18n="[placeholder]forge.placeholder.startAt" />
+	</div>
+	<div id="HubAttr" class="form-row node-input-hub hiddenAttrs">
+			<label for="node-input-hub"><i class="fa fa-key"></i> <span data-i18n="forge.label.hub"></span></label>
+			<input type="text" id="node-input-hub" data-i18n="[placeholder]forge.placeholder.hub"
+				style="width: 70%;" />
+			<input type="hidden" id="node-input-hubType" />
+		</div>
+	<div id="projectAttr" class="form-row node-input-project hiddenAttrs">
+				<label for="node-input-project"><i class="fa fa-key"></i> <span data-i18n="forge.label.project"></span></label>
+				<input type="text" id="node-input-project" data-i18n="[placeholder]forge.placeholder.project"
+					style="width: 70%;" />
+				<input type="hidden" id="node-input-projectType" />
+	</div>
+
+		<div id="BucketAttr" class="form-row node-input-bucket hiddenAttrs">
+			<label for="node-input-bucket"><i class="fa fa-folder"></i> <span data-i18n="forge.label.bucket"></span></label>
+			<input type="text" id="node-input-bucket" data-i18n="[placeholder]forge.placeholder.bucket"
+				style="width: 70%;" />
+			<input type="hidden" id="node-input-bucketType" />
+		</div>
+		<div id="KeyAttr" class="form-row node-input-key hiddenAttrs">
+			<label for="node-input-key"><i class="fa fa-tag"></i> <span data-i18n="forge.label.key"></span></label>
+			<input type="text" id="node-input-key" data-i18n="[placeholder]forge.placeholder.key" />
+		</div>
+	</div>
+	<script type="text/javascript">
+		var nodeOps = {
+			ListHubs: [ // GET 	hubs
+				'#LimitAttr', '#StartAtAttr'
+			],
+			ListProjects: [ // GET	hubs/:hub_id/projects
+				'#HubAttr'
+			],
+			SearchFolders: [ // GET projects/:project_id/folders/:folder_id/search
+				'#HubAttr','#projectAttr'
+			],
+			GetPublishStatus:[ // POST projects/:project_id/commands
+			],
+			Publish: [ // DELETE	buckets/:bucketKey
+				'#BucketAttr'
+			]			
+		};
+		$('#node-input-operation').on('change', function () {
+			$('#AttrHolder').children().addClass('hiddenAttrs').removeClass('visibleAttrs');
+			if (nodeOps[this.value])
+				$(nodeOps[this.value].join()).addClass('visibleAttrs').removeClass('hiddenAttrs');
+		});
+
+	</script>
+</script>
+
+<script type="text/javascript">
+	RED.nodes.registerType('forge-commands', {
+		category: 'forge',
+		color: '#0696D7',
+		icon: 'forge.png',
+		align: 'right',
+		defaults: {
+			name: {
+				value: 'forge-commands'
+			},
+			topic: {
+				value: ''
+			},
+			forge: {
+				type: 'forge-credentials'
+				//required: true
+			},
+			operation: {
+				value: 'ListHubs'
+			}
+		},
+		inputs: 1,
+		//inputLabels: ['credentials', 'in'],
+		outputs: 2,
+		outputLabels: ['response', 'err'],
+		label: function () {
+			return (this.name || 'DM ' + this.operation);
+		},
+		// oneditprepare is called immediately before the dialog is displayed.
+		// oneditsave is called when the edit dialog is okayed.
+		// oneditcancel is called when the edit dialog is cancelled.
+		// oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
+		// oneditresize is called when the edit dialog is resized.
+		oneditprepare: function () {
+			if (!this.hubType) {
+				if (this.hub === '') {
+					this.hubType = 'env';
+					this.hub = 'HUB_ID'
+				} else {
+					this.hubType = 'str';
+				}
+			} else if (this.hubType === 'string' || this.hubType === 'none') {
+				this.hubType = 'str';
+			}
+
+			$('#node-input-hubType').val(this.hubType);
+			$('#node-input-hub').typedInput({
+				default: 'env',
+				typeField: $('#node-input-hubType'),
+				types: [ /*'flow', 'global',*/ 'str', 'env']
+			});
+			$('#node-input-hub').typedInput('type', this.hubType);
+
+			
+			if (!this.projectType) {
+				if (this.project === '') {
+					this.projectType = 'env';
+					this.project = 'PROJECT_ID'
+				} else {
+					this.projectType = 'str';
+				}
+			} else if (this.projectType === 'string' || this.projectType === 'none') {
+				this.projectType = 'str';
+			}
+
+			$('#node-input-projectType').val(this.projectType);
+			$('#node-input-project').typedInput({
+				default: 'env',
+				typeField: $('#node-input-projectType'),
+				types: [ /*'flow', 'global',*/ 'str', 'env']
+			});
+			$('#node-input-project').typedInput('type', this.projectType);
+		},
+		oneditsave: function () {
+			//this.bucketType = $('#node-input-bucketType').val();
+
+			var trimFields = [
+				'bucket',
+				'key',				
+				'startAt',
+				'beginsWith',
+				'hub',
+				'project',
+				'copySource',
+				'localFilename',
+				'range',
+				'ifNoneMatch',
+				'guid'
+			];
+			// Just in case any whitespace has crept in with the copy-paste of the fields
+			trimFields.forEach(function (field) {
+				var v = $('#node-input-' + field).val();
+				v = v.trim();
+				$('#node-input-' + field).val(v);
+			});
+		} 	
+	});
+</script> 	
