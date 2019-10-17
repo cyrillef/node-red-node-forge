@@ -25,9 +25,11 @@
         "nodes": {
             "forge-credentials": "forge-credentials.js",
             "forge-default-credentials": "forge-default-credentials.js",
-            "forge-oss": "forge-oss.js",
+            "forge-oss": "forge-oss.js", 
             "forge-model-derivative": "forge-model-derivative.js",
-            "forge-wait-and-go": "forge-wait-and-go.js"
+            "forge-wait-and-go": "forge-wait-and-go.js",
+			"forge-dm": "forge-dm.js",
+			"forge-da": "forge-da.js"
         }
     },
     "dependencies": {
