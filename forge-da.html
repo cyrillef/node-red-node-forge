@@ -191,6 +191,16 @@
     ],
     GetWorkitem:[
     "#WorkItemIdAttr"
+    ],
+    DeleteActivity:[
+    "#ActivityIdAttr"],
+    DeleteActivityAlias:[
+    "#ActivityIdAttr",
+    "#ActivityAliasAttr",
+    ],
+    DeleteActivityVersion:[
+    "#ActivityIdAttr",
+    "#ActivityVersionAttr"
     ]
     };
   $("#node-input-operation").on("change", function() {
@@ -266,9 +276,10 @@
       },
       workitemId:{
         value:""
+      },
+      activityVersion:{
+        value:""
       }
-
-
     },
     inputs: 1,
     outputs: 2,

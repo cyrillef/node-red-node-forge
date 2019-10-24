@@ -5,7 +5,8 @@
   "license": "MIT",
   "author": "Cyrille Fauvel",
   "contributors": [
-    "Cyrille Fauvel <cyrille@autodesk.com>"
+    "Cyrille Fauvel <cyrille@autodesk.com>",
+    "Madhukar Moogala <madhukar.moogala@autodesk.com>"
   ],
   "repository": {
     "type": "git",

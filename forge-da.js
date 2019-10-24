@@ -177,50 +177,43 @@ module.exports = function(RED) {
 
   var service = {};
 
-  service.ListEngines = function(n, node, oa2legged, msg, cb) {
+  service.ListEngines = async function(n, node, oa2legged, msg, cb) {
     const client = new DesignAutomationClient({
       token: oa2legged.credentials.access_token
     });
-    client
-      .listEngines()
-      .then(function(engines) {
-        cb(null, engines);
-      })
-      .catch(function(error) {
-        cb(error, null);
-      });
+    try {
+      let engines = await client.listEngines();
+      cb(null, engines);
+    } catch (error) {
+      cb(error, null);
+    }
   };
 
-  service.GetEngine = function(n, node, oa2legged, msg, cb) {
+  service.GetEngine = async function(n, node, oa2legged, msg, cb) {
     const client = new DesignAutomationClient({
       token: oa2legged.credentials.access_token
     });
-
-    client
-      .getEngine(n.engine)
-      .then(function(details) {
-        cb(null, details);
-      })
-      .catch(function(error) {
-        cb(error, null);
-      });
+    try {
+      let details = await client.getEngine(n.engine);
+      cb(null, details);
+    } catch (error) {
+      cb(error, null);
+    }
   };
 
-  service.ListAppbundles = function(n, node, oa2legged, msg, cb) {
+  service.ListAppbundles = async function(n, node, oa2legged, msg, cb) {
     const client = new DesignAutomationClient({
       token: oa2legged.credentials.access_token
     });
-    client
-      .listAppBundles()
-      .then(function(details) {
-        cb(null, details);
-      })
-      .catch(function(error) {
-        cb(error, null);
-      });
+    try {
+      let details = await client.listAppBundles();
+      cb(null, details);
+    } catch (error) {
+      cb(error, null);
+    }
   };
 
-  service.GetAppbundle = function(n, node, oa2legged, msg, cb) {
+  service.GetAppbundle = async function(n, node, oa2legged, msg, cb) {
     const client = new DesignAutomationClient({
       token: oa2legged.credentials.access_token
     });
@@ -232,14 +225,12 @@ module.exports = function(RED) {
     );
     let qualifiedId = designAutomationId.toString();
 
-    client
-      .getAppBundle(qualifiedId)
-      .then(function(details) {
-        cb(null, details);
-      })
-      .catch(function(error) {
-        cb(error, null);
-      });
+    try {
+      let details = await client.getAppBundle(qualifiedId);
+      cb(null, details);
+    } catch (error) {
+      cb(error, null);
+    }
   };
 
   service.CreateOrUpdateAppbundle = async function(
@@ -532,7 +523,7 @@ module.exports = function(RED) {
     cb(null, activityAlias);
   };
 
-  service.CreateWorkitem = async function(n, node, oa2legged, msg, cb) {
+  service.CreateWorkitem = async function(n, node, oa2legged, _msg, cb) {
     const FORGE_BUCKET = n.bucket;
     const INPUT_FILE_PATH = n.inputFile;
     const INPUT_OBJECT_KEY = n.inputObjectKey;
@@ -612,14 +603,6 @@ module.exports = function(RED) {
       { name: "outputFile", url: outputSignedUrl.signedUrl }
     ];
 
-    /*if (msg.hasOwnProperty("payload") && typeof msg.payload !== "undefined") {
-      if (payload.workitemInputs) {
-        workitemInputs = payload.workitemInputs;
-      }
-      if (payload.workitemOutputs) {
-        workitemOutputs = payload.workitemOutputs;
-      }
-    }*/
     let workitem;
     try {
       workitem = await client.createWorkItem(
@@ -642,7 +625,7 @@ module.exports = function(RED) {
     }
   };
 
-  service.GetWorkitem = async function(n, node, oa2legged, msg, cb) {
+  service.GetWorkitem = async function(n, node, oa2legged, _msg, cb) {
     const { FORGE_CLIENT_ID, FORGE_CLIENT_SECRET } = process.env;
     const client = new DesignAutomationClient({
       client_id: FORGE_CLIENT_ID,
@@ -652,6 +635,54 @@ module.exports = function(RED) {
     try {
       workitem = await client.workItemDetails(n.workitemId);
       cb(null, workitem);
+    } catch (error) {
+      cb(error.stack, null);
+    }
+  };
+
+  service.DeleteActivity = async function(n, node, oa2legged, _msg, cb) {
+    const { FORGE_CLIENT_ID, FORGE_CLIENT_SECRET } = process.env;
+    const client = new DesignAutomationClient({
+      client_id: FORGE_CLIENT_ID,
+      client_secret: FORGE_CLIENT_SECRET
+    });
+    let details;
+    try {
+      details = await client.deleteActivity(n.activityId);
+      cb(null, details);
+    } catch (error) {
+      cb(error.stack, null);
+    }
+  };
+
+  service.DeleteActivityAlias = async function(n, node, oa2legged, _msg, cb) {
+    const { FORGE_CLIENT_ID, FORGE_CLIENT_SECRET } = process.env;
+    const client = new DesignAutomationClient({
+      client_id: FORGE_CLIENT_ID,
+      client_secret: FORGE_CLIENT_SECRET
+    });
+    let details;
+    try {
+      details = await client.deleteActivityAlias(n.activityId, n.activityAlias);
+      cb(null, details);
+    } catch (error) {
+      cb(error.stack, null);
+    }
+  };
+
+  service.DeleteActivityVersion = async function(n, node, oa2legged, _msg, cb) {
+    const { FORGE_CLIENT_ID, FORGE_CLIENT_SECRET } = process.env;
+    const client = new DesignAutomationClient({
+      client_id: FORGE_CLIENT_ID,
+      client_secret: FORGE_CLIENT_SECRET
+    });
+    let details;
+    try {
+      details = await client.deleteActivityVersion(
+        n.activityId,
+        n.activityVersion
+      );
+      cb(null, details);
     } catch (error) {
       cb(error.stack, null);
     }
