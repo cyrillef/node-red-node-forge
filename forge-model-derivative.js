@@ -34,48 +34,48 @@ module.exports = function (RED) {
 
         function onInput(msg) {
 
-			if ( msg.nodeFlowId ) {
-				var flowNode = RED.nodes.getNode(msg.nodeFlowId);
-				if (flowNode) {
-					msg.flowid =flowNode.z;
-					delete msg.nodeFlowId;
-				}
-			}
+            if (msg.nodeFlowId) {
+                var flowNode = RED.nodes.getNode(msg.nodeFlowId);
+                if (flowNode) {
+                    msg.flowid = flowNode.z;
+                    delete msg.nodeFlowId;
+                }
+            }
 
             var FORGE = node.forgeCredentials ? node.forgeCredentials.FORGE : null;
-			//RED.nodes.getNode('forge-credentials');
-			if (!FORGE) {
-				if (node._forgeCredentials) {
-					delete node._forgeCredentials;
-					node.warn(RED._('forge.warn.missing-credentials'));
-					return;
-				}
-				node._forgeCredentials = true;
-				var forgeDefaultCredentials = null;
-				RED.nodes.eachNode((elt) => { // elt.type === 'forge-*'
-					// https://discourse.nodered.org/t/how-to-get-flow-id-by-function-node/9889
-					if (node._forgeCredentials && elt.type === 'forge-default-credentials') {
-						if (![node.z, msg.flowid].includes(elt.z)) {
-							forgeDefaultCredentials = elt.id;
-							return;
-						}
-						node.forgeCredentials = RED.nodes.getNode(elt.id).forgeCredentials;
-						onInput(msg);
-						if (node.forgeCredentials.FORGE) {
-							delete node._forgeCredentials;
-							forgeDefaultCredentials = null;
-						}
-					}
-				});
-				if (forgeDefaultCredentials) {
-					node.forgeCredentials = RED.nodes.getNode(forgeDefaultCredentials).forgeCredentials;
-					onInput(msg);
-					forgeDefaultCredentials = null;
-				}
-				if (node._forgeCredentials)
-					delete node._forgeCredentials;
-				return;
-			}
+            //RED.nodes.getNode('forge-credentials');
+            if (!FORGE) {
+                if (node._forgeCredentials) {
+                    delete node._forgeCredentials;
+                    node.warn(RED._('forge.warn.missing-credentials'));
+                    return;
+                }
+                node._forgeCredentials = true;
+                var forgeDefaultCredentials = null;
+                RED.nodes.eachNode((elt) => { // elt.type === 'forge-*'
+                    // https://discourse.nodered.org/t/how-to-get-flow-id-by-function-node/9889
+                    if (node._forgeCredentials && elt.type === 'forge-default-credentials') {
+                        if (![node.z, msg.flowid].includes(elt.z)) {
+                            forgeDefaultCredentials = elt.id;
+                            return;
+                        }
+                        node.forgeCredentials = RED.nodes.getNode(elt.id).forgeCredentials;
+                        onInput(msg);
+                        if (node.forgeCredentials.FORGE) {
+                            delete node._forgeCredentials;
+                            forgeDefaultCredentials = null;
+                        }
+                    }
+                });
+                if (forgeDefaultCredentials) {
+                    node.forgeCredentials = RED.nodes.getNode(forgeDefaultCredentials).forgeCredentials;
+                    onInput(msg);
+                    forgeDefaultCredentials = null;
+                }
+                if (node._forgeCredentials)
+                    delete node._forgeCredentials;
+                return;
+            }
 
             node.sendMsg = function (err, data) {
                 if (err) {

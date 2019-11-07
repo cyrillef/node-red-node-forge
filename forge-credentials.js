@@ -45,9 +45,9 @@ module.exports = function (RED) {
 					//node.ClientID = (node.credentials.ClientIDType === 'global' ? globalContext : flowContext).get('FORGE_CLIENT_ID', 'forge')
 
 					//var redContext = require(require.main.path + "/../@node-red/runtime/lib/nodes/context");
-					if ( !/^#:\((\S+?)\)::(.*)$/.test(node.credentials.ClientID) )
-						node.credentials.ClientID ='#:(forge)::' + node.credentials.ClientID;
-					
+					if (!/^#:\((\S+?)\)::(.*)$/.test(node.credentials.ClientID))
+						node.credentials.ClientID = '#:(forge)::' + node.credentials.ClientID;
+
 					RED.util.evaluateNodeProperty(node.credentials.ClientID, node.credentials.ClientIDType, node, out, function (err, res) {
 						node.ClientID = err ? '' : res;
 						fulfill(node.ClientID);
@@ -57,8 +57,8 @@ module.exports = function (RED) {
 				this.ClientSecret = RED.util.evaluateNodeProperty(this.credentials.ClientSecret, this.credentials.ClientSecretType, this.credentials, out);
 			else
 				promises.push(new Promise(function (fulfill, reject) {
-					if ( !/^#:\((\S+?)\)::(.*)$/.test(node.credentials.ClientSecret) )
-						node.credentials.ClientSecret ='#:(forge)::' + node.credentials.ClientSecret;
+					if (!/^#:\((\S+?)\)::(.*)$/.test(node.credentials.ClientSecret))
+						node.credentials.ClientSecret = '#:(forge)::' + node.credentials.ClientSecret;
 					RED.util.evaluateNodeProperty(node.credentials.ClientSecret, node.credentials.ClientSecretType, node, out, function (err, res) {
 						node.ClientSecret = err ? '' : res;
 						fulfill(node.ClientSecret);
@@ -68,14 +68,16 @@ module.exports = function (RED) {
 				this.CallbackURL = RED.util.evaluateNodeProperty(this.credentials.CallbackURL, this.credentials.CallbackURLType, this, out);
 			else
 				promises.push(new Promise(function (fulfill, reject) {
-					if ( !/^#:\((\S+?)\)::(.*)$/.test(node.credentials.CallbackURL) )
-						node.credentials.CallbackURL ='#:(forge)::' + node.credentials.CallbackURL;
+					if (!/^#:\((\S+?)\)::(.*)$/.test(node.credentials.CallbackURL))
+						node.credentials.CallbackURL = '#:(forge)::' + node.credentials.CallbackURL;
 					RED.util.evaluateNodeProperty(node.credentials.CallbackURL, node.credentials.CallbackURLType, node.credentials, out, function (err, res) {
 						node.CallbackURL = err ? '' : res;
 						fulfill(node.CallbackURL);
 					});
 				}));
-		} catch (err) {}
+		} catch (err) {
+			console.error(err);
+		}
 
 		this.Scope = n.Scope;
 		this.State = n.State;
@@ -83,7 +85,7 @@ module.exports = function (RED) {
 		this.proxyRequired = n.proxyRequired;
 		this.proxy = n.proxy;
 
-		if (promises.length == 0)
+		if (promises.length === 0)
 			runOauth(node);
 		else
 			Promise.all(promises)
@@ -91,10 +93,8 @@ module.exports = function (RED) {
 				runOauth(node);
 			})
 			.catch(function (error) {
-				// Nevers called
-				console.log(error);
+				console.error(error);
 			});
-
 	}
 
 	function runOauth(node) {

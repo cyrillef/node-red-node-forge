@@ -25,7 +25,7 @@ module.exports = function (RED) {
     function ForgeWaitAndGoNode(n) {
         RED.nodes.createNode(this, n);
         var node = this;
-        node.waitAndGo =n;
+        node.waitAndGo = n;
 
         function onInput(msg) {
 
@@ -33,12 +33,12 @@ module.exports = function (RED) {
                 node.status({});
                 if (node.waitAndGoMsgs && node.waitAndGoMsgs.length === 1) {
                     node.send([node.waitAndGoMsgs[0], null]);
-                } else if(node.waitAndGoMsgs) {
+                } else if (node.waitAndGoMsgs) {
                     if (node.waitAndGo.combine) {
                         var result = node.waitAndGoMsgs[0];
-                        var tmp =result.payload;
-                        result.payload =[ tmp ];
-                        for (var i = 1; i < node.waitAndGoMsgs.length ;i++)
+                        var tmp = result.payload;
+                        result.payload = [tmp];
+                        for (var i = 1; i < node.waitAndGoMsgs.length; i++)
                             result.payload.push(node.waitAndGoMsgs[i].payload);
                         node.send([result, null]);
                     } else {
@@ -64,7 +64,7 @@ module.exports = function (RED) {
                     text: 'waiting'
                 });
                 if (!node.waitAndGoMsgs)
-                    node.waitAndGoMsgs =[];
+                    node.waitAndGoMsgs = [];
                 node.waitAndGoMsgs.push(msg);
             }
         }

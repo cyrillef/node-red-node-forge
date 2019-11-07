@@ -32,6 +32,8 @@
     },
     "dependencies": {
         "forge-apis": "^0.4.5",
+        "node-red-contrib-loop-processing": "^0.3.1",
+        "node-red-node-base64": "^0.1.3",
         "stream-buffers": "^3.0.2",
         "uuid": "^3.3.2"
     },
