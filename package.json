@@ -5,7 +5,8 @@
     "license": "MIT",
     "author": "Cyrille Fauvel",
     "contributors": [
-        "Cyrille Fauvel <cyrille@autodesk.com>"
+        "Cyrille Fauvel <cyrille@autodesk.com>",
+        "Madhukar Moogala <madhukar.moogala@autodesk.com>"
     ],
     "repository": {
         "type": "git",
@@ -27,6 +28,7 @@
             "forge-default-credentials": "forge-default-credentials.js",
             "forge-oss": "forge-oss.js",
             "forge-model-derivative": "forge-model-derivative.js",
+            "forge-da": "forge-da.js",
             "forge-wait-and-go": "forge-wait-and-go.js"
         }
     },
