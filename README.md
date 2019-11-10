@@ -1,3 +1,5 @@
+# Autodesk Forge Node-RED Nodes
+
 **This is work in progress and the readme below does not yet reflect its final state. For example the NPM information is not yet working.**
 
 [![Node.js](https://img.shields.io/badge/Node.js-6.3.1-blue.svg)](https://nodejs.org/)
@@ -10,8 +12,7 @@
 [![OSS](https://img.shields.io/badge/OSS-v2-green.svg)](http://developer-autodesk.github.io/)
 [![Model-Derivative](https://img.shields.io/badge/Model%20Derivative-v2-green.svg)](http://developer-autodesk.github.io/)
 
-
-# Autodesk Forge Node-RED Nodes
+## Overview
 
 A collection of nodes for [Autodesk Forge API](https://forge.autodesk.com/) ruuning on [Node-RED](http://nodered.org). See below for a list.
 
@@ -65,7 +66,7 @@ it to be yours.
 
 ## Written by
 
-Cyrille Fauvel <br />
-Forge Partner Development <br />
-http://developer.autodesk.com/ <br />
-http://around-the-corner.typepad.com <br />
+Cyrille Fauvel  
+Forge Partner Development  
+[http://developer.autodesk.com/](http://developer.autodesk.com/)  
+[http://around-the-corner.typepad.com](http://around-the-corner.typepad.com)

@@ -60,7 +60,8 @@ module.exports = function (RED) {
 				}
 				node._forgeCredentials = true;
 				var forgeDefaultCredentials = null;
-				RED.nodes.eachNode((elt) => { // elt.type === 'forge-*'
+				RED.nodes.eachNode((elt) => {
+					// elt.type === 'forge-*'
 					// https://discourse.nodered.org/t/how-to-get-flow-id-by-function-node/9889
 					if (node._forgeCredentials && elt.type === 'forge-default-credentials') {
 						if (![node.z, msg.flowid].includes(elt.z)) {

@@ -1,4 +1,5 @@
-<!-- Copyright (c) Autodesk, Inc.
+<!--
+  Copyright (c) Autodesk, Inc.
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -18,283 +19,922 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
 -->
+
 <!-- forge-da -->
 <script type="text/x-red" data-template-name="forge-da">
-  <style scoped>
-  	.hiddenAttrs {
-  		display: none;
-  	}
-  	.visibleAttrs {
-  		display: block;
-  	}
-  </style>
-  <div class="form-row">
-  	<label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
-  	<input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
-  </div>
-  <div class="form-row">
-  	<label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
-  	<input type="text" id="node-input-topic" />
-  </div>
-  <div class="form-row">
-		<label for="node-input-forge"><i class="fa fa-user"></i> <span data-i18n="forge.label.forge"></span></label>
-		<input type="text" id="node-input-forge">
+	<style scoped>
+		.hiddenAttrs {
+			display: none;
+		}
+		.visibleAttrs {
+			display: block;
+		}
+	</style>
+	<div class="form-row">
+		<label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
+		<input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
 	</div>
-  <div class="form-row">
-  	<label for="node-input-operation"><i class="fa fa-wrench"></i><span
-  			data-i18n="forge.label.operation"></span></label>
-  	<select type="text" id="node-input-operation">  	
-      <option value="ListEngines">List Engines</option>
-      <option value="GetEngine">Get Engine</option>
-      <option value="ListAppbundles">List Appbundles</option>
-      <option value="GetAppbundle">Get Appbundle</option>
-      <option value="CreateOrUpdateAppbundle">Create or Update Appbundle</option>   
-      <option value="ListAppbundleVersions">List Appbundle Versions</option>
-      <option value="ListAppbundleAliases">List Appbundle Aliases</option>           
-      <option value="DeleteAppbundle">Delete Appbundle</option>
-      <option value="DeleteAppbundleAlias">Delete Appbundle Alias</option>
-      <option value="DeleteAppbundleVersion">Delete Appbundle Version</option>        
-      <option value="ListActivities">List Activities</option>
-      <option value="GetActivity">Get Activity</option>
-      <option value="CreateorUpdateActivity">Create or Update Activity</option>
-      <option value="ListActivityVersions">List Activity Versions</option>
-      <option value="ListActivityAliases">List Activity Aliases</option>
-      <option value="CreateActivityAlias">Create Activity Alias</option>
-      <option value="UpdateActivityAlias">Update Activity Alias</option>
-      <option value="DeleteActivity">Delete Activity</option>
-      <option value="DeleteActivityAlias">Delete Activity Alias</option>
-      <option value="DeleteActivityVersion">Delete Activity Version</option>
-      <option value="CreateWorkitem">Create Workitem</option>
-      <option value="GetWorkitem">Get Workitem</option>
-      <option value="DeleteWorkitem">Delete Workitem</option>
-  	</select>
-  </div>
-  <div id="AttrHolder">    	
-  	<div id="EngineAttr" class="form-row node-input-engine hiddenAttrs">
-  		<label for="node-input-engine"><i class="fa fa-tag"></i> <span data-i18n="forge.label.engine"></span></label>
-  		<input type="text" id="node-input-engine" data-i18n="[placeholder]forge.placeholder.engine" />
-    </div>
-    <div id="BundleIdAttr" class="form-row node-input-bundleId hiddenAttrs">
-  		<label for="node-input-bundleId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.bundleId"></span></label>
-  		<input type="text" id="node-input-bundleId" data-i18n="[placeholder]forge.placeholder.bundleId" />
-    </div>
-    <div id="BundleAliasAttr" class="form-row node-input-bundleAlias hiddenAttrs">
-  		<label for="node-input-bundleAlias"><i class="fa fa-tag"></i> <span data-i18n="forge.label.bundleAlias"></span></label>
-  		<input type="text" id="node-input-bundleAlias" data-i18n="[placeholder]forge.placeholder.bundleAlias" />
-    </div> 
-    <div id="BundleFileAttr" class="form-row node-input-bundleFile hiddenAttrs">
-  		<label for="node-input-bundleFile"><i class="fa fa-suitcase"></i> <span data-i18n="forge.label.bundleFile"></span></label>
-      <input type="text" id="node-input-bundleFile" data-i18n="[placeholder]forge.placeholder.bundleFile" />
-      <div class="form-tips"><b>Tip:</b> Absolute File Path.</div>
-    </div>
-    <div id="BundleDescAttr" class="form-row node-input-bundleDesc hiddenAttrs">
-  		<label for="node-input-bundleDesc"><i class="fa fa-pencil-square"></i> <span data-i18n="forge.label.bundleDesc"></span></label>
-  		<input type="text" id="node-input-bundleDesc" data-i18n="[placeholder]forge.placeholder.bundleDesc" />
-    </div>
-    <div id="BundleVersionAttr" class="form-row node-input-bundleVersion hiddenAttrs">
-  		<label for="node-input-bundleVersion"><i class="fa fa-tag"></i> <span data-i18n="forge.label.bundleVersion"></span></label>
-  		<input type="number" id="node-input-bundleVersion" data-i18n="[placeholder]forge.placeholder.bundleVersion" />
-    </div> 
-    <div id="ActivityIdAttr" class="form-row node-input-activityId hiddenAttrs">
-  		<label for="node-input-activityId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.activityId"></span></label>
-  		<input type="text" id="node-input-activityId" data-i18n="[placeholder]forge.placeholder.activityId" />
-    </div>
-    <div id="ActivityAliasAttr" class="form-row node-input-activityAlias hiddenAttrs">
-  		<label for="node-input-activityAlias"><i class="fa fa-tag"></i> <span data-i18n="forge.label.activityAlias"></span></label>
-  		<input type="text" id="node-input-activityAlias" data-i18n="[placeholder]forge.placeholder.activityAlias" />
-    </div> 
-    <div id="ActivityVersionAttr" class="form-row node-input-activityVersion hiddenAttrs">
-  		<label for="node-input-activityVersion"><i class="fa fa-tag"></i> <span data-i18n="forge.label.activityVersion"></span></label>
-  		<input type="text" id="node-input-activityVersion" data-i18n="[placeholder]forge.placeholder.activityVersion" />
-    </div> 
-    <div id="ActivityDescAttr" class="form-row node-input-activityDesc hiddenAttrs">
-  		<label for="node-input-activityDesc"><i class="fa fa-pencil-square"></i> <span data-i18n="forge.label.activityDesc"></span></label>
-  		<input type="text" id="node-input-activityDesc" data-i18n="[placeholder]forge.placeholder.activityDesc" />
-    </div> 
+	<div class="form-row">
+		<label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
+		<input type="text" id="node-input-topic" />
+	</div>
+	<div class="form-row">
+		  <label for="node-input-forge"><i class="fa fa-user"></i> <span data-i18n="forge.label.forge"></span></label>
+		  <input type="text" id="node-input-forge">
+	  </div>
+	<div class="form-row">
+		<label for="node-input-operation"><i class="fa fa-wrench"></i><span
+				data-i18n="forge.label.operation"></span></label>
+		<select type="text" id="node-input-operation">
+
+		<option value="">--- Activities ---</option>
+		<option value="ListActivities">List Activities</option>
+		<option value="CreateActivity">Create Activity</option>
+		<option value="GetActivityAlias">Get Activity Alias</option>
+		<option value="DeleteActivityAlias">Delete Activity Alias</option>
+		<option value="UpdateActivityAlias">Update Activity Alias</option>
+		<option value="ListActivityAliases">List Activity Aliases</option>
+		<option value="CreateActivityAlias">Create Activity Alias</option>
+		<option value="GetActivity">Get Activity</option>
+		<option value="DeleteActivity">Delete Activity</option>
+		<option value="ListActivityVersions">List Activity Versions</option>
+		<option value="CreateActivityVersion">Create Activity Version</option>
+		<option value="GetActivityVersion">Get Activity Version</option>
+		<option value="DeleteActivityVersion">Delete Activity Version</option>
+
+		<option value="">--- AppBundles ---</option>
+
+		<option value="">--- Engines ---</option>
+		<option value="ListEngines">List Engines</option>
+		<option value="GetEngine">Get Engine</option>
+
+		<option value="">--- ForgeApps ---</option>
+
+		<option value="">--- Health ---</option>
+		<option value="GetHealth">Get Health</option>
+
+		<option value="">--- ServiceLimits ---</option>
+
+		<option value="">--- Shares ---</option>
+
+		<option value="">--- WorkItems ---</option>
 
 
-    <div id="BucketKeyAttr" class="form-row node-input-bucket hiddenAttrs">
-  		<label for="node-input-bucket"><i class="fa fa-archive"></i> <span data-i18n="forge.label.bucket"></span></label>
-  		<input type="text" id="node-input-bucket" data-i18n="[placeholder]forge.placeholder.bucket" />
-    </div> 
-    <div id="InputFileAttr" class="form-row node-input-inputFile hiddenAttrs">
-  		<label for="node-input-inputFile"><i class="fa fa-file"></i> <span data-i18n="forge.label.inputFile"></span></label>
-  		<input type="text" id="node-input-inputFile" data-i18n="[placeholder]forge.placeholder.inputFile" />
-    </div> 
-    <div id="InputObjectKeyAttr" class="form-row node-input-inputObjectKey hiddenAttrs">
-  		<label for="node-input-inputObjectKey"><i class="fa fa-tag"></i> <span data-i18n="forge.label.inputObjectKey"></span></label>
-  		<input type="text" id="node-input-inputObjectKey" data-i18n="[placeholder]forge.placeholder.inputObjectKey" />
-    </div> 
-    <div id="OutputObjectKeyAttr" class="form-row node-input-outputObjectKey hiddenAttrs">
-  		<label for="node-input-outputObjectKey"><i class="fa fa-tag"></i> <span data-i18n="forge.label.outputObjectKey"></span></label>
-  		<input type="text" id="node-input-outputObjectKey" data-i18n="[placeholder]forge.placeholder.outputObjectKey" />
-    </div> 
-    <div id="WorkItemIdAttr" class="form-row node-input-workitemId hiddenAttrs">
-  		<label for="node-input-workitemId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.workitemId"></span></label>
-  		<input type="text" id="node-input-workitemId" data-i18n="[placeholder]forge.placeholder.workitemId" />
-    </div>
-  </div>
-<script type="text/javascript">
-  var nodeOps = {
-    GetEngine : [
-    //Engine id
-    "#EngineAttr"
-    ],
-    GetAppbundle :[
-    //App Bundle Short id and BundleAlias
-    "#BundleIdAttr",
-    "#BundleAliasAttr"    
-    ],
-    CreateOrUpdateAppbundle : [
-    "#EngineAttr",
-    "#BundleIdAttr",
-    "#BundleAliasAttr",
-    "#BundleFileAttr",
-    "#BundleDescAttr"    
-    ],
-    ListAppbundleVersions:[
-    "#BundleIdAttr"
-    ],
-    ListAppbundleAliases:[
-    "#BundleIdAttr"
-    ],
-    DeleteAppbundle:[
-    "#BundleIdAttr"
-    ],
-    DeleteAppbundleAlias:[
-    "#BundleIdAttr",
-    "#BundleAliasAttr"
-    ],
-    DeleteAppbundleVersion:[
-    "#BundleIdAttr",
-    "#BundleVersionAttr"
-    ],
-    GetActivity:[
-    "#ActivityIdAttr",
-    "#ActivityAliasAttr"
-    ],
-    CreateorUpdateActivity:[
-    "#ActivityIdAttr",
-    "#ActivityAliasAttr",
-    "#ActivityDescAttr",
-    "#BundleIdAttr",
-    "#BundleAliasAttr",
-    "#EngineAttr"
-    ],
-    CreateWorkitem :[
-    "#ActivityIdAttr",
-    "#ActivityAliasAttr",
-    "#BucketKeyAttr",
-    "#InputFileAttr",
-    "#InputObjectKeyAttr",
-    "#OutputObjectKeyAttr"
-    ],
-    GetWorkitem:[
-    "#WorkItemIdAttr"
-    ],
-    DeleteActivity:[
-    "#ActivityIdAttr"],
-    DeleteActivityAlias:[
-    "#ActivityIdAttr",
-    "#ActivityAliasAttr",
-    ],
-    DeleteActivityVersion:[
-    "#ActivityIdAttr",
-    "#ActivityVersionAttr"
-    ]
-    };
-  $("#node-input-operation").on("change", function() {
-    $("#AttrHolder")
-      .children()
-      .addClass("hiddenAttrs")
-      .removeClass("visibleAttrs");
-    if (nodeOps[this.value])
-      $(nodeOps[this.value].join())
-        .addClass("visibleAttrs")
-        .removeClass("hiddenAttrs");
-  });
+		<option value="ListAppbundles">List Appbundles</option>
+		<option value="GetAppbundle">Get Appbundle</option>
+		<option value="CreateOrUpdateAppbundle">Create or Update Appbundle</option>
+		<option value="ListAppbundleVersions">List Appbundle Versions</option>
+		<option value="ListAppbundleAliases">List Appbundle Aliases</option>
+		<option value="DeleteAppbundle">Delete Appbundle</option>
+		<option value="DeleteAppbundleAlias">Delete Appbundle Alias</option>
+		<option value="DeleteAppbundleVersion">Delete Appbundle Version</option>
+		<option value="CreateWorkitem">Create Workitem</option>
+		<option value="GetWorkitem">Get Workitem</option>
+		<option value="DeleteWorkitem">Delete Workitem</option>
+		</select>
+	</div>
+	<div id="AttrHolder">
+		<div id="PageTokenAttr" class="form-row node-input-page hiddenAttrs">
+			<label for="node-input-page"><i class="fa fa-tag"></i> <span data-i18n="forge.label.page"></span></label>
+			<input type="text" id="node-input-page" data-i18n="[placeholder]forge.placeholder.page" />
+		</div>
+		
+		<div id="ActivityIdAttr" class="form-row node-input-activityId hiddenAttrs">
+			<label for="node-input-activityId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.activityId"></span></label>
+			<input type="text" id="node-input-activityId" data-i18n="[placeholder]forge.placeholder.activityId" />
+		</div>
+		<div id="ActivityAliasIdAttr" class="form-row node-input-activityAliasId hiddenAttrs">
+			<label for="node-input-activityAliasId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.activityAliasId"></span></label>
+			<input type="text" id="node-input-activityAliasId" data-i18n="[placeholder]forge.placeholder.activityAliasId" />
+		</div>
+		<div id="VersionAttr" class="form-row node-input-version hiddenAttrs">
+			<label for="node-input-version"><i class="fa fa-tag"></i> <span data-i18n="forge.label.version"></span></label>
+			<input type="text" id="node-input-version" data-i18n="[placeholder]forge.placeholder.version" />
+		</div>
+		<div id="DescriptionAttr" class="form-row node-input-description hiddenAttrs">
+			<label for="node-input-description"><i class="fa fa-pencil-square"></i> <span data-i18n="forge.label.description"></span></label>
+			<input type="text" id="node-input-description" data-i18n="[placeholder]forge.placeholder.description" />
+		</div>
+		<div id="ActivityAliasReceiverAttr" class="form-row node-input-receiver hiddenAttrs">
+			<label for="node-input-receiver"><i class="fa fa-pencil-square"></i> <span data-i18n="forge.label.receiver"></span></label>
+			<input type="text" id="node-input-receiver" data-i18n="[placeholder]forge.placeholder.receiver" />
+		</div>
+	
+
+		<div id="EngineIdAttr" class="form-row node-input-engineId hiddenAttrs">
+			<label for="node-input-engineId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.engineId"></span></label>
+			<input type="text" id="node-input-engineId" data-i18n="[placeholder]forge.placeholder.engineId" />
+		</div>
+		<div id="BundleIdAttr" class="form-row node-input-bundleId hiddenAttrs">
+			<label for="node-input-bundleId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.bundleId"></span></label>
+			<input type="text" id="node-input-bundleId" data-i18n="[placeholder]forge.placeholder.bundleId" />
+		</div>
+		<div id="BundleAliasAttr" class="form-row node-input-bundleAlias hiddenAttrs">
+			<label for="node-input-bundleAlias"><i class="fa fa-tag"></i> <span data-i18n="forge.label.bundleAlias"></span></label>
+			<input type="text" id="node-input-bundleAlias" data-i18n="[placeholder]forge.placeholder.bundleAlias" />
+		</div>
+		<div id="BundleFileAttr" class="form-row node-input-bundleFile hiddenAttrs">
+			<label for="node-input-bundleFile"><i class="fa fa-suitcase"></i> <span data-i18n="forge.label.bundleFile"></span></label>
+		<input type="text" id="node-input-bundleFile" data-i18n="[placeholder]forge.placeholder.bundleFile" />
+		<div class="form-tips"><b>Tip:</b> Absolute File Path.</div>
+		</div>
+		
+		<div id="WorkItemIdAttr" class="form-row node-input-workitemId hiddenAttrs">
+			<label for="node-input-workitemId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.workitemId"></span></label>
+			<input type="text" id="node-input-workitemId" data-i18n="[placeholder]forge.placeholder.workitemId" />
+		</div>
+
+		<div id="AppBundlesEditorAttr" class="form-row hiddenAttrs">
+			<div class="form-row" style="margin-bottom: 0px;">
+				<label for="node-input-appbundles"><i class="fa fa-wrench"></i> <span
+						data-i18n="forge.label.appbundles"></span></label>
+				<input type="hidden" id="node-input-appbundles" autofocus="autofocus">
+				<input type="hidden" id="node-input-appbundles-noerr">
+			</div>
+			<div class="form-row node-text-editor-row" style="position:relative">
+				<div style="position: absolute; right:0; bottom:calc(100% + 3px);"><button id="node-input-appbundles-expand-js"
+						class="editor-button editor-button-small"><i class="fa fa-expand"></i></button></div>
+				<div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-appbundles-editor"></div>
+			</div>
+		</div>
+		<div id="CommandLineEditorAttr" class="form-row hiddenAttrs">
+			<div class="form-row" style="margin-bottom: 0px;">
+				<label for="node-input-commandline"><i class="fa fa-wrench"></i> <span
+						data-i18n="forge.label.commandline"></span></label>
+				<input type="hidden" id="node-input-commandline" autofocus="autofocus">
+				<input type="hidden" id="node-input-commandline-noerr">
+			</div>
+			<div class="form-row node-text-editor-row" style="position:relative">
+				<div style="position: absolute; right:0; bottom:calc(100% + 3px);"><button id="node-input-commandline-expand-js"
+						class="editor-button editor-button-small"><i class="fa fa-expand"></i></button></div>
+				<div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-commandline-editor"></div>
+			</div>
+		</div>
+
+		<div id="ParametersAttr" class="form-row hiddenAttrs">
+			<div class="form-row" style="margin-bottom:0;">
+				<label><i class="fa fa-list"></i> <span data-i18n="forge.label.parameters"></span></label>
+			</div>
+			<div class="form-row node-input-parameter-container-row">
+				<ol id="node-input-parameter-container"></ol>
+			</div>
+		</div>
+		<div id="SettingsAttr" class="form-row hiddenAttrs">
+			<div class="form-row" style="margin-bottom:0;">
+				<label><i class="fa fa-list"></i> <span data-i18n="forge.label.settings"></span></label>
+			</div>
+			<div class="form-row node-input-setting-container-row">
+				<ol id="node-input-setting-container"></ol>
+			</div>
+		</div>
+
+		<div id="ForceAlltAttr" class="form-row node-input-all hiddenAttrs">
+			<label for="node-input-all"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.all"></span></label>
+			<input type="checkbox" id="node-input-all" />
+		</div>
+
+	</div>
+	<script type="text/javascript">
+	var nodeOps = {
+		ListActivities: [ "#PageTokenAttr", "#ForceAlltAttr" ],
+		CreateActivity: [
+			"#ActivityIdAttr", "#EngineIdAttr", "#DescriptionAttr",
+			/*"#BundleIdAttr",*/ "#AppBundlesEditorAttr",
+			"#CommandLineEditorAttr",
+			"#ParametersAttr", "#SettingsAttr"
+		],
+		GetActivityAlias: [ "#ActivityIdAttr", "#ActivityAliasIdAttr" ],
+		DeleteActivityAlias: [ "#ActivityIdAttr", "#ActivityAliasIdAttr" ],
+		UpdateActivityAlias: [ "#ActivityIdAttr", "#ActivityAliasIdAttr" ],
+		ListActivityAliases: [ "#ActivityIdAttr", "#PageTokenAttr", "#ForceAlltAttr" ],
+		CreateActivityAlias: [
+			"#ActivityIdAttr", "#ActivityAliasIdAttr", "#VersionAttr", "#ActivityAliasReceiverAttr"
+		],
+		GetActivity: [ "#ActivityIdAttr" ],
+		DeleteActivity: [ "#ActivityIdAttr" ],
+		ListActivityVersions: [ "#ActivityIdAttr", "#PageTokenAttr", "#ForceAlltAttr" ],
+		CreateActivityVersion: [
+			"#ActivityIdAttr", "#EngineIdAttr", "#DescriptionAttr",
+			/*"#BundleIdAttr",*/ "#AppBundlesEditorAttr",
+			"#CommandLineEditorAttr",
+			"#ParametersAttr", "#SettingsAttr"
+		],
+		GetActivityVersion: ["#ActivityIdAttr", "#VersionAttr" ],
+		DeleteActivityVersion: [ "#ActivityIdAttr", "#VersionAttr" ],
+
+		//GetAppbundle: [ "#BundleIdAttr", "#BundleAliasAttr" ],
+		//CreateAppbundle: [
+		//	"#EngineIdAttr", "#BundleIdAttr", "#BundleAliasAttr",
+		//	"#BundleFileAttr", "#DescriptionAttr"
+		//],
+		//ListAppbundleAliases: [ "#BundleIdAttr" ],
+		//DeleteAppbundleAlias: [ "#BundleIdAttr", "#BundleAliasAttr" ],
+		//UpdateAppbundleAlias: [
+		//	"#EngineIdAttr", "#BundleIdAttr", "#BundleAliasAttr",
+		//	"#BundleFileAttr", "#DescriptionAttr"
+		//],
+		//GetAppbundleAlias: [],
+		//CreateAppbundleAlias: [],
+		//GetAppbundle: [],
+		//DeleteAppbundle: [ "#BundleIdAttr" ],
+		//ListAppbundleVersions: [ "#BundleIdAttr" ],
+		//CreateAppbundleVersion: [],
+		//GetAppbundleVersion: [],
+		//DeleteAppbundleVersion: [ "#BundleIdAttr", "#VersionAttr" ],
+
+		ListEngines: [ "#PageTokenAttr", "#ForceAlltAttr" ],
+		GetEngine: [ "#EngineIdAttr" ],
+
+		GetHealth: [ "#EngineIdAttr" ],
+
+
+
+
+
+
+		
+		
+		
+		
+	//	CreateWorkitem: [
+	//		"#ActivityIdAttr", "#ActivityAliasIdAttr", "#BucketKeyAttr",
+	//		"#InputFileAttr", "#InputObjectKeyAttr", "#OutputObjectKeyAttr"
+	//	],
+	//	GetWorkitem: [ "#WorkItemIdAttr" ]
+		
+	};
+	
+	$("#node-input-operation").on("change", function() {
+		$("#AttrHolder")
+			.children()
+			.addClass("hiddenAttrs")
+			.removeClass("visibleAttrs");
+		if (nodeOps[this.value])
+			$(nodeOps[this.value].join())
+				.addClass("visibleAttrs")
+				.removeClass("hiddenAttrs");
+	});
+	</script>
 </script>
-</script>
 
 <script type="text/javascript">
- RED.nodes.registerType("forge-da", {
-    category: "forge",
-    color: "#0696D7",
-    icon: "forge.png",
-    align: "right",
-    defaults: {
-      name: {
-        value: "forge-da"
-      },
-      topic: {
-        value: ""
-      },
-      forge: {
-        type: "forge-credentials"       
-      },
-      operation: {
-        value: "ListEngines"
-      },
-      engine:{
-        value:""
-      },
-      bundleId :{
-        value:""
-      },
-      bundleAlias :{
-        value:""
-      },
-      bundleFile :{
-        value:""
-      },
-      bundleDesc :{
-        value:""
-      },
-      bundleVersion:{
-        value: -1
-      },
-      activityId:{
-        value:""
-      },
-      activityAlias:{
-        value:""
-      },
-      activityDesc:{
-        value:""
-      },
-      bucket:{
-        value:""
-      },
-      inputFile:{
-        value:""
-      },
-      inputObjectKey:{
-        value:""
-      },
-      outputObjectKey:{
-        value:""
-      },
-      workitemId:{
-        value:""
-      },
-      activityVersion:{
-        value:""
-      }
-    },
-    inputs: 1,
-    outputs: 2,
-    outputLabels: ["response", "err"],
-    label: function() {
-      return this.name || "DA " + this.operation;
-    },
-    // oneditprepare is called immediately before the dialog is displayed.
-    // oneditsave is called when the edit dialog is okayed.
-    // oneditcancel is called when the edit dialog is cancelled.
-    // oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
-    // oneditresize is called when the edit dialog is resized.
-    oneditprepare: function(){     
-    },
-    oneditsave: function(){
-    }
-  });
+	function versionParameters() {
+		return ({
+			id: '',
+			zip: false,
+			localName: null,
+			ondemand: false,
+			verb: 'get',
+			description: null,
+			required: false,
+			_defaults: function (parameter) {
+				parameter.id = parameter.id || this.id;
+				parameter.zip = parameter.zip || this.zip;
+				parameter.localName = parameter.localName || this.localName;
+				parameter.ondemand = parameter.ondemand || this.ondemand;
+				parameter.verb = parameter.verb || this.verb;
+				parameter.description = parameter.description || this.description;
+				parameter.required = parameter.required || this.required;
+				return (parameter);
+			},
+			_create: function (parameter, rows, container) {
+				var label = $('<label />', {
+						width: '40px;'
+					})
+					.text('ID ')
+					.appendTo(rows[1]);
+				$('<input />', {
+						class: 'node-input-parameter-id',
+						type: 'text',
+						//width: '100px'
+					})
+					.appendTo(rows[1]);
+
+				label = $('<label />', {
+						width: '40px;'
+					})
+					.text('localName ')
+					.appendTo(rows[2]);
+				$('<input />', {
+						class: 'node-input-parameter-localname',
+						type: 'text',
+						//width: '100px'
+						width: '55%'
+					})
+					.appendTo(rows[2]);
+
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: 'node-input-parameter-verb',
+					style: 'width: 15%;'
+				}).appendTo(rows[2]);
+				/* beautify preserve:end */
+
+				var selectOptions = {
+					get: 'get',
+					head: 'head',
+					put: 'put',
+					post: 'post',
+					patch: 'patch',
+					read: 'read'
+				};
+
+				var items = Object.values(selectOptions);
+				for (var i = 0; i < items.length; i++) {
+					selectField.append(
+						$('<option></option>').val(items[i]).text(items[i])
+					);
+				}
+				selectField.val(selectOptions.get);
+
+				var label = $('<label />', {
+						width: '40px;'
+					})
+					.text('zip')
+					.appendTo(rows[3]);
+				$('<input />', {
+						class: 'node-input-parameter-zip',
+						type: 'checkbox',
+						width: '20px',
+						value: 'zip'
+					})
+					.prependTo(label);
+
+				label = $('<label />', {
+						width: '40px;'
+					}).text('ondemand')
+					.appendTo(rows[3]);
+				$('<input />', {
+						class: 'node-input-parameter-ondemand',
+						type: 'checkbox',
+						width: '20px',
+						value: 'ondemand'
+					})
+					.prependTo(label);
+
+				label = $('<label />', {
+						width: '40px;'
+					}).text('required')
+					.appendTo(rows[3]);
+				$('<input />', {
+						class: 'node-input-parameter-required',
+						type: 'checkbox',
+						width: '20px',
+						value: 'required'
+					})
+					.prependTo(label);
+
+				label = $('<label />', {
+						width: '40px;'
+					})
+					.text('Description ')
+					.appendTo(rows[4]);
+				$('<input />', {
+						class: 'node-input-parameter-description',
+						type: 'text'
+					})
+					.appendTo(rows[4]);
+			},
+			_fill: function (parameter, rows) {
+				var parent = rows[1].parent().parent();
+				$(parent).find('.node-input-parameter-id').val(parameter.id);
+				$(parent).find('.node-input-parameter-localname').val(parameter.localName);
+				$(parent).find('.node-input-parameter-verb').val(parameter.verb);
+				$(parent).find('.node-input-parameter-zip').prop('checked', parameter.zip);
+				$(parent).find('.node-input-parameter-ondemand').prop('checked', parameter.ondemand);
+				$(parent).find('.node-input-parameter-required').prop('checked', parameter.required);
+				$(parent).find('.node-input-parameter-description').val(parameter.description)
+			},
+			_save: function (itemUI) {
+				var result = {
+					id: $(itemUI).find('.node-input-parameter-id').val(),
+					localName: $(itemUI).find('.node-input-parameter-localname').val(),
+					verb: $(itemUI).find('.node-input-parameter-verb').val(),
+					zip: $(itemUI).find('.node-input-parameter-zip').is(':checked'),
+					ondemand: $(itemUI).find('.node-input-parameter-ondemand').is(':checked'),
+					required: $(itemUI).find('.node-input-parameter-required').is(':checked'),
+					description: $(itemUI).find('.node-input-parameter-description').val()
+				};
+				return (result);
+			}
+		});
+	}
+
+	function stringSetting(id, className) {
+		return ({
+			id: id,
+			className: className || id,
+			type: 'StringSetting',
+
+			_defaults: function (item) {
+				item.value = item.value || this.value;
+				item.isEnvironmentVariable = item.isEnvironmentVariable || this.isEnvironmentVariable;
+				return (item);
+			},
+			_create: function (item, rows, container) {
+				var label = $('<label />', {
+						width: '40px;'
+					})
+					.text('Value')
+					.appendTo(rows[2]);
+				$('<input />', {
+						class: this.className + '-value',
+						type: 'text'
+					})
+					.appendTo(rows[2]);
+
+				label = $('<label />', {
+						width: '40px;'
+					})
+					.text('isEnvironmentVariable')
+					.appendTo(rows[3]);
+				$('<input />', {
+						class: this.className + '-isEnvironmentVariable',
+						type: 'checkbox',
+						width: '20px',
+						value: 'isEnvironmentVariable'
+					})
+					.prependTo(label);
+			},
+			_fill: function (item, rows) {
+				var parent = rows[1].parent().parent();
+				$(parent).find('.' + this.className + '-value').val(item.value);
+				$(parent).find('.' + this.className + '-isEnvironmentVariable').prop('checked', item
+					.isEnvironmentVariable);
+			},
+			_save: function (itemUI) {
+				//debugger;
+				var result = {
+					value: $(itemUI).find('.' + this.className + '-value').val(),
+					isEnvironmentVariable: $(itemUI).find('.' + this.className + '-isEnvironmentVariable')
+						.is(':checked')
+				};
+				return (result);
+			}
+		});
+	}
+
+	function urlSetting(id, className) {
+		return ({
+			id: id,
+			className: className || id,
+			type: 'UrlSetting',
+
+			_defaults: function (item) {
+				item.url = item.url || this.url;
+				item.headers = item.headers || this.headers;
+				item.verb = item.verb || this.verb;
+				item.multiparts = item.multiparts || this.multiparts;
+				item.description = item.description || this.description;
+				return (item);
+			},
+			_create: function (item, rows, container) {
+				var label = $('<label />', {
+						width: '40px;'
+					})
+					.text('URL')
+					.appendTo(rows[2]);
+				$('<input />', {
+						class: this.className + '-url',
+						type: 'text',
+						width: '55%'
+					})
+					.appendTo(rows[2]);
+
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: this.className + '-verb',
+					style: 'width: 15%;'
+				}).appendTo(rows[2]);
+				/* beautify preserve:end */
+
+				var selectOptions = {
+					get: 'get',
+					head: 'head',
+					put: 'put',
+					post: 'post',
+					patch: 'patch',
+					read: 'read'
+				};
+
+				var items = Object.values(selectOptions);
+				for (var i = 0; i < items.length; i++) {
+					selectField.append(
+						$('<option></option>').val(items[i]).text(items[i])
+					);
+				}
+				selectField.val(selectOptions.get);
+
+				label = $('<label />', {
+						width: '40px;'
+					})
+					.text('Headers')
+					.appendTo(rows[3]);
+				$('<input />', {
+						class: this.className + '-headers',
+						type: 'text'
+					})
+					.appendTo(rows[3]);
+				label = $('<label />', {
+						width: '40px;'
+					})
+					.text('Multiparts')
+					.appendTo(rows[4]);
+				$('<input />', {
+						class: this.className + '-multiparts',
+						type: 'text'
+					})
+					.appendTo(rows[4]);
+				label = $('<label />', {
+						width: '40px;'
+					})
+					.text('Description')
+					.appendTo(rows[5]);
+				$('<input />', {
+						class: this.className + '-description',
+						type: 'text'
+					})
+					.appendTo(rows[5]);
+			},
+			_fill: function (item, rows) {
+				var parent = rows[1].parent().parent();
+				$(parent).find('.' + this.className + '-url').val(item.url);
+				$(parent).find('.' + this.className + '-headers').val(item.headers);
+				$(parent).find('.' + this.className + '-verb').val(item.verb);
+				$(parent).find('.' + this.className + '-multiparts').val(item.multiparts);
+				$(parent).find('.' + this.className + '-description').val(item.description);
+			},
+			_save: function (itemUI) {
+				//debugger;
+				var result = {
+					url: $(itemUI).find('.' + this.className + '-url').val(),
+					headers: $(itemUI).find('.' + this.className + '-headers').val(),
+					verb: $(itemUI).find('.' + this.className + '-verb').val(),
+					multiparts: $(itemUI).find('.' + this.className + '-multiparts').val(),
+					description: $(itemUI).find('.' + this.className + '-description').val()
+				};
+				return (result);
+			}
+		});
+	}
+
+	function versionSettings(id, className) {
+		return ({
+			id: id,
+			className: className || id,
+			controllers: {
+				StringSetting: stringSetting(id, className),
+				UrlSetting: urlSetting(id, className)
+			},
+			type: 'StringSetting', // default
+
+			_defaults: function (item) {
+				if (!item.type && item.verb)
+					item.type = 'UrlSetting';
+				item.type = item.type || this.type;
+				item.key = item.key || 'key';
+				this.controllers[item.type]._defaults(item);
+				return (item);
+			},
+			_resizeItem: function (item) {
+				var newWidth = item.width();
+				item.find('.red-ui-typedInput').typedInput('width', newWidth - 135);
+			},
+			_cleanupRows: function (rows) {
+				//rows[1].children().not(':first').remove();
+				for (var i = 2; i < rows.length; i++)
+					$(rows[i]).empty();
+			},
+			_create: function (item, rows, container) {
+				//debugger;
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: this.className + '-type',
+					style: 'width: 35%; margin-right: 10px;'
+				}).appendTo(rows[1]);
+				/* beautify preserve:end */
+				$('<input />', {
+						class: this.className + '-key',
+						type: 'text',
+						width: '55%'
+					})
+					.text('fdsfgd')
+					.appendTo(rows[1]);
+
+				var items = Object.keys(this.controllers);
+				for (var i = 0; i < items.length; i++) {
+					selectField.append(
+						$('<option></option>').val(items[i]).text(items[i])
+					);
+				}
+
+				selectField.change(function (evt) {
+					var width = $('#' + id + '-container').width();
+					this.item.type = $(this.selectField).val();
+					this.that._cleanupRows(this.rows);
+					this.that.controllers[this.item.type]._create(this.item, this.rows, this
+					.container);
+					this.that.controllers[this.item.type]._defaults(this.item);
+					this.that.controllers[this.item.type]._fill(this.item, rows);
+					this.that._resizeItem(this.container);
+				}.bind({
+					that: this,
+					selectField: selectField,
+					item: item,
+					rows: rows,
+					container: container
+				}));
+
+				selectField.val(item.type);
+				selectField.change();
+
+				//this.controllers[this.type]._create(item, rows, container);
+			},
+			_fill: function (item, rows) {
+				var parent = rows[1].parent().parent();
+				$(parent).find('.' + this.className + '-key').val(item.key);
+				this.controllers[item.type]._fill(item, rows);
+			},
+			_save: function (itemUI) {
+				//debugger;
+				var itemType = $(itemUI).find('.' + this.className + '-type').val();
+				var result = this.controllers[itemType]._save(itemUI);
+				result.key = $(itemUI).find('.' + this.className + '-key').val();
+				return (result);
+			}
+		});
+	}
+
+	RED.nodes.registerType('forge-da', {
+		category: 'forge',
+		color: '#0696D7',
+		icon: 'forge.png',
+		align: 'right',
+		defaults: {
+			name: {
+				value: ''
+			},
+			topic: {
+				value: ''
+			},
+			forge: {
+				type: 'forge-credentials'
+			},
+			operation: {
+				value: 'ListEngines'
+			},
+
+			page: {
+				value: null
+			},
+			all: {
+				value: false
+			},
+			description: {
+				value: ''
+			},
+			version: {
+				value: 1
+			},
+
+			activityId: {
+				value: ''
+			},
+			activityAliasId: {
+				value: ''
+			},
+			receiver: {
+				value: ''
+			},
+			appbundles: {
+				values: "[]"
+			},
+			commandline: {
+				values: "[]"
+			},
+			parameters: {
+				value: [{
+					id: '',
+					zip: false,
+					localName: null,
+					ondemand: false,
+					verb: 'get',
+					description: null,
+					required: false,
+				}]
+			},
+			settings: {
+				value: [{}]
+			},
+
+			engineId: {
+				value: ''
+			},
+
+			bundleId: {
+				value: ''
+			},
+			bundleAlias: {
+				value: ''
+			},
+			bundleFile: {
+				value: ''
+			},
+
+			workitemId: {
+				value: ''
+			}
+
+		},
+		inputs: 1,
+		outputs: 2,
+		outputLabels: ['response', 'err'],
+		label: function () {
+			return this.name || 'da ' + this.operation;
+		},
+		// oneditprepare is called immediately before the dialog is displayed.
+		// oneditsave is called when the edit dialog is okayed.
+		// oneditcancel is called when the edit dialog is cancelled.
+		// oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
+		// oneditresize is called when the edit dialog is resized.
+		oneditprepare: function () {
+			// Parameters
+			this._def.createListContainer(this, 'node-input-parameter', this.parameters, versionParameters(),
+				4, 300);
+			// Settings
+			this._def.createListContainer(this, 'node-input-setting', this.settings, versionSettings(
+				'node-input-setting'), 5, 300);
+			// AppBundles editor
+			this._def.createEditor(this, 'node-input-appbundles', 'ace/mode/text');
+			// CommandLine editor
+			this._def.createEditor(this, 'node-input-commandline', 'ace/mode/text');
+		},
+		oneditcancel: function () {
+			// AppBundles editor
+			this._def.cancelEditor(this, 'node-input-appbundles');
+			// CommandLine editor
+			this._def.cancelEditor(this, 'node-input-commandline');
+		},
+		oneditsave: function () {
+			// Parameters
+			this.parameters = this._def.saveListContainer(this, 'node-input-parameter', versionParameters());
+			// Settings
+			this.settings = this._def.saveListContainer(this, 'node-input-setting', versionSettings(
+				'node-input-setting'));
+			// AppBundles editor
+			this._def.saveEditor(this, 'node-input-appbundles');
+			// CommandLine editor
+			this._def.saveEditor(this, 'node-input-commandline');
+		},
+		oneditresize: function (size) {
+			// Parameters
+			this._def.resizeListContainer(this, 'node-input-parameter', 'node-input-parameter', size);
+			// Settings
+			this._def.resizeListContainer(this, 'node-input-setting', 'node-input-setting', size);
+			// AppBundles
+			$('#node-input-appbundles-editor').css({
+				height: '70px',
+				'min-height': '70px'
+			})
+			this._def.resizeEditor(this, 'node-input-appbundles', size);
+			// CommandLine
+			$('#node-input-commandline-editor').css({
+				height: '70px',
+				'min-height': '70px'
+			})
+			this._def.resizeEditor(this, 'node-input-commandline', size);
+		},
+
+		createEditor: function (that, id /*'node-input-appbundles'*/ , mode /*'ace/mode/text'*/ ) {
+			if (!that._editors)
+				that._editors = {};
+			that._editors[id] = RED.editor.createEditor({
+				id: id + '-editor',
+				mode: mode,
+				value: $('#' + id).val(),
+				globals: {
+					msg: true,
+					context: true,
+					RED: true,
+					util: true,
+					flow: true,
+					global: true,
+					console: true,
+					Buffer: true,
+					setTimeout: true,
+					clearTimeout: true,
+					setInterval: true,
+					clearInterval: true
+				}
+			});
+
+			RED.library.create({
+				url: 'functions', // where to get the data from
+				type: 'function', // the type of object the library is for
+				editor: that._editors[id], // the field name the main text body goes to
+				mode: mode, //'ace/mode/nrjavascript',
+				fields: ['name', 'outputs']
+			});
+			that._editors[id].focus();
+
+			$('#' + id + '-expand-js').click(function (e) {
+				e.preventDefault();
+				var value = that._editors[id].getValue();
+				RED.editor.editJavaScript({
+					value: value,
+					width: 'Infinity',
+					cursor: that._editors[id].getCursorPosition(),
+					mode: mode,
+					complete: function (v, cursor) {
+						that._editors[id].setValue(v, -1);
+						that._editors[id].gotoLine(cursor.row + 1, cursor.column, false);
+						setTimeout(function () {
+							that._editors[id].focus();
+						}, 300);
+					}
+				});
+			});
+		},
+		cancelEditor: function (that, id) {
+			that._editors[id].destroy();
+			delete that._editors[id];
+		},
+		saveEditor: function (that, id) {
+			$('#' + id).val(that._editors[id].getValue());
+			that._editors[id].destroy();
+			delete that._editors[id];
+		},
+		resizeEditor: function (that, id, size) {
+			that._editors[id].resize();
+		},
+
+		createListContainer: function (that, id /*'node-input-parameter'*/ , items, controller, nbRows /*4*/ ,
+			minHeight /*300*/ ) {
+			nbRows = nbRows || 4;
+			minHeight = minHeight || 300;
+
+			function resizeItems(item) {
+				var newWidth = item.width();
+				item.find('.red-ui-typedInput').typedInput('width', newWidth - 135);
+			}
+
+			$('#' + id + '-container')
+				.css('min-height', minHeight + 'px')
+				.css('min-width', '450px')
+				.editableList({
+					addItem: function (container, i, opt) {
+						var params = opt;
+						params = controller._defaults(params);
+
+						container.css({
+							overflow: 'hidden',
+							whiteSpace: 'nowrap'
+						});
+
+						/* beautify preserve:start */
+						var rows = [ '', $('<div />').appendTo(container) ] ;
+						for ( var i =1 ; i < nbRows ; i++ )
+							rows.push($('<div />', { style: 'margin-top:8px;' }).appendTo(container));
+						/* beautify preserve:end */
+
+						controller._create(params, rows, container);
+						controller._fill(params, rows);
+
+						var newWidth = $('#' + id + '-container').width();
+						resizeItems(container);
+					},
+					resizeItem: resizeItems,
+					removable: true,
+					sortable: true
+				});
+
+			for (var i = 0; items && i < items.length; i++)
+				$('#' + id + '-container').editableList('addItem', items[i]);
+		},
+		saveListContainer: function (that, id, controller) {
+			//debugger;
+			var items = $('#' + id + '-container').editableList('items');
+			var results = [];
+			items.each(function (i) {
+				results.push(controller._save($(items[i])));
+			}.bind({
+				items: items
+			}));
+			return (results);
+		},
+		resizeListContainer: function (that, id, className, size) {
+			className = className || id;
+
+			var rows = $('#dialog-form>div:not(.' + className + '-container-row)');
+			var height = size.height;
+			for (var i = 0; i < rows.size(); i++)
+				height -= $(rows[i]).outerHeight(true);
+			var editorRow = $('#dialog-form>div.' + className + '-container-row');
+			height -= (parseInt(editorRow.css('marginTop')) + parseInt(editorRow.css('marginBottom')));
+
+			$('#' + id + '-container').editableList('height', height);
+		}
+
+	});
 </script>

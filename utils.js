@@ -23,29 +23,33 @@ module.exports = function (service) {
 
 	service.asIs = {};
 	service.defaultNullOrEmptyString = {
-		type: "string",
-		default: [null, ""]
+		type: 'string',
+		default: [null, '']
 	};
 	service.defaultNullOrEmptyDate = {
-		type: "date",
-		default: [null, ""]
+		type: 'date',
+		default: [null, '']
+	};
+	service.defaultNullOrEmptyBoolean = {
+		type: 'bool',
+		default: [null, false]
 	};
 
 	service.copyArg = function (src, arg, out, outArg, isObject) {
 		outArg = (typeof outArg !== 'undefined') ? outArg : arg; // map property
 		var tmpValue = src[arg];
 		if (typeof tmpValue !== 'undefined') {
-			if (isObject && typeof tmpValue === "string" && tmpValue !== "")
+			if (isObject && typeof tmpValue === 'string' && tmpValue !== '')
 				tmpValue = JSON.parse(stmpValue);
 			out[outArg] = tmpValue;
 		} else if (src.payload && src.payload.hasOwnProperty(arg) && typeof src.payload[arg] !== 'undefined') {
 			tmpValue = src.payload[arg];
-			if (isObject && typeof tmpValue === "string" && tmpValue !== "")
+			if (isObject && typeof tmpValue === 'string' && tmpValue !== '')
 				tmpValue = JSON.parse(stmpValue);
 			out[outArg] = tmpValue;
 		} else if (src.topic === arg) {
 			tmpValue = src.payload;
-			if (isObject && typeof tmpValue === "string" && tmpValue !== "")
+			if (isObject && typeof tmpValue === 'string' && tmpValue !== '')
 				tmpValue = JSON.parse(stmpValue);
 			out[outArg] = tmpValue;
 		}
@@ -105,7 +109,7 @@ module.exports = function (service) {
 
 	service.filesize = function (filename, payload) {
 		return (new Promise(function (fulfill, reject) {
-			if (filename === "" && Buffer.isBuffer(payload))
+			if (filename === '' && Buffer.isBuffer(payload))
 				return (fulfill(payload.length));
 
 			fs.stat(filename, function (err, stat) {
