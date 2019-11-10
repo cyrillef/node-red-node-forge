@@ -180,37 +180,11 @@ module.exports = function (RED) {
 		return (params);
 	};
 
-	service._ListActivities = function (api, params) {
-		return (new Promise(function (fulfill, reject) {
-			api.getActivitiesWithHttpInfo(params)
-				.then(function (results) {
-					//fulfill(results);
-					if (params.all && results.data.paginationToken) {
-						params.page = results.data.paginationToken;
-						service._ListActivities (api, params)
-							.then(function (results2) {
-								results.data.data = [ ...results.data.data, ...results2.data.data] ;
-								delete results.data.paginationToken;
-								fulfill(results);
-							})
-							.catch(function (error) {
-								reject(error);
-							});
-						return;
-					}
-					fulfill(results);
-				})
-				.catch(function (error) {
-					reject(error);
-				});
-		}));
-	};
-
 	service.ListActivities = function (n, node, oa2legged, msg, cb) {
 		var params = service.ListActivitiesParams(n, msg);
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		service._ListActivities(api, params)
+		service.pagination(api, api.getActivitiesWithHttpInfo, params, [ params ])
 			.then(function (results) {
 				cb(null, service.formatResponse(results));
 			})
@@ -218,20 +192,6 @@ module.exports = function (RED) {
 				cb(service.formatError(error), null);
 			});
 	};
-
-	// service.ListActivities = function (n, node, oa2legged, msg, cb) {
-	// 	var params = service.ListActivitiesParams(n, msg);
-
-	// 	var api = service.dav3API(oa2legged.getCredentials());
-	// 	if (!params.all)
-	// 	api.getActivitiesWithHttpInfo(params)
-	// 		.then(function (results) {
-	// 			cb(null, service.formatResponse(results));
-	// 		})
-	// 		.catch(function (error) {
-	// 			cb(service.formatError(error), null);
-	// 		});
-	// };
 
 	// POST	activities
 	// https://forge.autodesk.com/en/docs/design-automation/v3/reference/http/activities-POST/
@@ -381,38 +341,12 @@ module.exports = function (RED) {
 		return (params);
 	};
 
-	service._ListActivityAliases = function (api, params) {
-		return (new Promise(function (fulfill, reject) {
-			api.getActivityAliasesWithHttpInfo(params.activityId)
-				.then(function (results) {
-					//fulfill(results);
-					if (params.all && results.data.paginationToken) {
-						params.page = results.data.paginationToken;
-						service._ListActivityAliases (api, params)
-							.then(function (results2) {
-								results.data.data = [ ...results.data.data, ...results2.data.data] ;
-								delete results.data.paginationToken;
-								fulfill(results);
-							})
-							.catch(function (error) {
-								reject(error);
-							});
-						return;
-					}
-					fulfill(results);
-				})
-				.catch(function (error) {
-					reject(error);
-				});
-		}));
-	};
-
 	service.ListActivityAliases = function (n, node, oa2legged, msg, cb) {
 		var params = service.ListActivityAliasesParams(n, msg);
 		params.activityId = service.getUnqualifiedId(params.activityId);
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		service._ListActivityAliases(api, params)
+		service.pagination(api, api.getActivityAliasesWithHttpInfo, params, [ params.activityId ])
 			.then(function (results) {
 				cb(null, service.formatResponse(results));
 			})
@@ -420,20 +354,6 @@ module.exports = function (RED) {
 				cb(service.formatError(error), null);
 			});
 	};
-	
-	// service.ListActivityAliases = function (n, node, oa2legged, msg, cb) {
-	// 	var params = service.ListActivityAliasesParams(n, msg);
-	// 	params.activityId = service.getUnqualifiedId(params.activityId);
-
-	// 	var api = service.dav3API(oa2legged.getCredentials());
-	// 	api.getActivityAliasesWithHttpInfo(params.activityId)
-	// 		.then(function (results) {
-	// 			cb(null, service.formatResponse(results));
-	// 		})
-	// 		.catch(function (error) {
-	// 			cb(service.formatError(error), null);
-	// 		});
-	// };
 
 	// POST	activities/:id/aliases
 	// https://forge.autodesk.com/en/docs/design-automation/v3/reference/http/activities-id-aliases-POST/
@@ -526,38 +446,12 @@ module.exports = function (RED) {
 		return (params);
 	};
 
-	service._ListActivityVersions = function (api, params) {
-		return (new Promise(function (fulfill, reject) {
-			api.getActivityVersionsWithHttpInfo(params.activityId, params)
-				.then(function (results) {
-					//fulfill(results);
-					if (params.all && results.data.paginationToken) {
-						params.page = results.data.paginationToken;
-						service._ListActivityVersions (api, params)
-							.then(function (results2) {
-								results.data.data = [ ...results.data.data, ...results2.data.data] ;
-								delete results.data.paginationToken;
-								fulfill(results);
-							})
-							.catch(function (error) {
-								reject(error);
-							});
-						return;
-					}
-					fulfill(results);
-				})
-				.catch(function (error) {
-					reject(error);
-				});
-		}));
-	};
-
 	service.ListActivityVersions = function (n, node, oa2legged, msg, cb) {
 		var params = service.ListActivityVersionsParams(n, msg);
 		params.activityId = service.getUnqualifiedId(params.activityId);
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		service._ListActivities(api, params)
+		service.pagination(api, api.getActivityVersionsWithHttpInfo, params, [ params.activityId, params ])
 			.then(function (results) {
 				cb(null, service.formatResponse(results));
 			})
@@ -565,20 +459,6 @@ module.exports = function (RED) {
 				cb(service.formatError(error), null);
 			});
 	};
-
-	// service.ListActivityVersions = function (n, node, oa2legged, msg, cb) {
-	// 	var params = service.ListActivityVersionsParams(n, msg);
-	// 	params.activityId = service.getUnqualifiedId(params.activityId);
-
-	// 	var api = service.dav3API(oa2legged.getCredentials());
-	// 	api.getActivityVersionsWithHttpInfo(params.activityId, params)
-	// 		.then(function (results) {
-	// 			cb(null, service.formatResponse(results));
-	// 		})
-	// 		.catch(function (error) {
-	// 			cb(service.formatError(error), null);
-	// 		});
-	// };
 
 	// POST	activities/:id/versions
 	// https://forge.autodesk.com/en/docs/design-automation/v3/reference/http/activities-id-versions-POST/
@@ -699,12 +579,12 @@ module.exports = function (RED) {
 
 		return (params);
 	};
-	
+
 	service.ListEngines = function (n, node, oa2legged, msg, cb) {
 		var params = service.ListEnginesParams(n, msg);
-
+		
 		var api = service.dav3API(oa2legged.getCredentials());
-		api.getEnginesWithHttpInfo(params)
+		service.pagination(api, api.getEnginesWithHttpInfo, params, [ params ])
 			.then(function (results) {
 				cb(null, service.formatResponse(results));
 			})
@@ -1398,6 +1278,32 @@ module.exports = function (RED) {
 		}
 		delete error.response;
 		return (error);
+	};
+
+	service.pagination = function (api, method, params, args) {
+		var that = this;
+		return (new Promise(function (fulfill, reject) {
+			method.apply(api, args)
+				.then(function (results) {
+					if (params.all && results.data.paginationToken) {
+						params.page = results.data.paginationToken;
+						service.pagination (api, method, params, args)
+							.then(function (results2) {
+								results.data.data = [ ...results.data.data, ...results2.data.data] ;
+								delete results.data.paginationToken;
+								fulfill(results);
+							})
+							.catch(function (error) {
+								reject(error);
+							});
+						return;
+					}
+					fulfill(results);
+				})
+				.catch(function (error) {
+					reject(error);
+				});
+		}));
 	};
 
 };
