@@ -82,20 +82,27 @@
 		<option value="GetEngine">Get Engine</option>
 
 		<option value="">--- ForgeApps ---</option>
+		<option value="GetForgeApps">Get ForgeApps</option>
+		<option value="DeleteForgeApps">Delete ForgeApps</option>
+		<option value="UpdateForgeApps">Update ForgeApps</option>
 
 		<option value="">--- Health ---</option>
 		<option value="GetHealth">Get Health</option>
 
 		<option value="">--- ServiceLimits ---</option>
+		<option value="GetServiceLimits">Get Service Limits</option>
+		<option value="SetServiceLimits">Set Service Limits</option>
+		<option value="DeleteServiceLimits">Delete Service Limits</option>
 
 		<option value="">--- Shares ---</option>
 		<option value="ListShares">List Shares</option>
 
 		<option value="">--- WorkItems ---</option>
-
-		<option value="CreateWorkitem">Create Workitem</option>
-		<option value="GetWorkitem">Get Workitem</option>
-		<option value="DeleteWorkitem">Delete Workitem</option>
+		<option value="GetWorkitems">Get Workitems</option>
+		<option value="DeleteWorkitems">Delete Workitems</option>
+		<option value="CreateWorkitems">Create Workitems</option>
+		<option value="CreateBatchWorkitems">Create Batch Workitems</option>
+		
 		</select>
 	</div>
 	<div id="AttrHolder">
@@ -144,8 +151,23 @@
 			<input type="text" id="node-input-package" data-i18n="[placeholder]forge.placeholder.package" />
 		</div>
 
+		<div id="NicknameAttr" class="form-row node-input-nickname hiddenAttrs">
+			<label for="node-input-nickname"><i class="fa fa-tag"></i> <span data-i18n="forge.label.nickname"></span></label>
+			<input type="text" id="node-input-nickname" data-i18n="[placeholder]forge.placeholder.nickname" />
+		</div>
+		<div id="ExponentAttr" class="form-row node-input-exponent hiddenAttrs">
+			<label for="node-input-exponent"><i class="fa fa-tag"></i> <span data-i18n="forge.label.exponent"></span></label>
+			<input type="text" id="node-input-exponent" data-i18n="[placeholder]forge.placeholder.exponent" />
+		</div>
+		<div id="ModulusAttr" class="form-row node-input-modulus hiddenAttrs">
+			<label for="node-input-modulus"><i class="fa fa-tag"></i> <span data-i18n="forge.label.modulus"></span></label>
+			<input type="text" id="node-input-modulus" data-i18n="[placeholder]forge.placeholder.modulus" />
+		</div>
 
-
+		<div id="OwnerAttr" class="form-row node-input-owner hiddenAttrs">
+			<label for="node-input-owner"><i class="fa fa-tag"></i> <span data-i18n="forge.label.owner"></span></label>
+			<input type="text" id="node-input-owner" data-i18n="[placeholder]forge.placeholder.owner" />
+		</div>
 		
 		<div id="WorkItemIdAttr" class="form-row node-input-workitemId hiddenAttrs">
 			<label for="node-input-workitemId"><i class="fa fa-tag"></i> <span data-i18n="forge.label.workitemId"></span></label>
@@ -273,6 +295,9 @@
 		GetEngine: [ "#EngineIdAttr" ],
 
 		// --- ForgeApps ---
+		GetForgeApps: [ "#NicknameAttr" ],
+		DeleteForgeApps: [ "#NicknameAttr" ],
+		UpdateForgeApps: [ "#NicknameAttr", "#ExponentAttr", "#ModulusAttr" ],
 
 		// --- Health ---
 
@@ -280,20 +305,22 @@
 
 		// --- ServiceLimits ---
 
+		GetServiceLimits: [ "#OwnerAttr" ],
+		SetServiceLimits: [ "#OwnerAttr" ],
+		DeleteServiceLimits: [ "#OwnerAttr" ],		
+
 		// --- Shares ---
 
 		ListShares: [ "#PageTokenAttr", "#ForceAllAttr" ],
 
 		// --- WorkItems ---
 		
-		
-		
-		
-	//	CreateWorkitem: [
-	//		"#ActivityIdAttr", "#ActivityAliasIdAttr", "#BucketKeyAttr",
-	//		"#InputFileAttr", "#InputObjectKeyAttr", "#OutputObjectKeyAttr"
-	//	],
-	//	GetWorkitem: [ "#WorkItemIdAttr" ]
+		GetWorkitems: [ "#WorkItemIdAttr" ],
+		DeleteWorkitems: [ "#WorkItemIdAttr" ],
+		CreateWorkitems: [
+			"#ActivityIdAttr",
+		],
+		CreateBatchWorkitems: [],
 		
 	};
 	
@@ -777,6 +804,19 @@
 				value: ''
 			},
 
+			nickname: {
+				value: 'me'
+			},
+			exponent: {
+				value: ''
+			},
+			modulus: {
+				value: ''
+			},
+
+			owner: {
+				value: ''
+			},
 
 			workitemId: {
 				value: ''

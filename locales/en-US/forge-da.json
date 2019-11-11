@@ -20,6 +20,10 @@
       "appbundlesId": "Appbundle",
       "appbundlesAliasId": "Appbundle Alias",
       "package": "Package",
+      "nickname": "Nickname",
+      "exponent": "Exponent",
+      "modulus": "Modulus",
+      "owner": "Owner",
       "workitemId": "Workitem",
       "all": "Forge All"
     },
@@ -42,6 +46,10 @@
       "appbundlesId": "AppBundles Id",
       "appbundlesAliasId": "AppBundles Alias",
       "package": "Package",
+      "nickname": "Nickname Id",
+      "exponent": "Exponent",
+      "modulus": "Modulus",
+      "owner": "Owner",
       "workitemId": "Workitem Id",
       "all": "Forge All"
     },
