@@ -174,7 +174,8 @@ module.exports = function (RED) {
 		
 		service.getParams(n, msg, {
 			page: service.defaultNullOrEmptyString,
-			all: service.defaultNullOrEmptyBoolean
+			all: service.defaultNullOrEmptyBoolean,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 		
 		return (params);
@@ -186,7 +187,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		service.pagination(api, api.getActivitiesWithHttpInfo, params, [ params ])
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -201,12 +202,12 @@ module.exports = function (RED) {
 		service.getParams(n, msg, {
 			activityId: service.asIs,
 			engineId: service.asIs,
-			bundleId: service.asIs,
 			description: service.defaultNullOrEmptyString,
 			commandline: service.defaultNullOrEmptyString,
 			appbundles: service.defaultNullOrEmptyString,
 			parameters: service.asIs,
 			settings: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -220,19 +221,19 @@ module.exports = function (RED) {
 			id: params.activityId,
 			engine: params.engineId,
 			description: params.description,
-			appbundles: params.appbundles ? params.appbundles.split("\n") : null,
-			commandLine: params.commandline ? params.commandline.split("\n") : null,
+			appbundles: service.splitStringArray(params.appbundles),
+			commandLine: service.splitStringArray(params.commandline),
 			// settings: params.settings ? params.settings : null,
 			// parameters: params.parameters ? params.parameters : null
 		};
-		if (params.settings) {
+		if (params.settings && params.settings.length) {
 			body.settings ={};
 			params.settings.map(function (elt) {
 				body.settings[elt.key] =JSON.parse(JSON.stringify(elt));
 				delete body.settings[elt.key].key;
 			});
 		}
-		if (params.parameters) {
+		if (params.parameters && params.parameters.length) {
 			body.parameters ={};
 			params.parameters.map(function (elt) {
 				body.parameters[elt.id] =JSON.parse(JSON.stringify(elt));
@@ -243,7 +244,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.createActivityWithHttpInfo(body)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -257,7 +258,8 @@ module.exports = function (RED) {
 
 		service.getParams(n, msg, {
 			activityId: service.asIs,
-			activityAliasId: service.asIs
+			activityAliasId: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -270,7 +272,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.getActivityAliasWithHttpInfo(params.activityId, params.activityAliasId)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -286,7 +288,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.deleteActivityAliasWithHttpInfo(params.activityId, params.activityAliasId)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -300,9 +302,10 @@ module.exports = function (RED) {
 		
 		service.getParams(n, msg, {
 			activityId: service.asIs,
-			aliasId: service.asIs,
+			activityAliasId: service.asIs,
 			version: service.defaultNullOrEmptyString,
-			receiver: service.defaultNullOrEmptyString
+			receiver: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -318,9 +321,9 @@ module.exports = function (RED) {
 		};
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		api.modifyActivityAliasWithHttpInfo(params.activityId, params.aliasId, alias)
+		api.modifyActivityAliasWithHttpInfo(params.activityId, params.activityAliasId, alias)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -335,7 +338,8 @@ module.exports = function (RED) {
 		service.getParams(n, msg, {
 			activityId: service.asIs,
             page: service.defaultNullOrEmptyString,
-			all: service.defaultNullOrEmptyBoolean
+			all: service.defaultNullOrEmptyBoolean,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -348,7 +352,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		service.pagination(api, api.getActivityAliasesWithHttpInfo, params, [ params.activityId ])
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -364,7 +368,8 @@ module.exports = function (RED) {
 			activityId: service.asIs,
 			activityAliasId: service.asIs,
 			version: service.asIs,
-			receiver: service.defaultNullOrEmptyString
+			receiver: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -383,7 +388,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.createActivityAliasWithHttpInfo(params.activityId, alias)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -396,7 +401,8 @@ module.exports = function (RED) {
 		var params = {};
 		
 		service.getParams(n, msg, {
-			activityId: service.asIs
+			activityId: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -409,7 +415,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.getActivityWithHttpInfo(params.activityId)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -425,7 +431,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.deleteActivityWithHttpInfo(params.activityId)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -440,7 +446,8 @@ module.exports = function (RED) {
 		service.getParams(n, msg, {
 			activityId: service.asIs,
 			page: service.defaultNullOrEmptyString,
-			all: service.defaultNullOrEmptyBoolean
+			all: service.defaultNullOrEmptyBoolean,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -453,7 +460,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		service.pagination(api, api.getActivityVersionsWithHttpInfo, params, [ params.activityId, params ])
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -468,12 +475,12 @@ module.exports = function (RED) {
 		service.getParams(n, msg, {
 			activityId: service.asIs,
 			engineId: service.asIs,
-			bundleId: service.asIs,
 			description: service.defaultNullOrEmptyString,
 			commandline: service.defaultNullOrEmptyString,
 			appbundles: service.defaultNullOrEmptyString,
 			parameters: service.asIs,
 			settings: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -487,20 +494,20 @@ module.exports = function (RED) {
 			//id: params.activityId,
 			engine: params.engineId,
 			description: params.description,
-			appbundles: params.appbundles ? params.appbundles.split("\n") : null,
-			commandLine: params.commandline ? params.commandline.split("\n") : null,
+			appbundles: service.splitStringArray(params.appbundles),
+			commandLine: service.splitStringArray(params.commandline),
 			// settings: params.settings ? params.settings : null,
 			// parameters: params.parameters ? params.parameters : null,
 			//version: params.version
 		};
-		if (params.settings) {
+		if (params.settings && params.settings.length) {
 			body.settings ={};
 			params.settings.map(function (elt) {
 				body.settings[elt.key] =JSON.parse(JSON.stringify(elt));
 				delete body.settings[elt.key].key;
 			});
 		}
-		if (params.parameters) {
+		if (params.parameters && params.parameters.length) {
 			body.parameters ={};
 			params.parameters.map(function (elt) {
 				body.parameters[elt.id] =JSON.parse(JSON.stringify(elt));
@@ -511,7 +518,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.createActivityVersionWithHttpInfo(params.activityId, body)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -525,7 +532,8 @@ module.exports = function (RED) {
 
 		service.getParams(n, msg, {
 			activityId: service.asIs,
-			version: service.asIs
+			version: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -538,7 +546,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.getActivityVersionWithHttpInfo(params.activityId, params.version)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -554,7 +562,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.deleteActivityVersionWithHttpInfo(params.activityId, params.version)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -564,6 +572,379 @@ module.exports = function (RED) {
 	// #endregion
 
 	// #region --- AppBundles ---
+
+	// GET appbundles
+	// https://forge.autodesk.com/en/docs/design-automation/v3/reference/http/appbundles-GET/
+	service.ListAppbundlesParams = function (n, msg) {
+		var params = {};
+		
+		service.getParams(n, msg, {
+			page: service.defaultNullOrEmptyString,
+			all: service.defaultNullOrEmptyBoolean,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.ListAppbundles = function (n, node, oa2legged, msg, cb) {
+		var params = service.ListAppbundlesParams(n, msg);
+		
+		var api = service.dav3API(oa2legged.getCredentials());
+		service.pagination(api, api.getAppBundlesWithHttpInfo, params, [ params ])
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
+	// POST appbundles
+	service.CreateAppbundlesParams = function (n, msg) {
+		var params = {};
+		
+		service.getParams(n, msg, {
+			appbundlesId: service.asIs,
+			engineId: service.asIs,
+			description: service.defaultNullOrEmptyString,
+			commandline: service.defaultNullOrEmptyString,
+			appbundles: service.defaultNullOrEmptyString,
+			settings: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.CreateAppbundles = function (n, node, oa2legged, msg, cb) {
+		var params = service.CreateAppbundlesParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var body ={
+			id: params.appbundlesId,
+			engine: params.engineId,
+			description: params.description,
+			appbundles: service.splitStringArray(params.appbundles),
+			commandLine: service.splitStringArray(params.commandline),
+			// settings: params.settings ? params.settings : null,
+		};
+		if (params.settings && params.settings.length) {
+			body.settings ={};
+			params.settings.map(function (elt) {
+				body.settings[elt.key] =JSON.parse(JSON.stringify(elt));
+				delete body.settings[elt.key].key;
+			});
+		}
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.createAppBundleWithHttpInfo(body)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+	
+	// GET appbundles/:id/aliases/:aliasId
+	service.GetAppbundlesAliasParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			appbundlesId: service.asIs,
+			appbundlesAliasId: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.GetAppbundlesAlias = function (n, node, oa2legged, msg, cb) {
+		var params = service.GetAppbundlesAliasParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.getAppBundleAliasWithHttpInfo(params.appbundlesId, params.appbundlesAliasId)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
+	// DELETE appbundles/:id/aliases/:aliasId
+	service.DeleteAppbundlesAlias = function (n, node, oa2legged, msg, cb) {
+		var params = service.GetAppbundlesAliasParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.deleteAppBundleAliasWithHttpInfo(params.appbundlesId, params.appbundlesAliasId)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
+	// PATCH appbundles/:id/aliases/:aliasId
+	service.UpdateAppbundlesAliasParams = function (n, msg) {
+		var params = {};
+		
+		service.getParams(n, msg, {
+			appbundlesId: service.asIs,
+			appbundlesAliasId: service.asIs,
+			version: service.defaultNullOrEmptyString,
+			receiver: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.UpdateAppbundlesAlias = function (n, node, oa2legged, msg, cb) {
+		var params = service.UpdateAppbundlesAliasParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var alias = {
+			version: version,
+			receiver: receiver
+		};
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.modifyAppBundleAliasWithHttpInfo(params.appbundlesId, params.appbundlesAliasId, alias)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
+	// GET appbundles/:id/aliases
+	service.ListAppbundlesAliasesParams = function (n, msg) {
+		var params = {};
+		
+		service.getParams(n, msg, {
+			appbundlesId: service.asIs,
+            page: service.defaultNullOrEmptyString,
+			all: service.defaultNullOrEmptyBoolean,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.ListAppbundlesAliases = function (n, node, oa2legged, msg, cb) {
+		var params = service.ListAppbundlesAliasesParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		service.pagination(api, api.getAppBundleAliasesWithHttpInfo, params, [ params.appbundlesId ])
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
+	// POST appbundles/:id/aliases
+	service.CreateAppbundlesAliasParams = function (n, msg) {
+		var params = {};
+		
+		service.getParams(n, msg, {
+			appbundlesId: service.asIs,
+			appbundlesAliasId: service.asIs,
+			version: service.asIs,
+			receiver: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.CreateAppbundlesAlias = function (n, node, oa2legged, msg, cb) {
+		var params = service.CreateAppbundlesAliasParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var alias = {
+			id: params.appbundlesAliasId,
+			version: params.version,
+			receiver: params.receiver
+		};
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.createAppBundleAliasWithHttpInfo(params.appbundlesId, alias)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
+	// GET appbundles/:id
+	service.GetAppbundlesParams = function (n, msg) {
+		var params = {};
+		
+		service.getParams(n, msg, {
+			appbundlesId: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.GetAppbundles = function (n, node, oa2legged, msg, cb) {
+		var params = service.GetAppbundlesParams(n, msg);
+		//params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.getAppBundleWithHttpInfo(params.appbundlesId)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
+	// DELETE appbundles/:id
+	service.DeleteAppbundles = function (n, node, oa2legged, msg, cb) {
+		var params = service.GetAppbundlesParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.deleteAppBundleWithHttpInfo(params.appbundlesId)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
+	// GET appbundles/:id/versions
+	service.ListAppbundlesVersionsParams = function (n, msg) {
+		var params = {};
+		
+		service.getParams(n, msg, {
+			appbundlesId: service.asIs,
+			page: service.defaultNullOrEmptyString,
+			all: service.defaultNullOrEmptyBoolean,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.ListAppbundlesVersions = function (n, node, oa2legged, msg, cb) {
+		var params = service.ListAppbundlesVersionsParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		service.pagination(api, api.getAppBundleVersionsWithHttpInfo, params, [ params.appbundlesId, params ])
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
+	// POST appbundles/:id/versions
+	service.CreateAppbundlesVersionParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			appbundlesId: service.asIs,
+			package: service.defaultNullOrEmptyString,
+			engineId: service.asIs,
+			description: service.defaultNullOrEmptyString,
+			appbundles: service.defaultNullOrEmptyString,
+			settings: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.CreateAppbundlesVersion = function (n, node, oa2legged, msg, cb) {
+		var params = service.CreateAppbundlesVersionParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var body ={
+			//id: params.appbundlesId,
+			package: params.package,
+			engine: params.engineId,
+			description: params.description,
+			appbundles: service.splitStringArray(params.appbundles),
+			// settings: params.settings ? params.settings : null,
+			//version: params.version
+		};
+		if (params.settings && params.settings.length) {
+			body.settings ={};
+			params.settings.map(function (elt) {
+				body.settings[elt.key] =JSON.parse(JSON.stringify(elt));
+				delete body.settings[elt.key].key;
+			});
+		}
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.createAppBundleVersionWithHttpInfo(params.appbundlesId, body)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
+	// GET appbundles/:id/versions/:version
+	service.GetAppbundlesVersionParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			appbundlesId: service.asIs,
+			version: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.GetAppbundlesVersion = function (n, node, oa2legged, msg, cb) {
+		var params = service.GetAppbundlesVersionParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.getAppBundleVersionWithHttpInfo(params.appbundlesId, params.version)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});	
+	};
+
+	// DELETE appbundles/:id/versions/:version
+	service.DeleteAppbundlesVersion = function (n, node, oa2legged, msg, cb) {
+		var params = service.GetAppbundlesVersionParams(n, msg);
+		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.deleteAppBundleVersionWithHttpInfo(params.appbundlesId, params.version)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});	
+	};
+
 	// #endregion
 
 	// #region --- Engines ---
@@ -574,7 +955,9 @@ module.exports = function (RED) {
 		var params = {};
 		
 		service.getParams(n, msg, {
-			page: service.defaultNullOrEmptyString
+			page: service.defaultNullOrEmptyString,
+			all: service.defaultNullOrEmptyBoolean,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -586,7 +969,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		service.pagination(api, api.getEnginesWithHttpInfo, params, [ params ])
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -597,7 +980,12 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/design-automation/v3/reference/http/engines-id-GET/
 	service.GetEngineParams = function (n, msg) {
 		var params = {};
-		service.copyArg(msg, 'engineId', params, undefined, false);
+		
+		service.getParams(n, msg, {
+			engineId: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
 		return (params);
 	};
 
@@ -607,7 +995,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.getEngineWithHttpInfo(params.engineId)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -617,6 +1005,11 @@ module.exports = function (RED) {
 	// #endregion
 
 	// #region --- ForgeApps ---
+
+	// GET forgeapps/:id
+	// DELETE forgeapps/:id
+	// PATCH forgeapps/:id
+
 	// #endregion
 
 	// #region --- Health ---
@@ -627,7 +1020,8 @@ module.exports = function (RED) {
 		var params = {};
 
 		service.getParams(n, msg, {
-			engineId: service.asIs
+			engineId: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -639,7 +1033,7 @@ module.exports = function (RED) {
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.healthStatusWithHttpInfo(params.engineId)
 			.then(function (results) {
-				cb(null, service.formatResponse(results));
+				cb(null, service.formatResponse(results, params.raw));
 			})
 			.catch(function (error) {
 				cb(service.formatError(error), null);
@@ -649,12 +1043,51 @@ module.exports = function (RED) {
 	// #endregion
 
 	// #region --- ServiceLimits ---
+
+	// GET servicelimits/:owner
+	// PUT servicelimits/:owner
+	// DELETE servicelimits/:owner
+
 	// #endregion
 
 	// #region --- Shares ---
+
+	// GET shares
+	// https://forge.autodesk.com/en/docs/design-automation/v3/reference/http/shares-GET/
+	service.ListSharesParams = function (n, msg) {
+		var params = {};
+		
+		service.getParams(n, msg, {
+			page: service.defaultNullOrEmptyString,
+			all: service.defaultNullOrEmptyBoolean,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+		
+		return (params);
+	};
+
+	service.ListShares = function (n, node, oa2legged, msg, cb) {
+		var params = service.ListSharesParams(n, msg);
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		service.pagination(api, api.getSharesWithHttpInfo, params, [ params ])
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
+	};
+
 	// #endregion
 
 	// #region --- WorkItems ---
+
+	// GET workitems/:id
+	// DELETE workitems/:id
+	// POST workitems
+	// POST workitems/batch
+
 	// #endregion
 
 
@@ -1249,20 +1682,32 @@ module.exports = function (RED) {
 		return (id);
 	};
 
+	service.splitStringArray = function (stringArray) {
+		if (!stringArray)
+			return(null);
+		if (typeof stringArray === 'string')
+			return(stringArray.split("\n"));
+		return(stringArray);
+	};
+
 	service.dav3API = function (oauth2) {
 		let apiClient = new dav3.AutodeskForgeDesignAutomationClient( /*config.client*/ );
 		apiClient.authManager.authentications['2-legged'].accessToken = oauth2.access_token;
 		return (new dav3.AutodeskForgeDesignAutomationApi(apiClient));
 	};
 
-	service.formatResponse = function (response) {
-		response.statusCode = response.response.statusCode;
-		response.headers = response.response.headers;
-		if (response.hasOwnProperty ('data')) {
-			response.body = JSON.parse(JSON.stringify(response.data));
-			delete response.data;
+	service.formatResponse = function (response, raw) {
+		if (raw) {
+			response.statusCode = response.response.statusCode;
+			response.headers = response.response.headers;
+			if (response.hasOwnProperty('data')) {
+				response.body = JSON.parse(JSON.stringify(response.data));
+				delete response.data;
+			}
+			delete response.response;
+		} else {
+			response = JSON.parse(JSON.stringify(response.data));
 		}
-		delete response.response;
 		return (response);
 	};
 
