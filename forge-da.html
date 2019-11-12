@@ -127,7 +127,7 @@
 			<label for="node-input-description"><i class="fa fa-pencil-square"></i> <span data-i18n="forge.label.description"></span></label>
 			<input type="text" id="node-input-description" data-i18n="[placeholder]forge.placeholder.description" />
 		</div>
-		<div id="ActivityAliasReceiverAttr" class="form-row node-input-receiver hiddenAttrs">
+		<div id="ReceiverAttr" class="form-row node-input-receiver hiddenAttrs">
 			<label for="node-input-receiver"><i class="fa fa-pencil-square"></i> <span data-i18n="forge.label.receiver"></span></label>
 			<input type="text" id="node-input-receiver" data-i18n="[placeholder]forge.placeholder.receiver" />
 		</div>
@@ -246,10 +246,10 @@
 		],
 		GetActivityAlias: [ "#ActivityIdAttr", "#ActivityAliasIdAttr" ],
 		DeleteActivityAlias: [ "#ActivityIdAttr", "#ActivityAliasIdAttr" ],
-		UpdateActivityAlias: [ "#ActivityIdAttr", "#ActivityAliasIdAttr" ],
+		UpdateActivityAlias: [ "#ActivityIdAttr", "#ActivityAliasIdAttr", "#VersionAttr", "#ReceiverAttr" ],
 		ListActivityAliases: [ "#ActivityIdAttr", "#PageTokenAttr", "#ForceAllAttr" ],
 		CreateActivityAlias: [
-			"#ActivityIdAttr", "#ActivityAliasIdAttr", "#VersionAttr", "#ActivityAliasReceiverAttr"
+			"#ActivityIdAttr", "#ActivityAliasIdAttr", "#VersionAttr", "#ReceiverAttr"
 		],
 		GetActivity: [ "#ActivityIdAttr" ],
 		DeleteActivity: [ "#ActivityIdAttr" ],
@@ -273,10 +273,10 @@
 		],
 		GetAppbundlesAlias: [ "#AppbundlesIdAttr", "#AppbundlesAliasIdAttr" ],
 		DeleteAppbundlesAlias: [ "#AppbundlesIdAttr", "#AppbundlesAliasIdAttr" ],
-		UpdateAppbundlesAlias: [ "#AppbundlesIdAttr", "#AppbundlesAliasIdAttr" ],
+		UpdateAppbundlesAlias: [ "#AppbundlesIdAttr", "#AppbundlesAliasIdAttr", "#VersionAttr", "#ReceiverAttr" ],
 		ListAppbundlesAliases: [ "#AppbundlesIdAttr", "#PageTokenAttr", "#ForceAllAttr" ],
 		CreateAppbundlesAlias: [
-			"#AppbundlesIdAttr", "#AppbundlesAliasIdAttr", "#VersionAttr", "#AppbundlesAliasReceiverAttr"
+			"#AppbundlesIdAttr", "#AppbundlesAliasIdAttr", "#VersionAttr", "#ReceiverAttr"
 		],
 		GetAppbundles: [ "#AppbundlesIdAttr" ],
 		DeleteAppbundles: [ "#AppbundlesIdAttr" ],

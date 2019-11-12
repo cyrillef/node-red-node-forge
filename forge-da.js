@@ -316,8 +316,8 @@ module.exports = function (RED) {
 		params.activityId = service.getUnqualifiedId(params.activityId);
 
 		var alias = {
-			version: version,
-			receiver: receiver
+			version: params.version,
+			receiver: params.receiver
 		};
 
 		var api = service.dav3API(oa2legged.getCredentials());
@@ -709,8 +709,8 @@ module.exports = function (RED) {
 		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
 
 		var alias = {
-			version: version,
-			receiver: receiver
+			version: params.version,
+			receiver: params.receiver
 		};
 
 		var api = service.dav3API(oa2legged.getCredentials());
