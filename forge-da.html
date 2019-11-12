@@ -59,8 +59,7 @@
       <option value="CreateorUpdateActivity">Create or Update Activity</option>
       <option value="ListActivityVersions">List Activity Versions</option>
       <option value="ListActivityAliases">List Activity Aliases</option>
-      <option value="CreateActivityAlias">Create Activity Alias</option>
-      <option value="UpdateActivityAlias">Update Activity Alias</option>
+      <option value="CreateOrUpdateActivityAlias">Create or Update Activity Alias</option>
       <option value="DeleteActivity">Delete Activity</option>
       <option value="DeleteActivityAlias">Delete Activity Alias</option>
       <option value="DeleteActivityVersion">Delete Activity Version</option>
@@ -181,6 +180,10 @@
     "#BundleAliasAttr",
     "#EngineAttr"
     ],
+    CreateOrUpdateActivityAlias :[
+    "#ActivityIdAttr",
+    "#ActivityAliasAttr",
+    "#ActivityVersionAttr"],
     CreateWorkitem :[
     "#ActivityIdAttr",
     "#ActivityAliasAttr",
@@ -201,7 +204,11 @@
     DeleteActivityVersion:[
     "#ActivityIdAttr",
     "#ActivityVersionAttr"
-    ]
+    ],
+    ListActivityAliases:[
+    "#ActivityIdAttr"],
+    ListActivityVersions:[
+    "#ActivityIdAttr"]
     };
   $("#node-input-operation").on("change", function() {
     $("#AttrHolder")

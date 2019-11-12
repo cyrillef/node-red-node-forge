@@ -389,6 +389,31 @@ module.exports = function(RED) {
     }
   };
 
+  service.ListActivityAliases = async function(n, node, oa2legged, msg, cb) {
+    const client = new DesignAutomationClient({
+      token: oa2legged.credentials.access_token
+    });
+    let activityShortId = n.activityId;
+    try {
+      let aliasDetails = await client.listActivityAliases(activityShortId);
+      cb(null, aliasDetails);
+    } catch (error) {
+      cb(error, null);
+    }
+  };
+
+  service.ListActivityVersions = async function(n, node, oa2legged, msg, cb) {
+    const client = new DesignAutomationClient({
+      token: oa2legged.credentials.access_token
+    });
+    try {
+      let versionDetail = await client.listActivityVersions(n.activityId);
+      cb(null, versionDetail);
+    } catch (error) {
+      cb(error, null);
+    }
+  };
+
   service.GetActivity = async function(n, node, oa2legged, msg, cb) {
     const client = new DesignAutomationClient({
       token: oa2legged.credentials.access_token
@@ -399,7 +424,9 @@ module.exports = function(RED) {
       n.activityAlias
     );
     let qualifiedId = designAutomationId.toString();
-    if (msg.hasOwnProperty("payload") && typeof msg.payload !== "undefined") {
+
+    //I should find better way to distinguish from function input payload from that of inject input
+    if (msg.hasOwnProperty("payload") && typeof msg.payload == "object") {
       qualifiedId = msg.payload;
     }
     try {
@@ -515,6 +542,42 @@ module.exports = function(RED) {
           ACTIVITY_NAME,
           ACTIVITY_ALIAS,
           activity.version
+        );
+      }
+    } catch (err) {
+      cb("Could not create or update activity alias", null);
+    }
+    cb(null, activityAlias);
+  };
+
+  service.CreateOrUpdateActivityAlias = async function(
+    n,
+    node,
+    oa2legged,
+    _msg,
+    cb
+  ) {
+    const ACTIVITY_NAME = n.activityId;
+    const ACTIVITY_ALIAS = n.activityAlias;
+    const ACTIVITY_VERSION = n.activityVersion;
+    // Create or update an activity alias
+    const allActivityAliases = await client.listActivityAliases(ACTIVITY_NAME);
+    const matchingActivityAliases = allActivityAliases.filter(
+      item => item.id === ACTIVITY_ALIAS
+    );
+    let activityAlias;
+    try {
+      if (matchingActivityAliases.length === 0) {
+        activityAlias = await client.createActivityAlias(
+          ACTIVITY_NAME,
+          ACTIVITY_ALIAS,
+          ACTIVITY_VERSION
+        );
+      } else {
+        activityAlias = await client.updateActivityAlias(
+          ACTIVITY_NAME,
+          ACTIVITY_ALIAS,
+          ACTIVITY_VERSION
         );
       }
     } catch (err) {
