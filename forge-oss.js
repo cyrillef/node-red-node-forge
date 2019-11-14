@@ -180,7 +180,8 @@ module.exports = function (RED) {
 			startAt: service.defaultNullOrEmptyString,
 			region: {
 				default: ['US']
-			}
+			},
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 		return (params);
 	};
@@ -244,7 +245,8 @@ module.exports = function (RED) {
 			policyKey: service.asIs,
 			region: {
 				rename: 'xAdsRegion'
-			}
+			},
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -317,7 +319,8 @@ module.exports = function (RED) {
 				max: 100
 			},
 			startAt: service.defaultNullOrEmptyString,
-			beginsWith: service.defaultNullOrEmptyString
+			beginsWith: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 		return (params);
 	};
@@ -360,7 +363,8 @@ module.exports = function (RED) {
 				default: [null, ''],
 				rename: '_with'
 			},
-			ifModifiedSince: service.defaultNullOrEmptyDate
+			ifModifiedSince: service.defaultNullOrEmptyDate,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -397,7 +401,8 @@ module.exports = function (RED) {
 			range: service.defaultNullOrEmptyString,
 			ifNoneMatch: service.defaultNullOrEmptyString,
 			ifModifiedSince: service.defaultNullOrEmptyDate,
-			acceptEncoding: service.defaultNullOrEmptyString
+			acceptEncoding: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -434,7 +439,8 @@ module.exports = function (RED) {
 			localFilename: service.asIs,
 			ifMatch: service.defaultNullOrEmptyString,
 			contentType: service.defaultNullOrEmptyString,
-			contentDisposition: service.defaultNullOrEmptyString
+			contentDisposition: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		if ((params.localFilename === null || params.localFilename === '') &&
@@ -597,7 +603,8 @@ module.exports = function (RED) {
 		service.copyArg(msg, 'bucket', params, undefined, false);
 
 		service.getParams(n, msg, {
-			key: service.asIs
+			key: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -629,7 +636,8 @@ module.exports = function (RED) {
 			key: service.asIs,
 			access: service.asIs,
 			singleUse: service.asIs,
-			minutesExpiration: service.asIs
+			minutesExpiration: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		params.minutesExpiration = parseInt(params.minutesExpiration);
@@ -672,7 +680,8 @@ module.exports = function (RED) {
 			contentDisposition: service.defaultNullOrEmptyString,
 			region: {
 				rename: 'xAdsRegion'
-			}
+			},
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		if ((params.localFilename === null || params.localFilename === '') &&
@@ -835,7 +844,8 @@ module.exports = function (RED) {
 			ifNoneMatch: service.defaultNullOrEmptyString,
 			ifModifiedSince: service.defaultNullOrEmptyDate,
 			acceptEncoding: service.defaultNullOrEmptyString,
-			region: service.asIs
+			region: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -861,7 +871,8 @@ module.exports = function (RED) {
 
 		service.getParams(n, msg, {
 			guid: service.asIs,
-			region: service.asIs
+			region: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
@@ -891,7 +902,8 @@ module.exports = function (RED) {
 
 		service.getParams(n, msg, {
 			key: service.asIs,
-			copySource: service.asIs
+			copySource: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
