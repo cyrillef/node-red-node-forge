@@ -18,13 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/* jshint esversion: 8 */
+
 module.exports = function (RED) {
     "use strict";
     var url = require('url');
     var fs = require('fs');
-    var ForgeAPI = require('forge-apis');
     var utils = require('./utils');
-
+    var ForgeAPI = require('forge-apis');
+    
     // Forge
     function ForgeModelDerivativeNode(n) {
         RED.nodes.createNode(this, n);
@@ -139,6 +141,8 @@ module.exports = function (RED) {
     var service = {};
     utils(service);
 
+    // #region --- Model Serivative ---
+
     // POST	job
     // https://forge.autodesk.com/en/docs/model-derivative/v2/reference/http/job-POST/
     service.TranslateParams = function (n, msg) {
@@ -152,7 +156,8 @@ module.exports = function (RED) {
             },
             rootFilename: service.defaultNullOrEmptyString,
             checkReferences: service.defaultNullOrEmptyString,
-            region: service.asIs
+            region: service.asIs,
+            raw: service.defaultNullOrEmptyBoolean
         }, params);
         if (params.hasOwnProperty('rootFilename'))
             params.compressedUrn = true;
@@ -201,7 +206,8 @@ module.exports = function (RED) {
         //service.getParamsSimple(n, msg, ['limit', 'startAt', 'region'], params);
         service.getParams(n, msg, {
             urn: service.asIs,
-            acceptEncoding: service.defaultNullOrEmptyString
+            acceptEncoding: service.defaultNullOrEmptyString,
+            raw: service.defaultNullOrEmptyBoolean
         }, params);
 
         return (params);
@@ -228,7 +234,8 @@ module.exports = function (RED) {
 
         //service.getParamsSimple(n, msg, ['limit', 'startAt', 'region'], params);
         service.getParams(n, msg, {
-            urn: service.asIs
+            urn: service.asIs,
+            raw: service.defaultNullOrEmptyBoolean
         }, params);
 
         return (params);
@@ -256,7 +263,8 @@ module.exports = function (RED) {
         //service.getParamsSimple(n, msg, ['limit', 'startAt', 'region'], params);
         service.getParams(n, msg, {
             urn: service.asIs,
-            acceptEncoding: service.defaultNullOrEmptyString
+            acceptEncoding: service.defaultNullOrEmptyString,
+            raw: service.defaultNullOrEmptyBoolean
         }, params);
 
         return (params);
@@ -288,7 +296,8 @@ module.exports = function (RED) {
                 default: [false]
             },
             guid: service.asIs,
-            acceptEncoding: service.defaultNullOrEmptyString
+            acceptEncoding: service.defaultNullOrEmptyString,
+            raw: service.defaultNullOrEmptyBoolean
         }, params);
 
         return (params);
@@ -321,7 +330,8 @@ module.exports = function (RED) {
             },
             guid: service.asIs,
             objectid: service.defaultNullOrEmptyString,
-            acceptEncoding: service.defaultNullOrEmptyString
+            acceptEncoding: service.defaultNullOrEmptyString,
+            raw: service.defaultNullOrEmptyBoolean
         }, params);
 
         return (params);
@@ -354,6 +364,7 @@ module.exports = function (RED) {
                 rename: 'filename'
             },
             references: service.defaultNullOrEmptyString,
+            raw: service.defaultNullOrEmptyBoolean
         }, params);
         try {
             if (params.references)
@@ -397,7 +408,8 @@ module.exports = function (RED) {
         service.getParams(n, msg, {
             urn: service.asIs,
             width: service.asIs,
-            height: service.asIs
+            height: service.asIs,
+            raw: service.defaultNullOrEmptyBoolean
         }, params);
 
         return (params);
@@ -426,7 +438,8 @@ module.exports = function (RED) {
         service.getParams(n, msg, {
             urn: service.asIs,
             derivativeurn: service.asIs,
-            range: service.defaultNullOrEmptyString
+            range: service.defaultNullOrEmptyString,
+            raw: service.defaultNullOrEmptyBoolean
         }, params);
 
         return (params);
@@ -454,7 +467,8 @@ module.exports = function (RED) {
         //service.getParamsSimple(n, msg, ['limit', 'startAt', 'region'], params);
         service.getParams(n, msg, {
             ifModifiedSince: service.defaultNullOrEmptyDate,
-            acceptEncoding: service.defaultNullOrEmptyString
+            acceptEncoding: service.defaultNullOrEmptyString,
+            raw: service.defaultNullOrEmptyBoolean
         }, params);
 
         return (params);
@@ -473,5 +487,7 @@ module.exports = function (RED) {
                 cb(error, null);
             });
     };
+
+    // #endregion
 
 };

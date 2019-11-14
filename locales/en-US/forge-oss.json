@@ -27,7 +27,9 @@
 			"acceptEncoding": "Accept-Encoding",
 			"contentType": "Content-Type",
 			"contentDisposition": "Content-Disposition",
-			"pattern": "Filename Pattern"
+			"pattern": "Filename Pattern",
+			"raw": "Raw Response",
+			"all": "Forge All"
 		},
 		"placeholder": {
 			"name": "Name",
@@ -54,7 +56,9 @@
 			"acceptEncoding": "Accept-Encoding",
 			"contentType": "Content-Type",
 			"contentDisposition": "Content-Disposition",
-			"pattern": "Filepattern"
+			"pattern": "Filepattern",
+			"raw": "Raw Response",
+			"all": "Forge All"
 		},
 		"tip": {
 			"config1": "",

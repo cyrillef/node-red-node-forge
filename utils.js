@@ -26,6 +26,14 @@ module.exports = function (service) {
 		type: 'string',
 		default: [null, '']
 	};
+	// service.defaultNullOrEmptyInt = {
+	// 	type: 'integer',
+	// 	default: [null, 0]
+	// };
+	// service.defaultNullOrEmptyFloat = {
+	// 	type: 'float',
+	// 	default: [null, 0.0]
+	// };
 	service.defaultNullOrEmptyDate = {
 		type: 'date',
 		default: [null, '']
@@ -143,5 +151,34 @@ module.exports = function (service) {
 			.replace(/\_/g, '/'); // Convert '_' to '/'
 		return (new Buffer(base64, 'base64').toString());
 	};
+
+	service.formatResponse = function (response, raw) {
+		if (raw) {
+			response.statusCode = response.response.statusCode;
+			response.headers = response.response.headers;
+			if (response.hasOwnProperty('data')) {
+				response.body = JSON.parse(JSON.stringify(response.data));
+				delete response.data;
+			}
+			delete response.response;
+		} else {
+			response = JSON.parse(JSON.stringify(response.data));
+		}
+		return (response);
+	};
+
+	service.formatError = function (error) {
+		console.error(error);
+		if (error.response.statusCode)
+			error.statusCode = error.response.statusCode;
+		error.headers = error.response.headers;
+		if (error.response.hasOwnProperty ('body'))
+			error.details = JSON.parse(JSON.stringify(error.response.body));
+		else
+			error.details = error.response.text;
+		delete error.response;
+		return (error);
+	};
+
 
 };

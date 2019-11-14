@@ -18,13 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/* jshint esversion: 8 */
+
 module.exports = function (RED) {
 	"use strict";
-	var url = require('url');
-	var fs = require('fs');
-	var uuidv4 = require('uuid/v4');
-	var streamBuffers = require('stream-buffers');
-	var ForgeAPI = require('forge-apis');
+	const url = require('url');
+	const fs = require('fs');
+	const uuidv4 = require('uuid/v4');
+	const streamBuffers = require('stream-buffers');
+	const utils = require('./utils');
+	const ForgeAPI = require('forge-apis');
 
 	// Forge
 	function ForgeOSSNode(n) {
@@ -145,6 +148,9 @@ module.exports = function (RED) {
 	RED.nodes.registerType('forge-oss', ForgeOSSNode);
 
 	var service = {};
+	utils(service);
+
+	// #region --- Bucket ---
 
 	service.BucketKey = function (src, out) {
 		try {
@@ -288,6 +294,10 @@ module.exports = function (RED) {
 			});
 		//cb(null, params);
 	};
+
+	// #endregion
+
+	// #region --- Objects --- 
 
 	// GET	buckets/:bucketKey/objects
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-GET/
@@ -622,17 +632,19 @@ module.exports = function (RED) {
 			minutesExpiration: service.asIs
 		}, params);
 
+		params.minutesExpiration = parseInt(params.minutesExpiration);
+
 		return (params);
 	};
 
 	service.CreateSignature = function (n, node, oa2legged, msg, cb) {
 		var params = service.CreateSignatureParams(n, msg);
 
-		var postBucketsSigned = {};
-		service.getParams(n, msg, {
-			singleUse: service.asIs,
-			minutesExpiration: service.asIs
-		}, postBucketsSigned);
+		var postBucketsSigned = {
+			singleUse: params.singleUse,
+			minutesExpiration: params.minutesExpiration,
+			access: params.access
+		};
 
 		var ossObjects = new ForgeAPI.ObjectsApi();
 		ossObjects.createSignedResource(params.bucket, params.key, postBucketsSigned, params, oa2legged, oa2legged.getCredentials())
@@ -898,115 +910,6 @@ module.exports = function (RED) {
 			});
 	};
 
-	// Utils
-	service.asIs = {};
-	service.defaultNullOrEmptyString = {
-		type: 'string',
-		default: [null, '']
-	};
-	service.defaultNullOrEmptyDate = {
-		type: 'date',
-		default: [null, '']
-	};
-
-	service.copyArg = function (src, arg, out, outArg, isObject) {
-		outArg = (typeof outArg !== 'undefined') ? outArg : arg; // map property
-		var tmpValue = src[arg];
-		if (typeof tmpValue !== 'undefined') {
-			if (isObject && typeof tmpValue === 'string' && tmpValue !== '')
-				tmpValue = JSON.parse(stmpValue);
-			out[outArg] = tmpValue;
-		} else if (src.payload && src.payload.hasOwnProperty(arg) && typeof src.payload[arg] !== 'undefined') {
-			tmpValue = src.payload[arg];
-			if (isObject && typeof tmpValue === 'string' && tmpValue !== '')
-				tmpValue = JSON.parse(stmpValue);
-			out[outArg] = tmpValue;
-		} else if (src.topic === arg) {
-			tmpValue = src.payload;
-			if (isObject && typeof tmpValue === 'string' && tmpValue !== '')
-				tmpValue = JSON.parse(stmpValue);
-			out[outArg] = tmpValue;
-		}
-	};
-
-	service.getParamsSimple = function (node, msg, keys, out) {
-		var params = {};
-		for (var i = 0; i < keys.length; i++) {
-			service.copyArg(node, keys[i], params, undefined, false);
-			service.copyArg(msg, keys[i], params, undefined, false);
-		}
-	};
-
-	service.getParams = function (node, msg, params, out) {
-		out = out || {};
-		var keys = Object.keys(params);
-		for (var i = 0; i < keys.length; i++) {
-			var key = keys[i];
-			service.copyArg(node, key, out, undefined, false);
-			service.copyArg(msg, key, out, undefined, false);
-
-			if (params[key].type && params[key].type !== typeof out[key]) {
-				switch (params[key].type) {
-					case 'number':
-						out[key] = parseFloat(out[key]);
-						break;
-					default:
-						break;
-				}
-			}
-
-			if (params[key].default && params[key].default.includes(out[key])) {
-				delete out[key];
-				continue;
-			}
-			if (params[key].min && out[key] < params[key].min) {
-				out[key] = params[key].min;
-				continue;
-			}
-			if (params[key].max && out[key] > params[key].max) {
-				out[key] = params[key].max;
-				continue;
-			}
-
-			if (params[key].type && params[key].type === 'date') {
-				var dt = Date.parse(out[key]);
-				out[key] = new Date(dt).toUTCString();
-			}
-
-			if (params[key].rename) { // Should be last
-				out[params[key].rename] = out[key];
-				delete out[key];
-				continue;
-			}
-		}
-	};
-
-	service.filesize = function (filename, payload) {
-		return (new Promise(function (fulfill, reject) {
-			if (filename === '' && Buffer.isBuffer(payload))
-				return (fulfill(payload.length));
-
-			fs.stat(filename, function (err, stat) {
-				if (err)
-					reject(err);
-				else
-					fulfill(stat.size);
-			});
-		}));
-	};
-
-	// https://github.com/joliss/promise-map-series
-	service.promiseSerie = function (array, iterator, thisArg) {
-		var length = array.length;
-		var current = Promise.resolve();
-		var results = new Array(length);
-		var cb = arguments.length > 2 ? iterator.bind(thisArg) : iterator;
-		for (var i = 0; i < length; i++) {
-			current = results[i] = current.then(function (i) { // jshint ignore:line
-				return (cb(array[i], i, array));
-			}.bind(undefined, i));
-		}
-		return (Promise.all(results));
-	};
+	// #endregion
 
 };

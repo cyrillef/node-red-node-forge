@@ -34,8 +34,10 @@
             "width": "Width",
             "height": "Height",
             "checkReferences": "Check References",
-            "references": "References"
-		},
+            "references": "References",
+            "raw": "Raw Response",
+            "all": "Forge All"
+        },
 		"placeholder": {
 			"name": "Name",
 			"topic": "Topic",
@@ -53,7 +55,9 @@
             "ifModifiedSince": "If-Modified-Since UTC date time on server",
             "range": "Range (RFC 2616)",
             "width": "Width",
-            "height": "Height"
+            "height": "Height",
+            "raw": "Raw Response",
+            "all": "Forge All"
 		},
 		"tip": {
 			"config1": "",

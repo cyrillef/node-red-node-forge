@@ -218,6 +218,19 @@
 				<option value="EMEA">EMEA</option>
 			</select>
 		</div>
+
+		<div id="ForgeAllAttr" class="form-row node-input-all hiddenAttrs">
+			<label for="node-input-all"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.all"></span></label>
+			<input type="checkbox" id="node-input-all" />
+		</div>
+
+	</div>
+
+	<div id="RawResponseAttr" class="form-row node-input-raw">
+		<label for="node-input-raw"><i class="fa fa-file"></i> <span
+				data-i18n="forge.label.raw"></span></label>
+		<input type="checkbox" id="node-input-raw" />
 	</div>
 
 	<script type="text/javascript">
@@ -226,7 +239,7 @@
 				'#BucketAttr', '#RegionAttr', '#PolicyKeyAttr'
 			],
 			ListBuckets: [ // GET	buckets
-				'#Region', '#LimitAttr', '#StartAtAttr'
+				'#Region', '#LimitAttr', '#StartAtAttr', "#ForgeAllAttr"
 			],
 			BucketDetails: [ // GET	buckets/:bucketKey/details
 				'#BucketAttr'
@@ -235,7 +248,7 @@
 				'#BucketAttr'
 			],
 			ListObjects: [ // GET	buckets/:bucketKey/objects
-				'#BucketAttr', '#LimitAttr', '#StartAtAttr', '#BeginsWithAttr'
+				'#BucketAttr', '#LimitAttr', '#StartAtAttr', '#BeginsWithAttr', "#ForgeAllAttr"
 			],
 			PutObject: [ // PUT buckets/:bucketKey/objects/:objectName
 				'#BucketAttr', '#KeyAttr', '#LocalFilenameAttr', '#ContentTypeAttr', '#ContentDispositionAttr',
@@ -297,6 +310,13 @@
 			operation: {
 				value: 'GetObject'
 			},
+			raw: {
+				value: false
+			},
+			all: {
+				value: false
+			},
+			
 			bucket: {
 				//required: true,
 				value: 'FORGE_BUCKET',

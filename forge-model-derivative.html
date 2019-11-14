@@ -171,6 +171,19 @@
 				<div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-references-editor"></div>
 			</div>
 		</div>
+
+		<div id="ForgeAllAttr" class="form-row node-input-all hiddenAttrs">
+			<label for="node-input-all"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.all"></span></label>
+			<input type="checkbox" id="node-input-all" />
+		</div>
+
+	</div>
+
+	<div id="RawResponseAttr" class="form-row node-input-raw">
+		<label for="node-input-raw"><i class="fa fa-file"></i> <span
+				data-i18n="forge.label.raw"></span></label>
+		<input type="checkbox" id="node-input-raw" />
 	</div>
 
 	<script type="text/javascript">
@@ -895,6 +908,13 @@
 			operation: {
 				value: 'GetManifest'
 			},
+			raw: {
+				value: false
+			},
+			all: {
+				value: false
+			},
+			
 			urn: {
 				value: ''
 			},

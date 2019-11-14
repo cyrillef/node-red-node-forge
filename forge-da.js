@@ -23,8 +23,7 @@
 module.exports = function (RED) {
 	'use strict';
 	const fs = require('fs');
-	// const FormData = require('form-data');
-	// const path = require('path');
+	const utils = require('./utils');
 	const dav3 = require('autodesk.forge.designautomation');
 	const ForgeAPI = require('forge-apis');
 
@@ -164,6 +163,7 @@ module.exports = function (RED) {
 	RED.nodes.registerType('forge-da', ForgeDANode);
 
 	var service = {};
+	utils(service);
 
 	// #region --- Activities ---
 
@@ -201,7 +201,7 @@ module.exports = function (RED) {
 		
 		service.getParams(n, msg, {
 			activityId: service.asIs,
-			engineId: service.asIs,
+			engine: service.asIs,
 			description: service.defaultNullOrEmptyString,
 			commandline: service.defaultNullOrEmptyString,
 			appbundles: service.defaultNullOrEmptyString,
@@ -219,7 +219,7 @@ module.exports = function (RED) {
 
 		var body ={
 			id: params.activityId,
-			engine: params.engineId,
+			engine: params.engine,
 			description: params.description,
 			appbundles: service.splitStringArray(params.appbundles),
 			commandLine: service.splitStringArray(params.commandline),
@@ -258,7 +258,7 @@ module.exports = function (RED) {
 
 		service.getParams(n, msg, {
 			activityId: service.asIs,
-			activityAliasId: service.asIs,
+			alias: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
@@ -270,7 +270,7 @@ module.exports = function (RED) {
 		params.activityId = service.getUnqualifiedId(params.activityId);
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		api.getActivityAliasWithHttpInfo(params.activityId, params.activityAliasId)
+		api.getActivityAliasWithHttpInfo(params.activityId, params.alias)
 			.then(function (results) {
 				cb(null, service.formatResponse(results, params.raw));
 			})
@@ -286,7 +286,7 @@ module.exports = function (RED) {
 		params.activityId = service.getUnqualifiedId(params.activityId);
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		api.deleteActivityAliasWithHttpInfo(params.activityId, params.activityAliasId)
+		api.deleteActivityAliasWithHttpInfo(params.activityId, params.alias)
 			.then(function (results) {
 				cb(null, service.formatResponse(results, params.raw));
 			})
@@ -302,7 +302,7 @@ module.exports = function (RED) {
 		
 		service.getParams(n, msg, {
 			activityId: service.asIs,
-			activityAliasId: service.asIs,
+			alias: service.asIs,
 			version: service.defaultNullOrEmptyString,
 			receiver: service.defaultNullOrEmptyString,
 			raw: service.defaultNullOrEmptyBoolean
@@ -315,13 +315,13 @@ module.exports = function (RED) {
 		var params = service.UpdateActivityAliasParams(n, msg);
 		params.activityId = service.getUnqualifiedId(params.activityId);
 
-		var alias = {
+		var aliasSpec = {
 			version: params.version,
 			receiver: params.receiver
 		};
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		api.modifyActivityAliasWithHttpInfo(params.activityId, params.activityAliasId, alias)
+		api.modifyActivityAliasWithHttpInfo(params.activityId, params.alias, aliasSpec)
 			.then(function (results) {
 				cb(null, service.formatResponse(results, params.raw));
 			})
@@ -366,7 +366,7 @@ module.exports = function (RED) {
 		
 		service.getParams(n, msg, {
 			activityId: service.asIs,
-			activityAliasId: service.asIs,
+			alias: service.asIs,
 			version: service.asIs,
 			receiver: service.defaultNullOrEmptyString,
 			raw: service.defaultNullOrEmptyBoolean
@@ -380,7 +380,7 @@ module.exports = function (RED) {
 		params.activityId = service.getUnqualifiedId(params.activityId);
 
 		var alias = {
-			id: params.activityAliasId,
+			id: params.alias,
 			version: params.version,
 			receiver: params.receiver
 		};
@@ -474,7 +474,7 @@ module.exports = function (RED) {
 
 		service.getParams(n, msg, {
 			activityId: service.asIs,
-			engineId: service.asIs,
+			engine: service.asIs,
 			description: service.defaultNullOrEmptyString,
 			commandline: service.defaultNullOrEmptyString,
 			appbundles: service.defaultNullOrEmptyString,
@@ -492,7 +492,7 @@ module.exports = function (RED) {
 
 		var body ={
 			//id: params.activityId,
-			engine: params.engineId,
+			engine: params.engine,
 			description: params.description,
 			appbundles: service.splitStringArray(params.appbundles),
 			commandLine: service.splitStringArray(params.commandline),
@@ -606,7 +606,7 @@ module.exports = function (RED) {
 		
 		service.getParams(n, msg, {
 			appbundlesId: service.asIs,
-			engineId: service.asIs,
+			engine: service.asIs,
 			description: service.defaultNullOrEmptyString,
 			commandline: service.defaultNullOrEmptyString,
 			appbundles: service.defaultNullOrEmptyString,
@@ -623,7 +623,7 @@ module.exports = function (RED) {
 
 		var body ={
 			id: params.appbundlesId,
-			engine: params.engineId,
+			engine: params.engine,
 			description: params.description,
 			appbundles: service.splitStringArray(params.appbundles),
 			commandLine: service.splitStringArray(params.commandline),
@@ -653,7 +653,7 @@ module.exports = function (RED) {
 
 		service.getParams(n, msg, {
 			appbundlesId: service.asIs,
-			appbundlesAliasId: service.asIs,
+			alias: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
@@ -665,7 +665,7 @@ module.exports = function (RED) {
 		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		api.getAppBundleAliasWithHttpInfo(params.appbundlesId, params.appbundlesAliasId)
+		api.getAppBundleAliasWithHttpInfo(params.appbundlesId, params.alias)
 			.then(function (results) {
 				cb(null, service.formatResponse(results, params.raw));
 			})
@@ -695,7 +695,7 @@ module.exports = function (RED) {
 		
 		service.getParams(n, msg, {
 			appbundlesId: service.asIs,
-			appbundlesAliasId: service.asIs,
+			alias: service.asIs,
 			version: service.defaultNullOrEmptyString,
 			receiver: service.defaultNullOrEmptyString,
 			raw: service.defaultNullOrEmptyBoolean
@@ -714,7 +714,7 @@ module.exports = function (RED) {
 		};
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		api.modifyAppBundleAliasWithHttpInfo(params.appbundlesId, params.appbundlesAliasId, alias)
+		api.modifyAppBundleAliasWithHttpInfo(params.appbundlesId, params.alias, alias)
 			.then(function (results) {
 				cb(null, service.formatResponse(results, params.raw));
 			})
@@ -757,7 +757,7 @@ module.exports = function (RED) {
 		
 		service.getParams(n, msg, {
 			appbundlesId: service.asIs,
-			appbundlesAliasId: service.asIs,
+			alias: service.asIs,
 			version: service.asIs,
 			receiver: service.defaultNullOrEmptyString,
 			raw: service.defaultNullOrEmptyBoolean
@@ -771,7 +771,7 @@ module.exports = function (RED) {
 		params.appbundlesId = service.getUnqualifiedId(params.appbundlesId);
 
 		var alias = {
-			id: params.appbundlesAliasId,
+			id: params.alias,
 			version: params.version,
 			receiver: params.receiver
 		};
@@ -862,7 +862,7 @@ module.exports = function (RED) {
 		service.getParams(n, msg, {
 			appbundlesId: service.asIs,
 			package: service.defaultNullOrEmptyString,
-			engineId: service.asIs,
+			engine: service.asIs,
 			description: service.defaultNullOrEmptyString,
 			appbundles: service.defaultNullOrEmptyString,
 			settings: service.asIs,
@@ -879,7 +879,7 @@ module.exports = function (RED) {
 		var body ={
 			//id: params.appbundlesId,
 			package: params.package,
-			engine: params.engineId,
+			engine: params.engine,
 			description: params.description,
 			appbundles: service.splitStringArray(params.appbundles),
 			// settings: params.settings ? params.settings : null,
@@ -982,7 +982,7 @@ module.exports = function (RED) {
 		var params = {};
 		
 		service.getParams(n, msg, {
-			engineId: service.asIs,
+			engine: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
@@ -993,7 +993,7 @@ module.exports = function (RED) {
 		var params = service.GetEngineParams(n, msg);
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		api.getEngineWithHttpInfo(params.engineId)
+		api.getEngineWithHttpInfo(params.engine)
 			.then(function (results) {
 				cb(null, service.formatResponse(results, params.raw));
 			})
@@ -1099,7 +1099,7 @@ module.exports = function (RED) {
 		var params = {};
 
 		service.getParams(n, msg, {
-			engineId: service.asIs,
+			engine: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
@@ -1109,8 +1109,8 @@ module.exports = function (RED) {
 	service.GetHealth = function (n, node, oa2legged, msg, cb) {
 		var params = service.GetHealthParams(n, msg);
 
-		var api = service.dav3API(oa2legged.getCredentials());
-		api.healthStatusWithHttpInfo(params.engineId)
+		var api = service.dav3API();
+		api.healthStatusWithHttpInfo(params.engine)
 			.then(function (results) {
 				cb(null, service.formatResponse(results, params.raw));
 			})
@@ -1129,7 +1129,7 @@ module.exports = function (RED) {
 		var params = {};
 		
 		service.getParams(n, msg, {
-			owner: service.asIs,
+			nickname: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
@@ -1140,7 +1140,7 @@ module.exports = function (RED) {
 		var params = service.GetServiceLimitsParams(n, msg);
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		api.getServiceLimitWithHttpInfo(params.owner)
+		api.getServiceLimitWithHttpInfo(params.nickname)
 			.then(function (results) {
 				cb(null, service.formatResponse(results, params.raw));
 			})
@@ -1151,18 +1151,58 @@ module.exports = function (RED) {
 
 	// PUT servicelimits/:owner
 	// https://forge.autodesk.com/en/docs/design-automation/v3/reference/http/servicelimits-owner-PUT/
-	service.SetServiceLimits = function (n, node, oa2legged, msg, cb) {
-		var params = service.GetServiceLimitsParams(n, msg);
+	service.SetServiceLimitsParams = function (n, msg) {
+		var params = {};
+		
+		service.getParams(n, msg, {
+			nickname: service.asIs,
+			item: service.asIs,
+			// frontendLimits
+		//	limitPayloadSizeInKB: service.defaultNullOrEmptyString,
+		//	limitVersions: service.defaultNullOrEmptyString,
+		//	limitAliases: service.defaultNullOrEmptyString,
+		//	limitPublicAliases: service.defaultNullOrEmptyString,
+		//	limitAppUploadSizeInMB: service.defaultNullOrEmptyString,
+			limitMonthlyProcessingTimeInHours: service.defaultNullOrEmptyString,
+			// backendLimits
+			backendLimits: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
 
-		// var api = service.dav3API(oa2legged.getCredentials());
-		// api.deleteServiceLimitsWithHttpInfo(params.owner)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponse(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatError(error), null);
-		// 	});
-		cb(null, 'to be implemented');
+		return (params);
+	};
+
+	service.SetServiceLimits = function (n, node, oa2legged, msg, cb) {
+		var params = service.SetServiceLimitsParams(n, msg);
+
+		var item = {
+			frontendLimits: {
+			//	limitPayloadSizeInKB: params.limitPayloadSizeInKB,
+			//	limitVersions: params.limitVersions,
+			//	limitAliases: params.limitAliases,
+			//	limitPublicAliases: params.limitPublicAliases,
+			//	limitAppUploadSizeInMB: params.limitAppUploadSizeInMB,
+				limitMonthlyProcessingTimeInHours: params.limitMonthlyProcessingTimeInHours,
+			},
+			//backendLimits: null
+		};
+
+		if (params.backendLimits && params.backendLimits.length) {
+			item.backendLimits ={};
+			params.backendLimits.map(function (elt) {
+				item.backendLimits[elt.id] =JSON.parse(JSON.stringify(elt));
+				delete item.backendLimits[elt.id].id;
+			});
+		}
+
+		var api = service.dav3API(oa2legged.getCredentials());
+		api.modifyServiceLimitsWithHttpInfo(params.nickname, item)
+			.then(function (results) {
+				cb(null, service.formatResponse(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatError(error), null);
+			});
 	};
 
 	// DELETE servicelimits/:owner
@@ -1171,7 +1211,7 @@ module.exports = function (RED) {
 		var params = service.GetServiceLimitsParams(n, msg);
 
 		var api = service.dav3API(oa2legged.getCredentials());
-		api.deleteServiceLimitsWithHttpInfo(params.owner)
+		api.deleteServiceLimitsWithHttpInfo(params.nickname)
 			.then(function (results) {
 				cb(null, service.formatResponse(results, params.raw));
 			})
@@ -1262,13 +1302,17 @@ module.exports = function (RED) {
 		var params = {};
 		
 		service.getParams(n, msg, {
-			workitemId: service.asIs,
+			//workitemId: service.asIs,
 			activityId: service.asIs,
 			limitProcessingTimeSec: service.defaultNullOrEmptyString,
-			raw: service.defaultNullOrEmptyBoolean,
-			//arguments,
-			//signatures,
+			arguments: service.asIs,
+			baseUrls: service.defaultNullOrEmptyString,
+			signature: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
 		}, params);
+
+		if (params.limitProcessingTimeSec)
+			params.limitProcessingTimeSec =parseInt(params.limitProcessingTimeSec);
 
 		return (params);
 	};
@@ -1278,8 +1322,24 @@ module.exports = function (RED) {
 		
 		var workitem ={
 			activityId: params.activityId,
-
+			limitProcessingTimeSec: params.limitProcessingTimeSec
 		};
+		if (params.arguments && params.arguments.length) {
+			workitem.arguments ={};
+			params.arguments.map(function (elt) {
+				workitem.arguments[elt.key] =JSON.parse(JSON.stringify(elt));
+				delete workitem.arguments[elt.key].key;
+			});
+		}
+		if (params.baseUrls && params.signature) {
+			workitem.signatures = {
+				activityId: params.activityId,
+				baseUrls: {
+					url: params.baseUrls,
+					signature: params.signature
+				}
+			};
+		}
 
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.createWorkItemWithHttpInfo(workitem)
@@ -1298,8 +1358,24 @@ module.exports = function (RED) {
 		
 		var workitem ={
 			activityId: params.activityId,
-
+			limitProcessingTimeSec: params.limitProcessingTimeSec
 		};
+		if (params.arguments && params.arguments.length) {
+			workitem.arguments ={};
+			params.arguments.map(function (elt) {
+				workitem.arguments[elt.key] =JSON.parse(JSON.stringify(elt));
+				delete workitem.arguments[elt.key].key;
+			});
+		}
+		if (params.baseUrls && params.signature) {
+			workitem.signatures = {
+				activityId: params.activityId,
+				baseUrls: {
+					url: params.baseUrls,
+					signature: params.signature
+				}
+			};
+		}
 
 		var api = service.dav3API(oa2legged.getCredentials());
 		api.createWorkItemsBatchWithHttpInfo(workitem)
@@ -1313,93 +1389,7 @@ module.exports = function (RED) {
 
 	// #endregion
 
-	// #region --- Utils ---
-
-	service.asIs = {};
-	service.defaultNullOrEmptyString = {
-		type: 'string',
-		default: [null, '']
-	};
-	service.defaultNullOrEmptyDate = {
-		type: 'date',
-		default: [null, '']
-	};
-	service.defaultNullOrEmptyBoolean = {
-		type: 'bool',
-		default: [null, false]
-	};
-
-	service.copyArg = function (src, arg, out, outArg, isObject) {
-		outArg = (typeof outArg !== 'undefined') ? outArg : arg; // map property
-		var tmpValue = src[arg];
-		if (typeof tmpValue !== 'undefined') {
-			if (isObject && typeof tmpValue === 'string' && tmpValue !== '')
-				tmpValue = JSON.parse(stmpValue);
-			out[outArg] = tmpValue;
-		} else if (src.payload && src.payload.hasOwnProperty(arg) && typeof src.payload[arg] !== 'undefined') {
-			tmpValue = src.payload[arg];
-			if (isObject && typeof tmpValue === 'string' && tmpValue !== '')
-				tmpValue = JSON.parse(stmpValue);
-			out[outArg] = tmpValue;
-		} else if (src.topic === arg) {
-			tmpValue = src.payload;
-			if (isObject && typeof tmpValue === 'string' && tmpValue !== '')
-				tmpValue = JSON.parse(stmpValue);
-			out[outArg] = tmpValue;
-		}
-	};
-
-	service.getParamsSimple = function (node, msg, keys, out) {
-		var params = {};
-		for (var i = 0; i < keys.length; i++) {
-			service.copyArg(node, keys[i], params, undefined, false);
-			service.copyArg(msg, keys[i], params, undefined, false);
-		}
-	};
-
-	service.getParams = function (node, msg, params, out) {
-		out = out || {};
-		var keys = Object.keys(params);
-		for (var i = 0; i < keys.length; i++) {
-			var key = keys[i];
-			service.copyArg(node, key, out, undefined, false);
-			service.copyArg(msg, key, out, undefined, false);
-
-			if (params[key].type && params[key].type !== typeof out[key]) {
-				switch (params[key].type) {
-					case 'number':
-						out[key] = parseFloat(out[key]);
-						break;
-					default:
-						break;
-				}
-			}
-
-			if (params[key].default && params[key].default.includes(out[key])) {
-				delete out[key];
-				continue;
-			}
-			if (params[key].min && out[key] < params[key].min) {
-				out[key] = params[key].min;
-				continue;
-			}
-			if (params[key].max && out[key] > params[key].max) {
-				out[key] = params[key].max;
-				continue;
-			}
-
-			if (params[key].type && params[key].type === 'date') {
-				var dt = Date.parse(out[key]);
-				out[key] = new Date(dt).toUTCString();
-			}
-
-			if (params[key].rename) { // Should be last
-				out[params[key].rename] = out[key];
-				delete out[key];
-				continue;
-			}
-		}
-	};
+	// #region --- Utils for DA ---
 
 	service.getUnqualifiedId = function (id) {
 		// if (id.includes('.') && id.includes('+'))
@@ -1419,39 +1409,12 @@ module.exports = function (RED) {
 		return(stringArray);
 	};
 
-	service.dav3API = function (oauth2) {
+	service.dav3API = function (oauth2, oauthType) {
+		oauthType = oauthType || '2-legged';
 		let apiClient = new dav3.AutodeskForgeDesignAutomationClient( /*config.client*/ );
-		apiClient.authManager.authentications['2-legged'].accessToken = oauth2.access_token;
+		if (oauth2)
+			apiClient.authManager.authentications[oauthType].accessToken = oauth2.access_token;
 		return (new dav3.AutodeskForgeDesignAutomationApi(apiClient));
-	};
-
-	service.formatResponse = function (response, raw) {
-		if (raw) {
-			response.statusCode = response.response.statusCode;
-			response.headers = response.response.headers;
-			if (response.hasOwnProperty('data')) {
-				response.body = JSON.parse(JSON.stringify(response.data));
-				delete response.data;
-			}
-			delete response.response;
-		} else {
-			response = JSON.parse(JSON.stringify(response.data));
-		}
-		return (response);
-	};
-
-	service.formatError = function (error) {
-		console.error(error);
-		if (error.response.statusCode)
-			error.statusCode = error.response.statusCode;
-		error.headers = error.response.headers;
-		if (error.response.hasOwnProperty ('body')) {
-			error.details = JSON.parse(JSON.stringify(error.response.body));
-		} else {
-			error.details = error.response.text;
-		}
-		delete error.response;
-		return (error);
 	};
 
 	service.pagination = function (api, method, params, args) {
