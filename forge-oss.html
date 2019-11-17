@@ -66,7 +66,7 @@
 			<option value="GetSignedObject">Get Signed Object</option>
 			<option value="DeleteSignedObject">Delete Signed Object</option>
 
-			<option value="CopyObject">CopyObject *</option>
+			<option value="CopyObject">CopyObject</option>
 		</select>
 	</div>
 
@@ -110,9 +110,9 @@
 			<input type="text" id="node-input-contentDisposition"
 				data-i18n="[placeholder]forge.placeholder.contentDisposition" />
 		</div>
-		<div id="CopySourceAttr" class="form-row hiddenAttrs">
-			<label for="node-input-copySource"><i class="fa fa-files-o"></i> <span data-i18n="forge.label.copySource"></span></label>
-			<input type="text" id="node-input-copySource" data-i18n="[placeholder]forge.placeholder.copySource" />
+		<div id="CopyAttr" class="form-row hiddenAttrs">
+			<label for="node-input-copy"><i class="fa fa-files-o"></i> <span data-i18n="forge.label.copy"></span></label>
+			<input type="text" id="node-input-copy" data-i18n="[placeholder]forge.placeholder.copy" />
 		</div>
 
 		<div id="LimitAttr" class="form-row node-input-limit hiddenAttrs">
@@ -278,7 +278,7 @@
 				'#GUIDAttr', '#RegionAttr'
 			],
 			CopyObject: [ // PUT	buckets/:bucketKey/objects/:objectName/copyto/:newObjectName
-				'#BucketAttr', '#KeyAttr', '#CopySourceAttr'
+				'#BucketAttr', '#KeyAttr', '#CopyAttr'
 			]
 		};
 		$('#node-input-operation').on('change', function () {
@@ -346,7 +346,7 @@
 			contentDisposition: {
 				value: null
 			},
-			copySource: {
+			copy: {
 				value: ''
 			},
 			localFilename: {
@@ -437,7 +437,7 @@
 			var trimFields = [
 				'bucket',
 				'key',
-				'copySource',
+				'copy',
 				'startAt',
 				'beginsWith',
 				'localFilename',

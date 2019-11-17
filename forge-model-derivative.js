@@ -22,8 +22,6 @@
 
 module.exports = function (RED) {
     "use strict";
-    var url = require('url');
-    var fs = require('fs');
     var utils = require('./utils');
     var ForgeAPI = require('forge-apis');
     
@@ -103,14 +101,15 @@ module.exports = function (RED) {
                             continue;
                         msgErr[key] = msg[key];
                     }
-                    msgErr.err.op = 'oss:' + node.mdProperties.operation;
+                    msgErr.err.op = 'md:' + node.mdProperties.operation;
                     node.send([null, msgErr]);
                     return;
                 }
 
                 msg.payload = data;
                 node.status({});
-                msg.topic = node.topic;
+                msg.topic = node.mdProperties.topic || node.topic;
+				msg.op ='md:' + node.mdProperties.operation;
                 node.send([msg, null]);
             };
 
@@ -189,12 +188,11 @@ module.exports = function (RED) {
 
         var apis = new ForgeAPI.DerivativesApi();
         apis.translate(jobs, params, oa2legged, oa2legged.getCredentials())
-            .then(function (response) {
-                //console.log(JSON.stringify(response.body, null, 4));
-                cb(null, response);
+            .then(function (results) {
+                cb(null, service.formatResponseOldSDK(results, params.raw));
             })
             .catch(function (error) {
-                cb(error, null);
+                cb(service.formatErrorOldSDK(error), null);
             });
     };
 
@@ -218,12 +216,11 @@ module.exports = function (RED) {
 
         var apis = new ForgeAPI.DerivativesApi();
         apis.getManifest(params.urn, params, oa2legged, oa2legged.getCredentials())
-            .then(function (response) {
-                //console.log(JSON.stringify(response.body, null, 4));
-                cb(null, response);
+            .then(function (results) {
+                cb(null, service.formatResponseOldSDK(results, params.raw));
             })
             .catch(function (error) {
-                cb(error, null);
+                cb(service.formatErrorOldSDK(error), null);
             });
     };
 
@@ -246,12 +243,11 @@ module.exports = function (RED) {
 
         var apis = new ForgeAPI.DerivativesApi();
         apis.deleteManifest(params.urn, oa2legged, oa2legged.getCredentials())
-            .then(function (response) {
-                //console.log(JSON.stringify(response.body, null, 4));
-                cb(null, response);
+            .then(function (results) {
+                cb(null, service.formatResponseOldSDK(results, params.raw));
             })
             .catch(function (error) {
-                cb(error, null);
+                cb(service.formatErrorOldSDK(error), null);
             });
     };
 
@@ -275,12 +271,11 @@ module.exports = function (RED) {
 
         var apis = new ForgeAPI.DerivativesApi();
         apis.getMetadata(params.urn, params, oa2legged, oa2legged.getCredentials())
-            .then(function (response) {
-                //console.log(JSON.stringify(response.body, null, 4));
-                cb(null, response);
+            .then(function (results) {
+                cb(null, service.formatResponseOldSDK(results, params.raw));
             })
             .catch(function (error) {
-                cb(error, null);
+                cb(service.formatErrorOldSDK(error), null);
             });
     };
 
@@ -308,12 +303,11 @@ module.exports = function (RED) {
 
         var apis = new ForgeAPI.DerivativesApi();
         apis.getModelviewMetadata(params.urn, params.guid, params, oa2legged, oa2legged.getCredentials())
-            .then(function (response) {
-                //console.log(JSON.stringify(response.body, null, 4));
-                cb(null, response);
+            .then(function (results) {
+                cb(null, service.formatResponseOldSDK(results, params.raw));
             })
             .catch(function (error) {
-                cb(error, null);
+                cb(service.formatErrorOldSDK(error), null);
             });
     };
 
@@ -342,12 +336,11 @@ module.exports = function (RED) {
 
         var apis = new ForgeAPI.DerivativesApi();
         apis.getModelviewProperties(params.urn, params.guid, params, oa2legged, oa2legged.getCredentials())
-            .then(function (response) {
-                //console.log(JSON.stringify(response.body, null, 4));
-                cb(null, response);
+            .then(function (results) {
+                cb(null, service.formatResponseOldSDK(results, params.raw));
             })
             .catch(function (error) {
-                cb(error, null);
+                cb(service.formatErrorOldSDK(error), null);
             });
     };
 
@@ -390,12 +383,11 @@ module.exports = function (RED) {
                 returnType, oa2legged, oa2legged.getCredentials()
             )
             // apis.getModelviewProperties(params.urn, params.guid, params, oa2legged, oa2legged.getCredentials())
-            .then(function (response) {
-                //console.log(JSON.stringify(response.body, null, 4));
-                cb(null, response);
+            .then(function (results) {
+                cb(null, service.formatResponseOldSDK(results, params.raw));
             })
             .catch(function (error) {
-                cb(error, null);
+                cb(service.formatErrorOldSDK(error), null);
             });
     };
 
@@ -420,12 +412,11 @@ module.exports = function (RED) {
 
         var apis = new ForgeAPI.DerivativesApi();
         apis.getThumbnail(params.urn, params, oa2legged, oa2legged.getCredentials())
-            .then(function (response) {
-                //console.log(JSON.stringify(response.body, null, 4));
-                cb(null, response);
+            .then(function (results) {
+                cb(null, service.formatResponseOldSDK(results, params.raw));
             })
             .catch(function (error) {
-                cb(error, null);
+                cb(service.formatErrorOldSDK(error), null);
             });
     };
 
@@ -450,12 +441,11 @@ module.exports = function (RED) {
 
         var apis = new ForgeAPI.DerivativesApi();
         apis.getDerivativeManifest(params.urn, params.derivativeurn, params, oa2legged, oa2legged.getCredentials())
-            .then(function (response) {
-                //console.log(JSON.stringify(response.body, null, 4));
-                cb(null, response);
+            .then(function (results) {
+                cb(null, service.formatResponseOldSDK(results, params.raw));
             })
             .catch(function (error) {
-                cb(error, null);
+                cb(service.formatErrorOldSDK(error), null);
             });
     };
 
@@ -479,12 +469,11 @@ module.exports = function (RED) {
 
         var apis = new ForgeAPI.DerivativesApi();
         apis.getFormats(params, oa2legged, oa2legged.getCredentials())
-            .then(function (response) {
-                //console.log(JSON.stringify(response.body, null, 4));
-                cb(null, response);
+            .then(function (results) {
+                cb(null, service.formatResponseOldSDK(results, params.raw));
             })
             .catch(function (error) {
-                cb(error, null);
+                cb(service.formatErrorOldSDK(error), null);
             });
     };
 

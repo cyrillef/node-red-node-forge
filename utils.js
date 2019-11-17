@@ -19,6 +19,8 @@
 // SOFTWARE.
 
 module.exports = function (service) {
+	const fs = require('fs');
+
 	service = service || {};
 
 	service.asIs = {};
@@ -152,6 +154,29 @@ module.exports = function (service) {
 		return (new Buffer(base64, 'base64').toString());
 	};
 
+	service.safeBase64encode = function (st) {
+		return (Buffer.from(st).toString('base64')
+			.replace(/\+/g, '-') // Convert '+' to '-'
+			.replace(/\//g, '_') // Convert '/' to '_'
+			.replace(/=+$/, '')
+		);
+	};
+
+	service.formatResponseOldSDK = function (response, raw) {
+		if (raw) {
+			if (response.hasOwnProperty('data')) {
+				response.body = JSON.parse(JSON.stringify(response.data));
+				delete response.data;
+			}
+		} else {
+			if (response.hasOwnProperty('data'))
+				response = JSON.parse(JSON.stringify(response.data));
+			else if (response.hasOwnProperty('body'))
+				response = JSON.parse(JSON.stringify(response.body));
+		}
+		return (response);
+	};
+
 	service.formatResponse = function (response, raw) {
 		if (raw) {
 			response.statusCode = response.response.statusCode;
@@ -162,9 +187,17 @@ module.exports = function (service) {
 			}
 			delete response.response;
 		} else {
-			response = JSON.parse(JSON.stringify(response.data));
+			if (response.hasOwnProperty('data'))
+				response = JSON.parse(JSON.stringify(response.data));
+			else if (response.hasOwnProperty('body'))
+				response = JSON.parse(JSON.stringify(response.body));
 		}
 		return (response);
+	};
+
+	service.formatErrorOldSDK = function (error) {
+		console.error(error);
+		return (error);
 	};
 
 	service.formatError = function (error) {

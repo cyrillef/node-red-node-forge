@@ -120,7 +120,8 @@ module.exports = function (RED) {
 
 				msg.payload = data;
 				node.status({});
-				msg.topic = node.topic;
+				msg.topic = node.ossProperties.topic || node.topic;
+				msg.op ='oss:' + node.ossProperties.operation;
 				node.send([msg, null]);
 			};
 
@@ -181,6 +182,7 @@ module.exports = function (RED) {
 			region: {
 				default: ['US']
 			},
+			all: service.defaultNullOrEmptyBoolean,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 		return (params);
@@ -190,21 +192,12 @@ module.exports = function (RED) {
 		var params = service.ListBucketsParams(n, msg);
 
 		var ossBuckets = new ForgeAPI.BucketsApi();
-		ossBuckets.getBuckets(params, oa2legged, oa2legged.getCredentials())
-			.then(function (buckets) {
-				//console.log(JSON.stringify(buckets.body.items, null, 4));
-				if (!buckets.body.hasOwnProperty('next')) {
-					cb(null, buckets);
-				} else {
-					var url_parts = url.parse(buckets.body.next, true);
-					buckets.body.nextKey = url_parts.query.startAt;
-					buckets.body.limit = url_parts.query.limit;
-					buckets.body.region = params.region;
-					cb(null, buckets);
-				}
+		service.pagination(ossBuckets, ossBuckets.getBuckets, params, [ params, oa2legged, oa2legged.getCredentials() ])
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
 	};
 
@@ -215,6 +208,11 @@ module.exports = function (RED) {
 		//service.copyArg(n, 'bucket', params, undefined, false);
 		service.BucketKey(n, params);
 		service.copyArg(msg, 'bucket', params, undefined, false);
+
+		service.getParams(n, msg, {
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
 		return (params);
 	};
 
@@ -223,14 +221,12 @@ module.exports = function (RED) {
 
 		var ossBuckets = new ForgeAPI.BucketsApi();
 		ossBuckets.getBucketDetails(params.bucket, oa2legged, oa2legged.getCredentials())
-			.then(function (bucket) {
-				//console.log(JSON.stringify(buckets.body.items, null, 4));
-				cb(null, bucket);
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
-		//cb(null, params);
 	};
 
 	// POST	buckets
@@ -262,14 +258,12 @@ module.exports = function (RED) {
 
 		var ossBuckets = new ForgeAPI.BucketsApi();
 		ossBuckets.createBucket(postBuckets, params, oa2legged, oa2legged.getCredentials())
-			.then(function (bucket) {
-				//console.log(JSON.stringify(buckets.body.items, null, 4));
-				cb(null, bucket);
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
-		//cb(null, params);
 	};
 
 	// DELETE	buckets/:bucketKey
@@ -279,6 +273,11 @@ module.exports = function (RED) {
 		//service.copyArg(n, 'bucket', params, undefined, false);
 		service.BucketKey(n, params);
 		service.copyArg(msg, 'bucket', params, undefined, false);
+
+		service.getParams(n, msg, {
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
 		return (params);
 	};
 
@@ -287,14 +286,12 @@ module.exports = function (RED) {
 
 		var ossBuckets = new ForgeAPI.BucketsApi();
 		ossBuckets.deleteBucket(params.bucket, oa2legged, oa2legged.getCredentials())
-			.then(function (bucket) {
-				//console.log(JSON.stringify(buckets.body.items, null, 4));
-				cb(null, bucket);
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
-		//cb(null, params);
 	};
 
 	// #endregion
@@ -320,6 +317,7 @@ module.exports = function (RED) {
 			},
 			startAt: service.defaultNullOrEmptyString,
 			beginsWith: service.defaultNullOrEmptyString,
+			all: service.defaultNullOrEmptyBoolean,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 		return (params);
@@ -329,23 +327,13 @@ module.exports = function (RED) {
 		var params = service.ListObjectsParams(n, msg);
 
 		var ossObjects = new ForgeAPI.ObjectsApi();
-		ossObjects.getObjects(params.bucket, params, oa2legged, oa2legged.getCredentials())
-			.then(function (objects) {
-				//console.log(JSON.stringify(objects.body.items, null, 4));
-				if (!objects.body.hasOwnProperty('next')) {
-					cb(null, objects);
-				} else {
-					var url_parts = url.parse(objects.body.next, true);
-					objects.body.nextKey = url_parts.query.startAt;
-					objects.body.limit = params.limit || 10;
-					objects.body.beginsWidth = params.beginsWidth || '';
-					cb(null, objects);
-				}
+		service.pagination(ossObjects, ossObjects.getObjects, params, [ params.bucket, params, oa2legged, oa2legged.getCredentials() ])
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
-		//cb(null, params);
 	};
 
 	// GET	buckets/:bucketKey/objects/:objectName/details
@@ -379,13 +367,13 @@ module.exports = function (RED) {
 
 		var ossObjects = new ForgeAPI.ObjectsApi();
 		ossObjects.getObjectDetails(params.bucket, params.key, params, oa2legged, oa2legged.getCredentials())
-			.then(function (obj) {
-				cb(null, obj);
+			.then(function (results) {
+				results.body.urn = service.safeBase64encode(results.body.objectId);
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
-		//cb(null, params);
 	};
 
 	// GET	buckets/:bucketKey/objects/:objectName
@@ -413,11 +401,11 @@ module.exports = function (RED) {
 
 		var ossObjects = new ForgeAPI.ObjectsApi();
 		ossObjects.getObject(params.bucket, params.key, params, oa2legged, oa2legged.getCredentials())
-			.then(function (obj) {
-				cb(null, obj);
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
 	};
 
@@ -474,13 +462,13 @@ module.exports = function (RED) {
 		var params = service.PutObjectParams(n, msg);
 
 		service.PutObject_put(oa2legged, params)
-			.then(function (obj) {
-				cb(null, obj);
+			.then(function (results) {
+				results.body.urn = service.safeBase64encode(results.body.objectId);
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
-		//cb(null, params);
 	};
 
 	service.chunkSize = 5 * 1024 * 1024; // 5Mb
@@ -615,13 +603,12 @@ module.exports = function (RED) {
 
 		var ossObjects = new ForgeAPI.ObjectsApi();
 		ossObjects.deleteObject(params.bucket, params.key, oa2legged, oa2legged.getCredentials())
-			.then(function (obj) {
-				cb(null, obj);
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
-		//cb(null, params);
 	};
 
 	// POST	buckets/:bucketKey/objects/:objectName/signed
@@ -656,16 +643,15 @@ module.exports = function (RED) {
 
 		var ossObjects = new ForgeAPI.ObjectsApi();
 		ossObjects.createSignedResource(params.bucket, params.key, postBucketsSigned, params, oa2legged, oa2legged.getCredentials())
-			.then(function (obj) {
-				var url_parts = url.parse(obj.body.signedUrl, true);
-				obj.body.guid = url_parts.pathname.split('/').pop();
-				obj.body.region = url_parts.query.region || 'US';
-				cb(null, obj);
+			.then(function (results) {
+				var url_parts = url.parse(results.body.signedUrl, true);
+				results.body.guid = url_parts.pathname.split('/').pop();
+				results.body.region = url_parts.query.region || 'US';
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
-		// cb(null, params);
 	};
 
 	// PUT	signedresources/:id
@@ -715,13 +701,12 @@ module.exports = function (RED) {
 		var params = service.PutSignedObjectParams(n, msg);
 
 		service.PutSignedObject_put(oa2legged, params)
-			.then(function (obj) {
-				cb(null, obj);
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
-		//cb(null, params);
 	};
 
 	service.PutSignedObject_full = function (oa2legged, options, size, rstream) {
@@ -856,11 +841,11 @@ module.exports = function (RED) {
 
 		var ossObjects = new ForgeAPI.ObjectsApi();
 		ossObjects.getSignedResource(params.guid, params, oa2legged, oa2legged.getCredentials())
-			.then(function (obj) {
-				cb(null, obj);
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
 	};
 
@@ -883,13 +868,12 @@ module.exports = function (RED) {
 
 		var ossObjects = new ForgeAPI.ObjectsApi();
 		ossObjects.deleteSignedResource(params.guid, params, oa2legged, oa2legged.getCredentials())
-			.then(function (obj) {
-				cb(null, obj);
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
-		// cb(null, params);
 	};
 
 	// PUT	buckets/:bucketKey/objects/:objectName/copyto/:newObjectName
@@ -902,7 +886,7 @@ module.exports = function (RED) {
 
 		service.getParams(n, msg, {
 			key: service.asIs,
-			copySource: service.asIs,
+			copy: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
@@ -913,13 +897,47 @@ module.exports = function (RED) {
 		var params = service.CopyObjectParams(n, msg);
 
 		var ossObjects = new ForgeAPI.ObjectsApi();
-		ossObjects.copyTo(params.bucket, params.copySource, params.key, oa2legged, oa2legged.getCredentials())
-			.then(function (obj) {
-				cb(null, obj);
+		ossObjects.copyTo(params.bucket, params.key, params.copy, oa2legged, oa2legged.getCredentials())
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch(function (error) {
-				cb(error, null);
+				cb(service.formatErrorOldSDK(error), null);
 			});
+	};
+
+	// #endregion
+
+	// #region --- Utils for OSS ---
+
+	service.pagination = function (api, method, params, args) {
+		var that = this;
+		return (new Promise(function (fulfill, reject) {
+			method.apply(api, args)
+				.then(function (results) {
+					if (params.all && results.body.next) {
+						var url_parts = url.parse(results.body.next, true);
+						// results.body.nextKey = url_parts.query.startAt;
+						// results.body.limit = url_parts.query.limit;
+						// results.body.region = params.region;
+						params.startAt = url_parts.query.startAt;
+						service.pagination (api, method, params, args)
+							.then(function (results2) {
+								results.body.items = [ ...results.body.items, ...results2.body.items] ;
+								delete results.body.next;
+								fulfill(results);
+							})
+							.catch(function (error) {
+								reject(error);
+							});
+						return;
+					}
+					fulfill(results);
+				})
+				.catch(function (error) {
+					reject(error);
+				});
+		}));
 	};
 
 	// #endregion

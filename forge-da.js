@@ -22,10 +22,9 @@
 
 module.exports = function (RED) {
 	'use strict';
-	const fs = require('fs');
+	var http = require('https');
 	const utils = require('./utils');
 	const dav3 = require('autodesk.forge.designautomation');
-	const ForgeAPI = require('forge-apis');
 
 	// const {
 	//   DesignAutomationClient,
@@ -131,8 +130,7 @@ module.exports = function (RED) {
 
 				msg.payload = data;
 				node.status({});
-				if (node.topic)
-					msg.topic = node.topic;
+				msg.topic = node.daProperties.topic || node.topic;
 				msg.op ='da:' + node.daProperties.operation;
 				node.send([msg, null]);
 			};
@@ -1388,6 +1386,43 @@ module.exports = function (RED) {
 	};
 
 	// #endregion
+
+	// #region --- Utils ---
+
+	// Get Report
+	service.GetReportParams = function (n, msg) {
+		var params = {};
+		
+		service.getParams(n, msg, {
+			url: service.asIs
+		}, params);
+		
+		return (params);
+	};
+
+	service.GetReport = function (n, node, oa2legged, msg, cb) {
+		var params = service.GetReportParams(n, msg);
+
+		http.get(
+			params.url,
+			function (response) {
+				response.setEncoding('utf8');
+				let rawData = '';
+				response.on('data', function (chunk) {
+					rawData += chunk;
+				});
+				response.on('end', function () {
+					cb(null, rawData);
+				});
+
+				if ( response.statusCode !== 200 )
+					cb(response, null);
+			}
+		);
+	};
+
+	// #endregion
+
 
 	// #region --- Utils for DA ---
 

@@ -34,7 +34,8 @@
       "limitMonthlyProcessingTimeInHours": "Max usage",
       "backendLimits": "Backend Limits",
       "raw": "Raw Response",
-      "all": "Forge All"
+      "all": "Forge All",
+      "url": "Url"
     },
     "placeholder": {
       "name": "Name",
@@ -69,7 +70,8 @@
       "limitMonthlyProcessingTimeInHours": "Max engines usage (hours)",
       "backendLimits": "Backend Limits",
       "raw": "Raw Response",
-      "all": "Forge All"
+      "all": "Forge All",
+      "url": "Url"
     },
     "tip": {
       "config1": "",

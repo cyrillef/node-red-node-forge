@@ -103,6 +103,9 @@
 		<option value="CreateWorkitems">Create Workitems</option>
 		<option value="CreateBatchWorkitems">Create Batch Workitems</option>
 		
+		<option value="">--- Utils ---</option>
+		<option value="GetReport">Get Report</option>
+
 		</select>
 	</div>
 	<div id="AttrHolder">
@@ -278,6 +281,11 @@
 			<input type="checkbox" id="node-input-all" />
 		</div>
 
+		<div id="UrlAttr" class="form-row node-input-url hiddenAttrs">
+			<label for="node-input-url"><i class="fa fa-at"></i> <span data-i18n="forge.label.url"></span></label>
+			<input type="text" id="node-input-url" data-i18n="[placeholder]forge.placeholder.url" />
+		</div>
+
 	</div>
 	
 	<div id="RawResponseAttr" class="form-row node-input-raw">
@@ -385,6 +393,10 @@
 			"#ActivityIdAttr", "#LimitProcessingTimeSecAttr",
 			"#BaseUrlsAttr", "#SignatureAttr", "#ArgumentsAttr"
 		],
+
+		// --- Utils ---
+
+		GetReport: [ "#UrlAttr" ],
 		
 	};
 	
@@ -1251,6 +1263,10 @@
 			},
 			backendLimits: {
 				value: null
+			},
+
+			url: {
+				value: ''
 			}
 
 		},
