@@ -1,3 +1,269 @@
 <script type="text/x-red" data-help-name="forge-oss">
 	<p>Forge Bucket node. Manage Forge OSS Buckets and their Objects.</p>
+
+	<h3>Operations</h3>
+	<dl class="message-properties">
+		<dt>operation <span class="property-type">string</span></dt>
+		<dd>The Forge Design Automation operation/endpoint to execute.</dd>
+		
+		<h3 class="forge">CreateBucket</h3>
+		<dl class="message-properties forge">
+			<dd>Creates a bucket. Buckets are arbitrary spaces that are created by applications and are used to store objects for later retrieval. A bucket is owned by the application that creates it.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#bucket">bucket</a>, <a href="#region">region</a>, <a href="#policyKey">policyKey</a></dd>
+		</dl>
+
+		<h3>ListBuckets</h3>
+		<dl class="message-properties">
+			<dd>This endpoint will return the buckets owned by the application. This endpoint supports pagination.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#limit">limit</a>, <a href="#startAt">startAt</a>, <a href="#region">region</a>, <a href="#all">all</a></dd>
+		</dl>
+
+		<h3>BucketDetails</h3>
+		<dl class="message-properties">
+			<dd>Return bucket details in JSON format if the caller is the owner of the bucket. A request by any other application will result in a response of 403 Forbidden.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#bucket">bucket</a></dd>
+		</dl>
+
+		<h3>DeleteBucket</h3>
+		<dl class="message-properties">
+			<dd>Deletes a bucket (undocumented API, use with caution).</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#bucket">bucket</a></dd>
+		</dl>
+
+		<h3>ListObjects</h3>
+		<dl class="message-properties">
+			<dd>List objects in a bucket. It is only available to the bucket creator.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#limit">limit</a>, <a href="#startAt">startAt</a>, <a href="#beginsWith">beginsWith</a>,
+				<a href="#bucket">bucket</a>, <a href="#region">region</a>, <a href="#all">all</a></dd>
+		</dl>
+
+		<h3>PutObject</h3>
+		<dl class="message-properties">
+			<dd>Upload an object. If the specified object name already exists in the bucket, the uploaded content will overwrite the existing content for the bucket name/object name combination.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#bucket">bucket</a>, <a href="#key">key</a>, <a href="#localFilename">localFilename</a>,
+				<a href="#ifMatch">ifMatch</a>, <a href="#contentType">contentType</a>, <a href="#contentDisposition">contentDisposition</a></dd>
+		</dl>
+
+		<h3>GetObject</h3>
+		<dl class="message-properties">
+			<dd>Download an object.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#bucket">bucket</a>, <a href="#key">key</a>, <a href="#range">range</a>,
+				<a href="#ifNoneMatch">ifNoneMatch</a>, <a href="#ifModifiedSince">ifModifiedSince</a>,
+				<a href="#acceptEncoding">acceptEncoding</a>
+			</dd>
+		</dl>
+
+		<h3>DeleteObject</h3>
+		<dl class="message-properties">
+			<dd>Deletes an object from the bucket.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#bucket">bucket</a>, <a href="#key">key</a></dd>
+		</dl>
+
+		<h3>ObjectDetails</h3>
+		<dl class="message-properties">
+			<dd>Returns object details in JSON format.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#bucket">bucket</a>, <a href="#key">key</a>, <a href="#with">with</a>, <a href="#ifModifiedSince">ifModifiedSince</a></dd>
+		</dl>
+
+		<h3>CreateSignature</h3>
+		<dl class="message-properties">
+			<dd>This endpoint creates a signed URL that can be used to download an object within the specified expiration time.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#bucket">bucket</a>, <a href="#key">key</a>, <a href="#access">access</a>,
+				<a href="#singleUse">singleUse</a>, <a href="#minutesExpiration">minutesExpiration</a></dd> 
+		</dl>
+
+		<h3>PutSignedObject</h3>
+		<dl class="message-properties">
+			<dd>Overwrite a existing object using a signed URL.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#guid">guid</a>, <a href="#localFilename">localFilename</a>, <a href="#ifMatch">ifMatch</a>,
+				<a href="#contentDisposition">contentDisposition</a>, <a href="#region">region</a></dd>
+		</dl>
+
+		<h3>GetSignedObject</h3>
+		<dl class="message-properties">
+			<dd>Download an object using a signed URL.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#guid">guid</a>, <a href="#range">range</a>, <a href="#ifNoneMatch">ifNoneMatch</a>,
+				<a href="#ifModifiedSince">ifModifiedSince</a>, <a href="#acceptEncoding">acceptEncoding</a>,
+				<a href="#region">region</a></dd>
+		</dl>
+
+		<h3>DeleteSignedObject</h3>
+		<dl class="message-properties">
+			<dd>Delete a signed URL.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#guid">guid</a>, <a href="#region">region</a></dd>
+		</dl>
+
+		<h3>CopyObject</h3>
+		<dl class="message-properties">
+			<dd>Copies an object to another object name in the same bucket.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#bucket">bucket</a>, <a href="#key">key</a>, <a href="#copy">copy</a></dd>
+		</dl>
+
+	</dl>
+
+	<h3>Parameters</h3>
+
+	<a name="bucket" />
+	<dl class="message-properties">
+		<dt>bucket <span class="property-type">string</span></dt>
+		<dd>A unique name you assign to a bucket. It must be globally unique across all applications and
+			regions, otherwise the call will fail. Possible values: -_.a-z0-9 (between 3-128 characters in
+			length). Note that you cannot change a bucket key.</dd>
+	</dl>
+
+	<a name="region" />
+	<dl class="message-properties">
+		<dt class="optional">region <span class="property-type">enum (string)</span></dt>
+		<dd>The region where the bucket resides Acceptable values: US, EMEA Default: US</dd>
+	</dl>
+
+	<a name="policyKey" />
+	<dl class="message-properties">
+		<dt>policyKey <span class="property-type">enum (string)</span></dt>
+		<dd>Data retention policy. Acceptable values: transient, temporary, persistent</dd>
+	</dl>
+
+	<a name="limit" />
+	<dl class="message-properties">
+		<dt>limit <span class="property-type">int</span></dt>
+		<dd>Limit to the response size. Acceptable values: 1-100 Default = 10</dd>
+	</dl>
+
+	<a name="startAt" />
+	<dl class="message-properties">
+		<dt>startAt <span class="property-type">string</span></dt>
+		<dd>Key to use as an offset to continue pagination This is typically the last bucket key found in a preceding GET buckets response</dd>
+	</dl>
+	
+	<a name="beginWith" />
+	<dl class="message-properties">
+		<dt>beginWith <span class="property-type">string</span></dt>
+		<dd>String to filter the result set by. The result set is restricted to items whose objectKey begins with the provided string.</dd>
+	</dl>
+	
+	<a name="key" />
+	<dl class="message-properties">
+		<dt>key <span class="property-type">string</span></dt>
+		<dd>Object name being uploaded</dd>
+	</dl>
+	
+	<a name="copy" />
+	<dl class="message-properties">
+		<dt>copy <span class="property-type">string</span></dt>
+		<dd>Object key to use as the destination</dd>
+	</dl>
+	
+	<a name="localFilename" />
+	<dl class="message-properties">
+		<dt>localFilename <span class="property-type">string or buffer</span></dt>
+		<dd>Content to upload.</dd>
+	</dl>
+	
+	<a name="contentType" />
+	<dl class="message-properties">
+		<dt>contentType <span class="property-type">string</span></dt>
+		<dd>It is recommended to add this header if the content-type is known. Accepts any content-type except multipart/form-data.</dd>
+	</dl>
+	
+	<a name="contentDisposition" />
+	<dl class="message-properties">
+		<dt>contentDisposition <span class="property-type">string</span></dt>
+		<dd>The suggested default filename when downloading this object to a file after it has been uploaded.</dd>
+	</dl>
+	
+	<a name="acceptEncoding" />
+	<dl class="message-properties">
+		<dt>acceptEncoding <span class="property-type">string</span></dt>
+		<dd>When gzip is specified, a gzip compressed stream of the object’s bytes will be returned in the response. Cannot use “Accept-Encoding:gzip” with Range header containing an end byte range. End byte range will not be honored if “Accept-Encoding: gzip” header is used.</dd>
+	</dl>
+	
+	<a name="with" />
+	<dl class="message-properties">
+		<dt>with <span class="property-type">enum (string)</span></dt>
+		<dd>Extra information in details; multiple uses are supported Acceptable values: createdDate, lastAccessedDate, lastModifiedDate</dd>
+	</dl>
+	
+	<a name="ifMatch" />
+	<dl class="message-properties">
+		<dt>ifMatch <span class="property-type">string</span></dt>
+		<dd>When overwriting an object, use the latest SHA-1 hash to verify that you are overwriting the latest data.
+				A SHA-1 hash is returned every time you upload or overwrite an object. If the SHA-1 hash in the header does not match the current SHA-1 hash stored for this object in OSS, the request fails (status code 412).</dd>
+	</dl>
+	
+	<a name="ifNodeMatch" />
+	<dl class="message-properties">
+		<dt>ifNodeMatch <span class="property-type">string</span></dt>
+		<dd>The value of this header is compared to the ETAG of the object. If they match, the body will not be included in the response. Only the object information will be included.</dd>
+	</dl>
+	
+	<a name="ifModifiedSince" />
+	<dl class="message-properties">
+		<dt>ifModifiedSince <span class="property-type">string</span></dt>
+		<dd>If the requested object has not been modified since the time specified in this field, an entity will not be returned from the server; instead, a 304 (not modified) response will be returned without any message-body.</dd>
+	</dl>
+	
+	<a name="range" />
+	<dl class="message-properties">
+		<dt>range <span class="property-type">string</span></dt>
+		<dd>Byte range of the chunk being uploaded/downloaded.</dd>
+	</dl>
+	
+	<a name="access" />
+	<dl class="message-properties">
+		<dt>access <span class="property-type">enum (string)</span></dt>
+		<dd>Access for signed resource Acceptable values: read, write, readwrite, full; Default value: read</dd>
+	</dl>
+	
+	<a name="singleUse" />
+	<dl class="message-properties">
+		<dt>singleUse <span class="property-type">boolean</span></dt>
+		<dd>true if the URL will expire after it is used the first time. If you download the object, the URL will expire when the download is complete; default: false</dd>
+	</dl>
+	
+	<a name="minutesExpiration" />
+	<dl class="message-properties">
+		<dt>minutesExpiration <span class="property-type">int</span></dt>
+		<dd>Expiration time in minutes; default: 60</dd>
+	</dl>
+	
+	<a name="guid" />
+	<dl class="message-properties">
+		<dt>guid <span class="property-type">string</span></dt>
+		<dd>ID of signed resource.</dd>
+	</dl>
+	
+	<a name="all" />
+	<dl class="message-properties">
+		<dt>all <span class="property-type">boolean</span></dt>
+		<dd>Force to the node to get the complete list.</dd>
+	</dl>
+	
+	<a name="raw" />
+	<dl class="message-properties">
+		<dt>raw <span class="property-type">boolean</span></dt>
+		<dd>Get the raw HTPP response (includes headers and statusCode).</dd>
+	</dl>
+	
+
+<h3>References</h3>
+	<ul>
+	<li><a href="https://forge.autodesk.com/en/docs/data/v2/developers_guide/overview/">Forge Data Management (OSS)</a></li>
+	<li><a href="https://forge.autodesk.com/en/docs/data/v2/reference/http/">API Reference</a></li>
+	<li><a href="https://forge.autodesk.com/blog">Forge Blogs</a></li>
+	</ul>
+
 </script>

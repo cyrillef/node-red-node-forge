@@ -819,9 +819,6 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/signedresources-:id-GET/
 	service.GetSignedObjectParams = function (n, msg) {
 		var params = {};
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
 
 		service.getParams(n, msg, {
 			guid: service.asIs,

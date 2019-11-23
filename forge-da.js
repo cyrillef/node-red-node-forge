@@ -1423,7 +1423,6 @@ module.exports = function (RED) {
 
 	// #endregion
 
-
 	// #region --- Utils for DA ---
 
 	service.getUnqualifiedId = function (id) {

@@ -1,45 +1,45 @@
 <script type="text/x-red" data-help-name="forge-da">
-  <p>Connects to a forge design automation services and publishes output messages.</p>
+<p>Connects to a forge design automation services and publishes output messages.</p>
+<p>The node contains several operations; each operation requires specific mandatory and optional fields to run.</p>
 
 <h3>Inputs</h3>
-    <dl class="message-properties">
-        <dt>payload
-            <span class="property-type">string</span>
-        </dt>
-        <dd> the payload of the message to process any of listed Forge Design Automation operation. </dd>
-        <dt class="optional">topic <span class="property-type">string</span></dt>
-        <dd>Forge Design Automation topic to publish.</dd>
-    </dl>
+	<dl class="message-properties">
+		<dt>payload
+			<span class="property-type">string</span>
+		</dt>
+		<dd> the payload of the message to process any of listed Forge Design Automation operation. </dd>
+		
+		<dt class="optional">topic <span class="property-type">string</span></dt>
+		<dd>Forge Design Automation topic to publish.</dd>
 
- <h3>Outputs</h3>
-     <ol class="node-ports">
-         <li>Standard output
-             <dl class="message-properties">
-                 <dt>payload <span class="property-type">string</span></dt>
-                 <dd>the standard output of the operation.</dd>
-             </dl>
-         </li>
-         <li>Standard error
-             <dl class="message-properties">
-                 <dt>payload <span class="property-type">string</span></dt>
-                 <dd>the standard error of the operation.</dd>
-             </dl>
-         </li>
-     </ol>
+	</dl>
+
+<h3>Outputs</h3>
+	<ol class="node-ports">
+		<li>Standard output
+			<dl class="message-properties">
+				<dt>payload <span class="property-type">string</span></dt>
+				<dd>the standard output of the operation.</dd>
+			</dl>
+		</li>
+		<li>Standard error
+			<dl class="message-properties">
+				<dt>payload <span class="property-type">string</span></dt>
+				<dd>the standard error of the operation.</dd>
+			</dl>
+		</li>
+	</ol>	
 
 <h3>Details</h3>
-    <p><code>msg.payload</code> is used as the payload of the published message.
-    If it contains an Object it will be converted to a JSON string before being sent.
-    </p>
-    <p>The topic used can be configured in the node or, if left blank, can be set
-    by <code>msg.topic</code>.</p>
-    <p>forge-da node contains several operations, for each operation respective fields are provided as input properties to process particular operation</p>
-
+	<p><code>msg.payload</code> is used as the payload of the published message.</p>
+	<p>The topic used can be configured in the node or, if left blank, can be set by <code>msg.topic</code>.</p>
+	
 <h3>References</h3>
-    <ul>
-      <li><a href="https://forge.autodesk.com/en/docs/design-automation/v3/developers_guide/overview/">Forge Design Automation</a></li>
-      <li><a href="https://forge.autodesk.com/blog">Forge Blogs</a></li>
-    </ul>
+	<ul>
+	<li><a href="https://forge.autodesk.com/en/docs/design-automation/v3/developers_guide/overview/">Forge Design Automation</a></li>
+	<li><a href="https://forge.autodesk.com/en/docs/design-automation/v3/reference/http/">API Reference</a></li>
+	<li><a href="https://forge.autodesk.com/blog">Forge Blogs</a></li>
+	</ul>
 </script>
 
 </script>
