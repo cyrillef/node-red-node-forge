@@ -153,18 +153,6 @@ module.exports = function (RED) {
 
 	// #region --- Bucket ---
 
-	service.BucketKey = function (src, out) {
-		try {
-			if ((src.bucketType === null && src.bucket === '') || src.bucketType === 'none') {
-				src.bucketType = 'env';
-				src.bucket = 'FORGE_BUCKET';
-			}
-			out.bucket = RED.util.evaluateNodeProperty(src.bucket, src.bucketType, src, out);
-		} catch (err) {
-			out.bucket = src.bucket;
-		}
-	};
-
 	// GET	buckets
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-GET/
 	service.ListBucketsParams = function (n, msg) {
@@ -205,11 +193,9 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-details-GET/
 	service.BucketDetailsParams = function (n, msg) {
 		var params = {};
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
 
 		service.getParams(n, msg, {
+			bucket: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
@@ -233,11 +219,9 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-details-GET/
 	service.CreateBucketParams = function (n, msg) {
 		var params = {};
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
 
 		service.getParams(n, msg, {
+			bucket: service.asIs,
 			policyKey: service.asIs,
 			region: {
 				rename: 'xAdsRegion'
@@ -270,11 +254,9 @@ module.exports = function (RED) {
 	// undocumented
 	service.DeleteBucketParams = function (n, msg) {
 		var params = {};
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
-
+		
 		service.getParams(n, msg, {
+			bucket: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
@@ -303,18 +285,16 @@ module.exports = function (RED) {
 	service.ListObjectsParams = function (n, msg) {
 		var params = {};
 
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
-
 		//service.getParamsSimple(n, msg, ['limit', 'startAt', 'beginsWidth'], params);
 		service.getParams(n, msg, {
-			limit: {
-				type: 'number',
-				default: [10],
-				min: 0,
-				max: 100
-			},
+			bucket: service.asIs,
+			// limit: {
+			// 	type: 'number',
+			// 	default: [10],
+			// 	min: 0,
+			// 	max: 100
+			// },
+			limit: service.defaultNullOrEmptyString,
 			startAt: service.defaultNullOrEmptyString,
 			beginsWith: service.defaultNullOrEmptyString,
 			all: service.defaultNullOrEmptyBoolean,
@@ -340,15 +320,13 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-details-GET/
 	service.ObjectDetailsParams = function (n, msg) {
 		var params = {};
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
-
+		
 		service.getParams(n, msg, {
+			bucket: service.asIs,
 			key: service.asIs,
 			with: {
 				type: 'string',
-				default: [null, ''],
+				default: [ null, '' ],
 				rename: '_with'
 			},
 			ifModifiedSince: service.defaultNullOrEmptyDate,
@@ -380,11 +358,9 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-GET/
 	service.GetObjectParams = function (n, msg) {
 		var params = {};
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
-
+		
 		service.getParams(n, msg, {
+			bucket: service.asIs,
 			key: service.asIs,
 			range: service.defaultNullOrEmptyString,
 			ifNoneMatch: service.defaultNullOrEmptyString,
@@ -418,11 +394,9 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-resumable-PUT/
 	service.PutObjectParams = function (n, msg) {
 		var params = {};
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
 
 		service.getParams(n, msg, {
+			bucket: service.asIs,
 			key: service.asIs,
 			localFilename: service.asIs,
 			ifMatch: service.defaultNullOrEmptyString,
@@ -586,11 +560,9 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-DELETE/
 	service.DeleteObjectParams = function (n, msg) {
 		var params = {};
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
 
 		service.getParams(n, msg, {
+			bucket: service.asIs,
 			key: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
@@ -615,11 +587,9 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-signed-POST/
 	service.CreateSignatureParams = function (n, msg) {
 		var params = {};
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
 
 		service.getParams(n, msg, {
+			bucket: service.asIs,
 			key: service.asIs,
 			access: service.asIs,
 			singleUse: service.asIs,
@@ -877,11 +847,9 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/buckets-:bucketKey-objects-:objectName-copyto-:newObjectName-PUT/
 	service.CopyObjectParams = function (n, msg) {
 		var params = {};
-		//service.copyArg(n, 'bucket', params, undefined, false);
-		service.BucketKey(n, params);
-		service.copyArg(msg, 'bucket', params, undefined, false);
 
 		service.getParams(n, msg, {
+			bucket: service.asIs,
 			key: service.asIs,
 			copy: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
