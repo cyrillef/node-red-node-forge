@@ -69,6 +69,7 @@
 					data-i18n="forge.label.urn"></span></label>
 			<input type="text" id="node-input-urn" data-i18n="[placeholder]forge.placeholder.urn" />
 		</div>
+
 		<div id="DerivativeURNAttr" class="form-row node-input-derivativeurn hiddenAttrs">
 			<label for="node-input-derivativeurn"><i class="fa fa-at"></i> <span
 					data-i18n="forge.label.derivativeurn"></span></label>
@@ -80,11 +81,13 @@
 					data-i18n="forge.label.xAdsForce"></span></label>
 			<input type="checkbox" id="node-input-xAdsForce" />
 		</div>
+
 		<div id="ForceGetAttr" class="form-row node-input-forceget hiddenAttrs">
 			<label for="node-input-forceget"><i class="fa fa-hand-o-right"></i> <span
 					data-i18n="forge.label.forceget"></span></label>
 			<input type="checkbox" id="node-input-forceget" />
 		</div>
+
 		<div id="CheckReferencesAttr" class="form-row node-input-checkReferences hiddenAttrs">
 			<label for="node-input-checkReferences"><i class="fa fa-check-square-o"></i> <span
 					data-i18n="forge.label.checkReferences"></span></label>
@@ -96,15 +99,18 @@
 					data-i18n="forge.label.rootFilename"></span></label>
 			<input type="text" id="node-input-rootFilename" data-i18n="[placeholder]forge.placeholder.rootFilename" />
 		</div>
+
 		<div id="GUIDAttr" class="form-row node-input-guid hiddenAttrs">
 			<label for="node-input-guid"><i class="fa fa-th"></i> <span
 					data-i18n="forge.label.guid"></span></label>
 			<input type="text" id="node-input-guid" data-i18n="[placeholder]forge.placeholder.guid" />
 		</div>
+
 		<div id="ObjectIDAttr" class="form-row node-input-objectid hiddenAttrs">
 			<label for="node-input-objectid"><i class="fa fa-key"></i> <span data-i18n="forge.label.objectid"></span></label>
 			<input type="text" id="node-input-objectid" data-i18n="[placeholder]forge.placeholder.objectid" />
 		</div>
+
 		<div id="RangeAttr" class="form-row node-input-range hiddenAttrs">
 			<label for="node-input-range"><i class="fa fa-tag"></i> <span data-i18n="forge.label.range"></span></label>
 			<input type="text" id="node-input-range" data-i18n="[placeholder]forge.placeholder.range" />
@@ -116,6 +122,7 @@
 			<input type="datetime-local" id="node-input-ifModifiedSince"
 				data-i18n="[placeholder]forge.placeholder.ifModifiedSince" />
 		</div>
+
 		<div id="AcceptEncodingAttr" class="form-row node-input-acceptEncoding hiddenAttrs">
 			<label for="node-input-acceptEncoding"><i class="fa fa-tag"></i> <span
 					data-i18n="forge.label.acceptEncoding"></span></label>
@@ -124,6 +131,7 @@
 				<option value="gzip">gzip</option>
 			</select>
 		</div>
+
 		<div id="RegionAttr" class="form-row node-input-region hiddenAttrs">
 			<label for="node-input-region"><i class="fa fa-globe"></i> <span data-i18n="forge.label.region"></span></label>
 			<select type="text" id="node-input-region" style="width:72%;">
@@ -131,6 +139,7 @@
 				<option value="EMEA">EMEA</option>
 			</select>
 		</div>
+
 		<div id="WidthAttr" class="form-row node-input-width hiddenAttrs">
 			<label for="node-input-width"><i class="fa fa-tag"></i> <span
 					data-i18n="forge.label.width"></span></label>
@@ -172,10 +181,13 @@
 			</div>
 		</div>
 
-		<div id="ForgeAllAttr" class="form-row node-input-all hiddenAttrs">
-			<label for="node-input-all"><i class="fa fa-tag"></i> <span
-					data-i18n="forge.label.all"></span></label>
-			<input type="checkbox" id="node-input-all" />
+		<div id="WorkflowAttr" class="form-row node-input-workflow hiddenAttrs">
+			<label for="node-input-workflow"><i class="fa fa-key"></i> <span data-i18n="forge.label.workflow"></span></label>
+			<input type="text" id="node-input-workflow" data-i18n="[placeholder]forge.placeholder.workflow" />
+		</div>
+		<div id="WorkflowAttributeAttr" class="form-row node-input-workflowAttribute hiddenAttrs">
+			<label for="node-input-workflowAttribute"><i class="fa fa-key"></i> <span data-i18n="forge.label.workflowAttribute"></span></label>
+			<input type="text" id="node-input-workflowAttribute" data-i18n="[placeholder]forge.placeholder.workflowAttribute" />
 		</div>
 
 	</div>
@@ -189,7 +201,8 @@
 	<script type="text/javascript">
 		var nodeOps = {
 			Translate: [
-				'#URNAttr', '#ForceAttr', '#CheckReferencesAttr', '#RootFilenameAttr', '#JobsAttr', '#RegionAttr'
+				'#URNAttr', '#ForceAttr', '#CheckReferencesAttr', '#RootFilenameAttr', '#JobsAttr', '#RegionAttr',
+				'#WorkflowAttr', '#WorkflowAttributeAttr'
 			],
 			SetReferences: [
 				'#URNAttr', '#RootFilenameAttr', '#RegionAttr', '#ReferencesEditorAttr'
@@ -978,6 +991,12 @@
 			region: { // Acceptable values: US, EMEA
 				value: 'US',
 				//required: true
+			},
+			workflow: {
+				value: null
+			},
+			workflowAttribute: {
+				value: null
 			}
 		},
 		inputs: 1,

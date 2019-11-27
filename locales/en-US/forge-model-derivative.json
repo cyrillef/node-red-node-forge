@@ -35,8 +35,9 @@
             "height": "Height",
             "checkReferences": "Check References",
             "references": "References",
-            "raw": "Raw Response",
-            "all": "Forge All"
+            "workflow": "Webhook",
+            "workflowAttribute": "Webhook object",
+            "raw": "Raw Response"
         },
 		"placeholder": {
 			"name": "Name",
@@ -56,8 +57,11 @@
             "range": "Range (RFC 2616)",
             "width": "Width",
             "height": "Height",
-            "raw": "Raw Response",
-            "all": "Forge All"
+            "checkReferences": "Check References",
+            "references": "References",
+            "workflow": "Webhook URL",
+            "workflowAttribute": "Webhook object",
+            "raw": "Raw Response"
 		},
 		"tip": {
 			"config1": "",

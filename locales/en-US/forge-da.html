@@ -2,33 +2,523 @@
 <p>Connects to a forge design automation services and publishes output messages.</p>
 <p>The node contains several operations; each operation requires specific mandatory and optional fields to run.</p>
 
-<h3>Inputs</h3>
+	<h3>Operations</h3>
 	<dl class="message-properties">
-		<dt>payload
-			<span class="property-type">string</span>
-		</dt>
-		<dd> the payload of the message to process any of listed Forge Design Automation operation. </dd>
+		<dt>operation <span class="property-type">string</span></dt>
+		<dd>The Forge Model Derivative operation/endpoint to execute.</dd>
 		
-		<dt class="optional">topic <span class="property-type">string</span></dt>
-		<dd>Forge Design Automation topic to publish.</dd>
+		<h3 class="forge">Activities</h3>
+		<dl class="message-properties forge">
+			<h3 class="forge">ListActivities</h3>
+			<dl class="message-properties forge">
+				<dd>Lists all available Activities, including Activities shared with this Forge app.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#page">page</a>, <a href="#all">all</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateActivity</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a new Activity.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#engine">engine</a>, <a href="#description">description</a>,
+					<a href="#commandLine">commandLine</a>,  <a href="#parameters">parameters</a>,
+					<a href="#settings">settings</a></dd>
+			</dl>
+
+			<h3 class="forge">GetActivityAlias</h3>
+			<dl class="message-properties forge">
+				<dd>Get alias details.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#alias">alias</a></dd>
+			</dl>
+
+			<h3 class="forge">DeleteActivityAlias</h3>
+			<dl class="message-properties forge">
+				<dd>Deletes the alias.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#alias">alias</a></dd>
+			</dl>
+
+			<h3 class="forge">UpdateActivityAlias</h3>
+			<dl class="message-properties forge">
+				<dd>Modify alias details.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#alias">alias</a>, <a href="#version">version</a>, <a href="#receiver">receiver</a></dd>
+			</dl>
+
+			<h3 class="forge">ListActivityAliases</h3>
+			<dl class="message-properties forge">
+				<dd>Lists all aliases for the specified Activity.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#page">page</a>, <a href="#all">all</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateActivityAlias</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a new alias for this Activity.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#alias">alias</a>, <a href="#version">version</a>, <a href="#receiver">receiver</a></dd>
+			</dl>
+
+			<h3 class="forge">GetActivity</h3>
+			<dl class="message-properties forge">
+				<dd>Gets the details of the specified Activity. Note that the {id} parameter must be a QualifiedId (owner.name+label).</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a></dd>
+			</dl>
+
+			<h3 class="forge">DeleteActivity</h3>
+			<dl class="message-properties forge">
+				<dd>Deletes the specified Activity, including all versions and aliases.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a></dd>
+			</dl>
+
+			<h3 class="forge">ListActivityVersions</h3>
+			<dl class="message-properties forge">
+				<dd>Lists all versions of the specified Activity.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#page">page</a>, <a href="#all">all</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateActivityVersion</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a new version of the Activity.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#engine">engine</a>, <a href="#description">description</a>,
+					<a href="#commandLine">commandLine</a>,  <a href="#parameters">parameters</a>,
+					<a href="#settings">settings</a></dd>
+			</dl>
+
+			<h3 class="forge">GetActivityVersion</h3>
+			<dl class="message-properties forge">
+				<dd>Gets the details of the specified version of the Activity.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#version">version</a></dd>
+			</dl>
+
+			<h3 class="forge">DeleteActivityVersion</h3>
+			<dl class="message-properties forge">
+				<dd>Deletes the specified version of the Activity.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#version">version</a></dd>
+			</dl>
+
+		</dl>
+
+		<h3 class="forge">AppBundles</h3>
+		<dl class="message-properties forge">
+			<h3 class="forge">ListAppbundles</h3>
+			<dl class="message-properties forge">
+				<dd>Lists all available AppBundles, including AppBundles shared with this Forge app.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#page">page</a>, <a href="#all">all</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateAppbundles</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a new AppBundle.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a>, <a href="#engine">engine</a>, <a href="#description">description</a>,
+					<a href="#package">package</a>, <a href="#appBundles">appBundles</a>, <a href="#settings">settings</a></dd>
+			</dl>
+
+			<h3 class="forge">GetAppbundlesAlias</h3>
+			<dl class="message-properties forge">
+				<dd>Get alias details.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a>, <a href="#alias">alias</a></dd>
+			</dl>
+
+			<h3 class="forge">DeleteAppbundlesAlias</h3>
+			<dl class="message-properties forge">
+				<dd>Deletes the alias.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a>, <a href="#alias">alias</a></dd>
+			</dl>
+
+			<h3 class="forge">UpdateAppbundlesAlias</h3>
+			<dl class="message-properties forge">
+				<dd>Modify alias details.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a>, <a href="#alias">alias</a>,
+					<a href="#version">version</a>, <a href="#receiver">receiver</a></dd>
+			</dl>
+
+			<h3 class="forge">ListAppbundlesAliases</h3>
+			<dl class="message-properties forge">
+				<dd>Lists all aliases for the specified AppBundle.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a>, <a href="#page">page</a>, <a href="#all">all</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateAppbundlesAlias</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a new alias for this AppBundle.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a>, <a href="#alias">alias</a>,
+					<a href="#version">version</a>, <a href="#receiver">receiver</a></dd>
+			</dl>
+
+			<h3 class="forge">GetAppbundles</h3>
+			<dl class="message-properties forge">
+				<dd>Gets the details of the specified AppBundle. Note that the {id} parameter must be a QualifiedId (owner.name+label).</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a></dd>
+			</dl>
+
+			<h3 class="forge">DeleteAppbundles</h3>
+			<dl class="message-properties forge">
+				<dd>Deletes the specified AppBundle, including all versions and aliases.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a></dd>
+			</dl>
+
+			<h3 class="forge">ListAppbundlesVersions</h3>
+			<dl class="message-properties forge">
+				<dd>Lists all versions of the specified AppBundle.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a>, <a href="#page">page</a>, <a href="#all">all</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateAppbundlesVersion</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a new version of the AppBundle.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a>, <a href="#engine">engine</a>, <a href="#description">description</a>,
+					<a href="#package">package</a>, <a href="#appBundles">appBundles</a>, <a href="#settings">settings</a></dd>
+			</dl>
+
+			<h3 class="forge">GetAppbundlesVersion</h3>
+			<dl class="message-properties forge">
+				<dd>Gets the details of the specified version of the AppBundle.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a>, <a href="#version">version</a></dd>
+			</dl>
+
+			<h3 class="forge">DeleteAppbundlesVersion</h3>
+			<dl class="message-properties forge">
+				<dd>Deletes the specified version of the AppBundle.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#appbundlesId">appbundlesId</a>, <a href="#version">version</a></dd>
+			</dl>
+
+		</dl>
+
+		<h3 class="forge">Engines</h3>
+		<dl class="message-properties forge">
+			<h3 class="forge">ListEngines</h3>
+			<dl class="message-properties forge">
+				<dd>Lists all available Engines.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#page">page</a>, <a href="#all">all</a></dd>
+			</dl>
+
+			<h3 class="forge">GetEngine</h3>
+			<dl class="message-properties forge">
+				<dd>Gets the details of the specified Engine. Note that the {id} parameter must be a QualifiedId (owner.name+label).</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#engine">engine</a></dd>
+			</dl>
+		</dl>
+
+		<h3 class="forge">ForgeApps</h3>
+		<dl class="message-properties forge">
+			<h3 class="forge">GetForgeApps</h3>
+			<dl class="message-properties forge">
+				<dd>Return the given Forge app’s nickname.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#nickname">nickname</a></dd>
+			</dl>
+
+			<h3 class="forge">DeleteForgeApps</h3>
+			<dl class="message-properties forge">
+				<dd>Delete all data associated with the given Forge app.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#nickname">nickname</a></dd>
+			</dl>
+
+			<h3 class="forge">UpdateForgeApps</h3>
+			<dl class="message-properties forge">
+				<dd>Creates/updates the nickname for the current Forge app.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#nickname">nickname</a>, <a href="#exponent">exponent</a>, <a href="#modulus">modulus</a></dd>
+			</dl>
+		</dl>
+
+		<h3 class="forge">Health</h3>
+		<dl class="message-properties forge">
+			<h3 class="forge">GetHealth</h3>
+			<dl class="message-properties forge">
+				<dd>Gets the health status by Engine or for all Engines (Inventor, AutoCAD ...).</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#engine">engine</a></dd>
+			</dl>
+		</dl>
+
+		<h3 class="forge">ServiceLimits</h3>
+		<dl class="message-properties forge">
+			<h3 class="forge">GetServiceLimits</h3>
+			<dl class="message-properties forge">
+				<dd>Gets a user’s service limit configuration.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#nickname">nickname</a></dd>
+			</dl>
+
+			<h3 class="forge">SetServiceLimits</h3>
+			<dl class="message-properties forge">
+				<dd>Modify a user’s service limit configuration.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#nickname">nickname</a>,
+					<a href="#limitMonthlyProcessingTimeInHours">limitMonthlyProcessingTimeInHours</a>,
+					<a href="#backendLimits">backendLimits</a></dd>
+			</dl>
+		</dl>
+
+		<h3 class="forge">Shares</h3>
+		<dl class="message-properties forge">
+			<h3 class="forge">ListShares</h3>
+			<dl class="message-properties forge">
+				<dd>Gets all Shares (AppBundles and Activities) shared by this Forge app (shared to other Forge apps for them to use).</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#page">page</a>, <a href="#all">all</a></dd>
+			</dl>
+		</dl>
+
+		<h3 class="forge">WorkItems</h3>
+		<dl class="message-properties forge">
+			<h3 class="forge">GetWorkitems</h3>
+			<dl class="message-properties forge">
+				<dd>Gets the status of a specific WorkItem.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#workItemId">workItemId</a></dd>
+			</dl>
+
+			<h3 class="forge">DeleteWorkitems</h3>
+			<dl class="message-properties forge">
+				<dd>Cancels a specific WorkItem.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#workItemId">workItemId</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateWorkitems</h3>
+			<dl class="message-properties forge">
+				<dd>The new WorkItem is always placed on a queue and later picked up by an engine.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#limitProcessingTimeSec">limitProcessingTimeSec</a>, 
+					<a href="#baseUrls">baseUrls</a>, <a href="#signature">signature</a>,
+					<a href="#arguments">arguments</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateBatchWorkitems</h3>
+			<dl class="message-properties forge">
+				<dd>The new WorkItems are always placed on the queue and later picked up by an engine.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#activityId">activityId</a>, <a href="#limitProcessingTimeSec">limitProcessingTimeSec</a>, 
+					<a href="#baseUrls">baseUrls</a>, <a href="#signature">signature</a>,
+					<a href="#arguments">arguments</a></dd>
+			</dl>
+		</dl>
+
+		<h3 class="forge">Others</h3>
+		<dl class="message-properties forge">
+			<h3 class="forge">GetReport</h3>
+			<dl class="message-properties forge">
+				<dd>Gets the workitem report.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#url">url</a></dd>
+			</dl>
+		</dl>
 
 	</dl>
 
-<h3>Outputs</h3>
-	<ol class="node-ports">
-		<li>Standard output
-			<dl class="message-properties">
-				<dt>payload <span class="property-type">string</span></dt>
-				<dd>the standard output of the operation.</dd>
-			</dl>
-		</li>
-		<li>Standard error
-			<dl class="message-properties">
-				<dt>payload <span class="property-type">string</span></dt>
-				<dd>the standard error of the operation.</dd>
-			</dl>
-		</li>
-	</ol>	
+	<h3>Parameters</h3>
+
+	<a name="page" />
+	<dl class="message-properties">
+		<dt>page <span class="property-type">string</span></dt>
+		<dd>Access an additional ‘page’ of data when necessary, based on the ‘paginationToken’ returned from a previous invocation.</dd>
+	</dl>
+
+	<a name="description" />
+	<dl class="message-properties">
+		<dt>description <span class="property-type">string</span></dt>
+		<dd>Human readable description of the object.</dd>
+	</dl>
+
+	<a name="alias" />
+	<dl class="message-properties">
+		<dt>alias <span class="property-type">string</span></dt>
+		<dd>Name of alias.</dd>
+	</dl>
+
+	<a name="version" />
+	<dl class="message-properties">
+		<dt>version <span class="property-type">integer</span></dt>
+		<dd>The version that this alias refers to.</dd>
+	</dl>
+
+	<a name="activityId" />
+	<dl class="message-properties">
+		<dt>activityId <span class="property-type">string</span></dt>
+		<dd>Name of Activity</dd>
+	</dl>
+
+	<a name="receiver" />
+	<dl class="message-properties">
+		<dt>receiver <span class="property-type">string</span></dt>
+		<dd>The user to share the alias with.</dd>
+	</dl>
+
+	<a name="appbundles" />
+	<dl class="message-properties">
+		<dt>appbundles <span class="property-type">string[]</span></dt>
+		<dd>A module referenced by an Activity in order to perform specific functions. Typically this is a DLL or some other form of custom code.</dd>
+	</dl>
+
+	<a name="commandline" />
+	<dl class="message-properties">
+		<dt>commandline <span class="property-type">string[]</span></dt>
+		<dd>Path to Engine executable with arguments.</dd>
+	</dl>
+
+	<a name="parameters" />
+	<dl class="message-properties">
+		<dt>parameters <span class="property-type">object[]</span></dt>
+		<dd>Each parameter represents an input or output file. Named parameters of an Activity have corresponding named arguments of a WorkItem.</dd>
+	</dl>
+
+	<a name="settings" />
+	<dl class="message-properties">
+		<dt>settings <span class="property-type">string[]</span></dt>
+		<dd>The url/string Settings for a given set of AppBundles.</dd>
+	</dl>
+
+	<a name="engine" />
+	<dl class="message-properties">
+		<dt>engine <span class="property-type">string</span></dt>
+		<dd>The actual processing engine that runs the WorkItem job and processes the Activity.</dd>
+	</dl>
+
+	<a name="appbundlesId" />
+	<dl class="message-properties">
+		<dt>appbundlesId <span class="property-type">string</span></dt>
+		<dd>Name of AppBundle.</dd>
+	</dl>
+
+	<a name="package" />
+	<dl class="message-properties">
+		<dt>package <span class="property-type">string</span></dt>
+		<dd>The URL that points to the zip package for the AppBundle or Engine.</dd>
+	</dl>
+
+	<a name="nickname" />
+	<dl class="message-properties">
+		<dt>nickname <span class="property-type">string</span></dt>
+		<dd>The user to fetch the service limit configuration for.</dd>
+	</dl>
+
+	<a name="exponent" />
+	<dl class="message-properties">
+		<dt>exponent <span class="property-type">string</span></dt>
+		<dd></dd>
+	</dl>
+
+	<a name="modulus" />
+	<dl class="message-properties">
+		<dt>modulus <span class="property-type">string</span></dt>
+		<dd></dd>
+	</dl>
+
+	<a name="workitemId" />
+	<dl class="message-properties">
+		<dt>workitemId <span class="property-type">string</span></dt>
+		<dd>Name of WorkItem.</dd>
+	</dl>
+
+	<a name="limitProcessingTimeSec" />
+	<dl class="message-properties">
+		<dt>limitProcessingTimeSec <span class="property-type">string</span></dt>
+		<dd>Max duration of processing in seconds per workitem (includes download and upload time).</dd>
+	</dl>
+
+	<a name="baseUrls" />
+	<dl class="message-properties">
+		<dt>baseUrls <span class="property-type">object[]</span></dt>
+		<dd>Digitally signed base urls that are allowed in the WorkItem. The client may supply these when using a 3-legged oauth token for submitting a WorkItem.</dd>
+	</dl>
+
+	<a name="signature" />
+	<dl class="message-properties">
+		<dt>signature <span class="property-type">string</span></dt>
+		<dd>The signature calculated for Url.</dd>
+	</dl>
+
+	<a name="arguments" />
+	<dl class="message-properties">
+		<dt>arguments <span class="property-type">object</span></dt>
+		<dd>Arguments of the WorkItem. Named parameters of an Activity have corresponding named arguments of a WorkItem.</dd>
+	</dl>
+
+	<a name="limitPayloadSizeInKB" />
+	<dl class="message-properties">
+		<dt>limitPayloadSizeInKB <span class="property-type">integer</span></dt>
+		<dd>Max permitted size for App/Activity/Workitem json payload in kilobytes. Default is 16KB.</dd>
+	</dl>
+
+	<a name="limitVersions" />
+	<dl class="message-properties">
+		<dt>limitVersions <span class="property-type">integer</span></dt>
+		<dd>Max permitted number of App/Activity versions a client can have at any one time. Default is 100.</dd>
+	</dl>
+
+	<a name="limitAliases" />
+	<dl class="message-properties">
+		<dt>limitAliases <span class="property-type">integer</span></dt>
+		<dd>Max permitted number of aliases that a client can have at any one time. Default is 100.</dd>
+	</dl>
+
+	<a name="limitPublicAliases" />
+	<dl class="message-properties">
+		<dt>limitPublicAliases <span class="property-type">integer</span></dt>
+		<dd>Max permitted number of public aliases that a client can have at any one time. Default is 0.</dd>
+	</dl>
+
+	<a name="limitAppUploadSizeInMB" />
+	<dl class="message-properties">
+		<dt>limitAppUploadSizeInMB <span class="property-type">integer</span></dt>
+		<dd>Max permitted size of an App upload in megabytes.</dd>
+	</dl>
+
+	<a name="limitMonthlyProcessingTimeInHours" />
+	<dl class="message-properties">
+		<dt>limitMonthlyProcessingTimeInHours <span class="property-type">integer</span></dt>
+		<dd>Max commulative engine usage by client in a given calendar month.</dd>
+	</dl>
+
+	<a name="backendLimits" />
+	<dl class="message-properties">
+		<dt>backendLimits <span class="property-type">object</span></dt>
+		<dd></dd>
+	</dl>
+
+	<a name="url" />
+	<dl class="message-properties">
+		<dt>url <span class="property-type">string</span></dt>
+		<dd>The Url value.</dd>
+	</dl>
+
+	<a name="all" />
+	<dl class="message-properties">
+		<dt>all <span class="property-type">boolean</span></dt>
+		<dd>Force to the node to get the complete list.</dd>
+	</dl>
+	
+	<a name="raw" />
+	<dl class="message-properties">
+		<dt>raw <span class="property-type">boolean</span></dt>
+		<dd>Get the raw HTPP response (includes headers and statusCode).</dd>
+	</dl>
 
 <h3>Details</h3>
 	<p><code>msg.payload</code> is used as the payload of the published message.</p>
@@ -40,6 +530,4 @@
 	<li><a href="https://forge.autodesk.com/en/docs/design-automation/v3/reference/http/">API Reference</a></li>
 	<li><a href="https://forge.autodesk.com/blog">Forge Blogs</a></li>
 	</ul>
-</script>
-
 </script>

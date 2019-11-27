@@ -156,6 +156,8 @@ module.exports = function (RED) {
             rootFilename: service.defaultNullOrEmptyString,
             checkReferences: service.defaultNullOrEmptyString,
             region: service.asIs,
+            workflow: service.defaultNullOrEmptyString,
+            workflowAttribute: service.defaultNullOrEmptyString,
             raw: service.defaultNullOrEmptyBoolean
         }, params);
         if (params.hasOwnProperty('rootFilename'))
@@ -182,8 +184,17 @@ module.exports = function (RED) {
             }
         };
         if (params.hasOwnProperty('rootFilename')) {
-            jobs.input.compressedUrn = params.compressedUrn;
+            jobs.input.compressedUrn = true;
             jobs.input.rootFilename = params.rootFilename;
+        }
+        if (params.hasOwnProperty('workflow')) {
+            jobs.misc = {};
+            jobs.misc.workflow = params.workflow;
+            try {
+                jobs.misc.workflowAttribute = JSON.parse(params.workflowAttribute);
+            } catch ( ex ) {
+                jobs.misc.workflowAttribute = params.workflowAttribute;
+            }
         }
 
         var apis = new ForgeAPI.DerivativesApi();

@@ -1,0 +1,213 @@
+<script type="text/x-red" data-help-name="forge-model-derivative">
+	<p>Forge Model Derivative node. Manage CAD models / designs in different formats,
+		as well as to extract valuable metadata.</p>
+	<p>The node contains several operations; each operation requires specific mandatory and optional fields to run.</p>
+
+	<h3>Operations</h3>
+	<dl class="message-properties">
+		<dt>operation <span class="property-type">string</span></dt>
+		<dd>The Forge Model Derivative operation/endpoint to execute.</dd>
+		
+		<h3 class="forge">Translate</h3>
+		<dl class="message-properties forge">
+			<dd>You can use this endpoint to do the following:
+					Translate a design from one format to another format.
+					Extract selected parts of a design and export the set of geometries in OBJ format.
+					Generate different-sized thumbnails.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#urn">urn</a>, <a href="#xAdsForce">xAdsForce</a>, <a href="#checkReferences">checkReferences</a>
+				<a href="#rootFilename">rootFilename</a>, <a href="#jobs">jobs</a>, <a href="#region">region</a>,
+				<a href="#workflow">workflow</a>, <a href="#workflowAttribute">workflowAttribute</a></dd>
+		</dl>
+
+		<h3 class="forge">SetReferences</h3>
+		<dl class="message-properties forge">
+			<dd>To create references for a composite design in Model Derivative. The description of references is stored in Model Derivative. To use it with the POST job endpoint, you need to set checkReferences to true</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#urn">urn</a>, <a href="#references">references</a>
+				<a href="#rootFilename">rootFilename</a>, <a href="#region">region</a></dd>
+		</dl>
+
+		<h3 class="forge">GetManifest</h3>
+		<dl class="message-properties forge">
+			<dd>Returns information about derivatives that correspond to a specific source file, including derivative URNs and statuses.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#urn">urn</a>, <a href="#acceptEncoding">acceptEncoding</a></dd>
+		</dl>
+
+		<h3 class="forge">DeleteManifest</h3>
+		<dl class="message-properties forge">
+			<dd>Deletes the manifest and all its translated output files (derivatives). However, it does not delete the design source file.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#urn">urn</a></dd>
+		</dl>
+
+		<h3 class="forge">GetMetadata</h3>
+		<dl class="message-properties forge">
+			<dd>Returns a list of model view (metadata) IDs for a design model. The metadata ID enables end users to select an object tree and properties for a specific model view.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#urn">urn</a>, <a href="#acceptEncoding">acceptEncoding</a></dd>
+		</dl>
+
+		<h3 class="forge">GetObjectTree</h3>
+		<dl class="message-properties forge">
+			<dd>Returns an object tree, i.e., a hierarchical list of objects for a model view.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#urn">urn</a>, <a href="#guid">guid</a>, <a href="#forceget">forceget</a>, <a href="#acceptEncoding">acceptEncoding</a></dd>
+		</dl>
+
+		<h3 class="forge">GetProperties</h3>
+		<dl class="message-properties forge">
+			<dd>Returns a list of properties for each object in an object tree. Properties are returned according to object ID and do not follow a hierarchical structure.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#urn">urn</a>, <a href="#guid">guid</a>, <a href="#objectid">objectid</a>,
+				<a href="#forceget">forceget</a>, <a href="#acceptEncoding">acceptEncoding</a></dd>
+		</dl>
+
+		<h3 class="forge">GetDerivativeManifest</h3>
+		<dl class="message-properties forge">
+			<dd>Downloads a selected derivative. To download the file, you need to specify the file’s URN, which you retrieve by calling the GET :urn/manifest endpoint.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#urn">urn</a>, <a href="#derivativeurn">derivativeurn</a>, <a href="#range">range</a></dd>
+		</dl>
+
+		<h3 class="forge">GetThumbnail</h3>
+		<dl class="message-properties forge">
+			<dd>Downloads the thumbnail for the source file.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#urn">urn</a>, <a href="#width">width</a>, <a href="#height">height</a></dd>
+		</dl>
+
+		<h3 class="forge">GetFormats</h3>
+		<dl class="message-properties forge">
+			<dd>Returns an up-to-date list of Forge-supported translations, that you can use to identify which types of derivatives are supported for each source file type. You can set this endpoint to only return the list of supported translations if they have been updated since a specified date.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#ifModifiedSince">ifModifiedSince</a>, <<a href="#acceptEncoding">acceptEncoding</a></dd>
+		</dl>
+
+	</dl>
+
+	<h3>Parameters</h3>
+
+	<a name="urn" />
+	<dl class="message-properties">
+		<dt>urn <span class="property-type">string</span></dt>
+		<dd>The root design urn. Mandatory if the base64 encoded urn in the request URL is a logical urn.</dd>
+	</dl>
+
+	<a name="derivativeurn" />
+	<dl class="message-properties">
+		<dt>derivativeurn <span class="property-type">string</span></dt>
+		<dd>The URL-encoded URN of the derivatives. The URN is retrieved from the GET :urn/manifest endpoint.</dd>
+	</dl>
+
+	<a name="guid" />
+	<dl class="message-properties">
+		<dt>guid <span class="property-type">string</span></dt>
+		<dd>Unique model view ID. Call GET :urn/metadata to get the ID</dd>
+	</dl>
+
+	<a name="objectid" />
+	<dl class="message-properties">
+		<dt>objectid <span class="property-type">string</span></dt>
+		<dd>Object id which you want to query properties for.</dd>
+	</dl>
+
+	<a name="xAdsForce" />
+	<dl class="message-properties">
+		<dt>xAdsForce <span class="property-type">boolean</span></dt>
+		<dd>true: the endpoint replaces previously translated output file types with the newly generated derivatives</dd>
+		<dd>false (default): previously created derivatives are not replaced</dd>
+	</dl>
+
+	<a name="forceget" />
+	<dl class="message-properties">
+		<dt>forceget <span class="property-type">boolean</span></dt>
+		<dd>To force get the large resource even if it exceeded the expected maximum length (20 MB). Possible values: true, false. The the implicit value is false.</dd>
+	</dl>
+
+	<a name="rootFilename" />
+	<dl class="message-properties">
+		<dt>rootFilename <span class="property-type">string</span></dt>
+		<dd>The root filename of the compressed file. Mandatory if the compressedUrn is set to true.</dd>
+	</dl>
+
+	<a name="range" />
+	<dl class="message-properties">
+		<dt>range <span class="property-type">string</span></dt>
+		<dd>This is the standard RFC 2616 range request header. It only supports one range specifier per request.</dd>
+	</dl>
+
+	<a name="width" />
+	<dl class="message-properties">
+		<dt>width <span class="property-type">enum(integer)</span></dt>
+		<dd>Width of thumbnail</dd>
+	</dl>
+
+	<a name="height" />
+	<dl class="message-properties">
+		<dt>height <span class="property-type">enum(integer)</span></dt>
+		<dd>Height of thumbnail</dd>
+	</dl>
+
+	<a name="jobs" />
+	<dl class="message-properties">
+		<dt>jobs <span class="property-type">object[]</span></dt>
+		<dd></dd>
+	</dl>
+
+	<a name="checkReferences" />
+	<dl class="message-properties">
+		<dt>checkReferences <span class="property-type">boolean</span></dt>
+		<dd>To create references for a composite design in Model Derivative. The description of references is stored in Model Derivative. To use it with the POST job endpoint, you need to set checkReferences to true.</dd>
+	</dl>
+
+	<a name="references" />
+	<dl class="message-properties">
+		<dt>references <span class="property-type">object[]</span></dt>
+		<dd></dd>
+	</dl>
+
+	<a name="ifModifiedSince" />
+	<dl class="message-properties">
+		<dt>ifModifiedSince <span class="property-type">string</span></dt>
+		<dd>The supported formats are only returned if they were modified since the specified date.</dd>
+	</dl>
+
+	<a name="acceptEncoding" />
+	<dl class="message-properties">
+		<dt>acceptEncoding <span class="property-type">string</span></dt>
+		<dd>If specified with gzip or *, content will be compressed and returned in a GZIP format.</dd>
+	</dl>
+
+	<a name="region" />
+	<dl class="message-properties">
+		<dt>region <span class="property-type">enum(string)</span></dt>
+		<dd>Region in which to store references. Possible values: US, EMEA. By default, it is set to US.</dd>
+	</dl>
+
+	<a name="workflow" />
+	<dl class="message-properties">
+		<dt>workflow <span class="property-type">string</span></dt>
+		<dd>The workflow id created for a webhook, used to listen to Model Derivative events.</dd>
+	</dl>
+
+	<a name="workflowAttribute" />
+	<dl class="message-properties">
+		<dt>workflowAttribute <span class="property-type">object</span></dt>
+		<dd>A user-defined JSON object, which you can use to set some custom workflow information. It needs to be less than 1KB and will be ignored if misc.workflow parameter is not set.</dd>
+	</dl>
+
+	<a name="raw" />
+	<dl class="message-properties">
+		<dt>raw <span class="property-type">boolean</span></dt>
+		<dd>Get the raw HTPP response (includes headers and statusCode).</dd>
+	</dl>
+
+<h3>References</h3>
+	<ul>
+	<li><a href="https://forge.autodesk.com/en/docs/model-derivative/v2/overview/">Forge Model Derivative</a></li>
+	<li><a href="https://forge.autodesk.com/en/docs/model-derivative/v2/reference/http/">API Reference</a></li>
+	<li><a href="https://forge.autodesk.com/blog">Forge Blogs</a></li>
+	</ul>
+</script>

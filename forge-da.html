@@ -310,9 +310,7 @@
 		DeleteActivityAlias: [ "#ActivityIdAttr", "#AliasAttr" ],
 		UpdateActivityAlias: [ "#ActivityIdAttr", "#AliasAttr", "#VersionAttr", "#ReceiverAttr" ],
 		ListActivityAliases: [ "#ActivityIdAttr", "#PageTokenAttr", "#ForgeAllAttr" ],
-		CreateActivityAlias: [
-			"#ActivityIdAttr", "#AliasAttr", "#VersionAttr", "#ReceiverAttr"
-		],
+		CreateActivityAlias: [ "#ActivityIdAttr", "#AliasAttr", "#VersionAttr", "#ReceiverAttr" ],
 		GetActivity: [ "#ActivityIdAttr" ],
 		DeleteActivity: [ "#ActivityIdAttr" ],
 		ListActivityVersions: [ "#ActivityIdAttr", "#PageTokenAttr", "#ForgeAllAttr" ],
@@ -322,7 +320,7 @@
 			"#CommandLineEditorAttr",
 			"#ParametersAttr", "#SettingsAttr"
 		],
-		GetActivityVersion: ["#ActivityIdAttr", "#VersionAttr" ],
+		GetActivityVersion: [ "#ActivityIdAttr", "#VersionAttr" ],
 		DeleteActivityVersion: [ "#ActivityIdAttr", "#VersionAttr" ],
 
 		// --- AppBundles ---
@@ -375,7 +373,7 @@
 			"#LimitMonthlyProcessingTimeInHoursAttr",
 			"#BackendLimitsAttr"
 		],
-		DeleteServiceLimits: [ "#NicknameAttr" ],		
+		//DeleteServiceLimits: [ "#NicknameAttr" ],		
 
 		// --- Shares ---
 
