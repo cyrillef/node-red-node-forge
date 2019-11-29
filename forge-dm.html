@@ -1,0 +1,342 @@
+<!--  Copyright (c) Autodesk, Inc.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<script type="text/x-red" data-template-name="forge-dm">
+	<style scoped>
+		.hiddenAttrs {
+			display: none;
+		}
+		
+		.visibleAttrs {
+			display: block;
+		}
+	</style>
+
+	<div class="form-row">
+		<label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
+		<input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
+		<input type="text" id="node-input-topic" />
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-forge"><i class="fa fa-user"></i> <span data-i18n="forge.label.forge"></span></label>
+		<input type="text" id="node-input-forge">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-operation"><i class="fa fa-wrench"></i> <span data-i18n="forge.label.operation"></span></label>
+		<select type="text" id="node-input-operation">
+			
+			<option value="">--- 3 Legged ---</option>
+			<option value="Authorize">Authorize</option>
+			<option value="GetToken">Get Token</option>
+			<option value="Refresh">Refresh</option>
+
+			<option value="">--- Hubs ---</option>
+			<option value="ListHubs">List Hubs</option>
+			<option value="HubDetails">Hub Details</option>
+
+			<option value="">--- Projects ---</option>
+			<option value="ListProjects">List Projects</option>
+			<option value="ProjectDetails">Project Details</option>
+			<option value="ProjectHubDetails">Project Hub Details</option>
+			<option value="ListFolders">List Folders</option>
+			<option value="Download">Download **</option>
+			<option value="JobInfo">Job Info **</option>
+			<option value="CreateDownloadType">Create Download Type **</option>
+			<option value="CreateStorage">Create Storage **</option>
+
+			<option value="">--- Folders ---</option>
+			<option value="FolderDetails">Folder Details</option>
+			<option value="FolderContents">Folder Contents</option>
+			<option value="FolderParent">Folder Parent</option>
+			<option value="FolderRefs">Folder Refs</option>
+			<option value="FolderLinks">FolderLinks **</option>
+			<option value="FolderRelationshipsRefs">Folder Relationships Refs</option>
+			<option value="Search">Search **</option>
+			<option value="CreateFolder">Create Folder</option>
+			<option value="CreateFolderRelationshipsRef">Create Folder Relationships Ref</option>
+			<option value="ModifyFolder">ModifyFolder **</option>
+
+			<option value="">--- Items ---</option>
+			ItemDetails
+			ItemParentFolder
+			ItemRefs
+			ItemLinks
+			ItemRelationshipsRefs
+			ItemTip
+			ItemVersions
+			CreateItemVersion
+			CreateItemRelationshipsRef
+			ModifyItem
+
+			<option value="">--- Versions ---</option>
+
+			<option value="">--- Commands ---</option>
+
+		</select>
+	</div>
+
+	<div id="AttrHolder">
+		
+		<div id="hubidAttr" class="form-row node-input-hubid hiddenAttrs">
+			<label for="node-input-hubid"><i class="fa fa-key"></i> <span data-i18n="forge.label.hubid"></span></label>
+			<input type="text" id="node-input-hubid" data-i18n="[placeholder]forge.placeholder.hubid" />
+		</div>
+
+		<div id="projectidAttr" class="form-row node-input-projectid hiddenAttrs">
+			<label for="node-input-projectid"><i class="fa fa-key"></i> <span data-i18n="forge.label.projectid"></span></label>
+			<input type="text" id="node-input-projectid" data-i18n="[placeholder]forge.placeholder.projectid" />
+		</div>
+
+		<div id="folderidAttr" class="form-row node-input-folderid hiddenAttrs">
+			<label for="node-input-folderid"><i class="fa fa-key"></i> <span data-i18n="forge.label.folderid"></span></label>
+			<input type="text" id="node-input-folderid" data-i18n="[placeholder]forge.placeholder.folderid" />
+		</div>
+
+		<div id="itemidAttr" class="form-row node-input-itemid hiddenAttrs">
+			<label for="node-input-itemid"><i class="fa fa-key"></i> <span data-i18n="forge.label.itemid"></span></label>
+			<input type="text" id="node-input-itemid" data-i18n="[placeholder]forge.placeholder.itemid" />
+		</div>
+
+		<div id="jobidAttr" class="form-row node-input-jobid hiddenAttrs">
+			<label for="node-input-jobid"><i class="fa fa-key"></i> <span data-i18n="forge.label.jobid"></span></label>
+			<input type="text" id="node-input-jobid" data-i18n="[placeholder]forge.placeholder.jobid" />
+		</div>
+
+		<div id="urlAttr" class="form-row node-input-url hiddenAttrs">
+			<label for="node-input-url"><i class="fa fa-key"></i> <span data-i18n="forge.label.url"></span></label>
+			<input type="text" id="node-input-url" data-i18n="[placeholder]forge.placeholder.url" />
+		</div>
+
+		<div id="codeAttr" class="form-row node-input-code hiddenAttrs">
+			<label for="node-input-code"><i class="fa fa-key"></i> <span data-i18n="forge.label.code"></span></label>
+			<input type="text" id="node-input-code" data-i18n="[placeholder]forge.placeholder.code" />
+		</div>
+
+		<div id="downloadidAttr" class="form-row node-input-downloadid hiddenAttrs">
+			<label for="node-input-downloadid"><i class="fa fa-key"></i> <span data-i18n="forge.label.downloadid"></span></label>
+			<input type="text" id="node-input-downloadid" data-i18n="[placeholder]forge.placeholder.downloadid" />
+		</div>
+
+		<div id="jobidAttr" class="form-row node-input-jobid hiddenAttrs">
+			<label for="node-input-jobid"><i class="fa fa-key"></i> <span data-i18n="forge.label.jobid"></span></label>
+			<input type="text" id="node-input-jobid" data-i18n="[placeholder]forge.placeholder.jobid" />
+		</div>
+
+		<div id="contentTypeAttr" class="form-row hiddenAttrs">
+			<label for="node-input-contentType"><i class="fa fa-arrow-left"></i> <span
+					data-i18n="forge.label.contentType"></span></label>
+			<select type="text" id="node-input-contentType" style="width:70%;">
+				<!-- option value="text.plain">text.plain</option -->
+				<option selected value="application/octet-stream">application/octet-stream</option>
+				<option value="application/json">application/json</option>
+				<option value="application/vnd.api+json">application/vnd.api+json</option>
+				<option value="application/pdf">image/pdf</option>
+				<option value="application/xml">image/xml</option>
+				<option value="application/zip">image/zip</option>
+				<option value="image/gif">image/gif</option>
+				<option value="image/jpeg">image/jpeg</option>
+				<option value="image/png">image/png</option>
+				<option value="image/tiff">image/tiff</option>
+				<option value="image/vnd.microsoft.icon">image/vnd.microsoft.icon</option>
+				<option value="image/x-icon">image/x-icon</option>
+				<option value="image/vnd.djvu">image/vnd.djvu</option>
+				<option value="audio/mpeg">image/mpeg</option>
+				<option value="audio/x-ms-wma">image/x-ms-wma</option>
+				<option value="audio/vnd.rn-realaudio">image/vnd.rn-realaudio</option>
+				<option value="audio/x-wav">image/x-wav</option>
+			</select>
+		</div>
+
+		<div id="ifModifiedSinceAttr" class="form-row node-input-ifModifiedSince hiddenAttrs">
+			<label for="node-input-ifModifiedSince"><i class="fa fa-clock-o"></i> <span
+					data-i18n="forge.label.ifModifiedSince"></span></label>
+			<input type="datetime-local" id="node-input-ifModifiedSince"
+				data-i18n="[placeholder]forge.placeholder.ifModifiedSince" />
+		</div>
+
+		<div id="includePathInProjectAttr" class="form-row node-input-includePathInProject hiddenAttrs">
+			<label for="node-input-includePathInProject"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.includePathInProject"></span></label>
+			<input type="checkbox" id="node-input-includePathInProject"
+				data-i18n="[placeholder]forge.placeholder.includePathInProject" />
+		</div>
+
+		<div id="includeHiddenAttr" class="form-row node-input-includeHidden hiddenAttrs">
+			<label for="node-input-includeHidden"><i class="fa fa-file"></i> <span
+					data-i18n="forge.label.includeHidden"></span></label>
+			<input type="checkbox" id="node-input-includeHidden"
+				data-i18n="[placeholder]forge.placeholder.includeHidden" />
+		</div>
+
+	</div>
+
+	<div id="RawResponseAttr" class="form-row node-input-raw">
+		<label for="node-input-raw"><i class="fa fa-tag"></i> <span
+				data-i18n="forge.label.raw"></span></label>
+		<input type="checkbox" id="node-input-raw" />
+	</div>
+
+	<script type="text/javascript">
+		var nodeOps = {
+
+			// --- 3 Legged ---
+
+			Authorize: [],
+			GetToken: [ '#codeAttr' ],
+			Refresh: [],
+
+			// --- Hubs ---
+
+			ListHubs: [],
+			HubDetails: [ '#hubidAttr' ],
+
+			// --- Projects ---
+
+			ListProjects: [ '#hubidAttr' ],
+			ProjectDetails: [ '#hubidAttr', '#projectidAttr' ],
+			ProjectHubDetails: [ '#hubidAttr', '#projectidAttr' ],
+			ListFolders: [ '#hubidAttr', '#projectidAttr' ],
+			Download: [ '#projectidAttr', '#downoadidAttr' ],
+			JobInfo: [ '#projectidAttr', '#jobidAttr' ],
+			CreateDownloadType: [ '#projectidAttr' /*, '#contentTypeAttr'*/ ],
+			CreateStorage: [ '#projectidAttr' /*, '#contentTypeAttr'*/ ],
+
+			// --- Folders ---
+			FolderDetails: [ '#projectidAttr', '#folderidAttr', '#ifModifiedSinceAttr' ],
+			FolderContents: [ '#projectidAttr', '#folderidAttr', '#includeHiddenAttr' ],
+			FolderParent: [ '#projectidAttr', '#folderidAttr' ],
+			FolderRefs: [ '#projectidAttr', '#folderidAttr' ],
+			FolderLinks: [ '#projectidAttr', '#folderidAttr' ],
+			FolderRelationshipsRefs: [ '#projectidAttr', '#folderidAttr' ],
+			Search: [ '#projectidAttr', '#folderidAttr' ],
+			CreateFolder: [ '#projectidAttr' /*, '#contentTypeAttr'*/ ],
+			CreateFolderRelationshipsRef: [ '#projectidAttr', '#folderidAttr' /*, '#contentTypeAttr'*/ ],
+			ModifyFolder: [ '#projectidAttr', '#folderidAttr' /*, '#contentTypeAttr'*/ ],
+
+			// --- Items ---
+			ItemDetails: [ '#projectidAttr', '#itemidAttr', '#includePathInProjectAttr' ],
+			ItemParentFolder: [ '#projectidAttr', '#itemidAttr' ],
+			ItemRefs: [ '#projectidAttr', '#itemidAttr' ],
+			ItemLinks: [ '#projectidAttr', '#itemidAttr' ],
+			ItemRelationshipsRefs: [ '#projectidAttr', '#itemidAttr' ],
+			ItemTip: [ '#projectidAttr', '#itemidAttr' ],
+			ItemVersions: [ '#projectidAttr', '#itemidAttr' ],
+			CreateItemVersion: [ '#projectidAttr' /*, '#contentTypeAttr'*/ ],
+			CreateItemRelationshipsRef: [ '#projectidAttr', '#itemidAttr' /*, '#contentTypeAttr'*/ ],
+			ModifyItem: [ '#projectidAttr', '#itemidAttr' /*, '#contentTypeAttr'*/ ],
+
+			// --- Versions ---
+
+			// --- Commands ---
+			
+		};
+		$('#node-input-operation').on('change', function () {
+			$('#AttrHolder').children().addClass('hiddenAttrs').removeClass('visibleAttrs');
+			if (nodeOps[this.value])
+				$(nodeOps[this.value].join()).addClass('visibleAttrs').removeClass('hiddenAttrs');
+		});
+
+</script>
+
+<script type="text/javascript">
+	RED.nodes.registerType('forge-dm', {
+		category: 'forge',
+		color: '#0696D7',
+		icon: 'forge.png',
+		align: 'right',
+		defaults: {
+			name: {
+				value: ''
+			},
+			topic: {
+				value: ''
+			},
+			forge: {
+				type: 'forge-credentials',
+				required: true
+			},
+			operation: {
+				value: 'ListHubs'
+			},
+			raw: {
+				value: false
+			},
+
+			hubid: {
+				value: ''
+			},
+			projectid: {
+				value: ''
+			},
+
+			downloadid: {
+				value: ''
+			},
+			jobid: {
+				value: ''
+			},
+			folderid: {
+				value: ''
+			},
+
+			ifModifiedSince: {
+				value: null
+			},
+			includeHidden: {
+				value: null
+			},
+			includePathInProject: {
+				value: null
+			},
+			contentType: {
+				value: 'application/vnd.api+json'
+			},
+
+		},
+		inputs: 1,
+		//inputLabels: ['credentials', 'in'],
+		outputs: 2,
+		outputLabels: ['response', 'err'],
+		label: function () {
+			return (this.name || 'dm ' + this.operation);
+		},
+		// oneditprepare is called immediately before the dialog is displayed.
+		// oneditsave is called when the edit dialog is okayed.
+		// oneditcancel is called when the edit dialog is cancelled.
+		// oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
+		// oneditresize is called when the edit dialog is resized.
+		oneditsave: function () {
+			//this.hubType = $('#node-input-hubType').val();
+			var trimFields = [
+				'hubid',
+				'projectid',
+			];
+			// Just in case any whitespace has crept in with the copy-paste of the fields
+			trimFields.forEach(function (field) {
+				var v = $('#node-input-' + field).val();
+				v = v.trim();
+				$('#node-input-' + field).val(v);
+			});
+		}
+	});
+</script>

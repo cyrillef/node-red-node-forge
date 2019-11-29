@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/* jshint esversion: 8 */
+
 module.exports = function (RED) {
 	"use strict";
 
@@ -64,13 +66,13 @@ module.exports = function (RED) {
 						fulfill(node.ClientSecret);
 					});
 				}));
-			if (this.credentials.CallbackURLType !== 'flow' && this.credentials.CallbackURLType !== 'global')
-				this.CallbackURL = RED.util.evaluateNodeProperty(this.credentials.CallbackURL, this.credentials.CallbackURLType, this, out);
+			if (n.CallbackURLType !== 'flow' && n.CallbackURLType !== 'global')
+				this.CallbackURL = RED.util.evaluateNodeProperty(n.CallbackURL, n.CallbackURLType, this, out);
 			else
 				promises.push(new Promise(function (fulfill, reject) {
-					if (!/^#:\((\S+?)\)::(.*)$/.test(node.credentials.CallbackURL))
-						node.credentials.CallbackURL = '#:(forge)::' + node.credentials.CallbackURL;
-					RED.util.evaluateNodeProperty(node.credentials.CallbackURL, node.credentials.CallbackURLType, node.credentials, out, function (err, res) {
+					if (!/^#:\((\S+?)\)::(.*)$/.test(node.CallbackURL))
+						node.CallbackURL = '#:(forge)::' + node.CallbackURL;
+					RED.util.evaluateNodeProperty(node.CallbackURL, node.CallbackURLType, node, out, function (err, res) {
 						node.CallbackURL = err ? '' : res;
 						fulfill(node.CallbackURL);
 					});
@@ -89,25 +91,29 @@ module.exports = function (RED) {
 			runOauth(node);
 		else
 			Promise.all(promises)
-			.then(function (values) {
-				runOauth(node);
-			})
-			.catch(function (error) {
-				console.error(error);
-			});
+				.then(function (values) {
+					runOauth(node);
+				})
+				.catch(function (error) {
+					console.error(error);
+				});
 	}
 
 	function runOauth(node) {
 		if (!node.FORGE) {
-			node.FORGE = callOauth2Legged(node.ClientID, node.ClientSecret, node.Scope);
-			node.FORGE
-				.then((response) => {
-					node.FORGE = response;
-				})
-				.catch((error) => {
-					node.FORGE = undefined;
-					node.error('Forge credentials error' + error);
-				});
+			if (node.CallbackURL && node.CallbackURL !== '') { // 3legged
+				node.FORGE = createOauth3Legged(node.ClientID, node.ClientSecret, node.CallbackURL, node.Scope);
+			} else { // 2legged
+				node.FORGE = callOauth2Legged(node.ClientID, node.ClientSecret, node.Scope);
+				node.FORGE
+					.then((response) => {
+						node.FORGE = response;
+					})
+					.catch((error) => {
+						node.FORGE = undefined;
+						node.error('Forge credentials error' + error);
+					});
+			}
 		}
 	}
 
@@ -147,6 +153,11 @@ module.exports = function (RED) {
 					reject(error);
 				});
 		}));
+	}
+
+	function createOauth3Legged(clientId, clientSecret, callbackURL, scope) {
+		var oa3legged = new ForgeAPI.AuthClientThreeLegged(clientId, clientSecret, callbackURL, scope, true);
+		return (oa3legged);
 	}
 
 };

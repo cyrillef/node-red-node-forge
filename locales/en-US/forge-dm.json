@@ -1,0 +1,64 @@
+{
+	"forge": {
+		"label": {
+			"forge": "Forge",
+			"name": "Name",
+			"topic": "Topic",
+			"operation": "Operation",
+			"hubid": "Hub ID",
+			"projectid": "Project ID",
+			"folderid": "Folder ID",
+			"itemid": "Item ID",
+			"jobid": "Job ID",
+			"downloadid": "Download ID",
+			"url": "URL",
+			"code": "Code",
+			"includePathInProject": "Include Path",
+			"includeHidden": "Include Hidden",
+			"ifModifiedSince": "ifModifiedSince",
+			"contentType": "contentType",
+			"raw": "Raw Response"
+		},
+		"placeholder": {
+			"name": "Name",
+			"topic": "Topic",
+			"hubid": "Hub ID",
+			"projectid": "Project ID",
+			"folderid": "Folder ID",
+			"itemid": "Item ID",
+			"jobid": "Job ID",
+			"downloadid": "Download ID",
+			"url": "URL",
+			"code": "Code",
+			"includePathInProject": "Include Path",
+			"includeHidden": "Include Hidden",
+			"ifModifiedSince": "ifModifiedSince",
+			"contentType": "contentType",
+			"raw": "Raw Response"
+		},
+		"tip": {
+			"config1": "",
+			"config2": ""
+		},
+		"status": {
+			"initializing": "initializing",
+			"error": "error",
+			"checking-for-changes": "checking for changes",
+			"downloading": "downloading",
+			"checking-credentials": "checking credentials",
+			"uploading": "uploading",
+			"failed": "failed"
+		},
+		"warn": {
+			"missing-credentials": "Missing Forge credentials"
+		},
+		"error": {
+			"failed-to-fetch": "failed to fetch DM state: __err__",
+			"no-bucket-specified": "No bucket specified",
+			"no-filename-specified": "No filename specified",
+			"download-failed": "download failed: __err__",
+			"forge-oss-error": "Forge error: __err__",
+			"unknown-operation": "failed: Operation node defined - __op__"
+		}
+	}
+}
