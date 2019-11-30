@@ -49,6 +49,7 @@ SOFTWARE.
 			<option value="Authorize">Authorize</option>
 			<option value="GetToken">Get Token</option>
 			<option value="Refresh">Refresh</option>
+			<option value="Me">Me</option>
 
 			<option value="">--- Hubs ---</option>
 			<option value="ListHubs">List Hubs</option>
@@ -59,38 +60,46 @@ SOFTWARE.
 			<option value="ProjectDetails">Project Details</option>
 			<option value="ProjectHubDetails">Project Hub Details</option>
 			<option value="ListFolders">List Folders</option>
-			<option value="Download">Download **</option>
-			<option value="JobInfo">Job Info **</option>
-			<option value="CreateDownloadType">Create Download Type **</option>
-			<option value="CreateStorage">Create Storage **</option>
+			<option value="Download">Download</option>
+			<option value="JobInfo">Job Info</option>
+			<option value="CreateDownloadType">Create Download Type</option>
+			<option value="CreateStorage">Create Storage</option>
 
 			<option value="">--- Folders ---</option>
 			<option value="FolderDetails">Folder Details</option>
 			<option value="FolderContents">Folder Contents</option>
 			<option value="FolderParent">Folder Parent</option>
 			<option value="FolderRefs">Folder Refs</option>
-			<option value="FolderLinks">FolderLinks **</option>
+			<option value="FolderRelationshipsLinks">Folder Relationships Links</option>
 			<option value="FolderRelationshipsRefs">Folder Relationships Refs</option>
-			<option value="Search">Search **</option>
+			<option value="Search">Search</option>
 			<option value="CreateFolder">Create Folder</option>
 			<option value="CreateFolderRelationshipsRef">Create Folder Relationships Ref</option>
-			<option value="ModifyFolder">ModifyFolder **</option>
+			<option value="ModifyFolder">Modify  Folder</option>
 
 			<option value="">--- Items ---</option>
-			ItemDetails
-			ItemParentFolder
-			ItemRefs
-			ItemLinks
-			ItemRelationshipsRefs
-			ItemTip
-			ItemVersions
-			CreateItemVersion
-			CreateItemRelationshipsRef
-			ModifyItem
+			<option value="ItemDetails">Item Details</option>
+			<option value="ItemParentFolder">Item Parent Folder</option>
+			<option value="ItemRefs">ItemRefs</option>
+			<option value="ItemRelationshipsLinks">Item Relationships Links</option>
+			<option value="ItemRelationshipsRefs">Item Relationships Refs</option>
+			<option value="ItemTip">Item Tip</option>
+			<option value="ItemVersions">Item Versions</option>
+			<option value="CreateItemVersion">Create Item Version</option>
+			<option value="CreateItemRelationshipsRef">Create ItemR elationships Ref</option>
+			<option value="ModifyItem">Modify Item</option>
 
 			<option value="">--- Versions ---</option>
-
-			<option value="">--- Commands ---</option>
+			<option value="VersionDetails">Version Details</option>
+			<option value="VersionFileFormats">Version FileFormats</option>
+			<option value="VersionDownloads">Version Downloads</option>
+			<option value="VersionItem">Version Item</option>
+			<option value="VersionRefs">Version Refs</option>
+			<option value="VersionRelationshipsLinks">Version Relationships Links</option>
+			<option value="VersionRelationshipsRefs">Version Relationships Refs</option>
+			<option value="CreateVersion">Create Version</option>
+			<option value="CreateVersionRelationshipsRef">Create Version Relationships Ref</option>
+			<option value="ModifyVersion">Modify Version</option>
 
 		</select>
 	</div>
@@ -117,6 +126,11 @@ SOFTWARE.
 			<input type="text" id="node-input-itemid" data-i18n="[placeholder]forge.placeholder.itemid" />
 		</div>
 
+		<div id="versionidAttr" class="form-row node-input-versionid hiddenAttrs">
+			<label for="node-input-versionid"><i class="fa fa-key"></i> <span data-i18n="forge.label.versionid"></span></label>
+			<input type="text" id="node-input-versionid" data-i18n="[placeholder]forge.placeholder.versionid" />
+		</div>
+			
 		<div id="jobidAttr" class="form-row node-input-jobid hiddenAttrs">
 			<label for="node-input-jobid"><i class="fa fa-key"></i> <span data-i18n="forge.label.jobid"></span></label>
 			<input type="text" id="node-input-jobid" data-i18n="[placeholder]forge.placeholder.jobid" />
@@ -135,11 +149,6 @@ SOFTWARE.
 		<div id="downloadidAttr" class="form-row node-input-downloadid hiddenAttrs">
 			<label for="node-input-downloadid"><i class="fa fa-key"></i> <span data-i18n="forge.label.downloadid"></span></label>
 			<input type="text" id="node-input-downloadid" data-i18n="[placeholder]forge.placeholder.downloadid" />
-		</div>
-
-		<div id="jobidAttr" class="form-row node-input-jobid hiddenAttrs">
-			<label for="node-input-jobid"><i class="fa fa-key"></i> <span data-i18n="forge.label.jobid"></span></label>
-			<input type="text" id="node-input-jobid" data-i18n="[placeholder]forge.placeholder.jobid" />
 		</div>
 
 		<div id="contentTypeAttr" class="form-row hiddenAttrs">
@@ -188,6 +197,48 @@ SOFTWARE.
 				data-i18n="[placeholder]forge.placeholder.includeHidden" />
 		</div>
 
+		<div id="filtersAttr" class="form-row hiddenAttrs">
+			<div class="form-row" style="margin-bottom:0;">
+				<label><i class="fa fa-list"></i> <span data-i18n="forge.label.filters"></span></label>
+			</div>
+			<div class="form-row node-input-filters-container-row">
+				<ol id="node-input-filters-container"></ol>
+			</div>
+		</div>
+
+		<div id="pageNumberAttr" class="form-row node-input-pageNumber hiddenAttrs">
+			<label for="node-input-pageNumber"><i class="fa fa-key"></i> <span data-i18n="forge.label.pageNumber"></span></label>
+			<input type="number" min="0" id="node-input-pageNumber" data-i18n="[placeholder]forge.placeholder.pageNumber" />
+		</div>
+		<div id="pageLimitAttr" class="form-row node-input-pageLimit hiddenAttrs">
+			<label for="node-input-pageLimit"><i class="fa fa-key"></i> <span data-i18n="forge.label.pageLimit"></span></label>
+			<input type="number" min="1" id="node-input-pageLimit" data-i18n="[placeholder]forge.placeholder.pageLimit" />
+		</div>
+
+		<div id="bodyEditorAttr" class="form-row hiddenAttrs">
+			<div class="form-row" style="margin-bottom: 0px;">
+				<label for="node-input-body"><i class="fa fa-square-o"></i> <span
+						data-i18n="forge.label.body"></span></label>
+				<input type="hidden" id="node-input-body" autofocus="autofocus">
+				<input type="hidden" id="node-input-body-noerr">
+			</div>
+			<div class="form-row node-text-editor-row" style="position:relative">
+				<div style="position: absolute; right:0; bottom:calc(100% + 3px);"><button id="node-input-body-expand-js"
+						class="editor-button editor-button-small"><i class="fa fa-expand"></i></button></div>
+				<div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-body-editor"></div>
+			</div>
+		</div>
+
+		<div id="copyFromAttr" class="form-row node-input-copyFrom hiddenAttrs">
+			<label for="node-input-copyFrom"><i class="fa fa-key"></i> <span data-i18n="forge.label.copyFrom"></span></label>
+			<input type="text" id="node-input-copyFrom" data-i18n="[placeholder]forge.placeholder.copyFrom" />
+		</div>
+
+		<div id="xuseridAttr" class="form-row node-input-xuserid hiddenAttrs">
+			<label for="node-input-xuserid"><i class="fa fa-key"></i> <span data-i18n="forge.label.xuserid"></span></label>
+			<input type="text" id="node-input-xuserid" data-i18n="[placeholder]forge.placeholder.xuserid" autocomplete="off" />
+		</div>
+
 	</div>
 
 	<div id="RawResponseAttr" class="form-row node-input-raw">
@@ -204,51 +255,71 @@ SOFTWARE.
 			Authorize: [],
 			GetToken: [ '#codeAttr' ],
 			Refresh: [],
+			Me: [],
 
 			// --- Hubs ---
 
-			ListHubs: [],
-			HubDetails: [ '#hubidAttr' ],
+			ListHubs: [ "#filtersAttr", '#xuseridAttr' ],
+			HubDetails: [ '#hubidAttr', '#xuseridAttr' ],
 
 			// --- Projects ---
 
-			ListProjects: [ '#hubidAttr' ],
-			ProjectDetails: [ '#hubidAttr', '#projectidAttr' ],
-			ProjectHubDetails: [ '#hubidAttr', '#projectidAttr' ],
-			ListFolders: [ '#hubidAttr', '#projectidAttr' ],
-			Download: [ '#projectidAttr', '#downoadidAttr' ],
-			JobInfo: [ '#projectidAttr', '#jobidAttr' ],
-			CreateDownloadType: [ '#projectidAttr' /*, '#contentTypeAttr'*/ ],
-			CreateStorage: [ '#projectidAttr' /*, '#contentTypeAttr'*/ ],
+			ListProjects: [ '#hubidAttr', '#filtersAttr', '#pageNumberAttr', '#pageLimitAttr', '#xuseridAttr' ],
+			ProjectDetails: [ '#hubidAttr', '#projectidAttr', '#xuseridAttr' ],
+			ProjectHubDetails: [ '#hubidAttr', '#projectidAttr', '#xuseridAttr' ],
+			ListFolders: [ '#hubidAttr', '#projectidAttr', '#xuseridAttr' ],
+			Download: [ '#projectidAttr', '#downloadidAttr', '#xuseridAttr' ],
+			JobInfo: [ '#projectidAttr', '#jobidAttr', '#xuseridAttr' ],
+			CreateDownloadType: [ '#projectidAttr' /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#xuseridAttr' ],
+			CreateStorage: [ '#projectidAttr' /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#xuseridAttr' ],
 
 			// --- Folders ---
-			FolderDetails: [ '#projectidAttr', '#folderidAttr', '#ifModifiedSinceAttr' ],
-			FolderContents: [ '#projectidAttr', '#folderidAttr', '#includeHiddenAttr' ],
-			FolderParent: [ '#projectidAttr', '#folderidAttr' ],
-			FolderRefs: [ '#projectidAttr', '#folderidAttr' ],
-			FolderLinks: [ '#projectidAttr', '#folderidAttr' ],
-			FolderRelationshipsRefs: [ '#projectidAttr', '#folderidAttr' ],
-			Search: [ '#projectidAttr', '#folderidAttr' ],
-			CreateFolder: [ '#projectidAttr' /*, '#contentTypeAttr'*/ ],
-			CreateFolderRelationshipsRef: [ '#projectidAttr', '#folderidAttr' /*, '#contentTypeAttr'*/ ],
-			ModifyFolder: [ '#projectidAttr', '#folderidAttr' /*, '#contentTypeAttr'*/ ],
+			FolderDetails: [ '#projectidAttr', '#folderidAttr', '#ifModifiedSinceAttr', '#xuseridAttr' ],
+			FolderContents: [
+				'#projectidAttr', '#folderidAttr', '#filtersAttr',
+				'#pageNumberAttr', '#pageLimitAttr',
+				'#includeHiddenAttr', '#xuseridAttr'
+			],
+			FolderParent: [ '#projectidAttr', '#folderidAttr', '#xuseridAttr' ],
+			FolderRefs: [ '#projectidAttr', '#folderidAttr', '#filtersAttr', '#xuseridAttr' ],
+			FolderRelationshipsLinks: [ '#projectidAttr', '#folderidAttr', '#filtersAttr', '#xuseridAttr' ],
+			FolderRelationshipsRefs: [ '#projectidAttr', '#folderidAttr', '#filtersAttr', '#xuseridAttr' ],
+			Search: [ '#projectidAttr', '#folderidAttr', '#filtersAttr', '#pageNumberAttr', '#pageLimitAttr' ],
+			CreateFolder: [ '#projectidAttr' /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#xuseridAttr' ],
+			CreateFolderRelationshipsRef: [
+				'#projectidAttr', '#folderidAttr'
+				/*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#xuseridAttr'
+			],
+			ModifyFolder: [
+				'#projectidAttr', '#folderidAttr'
+				/*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#xuseridAttr'
+			],
 
 			// --- Items ---
-			ItemDetails: [ '#projectidAttr', '#itemidAttr', '#includePathInProjectAttr' ],
-			ItemParentFolder: [ '#projectidAttr', '#itemidAttr' ],
-			ItemRefs: [ '#projectidAttr', '#itemidAttr' ],
-			ItemLinks: [ '#projectidAttr', '#itemidAttr' ],
-			ItemRelationshipsRefs: [ '#projectidAttr', '#itemidAttr' ],
-			ItemTip: [ '#projectidAttr', '#itemidAttr' ],
-			ItemVersions: [ '#projectidAttr', '#itemidAttr' ],
-			CreateItemVersion: [ '#projectidAttr' /*, '#contentTypeAttr'*/ ],
-			CreateItemRelationshipsRef: [ '#projectidAttr', '#itemidAttr' /*, '#contentTypeAttr'*/ ],
-			ModifyItem: [ '#projectidAttr', '#itemidAttr' /*, '#contentTypeAttr'*/ ],
+			ItemDetails: [ '#projectidAttr', '#itemidAttr', '#includePathInProjectAttr', '#xuseridAttr' ],
+			ItemParentFolder: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
+			ItemRefs: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
+			ItemRelationshipsLinks: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
+			ItemRelationshipsRefs: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
+			ItemTip: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
+			ItemVersions: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
+			CreateItemVersion: [ '#projectidAttr' /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#copyFromAttr', '#xuseridAttr' ],
+			CreateItemRelationshipsRef: [ '#projectidAttr', '#itemidAttr' /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#xuseridAttr' ],
+			ModifyItem: [ '#projectidAttr', '#itemidAttr' /*, '#contentTypeAttr'*/, '#xuseridAttr' ],
 
 			// --- Versions ---
 
-			// --- Commands ---
-			
+			VersionDetails: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
+			VersionFileFormats: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
+			VersionDownloads: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
+			VersionItem: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
+			VersionRefs: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
+			VersionRelationshipsLinks: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
+			VersionRelationshipsRefs: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
+			CreateVersion: [ '#projectidAttr', /*, '#contentTypeAttr'*/, '#xuseridAttr' ],
+			CreateVersionRelationshipsRef: [ '#projectidAttr', '#versionidAttr' /*, '#contentTypeAttr'*/, '#xuseridAttr' ],
+			ModifyVersion: [ '#projectidAttr', '#versionidAttr' /*, '#contentTypeAttr'*/, '#xuseridAttr' ],
+
 		};
 		$('#node-input-operation').on('change', function () {
 			$('#AttrHolder').children().addClass('hiddenAttrs').removeClass('visibleAttrs');
@@ -259,6 +330,247 @@ SOFTWARE.
 </script>
 
 <script type="text/javascript">
+	function filterParameters() {
+		return ({
+			id: 'attributes.name',
+			custom: '',
+			modifier: '',
+			expr: '',
+
+			_defaults: function (filter) {
+				filter.id = filter.id || this.id;
+				filter.custom = filter.custom || this.custom;
+				filter.modifier = filter.modifier || this.modifier;
+				filter.expr = filter.expr || this.expr;
+				return (filter);
+			},
+			_create: function (filter, rows, container) {
+				/* beautify preserve:start */
+				var selectField = $('<select />', {
+					class: 'node-input-filter-id',
+					style: 'width: 35%;'
+				}).appendTo(rows[1]);
+				/* beautify preserve:end */
+
+				var selectOptions = {
+					'custom': 'Custom',
+					'id': 'ID',
+					'type': 'Type',
+					'attributes.name': 'Name',
+					'attributes.region': 'Region',
+					'attributes.extension.version': 'Version',
+					'attributes.extension.type': 'Extension Type',
+
+					'mimeType': 'mimeType',
+					'attributes.fileName': 'File Name',
+					'fileType': 'File Type (Ext)',
+					'lastModifiedTime': 'Last Modified Time',
+					'meta.refType': 'Ref Type',
+					'direction': 'Direction',
+					'hidden': 'Hidden'
+				};
+
+				var items = Object.values(selectOptions);
+				var keys = Object.keys(selectOptions);
+				for (var i = 0; i < items.length; i++) {
+					selectField.append(
+						$('<option></option>').val(keys[i]).text(items[i])
+					);
+				}
+				selectField.val(keys[3]);
+
+				var custom = $('<input />', {
+						class: 'node-input-filter-custom',
+						type: 'text',
+						style: 'display: none;'
+					})
+					.appendTo(rows[1]);
+
+				/* beautify preserve:start */
+				var modifier = $('<select />', {
+					class: 'node-input-filter-modifier',
+					style: 'width: 35%;'
+				}).appendTo(rows[2]);
+				/* beautify preserve:end */
+
+				selectOptions = {
+					'': 'None',
+					'-lt': '<',
+					'-le': '<=',
+					'-eq': '==',
+					'-ge': '>=',
+					'-gt': '>',
+					'-starts': 'starts',
+					'-ends': 'ends',
+					'-contains': 'contains'
+				};
+
+				items = Object.values(selectOptions);
+				keys = Object.keys(selectOptions);
+				for (var i = 0; i < items.length; i++) {
+					modifier.append(
+						$('<option></option>').val(keys[i]).text(items[i])
+					);
+				}
+				modifier.val(keys[0]);
+
+				var expr = $('<input />', {
+						class: 'node-input-filter-expr',
+						type: 'text',
+						width: '65%',
+					})
+					.appendTo(rows[2]);
+
+				/* beautify preserve:start */
+				var exprExtType = $('<select />', {
+					class: 'node-input-filter-extType',
+					style: 'width: 65%; display: none;'
+				}).appendTo(rows[2]);
+				/* beautify preserve:end */
+				exprExtType.append('<option value="hubs:autodesk.bim360:Account">BIM360 Docs</option>');
+				exprExtType.append('<option value="hubs:autodesk.core:Hub">Team</option>');
+				exprExtType.append('<option value="hubs:autodesk.a360:PersonalHub">Personal</option>');
+
+				/* beautify preserve:start */
+				var exprDirection = $('<select />', {
+					class: 'node-input-filter-direction',
+					style: 'width: 65%; display: none;'
+				}).appendTo(rows[2]);
+				/* beautify preserve:end */
+				exprDirection.append('<option value="from">From</option>');
+				exprDirection.append('<option value="to">To</option>');
+
+				/* beautify preserve:start */
+				var exprRefType = $('<select />', {
+					class: 'node-input-filter-refType',
+					style: 'width: 65%; display: none;'
+				}).appendTo(rows[2]);
+				/* beautify preserve:end */
+				exprRefType.append('<option value="derived">derived</option>');
+				exprRefType.append('<option value="dependencies">dependencies</option>');
+				exprRefType.append('<option value="auxiliary">auxiliary</option>');
+				exprRefType.append('<option value="xrefs">xrefs</option>');
+				exprRefType.append('<option value="includes">includes</option>');
+
+				var lastModifiedTime = $('<input />', {
+						class: 'node-input-filter-lastModifiedTime',
+						type: 'datetime-local',
+						style: 'display: none;'
+					})
+					.appendTo(rows[2]);
+
+				var that = this;
+				selectField.on('change', function (evt) {
+					that._switch(this.value, filter, rows);
+				});
+			},
+			_fill: function (filter, rows) {
+				debugger;
+				this._switch (filter.id, filter, rows);
+
+				var parent = rows[1].parent().parent();
+				$(parent).find('.node-input-filter-id').val(filter.id);
+				//$(parent).find('.node-input-filter-custom').val(filter.custom);
+				$(parent).find('.node-input-filter-modifier').val(filter.modifier);
+				//$(parent).find('.node-input-filter-expr').val(filter.expr);
+
+				switch(filter.id) {
+					case 'custom':
+						$(parent).find('.node-input-filter-custom').val(filter.custom);
+						$(parent).find('.node-input-filter-expr').val(filter.expr);
+						break;
+					case 'attributes.extension.type':
+						$(parent).find('.node-input-filter-extType').val(filter.expr);
+						break;
+					case 'direction':
+						$(parent).find('.node-input-filter-direction').val(filter.expr);
+						break;
+					case 'meta.refType':
+						$(parent).find('.node-input-filter-refType').val(filter.expr);
+						break;
+					case 'lastModifiedTime':
+						$(parent).find('.node-input-filter-lastModifiedTime').val(filter.expr);
+						break;
+					default:
+						$(parent).find('.node-input-filter-expr').val(filter.expr);
+						break;
+				}
+			},
+			_save: function (itemUI) {
+				debugger;
+				var result = {
+					id: $(itemUI).find('.node-input-filter-id').val(),
+					custom: '', //custom: $(itemUI).find('.node-input-filter-custom').val(),
+					modifier: $(itemUI).find('.node-input-filter-modifier').val(),
+					expr: $(itemUI).find('.node-input-filter-expr').val(),
+				};
+				
+				switch(result.id) {
+					case 'custom':
+						result.custom = $(itemUI).find('.node-input-filter-custom').val();
+						//result.expr = $(itemUI).find('.node-input-filter-expr').val();
+						break;
+					case 'attributes.extension.type':
+						result.expr = $(itemUI).find('.node-input-filter-extType').val();
+						break;
+					case 'direction':
+						result.expr = $(itemUI).find('.node-input-filter-direction').val();
+						break;
+					case 'meta.refType':
+						result.expr = $(itemUI).find('.node-input-filter-refType').val();
+						break;
+					case 'lastModifiedTime':
+						result.expr = $(itemUI).find('.node-input-filter-lastModifiedTime').val();
+						break;
+					default:
+						//result.expr = $(itemUI).find('.node-input-filter-expr').val();
+						break;
+				}
+				return (result);
+			},
+			_switch: function (value, filter, rows) {
+				debugger;
+				var parent = rows[1].parent().parent();
+				var custom = $(parent).find('.node-input-filter-custom');
+				var expr = $(parent).find('.node-input-filter-expr');
+				var exprExtType = $(parent).find('.node-input-filter-extType');
+				var exprDirection = $(parent).find('.node-input-filter-direction');
+				var exprRefType = $(parent).find('.node-input-filter-refType');
+				var lastModifiedTime = $(parent).find('.node-input-filter-lastModifiedTime');
+				
+				custom.css('display', 'none');
+				expr.css({ display: 'inline',  width: '65%' });
+				exprExtType.css('display', 'none');
+				exprDirection.css('display', 'none');
+				exprRefType.css('display', 'none');
+				lastModifiedTime.css('display', 'none');
+				switch(value) {
+					case 'custom':
+						custom.css({ display: 'inline',  width: '65%' });
+						break;
+					case 'attributes.extension.type':
+						expr.css('display', 'none');
+						exprExtType.css({ display: 'inline',  width: '65%' });
+						break;
+					case 'direction':
+						expr.css('display', 'none');
+						exprDirection.css({ display: 'inline',  width: '65%' });
+						break;
+					case 'meta.refType':
+						expr.css('display', 'none');
+						exprRefType.css({ display: 'inline',  width: '65%' });
+						break;
+					case 'lastModifiedTime':
+						expr.css('display', 'none');
+						lastModifiedTime.css({ display: 'inline',  width: '65%' });
+						break;
+					default:
+						break;
+				}
+			}
+		});
+	}
+
 	RED.nodes.registerType('forge-dm', {
 		category: 'forge',
 		color: '#0696D7',
@@ -288,14 +600,20 @@ SOFTWARE.
 			projectid: {
 				value: ''
 			},
+			folderid: {
+				value: ''
+			},
+			itemid: {
+				value: ''
+			},
+			versionid: {
+				value: ''
+			},
 
 			downloadid: {
 				value: ''
 			},
 			jobid: {
-				value: ''
-			},
-			folderid: {
 				value: ''
 			},
 
@@ -312,6 +630,33 @@ SOFTWARE.
 				value: 'application/vnd.api+json'
 			},
 
+			pageNumber: {
+				value: null
+			},
+			pageLimit: {
+				value: null
+			},
+
+			filters: {
+				value: [{
+					id: 'attributes.name',
+					custom: '',
+					modifier: '',
+					expr: '',
+				}]
+			},
+
+			body: {
+				value: null
+			},
+			copyFrom: {
+				value: null
+			},
+
+			xuserid: {
+				value: null
+			}
+
 		},
 		inputs: 1,
 		//inputLabels: ['credentials', 'in'],
@@ -325,6 +670,16 @@ SOFTWARE.
 		// oneditcancel is called when the edit dialog is cancelled.
 		// oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
 		// oneditresize is called when the edit dialog is resized.
+		oneditprepare: function () {
+			// AppBundles editor
+			this._def.createEditor(this, 'node-input-body', 'ace/mode/javascript');
+			// Filters
+			this._def.createListContainer(this, 'node-input-filters', this.filters, filterParameters(), 3, 300);
+		},
+		oneditcancel: function () {
+			// AppBundles editor
+			this._def.cancelEditor(this, 'node-input-body');
+		},
 		oneditsave: function () {
 			//this.hubType = $('#node-input-hubType').val();
 			var trimFields = [
@@ -337,6 +692,158 @@ SOFTWARE.
 				v = v.trim();
 				$('#node-input-' + field).val(v);
 			});
+
+			// body editor
+			this._def.saveEditor(this, 'node-input-body');
+			// Filters
+			this.filters = this._def.saveListContainer(this, 'node-input-filters', filterParameters());
+
+			// Debug
+			var elt =$('#node-input-xuserid');
+			if ( elt.val() === 'autodesk' ) {
+				elt.val('');
+				this.xuserid ='';
+			}
+		},
+		oneditresize: function (size) {
+			// body
+			$('#node-input-body-editor').css({
+				height: '70px',
+				'min-height': '70px'
+			})
+			this._def.resizeEditor(this, 'node-input-body', size);
+
+			// Filters
+			this._def.resizeListContainer(this, 'node-input-filters', 'node-input-filters', size);
+		},
+
+		createEditor: function (that, id /*'node-input-appbundles'*/ , mode /*'ace/mode/text'*/ ) {
+			if (!that._editors)
+				that._editors = {};
+			that._editors[id] = RED.editor.createEditor({
+				id: id + '-editor',
+				mode: mode,
+				value: $('#' + id).val(),
+				globals: {
+					msg: true,
+					context: true,
+					RED: true,
+					util: true,
+					flow: true,
+					global: true,
+					console: true,
+					Buffer: true,
+					setTimeout: true,
+					clearTimeout: true,
+					setInterval: true,
+					clearInterval: true
+				}
+			});
+
+			RED.library.create({
+				url: 'functions', // where to get the data from
+				type: 'function', // the type of object the library is for
+				editor: that._editors[id], // the field name the main text body goes to
+				mode: mode, //'ace/mode/nrjavascript',
+				fields: ['name', 'outputs']
+			});
+			that._editors[id].focus();
+
+			$('#' + id + '-expand-js').click(function (e) {
+				e.preventDefault();
+				var value = that._editors[id].getValue();
+				RED.editor.editJavaScript({
+					value: value,
+					width: 'Infinity',
+					cursor: that._editors[id].getCursorPosition(),
+					mode: mode,
+					complete: function (v, cursor) {
+						that._editors[id].setValue(v, -1);
+						that._editors[id].gotoLine(cursor.row + 1, cursor.column, false);
+						setTimeout(function () {
+							that._editors[id].focus();
+						}, 300);
+					}
+				});
+			});
+		},
+		cancelEditor: function (that, id) {
+			that._editors[id].destroy();
+			delete that._editors[id];
+		},
+		saveEditor: function (that, id) {
+			$('#' + id).val(that._editors[id].getValue());
+			that._editors[id].destroy();
+			delete that._editors[id];
+		},
+		resizeEditor: function (that, id, size) {
+			that._editors[id].resize();
+		},
+
+		createListContainer: function (that, id /*'node-input-filter'*/, items, controller, nbRows /*4*/, minHeight /*300*/ ) {
+			nbRows = nbRows || 4;
+			minHeight = minHeight || 300;
+
+			function resizeItems(item) {
+				var newWidth = item.width();
+				item.find('.red-ui-typedInput').typedInput('width', newWidth - 135);
+			}
+
+			$('#' + id + '-container')
+				.css('min-height', minHeight + 'px')
+				.css('min-width', '450px')
+				.editableList({
+					addItem: function (container, i, opt) {
+						var params = opt;
+						params = controller._defaults(params);
+
+						container.css({
+							overflow: 'hidden',
+							whiteSpace: 'nowrap'
+						});
+
+						/* beautify preserve:start */
+						var rows = [ '', $('<div />').appendTo(container) ] ;
+						for ( var i =1 ; i < nbRows ; i++ )
+							rows.push($('<div />', { style: 'margin-top:8px;' }).appendTo(container));
+						/* beautify preserve:end */
+
+						controller._create(params, rows, container);
+						controller._fill(params, rows);
+
+						var newWidth = $('#' + id + '-container').width();
+						resizeItems(container);
+					},
+					resizeItem: resizeItems,
+					removable: true,
+					sortable: true
+				});
+
+			for (var i = 0; items && i < items.length; i++)
+				$('#' + id + '-container').editableList('addItem', items[i]);
+		},
+		saveListContainer: function (that, id, controller) {
+			var items = $('#' + id + '-container').editableList('items');
+			var results = [];
+			items.each(function (i) {
+				results.push(controller._save($(items[i])));
+			}.bind({
+				items: items
+			}));
+			return (results);
+		},
+		resizeListContainer: function (that, id, className, size) {
+			className = className || id;
+
+			var rows = $('#dialog-form>div:not(.' + className + '-container-row)');
+			var height = size.height;
+			for (var i = 0; i < rows.size(); i++)
+				height -= $(rows[i]).outerHeight(true);
+			var editorRow = $('#dialog-form>div.' + className + '-container-row');
+			height -= (parseInt(editorRow.css('marginTop')) + parseInt(editorRow.css('marginBottom')));
+
+			$('#' + id + '-container').editableList('height', height);
 		}
+
 	});
 </script>

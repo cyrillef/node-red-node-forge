@@ -97,12 +97,28 @@ module.exports = function (RED) {
 				.catch(function (error) {
 					console.error(error);
 				});
+
+		this.saveCredentials = function (credentials) {
+			// Access the node's context object
+			var nodeContext = node.context();
+			// var flowContext = node.context().flow;
+			// var globalContext = node.context().global;
+			nodeContext.set('3legged', credentials, 'credentials');
+		};
 	}
 
 	function runOauth(node) {
 		if (!node.FORGE) {
 			if (node.CallbackURL && node.CallbackURL !== '') { // 3legged
-				node.FORGE = createOauth3Legged(node.ClientID, node.ClientSecret, node.CallbackURL, node.Scope);
+				//node.FORGE = createOauth3Legged(node.ClientID, node.ClientSecret, node.CallbackURL, node.Scope);
+				callOauth3Legged(node, node.ClientID, node.ClientSecret, node.CallbackURL, node.Scope)
+					.then((response) => {
+						node.FORGE = response;
+					})
+					.catch((error) => {
+						node.FORGE = undefined;
+						node.error('Forge credentials error' + error);
+					});
 			} else { // 2legged
 				node.FORGE = callOauth2Legged(node.ClientID, node.ClientSecret, node.Scope);
 				node.FORGE
@@ -158,6 +174,34 @@ module.exports = function (RED) {
 	function createOauth3Legged(clientId, clientSecret, callbackURL, scope) {
 		var oa3legged = new ForgeAPI.AuthClientThreeLegged(clientId, clientSecret, callbackURL, scope, true);
 		return (oa3legged);
+	}
+
+	function callOauth3Legged(node, clientId, clientSecret, callbackURL, scope) {
+		return (new Promise(function (fulfill, reject) {
+			var oa3legged = createOauth3Legged(clientId, clientSecret, callbackURL, scope);
+
+			// Access the node's context object
+			var nodeContext = node.context();
+			// var flowContext = node.context().flow;
+			// var globalContext = node.context().global;
+			var credentials = nodeContext.get('3legged', 'credentials');
+			if ( credentials && oa3legged.credentials && !oa3legged.credentials.hasOwnProperty('refresh_token') ) {
+				oa3legged.credentials = credentials;
+
+				oa3legged.refreshToken(oa3legged.credentials)
+					.then((credentials) => {
+						oa3legged.credentials = credentials;
+						node.saveCredentials(credentials);
+						fulfill(oa3legged);
+					})
+					.catch((error) => {
+						reject(error);
+					});
+
+			} else {
+				fulfill(oa3legged);
+			}
+		}));
 	}
 
 };

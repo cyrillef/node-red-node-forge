@@ -148,46 +148,62 @@ module.exports = function (RED) {
 	var service = {};
 	utils(service);
 
-	// #region --- 3legged ---
+	service.decodeFilters = function (params) {
+		if (!params.filters)
+			return (params);
 
-	service.AuthorizeParams =function (n, msg) {
-		var params = {};
-		
-		service.getParams(n, msg, {
-			raw: service.defaultNullOrEmptyBoolean
-		}, params);
-		
+		var t = params.filters.map(function (elt) {
+			var name = 'filter[' + elt.id + ']' + elt.modifier;
+			if (elt.id === 'custom')
+				name = 'filter[' + elt.custom + ']' + elt.modifier;
+			if (!params.hasOwnProperty(name))
+				params[name] = [];
+			params[name].push(elt.expr);
+		});
+		delete params.filters;
+
 		return (params);
 	};
 
-	service.Authorize =function (n, node, oa3legged, msg, cb) {
-		var params =service.AuthorizeParams(n, msg);
+	// #region --- 3legged ---
+
+	service.AuthorizeParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.Authorize = function (n, node, oa3legged, msg, cb) {
+		var params = service.AuthorizeParams(n, msg);
 
 		var url = oa3legged.generateAuthUrl();
 		if (!params.raw)
-			url = '"' + url.replace (/ /g, '%20') + '"';
+			url = '"' + url.replace(/ /g, '%20') + '"';
 		cb(null, url);
 	};
 
-	service.GetTokenParams =function (n, msg) {
+	service.GetTokenParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
-			//url: service.asIs,
 			code: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
 		return (params);
 	};
 
-	service.GetToken =function (n, node, oa3legged, msg, cb) {
+	service.GetToken = function (n, node, oa3legged, msg, cb) {
 		var params = service.GetTokenParams(n, msg);
 
-		//let query = url.parse(params.url, true);
 		oa3legged.getToken(params.code)
 			.then((credentials) => {
 				oa3legged.credentials = credentials;
+				node.forgeCredentials.saveCredentials(credentials);
 				cb(null, true);
 			})
 			.catch((error) => {
@@ -195,11 +211,37 @@ module.exports = function (RED) {
 			});
 	};
 
-	service.Refresh =function (n, node, oa3legged, msg, cb) {
+	service.Refresh = function (n, node, oa3legged, msg, cb) {
+		if ( !oa3legged.credentials.hasOwnProperty('refresh_token') )
+			return (cb(null, false));
 		oa3legged.refreshToken(oa3legged.credentials)
 			.then((credentials) => {
 				oa3legged.credentials = credentials;
+				node.forgeCredentials.saveCredentials(credentials);
 				cb(null, true);
+			})
+			.catch((error) => {
+				cb(service.formatErrorOldSDK(error), null);
+			});
+	};
+
+	service.MeParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.Me = function (n, node, oa3legged, msg, cb) {
+		var params = service.MeParams(n, msg);
+
+		var api = new ForgeAPI.UserProfileApi();
+		api.getUserProfile(oa3legged, oa3legged.credentials)
+			.then((results) => {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
 			.catch((error) => {
 				cb(service.formatErrorOldSDK(error), null);
@@ -210,21 +252,22 @@ module.exports = function (RED) {
 
 	// #region --- Hubs ---
 
-	// node.forgeCredentials.client3Legged, node.forgeCredentials.internalCredentials
-
 	// GET Hubs
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-GET/
 	service.ListHubsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
-			'x-user-id': service.defaultNullOrEmptyString,
-			// filter[id]   array: string
-			// filter[name]  array: string
-			// filter[extension.type] array: string
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
+			// filter[id]
+			// filter[name]
+			// filter[extension.type]
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
+		params = service.decodeFilters(params);
+
 		return (params);
 	};
 
@@ -247,7 +290,7 @@ module.exports = function (RED) {
 		var params = {};
 
 		service.getParams(n, msg, {
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			hubid: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
@@ -259,7 +302,8 @@ module.exports = function (RED) {
 		var params = service.HubDetailsParams(n, msg);
 
 		var api = new ForgeAPI.HubsApi();
-		api.getHub(params.hubid, oa3legged, oa3legged.credentials)
+		//api.getHub(params.hubid, oa3legged, oa3legged.credentials)
+		api.getHub2(params.hubid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -276,17 +320,25 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-hub_id-projects-GET/
 	service.ListProjectsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			hubid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
-			// filter[id]   array: string
-			// filter[extension.type] array: string
-			// page[number] int
-			// page[limit]  int
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
+			// filter[id]
+			// filter[extension.type]
+			pageNumber: service.defaultNullOrEmptyString,
+			pageLimit: service.defaultNullOrEmptyString,
+			// page[number]
+			// page[limit]
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
+		params.pageNumber = params.pageNumber && params.pageNumber.split(',');
+		params.pageLimit = params.pageLimit && params.pageLimit.split(',');
+
+		params = service.decodeFilters(params);
+
 		return (params);
 	};
 
@@ -307,11 +359,11 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-hub_id-projects-project_id-GET/
 	service.ProjectDetailsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			hubid: service.asIs,
 			projectid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
@@ -322,7 +374,7 @@ module.exports = function (RED) {
 		var params = service.ProjectDetailsParams(n, msg);
 
 		var api = new ForgeAPI.ProjectsApi();
-		api.getProject(params.hubid, params.projectid, oa3legged, oa3legged.credentials)
+		api.getProject2(params.hubid, params.projectid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -337,7 +389,7 @@ module.exports = function (RED) {
 		var params = service.ProjectDetailsParams(n, msg);
 
 		var api = new ForgeAPI.ProjectsApi();
-		api.getProjectHub(params.hubid, params.projectid, oa3legged, oa3legged.credentials)
+		api.getProjectHub2(params.hubid, params.projectid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -350,9 +402,9 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/hubs-hub_id-projects-project_id-topFolders-GET/
 	service.ListFolders = function (n, node, oa3legged, msg, cb) {
 		var params = service.ProjectDetailsParams(n, msg);
-		
+
 		var api = new ForgeAPI.ProjectsApi();
-		api.getProjectTopFolders(params.hubid, params.projectid, oa3legged, oa3legged.credentials)
+		api.getProjectTopFolders2(params.hubid, params.projectid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -360,126 +412,127 @@ module.exports = function (RED) {
 				cb(service.formatErrorOldSDK(error), null);
 			});
 	};
-	
+
 	// GET	projects/:project_id/downloads/:download_id
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-downloads-download_id-GET/
 	service.DownloadParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			downloadid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
 	};
-	
+
 	service.Download = function (n, node, oa3legged, msg, cb) {
 		var params = service.DownloadParams(n, msg);
-		
-		var api = new ForgeAPI.ProjectsApi();
-		// api.getProjectTopFolders(params.projectid, params.downloadid, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
 
-		cb(new Error('Not Implemented'), null);
+		var api = new ForgeAPI.ProjectsApi();
+		api.getDownload(params.projectid, params.downloadid, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// GET	projects/:project_id/jobs/:job_id
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-jobs-job_id-GET/
 	service.JobInfoParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			jobid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
 		return (params);
 	};
-	
+
 	service.JobInfo = function (n, node, oa3legged, msg, cb) {
 		var params = service.JobInfoParams(n, msg);
-		
-		var api = new ForgeAPI.ProjectsApi();
-		// api.getProjectTopFolders(params.projectid, params.jobid, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
 
-		cb(new Error('Not Implemented'), null);
+		var api = new ForgeAPI.ProjectsApi();
+		api.getJob(params.projectid, params.jobid, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// POST	projects/:project_id/downloads
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-downloads-POST/
 	service.CreateDownloadTypeParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			contentType: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
+
 		return (params);
 	};
-	
+
 	service.CreateDownloadType = function (n, node, oa3legged, msg, cb) {
 		var params = service.CreateDownloadTypeParams(n, msg);
-		
-		var api = new ForgeAPI.ProjectsApi();
-		// api.getProjectTopFolders(params.projectid, params.jobid, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
 
-		cb(new Error('Not Implemented'), null);
+		var api = new ForgeAPI.ProjectsApi();
+		api.postDownload(params.projectid, params.body, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// POST	projects/:project_id/storage
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-storage-POST/
 	service.CreateStorageParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
+			contentType: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
-		params.contentType = 'application/vnd.api+json';
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
 
 		return (params);
 	};
-	
+
 	service.CreateStorage = function (n, node, oa3legged, msg, cb) {
 		var params = service.CreateStorageParams(n, msg);
-		
-		var api = new ForgeAPI.ProjectsApi();
-		// api.getProjectTopFolders(params.projectid, params.jobid, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
 
-		cb(new Error('Not Implemented'), null);
+		var api = new ForgeAPI.ProjectsApi();
+		api.postStorage2(params.projectid, params.body, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// #endregion
@@ -490,15 +543,15 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-folders-folder_id-GET/
 	service.FolderDetailsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			folderid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			ifModifiedSince: service.defaultNullOrEmptyDate,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
 		return (params);
 	};
 
@@ -506,7 +559,7 @@ module.exports = function (RED) {
 		var params = service.FolderDetailsParams(n, msg);
 
 		var api = new ForgeAPI.FoldersApi();
-		api.getFolder(params.projectid, params.folderid, oa3legged, oa3legged.credentials)
+		api.getFolder2(params.projectid, params.folderid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -519,20 +572,28 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-folders-folder_id-contents-GET/
 	service.FolderContentsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			folderid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
-			// filterType[]
-			// filterId[]
-			// filterExtensionType[]
-			// pageNumber[]
-			// pageLimit[]
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
+			// filter[type]
+			// filter[id]
+			// filter[extension.type]
+			pageNumber: service.defaultNullOrEmptyString,
+			pageLimit: service.defaultNullOrEmptyString,
+			// page[number]
+			// page[limit]
 			includeHidden: service.defaultNullOrEmptyBoolean,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
+
+		params.pageNumber = params.pageNumber && params.pageNumber.split(',');
+		params.pageLimit = params.pageLimit && params.pageLimit.split(',');
 		
+		params = service.decodeFilters(params);
+
 		return (params);
 	};
 
@@ -553,14 +614,14 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-folders-folder_id-parent-GET/
 	service.FolderParentParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			folderid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
 		return (params);
 	};
 
@@ -568,7 +629,7 @@ module.exports = function (RED) {
 		var params = service.FolderParentParams(n, msg);
 
 		var api = new ForgeAPI.FoldersApi();
-		api.getFolderParent(params.projectid, params.folderid, oa3legged, oa3legged.credentials)
+		api.getFolderParent2(params.projectid, params.folderid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -581,17 +642,20 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-folders-folder_id-refs-GET/
 	service.FolderRefsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			folderid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
 			// filter[type]
 			// filter[id]
 			// filter[extension.type]
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
+		params = service.decodeFilters(params);
+
 		return (params);
 	};
 
@@ -610,13 +674,14 @@ module.exports = function (RED) {
 
 	// GET projects/:project_id/folders/:folder_id/relationships/links
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-folders-folder_id-relationships-links-GET/
-	service.FolderLinksParams = function (n, msg) {
+	service.FolderRelationshipsLinksParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			folderid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
 			// filter[type]
 			// filter[id]
 			// filter[extension.type]
@@ -624,42 +689,44 @@ module.exports = function (RED) {
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
+		params = service.decodeFilters(params);
+
 		return (params);
 	};
 
-	service.FolderLinks = function (n, node, oa3legged, msg, cb) {
+	service.FolderRelationshipsLinks = function (n, node, oa3legged, msg, cb) {
 		var params = service.FolderLinksParams(n, msg);
-		
-		var body = {} ;
 
 		var api = new ForgeAPI.FoldersApi();
-		// api.postFolderRelationshipsRef(params.projectid, params.folderid, body, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
-
-		cb(new Error('Not Implemented'), null);
+		api.getFolderRelationshipsLinks(params.projectid, params.folderid, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// GET projects/:project_id/folders/:folder_id/relationships/refs
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-folders-folder_id-relationships-refs-GET/
 	service.FolderRelationshipsRefsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			folderid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
 			// filter[type]
 			// filter[id]
+			// filter[refType]
 			// filter[extension.type]
-			// filter[mimeType]
+			// filter[direction]
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
+		params = service.decodeFilters(params);
+
 		return (params);
 	};
 
@@ -680,58 +747,65 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-folders-folder_id-search-GET/
 	service.SearchParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			folderid: service.asIs,
-			//'x-user-id': service.defaultNullOrEmptyString,
-			//filter[*],
-			//page[number]
+			filters: service.asIs,
+			// filter[*]
+			pageNumber: service.defaultNullOrEmptyString,
+			pageLimit: service.defaultNullOrEmptyString,
+			// page[number]
+			// page[limit]
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
+
+		params.pageNumber = params.pageNumber && params.pageNumber.split(',');
+		params.pageLimit = params.pageLimit && params.pageLimit.split(',');
+
+		params = service.decodeFilters(params);
 
 		return (params);
 	};
 
 	service.Search = function (n, node, oa3legged, msg, cb) {
 		var params = service.SearchParams(n, msg);
-		
-		var body = {} ;
 
 		var api = new ForgeAPI.FoldersApi();
-		// api.postFolderRelationshipsRef(params.projectid, params.folderid, body, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
-
-		cb(new Error('Not Implemented'), null);
+		api.search(params.projectid, params.folderid, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// POST projects/:project_id/folders
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-folders-POST/
 	service.CreateFolderParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			contentType: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
+
 		return (params);
 	};
-	
+
 	service.CreateFolder = function (n, node, oa3legged, msg, cb) {
 		var params = service.CreateFolderParams(n, msg);
-		
-		var body = {} ;
 
 		var api = new ForgeAPI.FoldersApi();
-		api.postFolder(params.projectid, body, oa3legged, oa3legged.credentials)
+		api.postFolder2(params.projectid, params.body, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -744,25 +818,28 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-folders-folder_id-relationships-refs-POST/
 	service.CreateFolderRelationshipsRefParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			folderid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			contentType: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
+
 		return (params);
 	};
-	
+
 	service.CreateFolderRelationshipsRef = function (n, node, oa3legged, msg, cb) {
 		var params = service.CreateFolderRelationshipsRefParams(n, msg);
-		
-		var body = {} ;
 
 		var api = new ForgeAPI.FoldersApi();
-		api.postFolderRelationshipsRef(params.projectid, params.folderid, body, oa3legged, oa3legged.credentials)
+		api.postFolderRelationshipsRef2(params.projectid, params.folderid, params.body, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -775,33 +852,34 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-folders-folder_id-PATCH/
 	service.ModifyFolderParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			folderid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			contentType: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
+
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
 
 		return (params);
 	};
 
 	service.ModifyFolder = function (n, node, oa3legged, msg, cb) {
 		var params = service.ModifyFolderParams(n, msg);
-		
-		var body = {} ;
 
 		var api = new ForgeAPI.FoldersApi();
-		// api.postFolderRelationshipsRef(params.projectid, params.folderid, body, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
-
-		cb(new Error('Not Implemented'), null);
+		api.patchFolder(params.projectid, params.folderid, params.body, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// #endregion
@@ -812,15 +890,15 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-items-item_id-GET/
 	service.ItemDetailsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			itemid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			includePathInProject: service.defaultNullOrEmptyBoolean,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
 		return (params);
 	};
 
@@ -828,7 +906,7 @@ module.exports = function (RED) {
 		var params = service.ItemDetailsParams(n, msg);
 
 		var api = new ForgeAPI.ItemsApi();
-		api.getItem(params.projectid, params.itemid, oa3legged, oa3legged.credentials)
+		api.getItem2(params.projectid, params.itemid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -841,14 +919,14 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-items-item_id-parent-GET/
 	service.ItemParentFolderParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			itemid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
 		return (params);
 	};
 
@@ -856,7 +934,7 @@ module.exports = function (RED) {
 		var params = service.ItemParentFolderParams(n, msg);
 
 		var api = new ForgeAPI.ItemsApi();
-		api.getItemParentFolder(params.projectid, params.itemid, oa3legged, oa3legged.credentials)
+		api.getItemParentFolder2(params.projectid, params.itemid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -869,17 +947,20 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-items-item_id-refs-GET/
 	service.ItemRefsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			itemid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
 			// filter[type]
 			// filter[id]
 			// filter[extension.type]
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
+		params = service.decodeFilters(params);
+
 		return (params);
 	};
 
@@ -898,13 +979,14 @@ module.exports = function (RED) {
 
 	// GET projects/:project_id/items/:item_id/relationships/links
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-items-item_id-relationships-links-GET/
-	service.ItemLinksParams = function (n, msg) {
+	service.ItemRelationshipsLinksParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			itemid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
 			// filter[type]
 			// filter[id]
 			// filter[extension.type]
@@ -912,35 +994,34 @@ module.exports = function (RED) {
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
+		params = service.decodeFilters(params);
+
 		return (params);
 	};
 
-	service.ItemLinks = function (n, node, oa3legged, msg, cb) {
-		var params = service.ItemLinksParams(n, msg);
-		
-		var body = {} ;
+	service.ItemRelationshipsLinks = function (n, node, oa3legged, msg, cb) {
+		var params = service.ItemRelationshipsLinksParams(n, msg);
 
 		var api = new ForgeAPI.ItemsApi();
-		// api.postFolderRelationshipsRef(params.projectid, params.itemid, body, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
-
-		cb(new Error('Not Implemented'), null);
+		api.getItemRelationshipsLinks(params.projectid, params.itemid, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// GET projects/:project_id/items/:item_id/relationships/refs
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-items-item_id-relationships-refs-GET/
 	service.ItemRelationshipsRefsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			itemid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
 			// filter[type]
 			// filter[id]
 			// filter[refType]
@@ -948,7 +1029,9 @@ module.exports = function (RED) {
 			// filter[extension.type]
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
+		params = service.decodeFilters(params);
+
 		return (params);
 	};
 
@@ -969,22 +1052,22 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-items-item_id-tip-GET/
 	service.ItemTipParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			itemid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
 		return (params);
 	};
-	
+
 	service.ItemTip = function (n, node, oa3legged, msg, cb) {
 		var params = service.ItemTipParams(n, msg);
 
 		var api = new ForgeAPI.ItemsApi();
-		api.getItemTip(params.projectid, params.itemid, oa3legged, oa3legged.credentials)
+		api.getItemTip2(params.projectid, params.itemid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -997,20 +1080,28 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-items-item_id-versions-GET/
 	service.ItemVersionsParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			itemid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
 			// filter[type]
 			// filter[id]
 			// filter[extension.type]
 			// filter[versionNumber]
+			pageNumber: service.defaultNullOrEmptyString,
+			pageLimit: service.defaultNullOrEmptyString,
 			// page[number]
 			// page[limit]
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
-		
+
+		params.pageNumber = params.pageNumber && params.pageNumber.split(',');
+		params.pageLimit = params.pageLimit && params.pageLimit.split(',');
+
+		params = service.decodeFilters(params);
+
 		return (params);
 	};
 
@@ -1031,25 +1122,28 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-items-POST/
 	service.CreateItemVersionParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			contentType: service.asIs,
-			// copyFrom
+			copyFrom: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
+
 		return (params);
 	};
-	
+
 	service.CreateItemVersion = function (n, node, oa3legged, msg, cb) {
 		var params = service.CreateItemVersionParams(n, msg);
-		
-		var body = {} ;
 
 		var api = new ForgeAPI.ItemsApi();
-		api.postItem(params.projectid, body, oa3legged, oa3legged.credentials)
+		api.postItem2(params.projectid, params.body, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -1062,25 +1156,28 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-items-item_id-relationships-refs-POST/
 	service.CreateItemRelationshipsRefParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			itemid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			contentType: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
 
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
+
 		return (params);
 	};
-	
+
 	service.CreateItemRelationshipsRef = function (n, node, oa3legged, msg, cb) {
 		var params = service.CreateItemRelationshipsRefParams(n, msg);
-		
-		var body = {} ;
 
 		var api = new ForgeAPI.ItemsApi();
-		api.postItemRelationshipsRef(params.projectid, params.itemid, body, oa3legged, oa3legged.credentials)
+		api.postItemRelationshipsRef2(params.projectid, params.itemid, params.body, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -1093,25 +1190,88 @@ module.exports = function (RED) {
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-items-item_id-PATCH/
 	service.ModifyItemParams = function (n, msg) {
 		var params = {};
-		
+
 		service.getParams(n, msg, {
 			projectid: service.asIs,
 			itemid: service.asIs,
-			'x-user-id': service.defaultNullOrEmptyString,
+			xuserid: service.defaultNullOrEmptyString,
 			contentType: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
+
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
 
 		return (params);
 	};
 
 	service.ModifyItem = function (n, node, oa3legged, msg, cb) {
 		var params = service.ModifyItemParams(n, msg);
-		
-		var body = {} ;
 
 		var api = new ForgeAPI.ItemsApi();
-		// api.postFolderRelationshipsRef(params.projectid, params.itemid, body, oa3legged, oa3legged.credentials)
+		api.patchItem(params.projectid, params.itemid, params.body, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
+	};
+
+	// #endregion
+
+	// #region --- Versions ---
+
+	// GET projects/:project_id/versions/:version_id
+	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-GET/
+	service.VersionDetailsParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			projectid: service.asIs,
+			versionid: service.asIs,
+			xuserid: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.VersionDetails = function (n, node, oa3legged, msg, cb) {
+		var params = service.VersionDetailsParams(n, msg);
+
+		var api = new ForgeAPI.VersionsApi();
+		api.getVersion(params.projectid, params.versionid, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
+	};
+
+	// GET projects/:project_id/versions/:version_id/downloadFormats
+	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-downloadFormats-GET/
+	service.VersionFileFormatsParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			projectid: service.asIs,
+			versionid: service.asIs,
+			xuserid: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.VersionFileFormats = function (n, node, oa3legged, msg, cb) {
+		var params = service.VersionFileFormatsParams(n, msg);
+
+		var api = new ForgeAPI.VersionsApi();
+		// api.getVersion(params.projectid, params.versionid, oa3legged, oa3legged.credentials)
 		// 	.then(function (results) {
 		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
 		// 	})
@@ -1122,39 +1282,271 @@ module.exports = function (RED) {
 		cb(new Error('Not Implemented'), null);
 	};
 
-	// #endregion
-
-	// #region --- Versions ---
-
-	// GET projects/:project_id/versions/:version_id
-	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-GET/
-
-	// GET projects/:project_id/versions/:version_id/downloadFormats
-	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-downloadFormats-GET/
-
 	// GET projects/:project_id/versions/:version_id/downloads
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-downloads-GET/
+	service.VersionDownloadsParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			projectid: service.asIs,
+			versionid: service.asIs,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
+			// filter[format.fileType]
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		params = service.decodeFilters(params);
+
+		return (params);
+	};
+
+	service.VersionDownloads = function (n, node, oa3legged, msg, cb) {
+		var params = service.VersionDownloadsParams(n, msg);
+
+		var api = new ForgeAPI.VersionsApi();
+		// api.getVersion(params.projectid, params.versionid, oa3legged, oa3legged.credentials)
+		// 	.then(function (results) {
+		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
+		// 	})
+		// 	.catch(function (error) {
+		// 		cb(service.formatErrorOldSDK(error), null);
+		// 	});
+
+		cb(new Error('Not Implemented'), null);
+	};
 
 	// GET projects/:project_id/versions/:version_id/item
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-item-GET/
+	service.VersionItemParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			projectid: service.asIs,
+			versionid: service.asIs,
+			xuserid: service.defaultNullOrEmptyString,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.VersionItem = function (n, node, oa3legged, msg, cb) {
+		var params = service.VersionItemParams(n, msg);
+
+		var api = new ForgeAPI.VersionsApi();
+		api.getVersionItem(params.projectid, params.versionid, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
+	};
 
 	// GET projects/:project_id/versions/:version_id/refs
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-refs-GET/
+	service.VersionRefsParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			projectid: service.asIs,
+			versionid: service.asIs,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
+			// filter[type]
+			// filter[id]
+			// filter[extension.type]
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		params = service.decodeFilters(params);
+
+		return (params);
+	};
+
+	service.VersionRefs = function (n, node, oa3legged, msg, cb) {
+		var params = service.VersionRefsParams(n, msg);
+
+		var api = new ForgeAPI.VersionsApi();
+		api.getVersionRefs(params.projectid, params.versionid, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
+	};
 
 	// GET projects/:project_id/versions/:version_id/relationships/links
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-relationships-links-GET/
+	service.VersionRelationshipsLinksParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			projectid: service.asIs,
+			versionid: service.asIs,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
+			// filter[type]
+			// filter[id]
+			// filter[extension.type]
+			// filter[mimeType]
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		params = service.decodeFilters(params);
+
+		return (params);
+	};
+
+	service.VersionRelationshipsLinks = function (n, node, oa3legged, msg, cb) {
+		var params = service.VersionLinksParams(n, msg);
+
+		var body = {};
+
+		var api = new ForgeAPI.VersionsApi();
+		// api.postFolderRelationshipsRef(params.projectid, params.versionid, body, oa3legged, oa3legged.credentials)
+		// 	.then(function (results) {
+		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
+		// 	})
+		// 	.catch(function (error) {
+		// 		cb(service.formatErrorOldSDK(error), null);
+		// 	});
+
+		cb(new Error('Not Implemented'), null);
+	};
 
 	// GET projects/:project_id/versions/:version_id/relationships/refs
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-relationships-refs-GET/
+	service.VersionRelationshipsRefsParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			projectid: service.asIs,
+			versionid: service.asIs,
+			xuserid: service.defaultNullOrEmptyString,
+			filters: service.asIs,
+			// filter[type]
+			// filter[id]
+			// filter[refType]
+			// filter[direction]
+			// filter[extension.type]
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		params = service.decodeFilters(params);
+
+		return (params);
+	};
+
+	service.VersionRelationshipsRefs = function (n, node, oa3legged, msg, cb) {
+		var params = service.VersionRelationshipsRefsParams(n, msg);
+
+		var api = new ForgeAPI.VersionsApi();
+		api.getVersionRelationshipsRefs(params.projectid, params.versionid, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
+	};
 
 	// POST projects/:project_id/versions
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-POST/
+	service.CreateVersionParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			projectid: service.asIs,
+			xuserid: service.defaultNullOrEmptyString,
+			contentType: service.asIs,
+			// copyFrom
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.CreateVersion = function (n, node, oa3legged, msg, cb) {
+		var params = service.CreateVersionParams(n, msg);
+
+		var body = {};
+
+		var api = new ForgeAPI.VersionsApi();
+		api.postVersion(params.projectid, body, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
+	};
 
 	// POST projects/:project_id/versions/:version_id/relationships/refs
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-relationships-refs-POST/
+	service.CreateVersionRelationshipsRefParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			projectid: service.asIs,
+			versionid: service.asIs,
+			xuserid: service.defaultNullOrEmptyString,
+			contentType: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.CreateVersionRelationshipsRef = function (n, node, oa3legged, msg, cb) {
+		var params = service.CreateVersionRelationshipsRefParams(n, msg);
+
+		var body = {};
+
+		var api = new ForgeAPI.VersionsApi();
+		api.postVersionRelationshipsRef(params.projectid, params.versionid, body, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
+	};
 
 	// PATCH projects/:project_id/versions/:version_id
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-PATCH/
+	service.ModifyVersionParams = function (n, msg) {
+		var params = {};
+
+		service.getParams(n, msg, {
+			projectid: service.asIs,
+			versionid: service.asIs,
+			xuserid: service.defaultNullOrEmptyString,
+			contentType: service.asIs,
+			raw: service.defaultNullOrEmptyBoolean
+		}, params);
+
+		return (params);
+	};
+
+	service.ModifyVersion = function (n, node, oa3legged, msg, cb) {
+		var params = service.ModifyVersionParams(n, msg);
+
+		var body = {};
+
+		var api = new ForgeAPI.VersionsApi();
+		// api.postFolderRelationshipsRef(params.projectid, params.versionid, body, oa3legged, oa3legged.credentials)
+		// 	.then(function (results) {
+		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
+		// 	})
+		// 	.catch(function (error) {
+		// 		cb(service.formatErrorOldSDK(error), null);
+		// 	});
+
+		cb(new Error('Not Implemented'), null);
+	};
 
 	// #endregion
 
