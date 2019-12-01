@@ -695,7 +695,7 @@ module.exports = function (RED) {
 	};
 
 	service.FolderRelationshipsLinks = function (n, node, oa3legged, msg, cb) {
-		var params = service.FolderLinksParams(n, msg);
+		var params = service.FolderRelationshipsLinksParams(n, msg);
 
 		var api = new ForgeAPI.FoldersApi();
 		api.getFolderRelationshipsLinks(params.projectid, params.folderid, params, oa3legged, oa3legged.credentials)
@@ -1243,7 +1243,7 @@ module.exports = function (RED) {
 		var params = service.VersionDetailsParams(n, msg);
 
 		var api = new ForgeAPI.VersionsApi();
-		api.getVersion(params.projectid, params.versionid, oa3legged, oa3legged.credentials)
+		api.getVersion2(params.projectid, params.versionid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -1254,7 +1254,7 @@ module.exports = function (RED) {
 
 	// GET projects/:project_id/versions/:version_id/downloadFormats
 	// https://forge.autodesk.com/en/docs/data/v2/reference/http/projects-project_id-versions-version_id-downloadFormats-GET/
-	service.VersionFileFormatsParams = function (n, msg) {
+	service.VersionDownloadFormatsParams = function (n, msg) {
 		var params = {};
 
 		service.getParams(n, msg, {
@@ -1267,19 +1267,17 @@ module.exports = function (RED) {
 		return (params);
 	};
 
-	service.VersionFileFormats = function (n, node, oa3legged, msg, cb) {
-		var params = service.VersionFileFormatsParams(n, msg);
+	service.VersionDownloadFormats = function (n, node, oa3legged, msg, cb) {
+		var params = service.VersionDownloadFormatsParams(n, msg);
 
 		var api = new ForgeAPI.VersionsApi();
-		// api.getVersion(params.projectid, params.versionid, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
-
-		cb(new Error('Not Implemented'), null);
+		api.getVersionDownloadFormats(params.projectid, params.versionid, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// GET projects/:project_id/versions/:version_id/downloads
@@ -1305,15 +1303,13 @@ module.exports = function (RED) {
 		var params = service.VersionDownloadsParams(n, msg);
 
 		var api = new ForgeAPI.VersionsApi();
-		// api.getVersion(params.projectid, params.versionid, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
-
-		cb(new Error('Not Implemented'), null);
+		api.getVersionDownloads(params.projectid, params.versionid, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// GET projects/:project_id/versions/:version_id/item
@@ -1335,7 +1331,7 @@ module.exports = function (RED) {
 		var params = service.VersionItemParams(n, msg);
 
 		var api = new ForgeAPI.VersionsApi();
-		api.getVersionItem(params.projectid, params.versionid, oa3legged, oa3legged.credentials)
+		api.getVersionItem2(params.projectid, params.versionid, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -1401,20 +1397,16 @@ module.exports = function (RED) {
 	};
 
 	service.VersionRelationshipsLinks = function (n, node, oa3legged, msg, cb) {
-		var params = service.VersionLinksParams(n, msg);
-
-		var body = {};
+		var params = service.VersionRelationshipsLinksParams(n, msg);
 
 		var api = new ForgeAPI.VersionsApi();
-		// api.postFolderRelationshipsRef(params.projectid, params.versionid, body, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
-
-		cb(new Error('Not Implemented'), null);
+		api.getVersionRelationshipsLinks(params.projectid, params.versionid, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// GET projects/:project_id/versions/:version_id/relationships/refs
@@ -1462,9 +1454,14 @@ module.exports = function (RED) {
 			projectid: service.asIs,
 			xuserid: service.defaultNullOrEmptyString,
 			contentType: service.asIs,
-			// copyFrom
+			copyFrom: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
+
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
 
 		return (params);
 	};
@@ -1472,10 +1469,8 @@ module.exports = function (RED) {
 	service.CreateVersion = function (n, node, oa3legged, msg, cb) {
 		var params = service.CreateVersionParams(n, msg);
 
-		var body = {};
-
 		var api = new ForgeAPI.VersionsApi();
-		api.postVersion(params.projectid, body, oa3legged, oa3legged.credentials)
+		api.postVersion2(params.projectid, params.body, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -1494,8 +1489,13 @@ module.exports = function (RED) {
 			versionid: service.asIs,
 			xuserid: service.defaultNullOrEmptyString,
 			contentType: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
+
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
 
 		return (params);
 	};
@@ -1503,10 +1503,8 @@ module.exports = function (RED) {
 	service.CreateVersionRelationshipsRef = function (n, node, oa3legged, msg, cb) {
 		var params = service.CreateVersionRelationshipsRefParams(n, msg);
 
-		var body = {};
-
 		var api = new ForgeAPI.VersionsApi();
-		api.postVersionRelationshipsRef(params.projectid, params.versionid, body, oa3legged, oa3legged.credentials)
+		api.postVersionRelationshipsRef2(params.projectid, params.versionid, params.body, params, oa3legged, oa3legged.credentials)
 			.then(function (results) {
 				cb(null, service.formatResponseOldSDK(results, params.raw));
 			})
@@ -1525,8 +1523,13 @@ module.exports = function (RED) {
 			versionid: service.asIs,
 			xuserid: service.defaultNullOrEmptyString,
 			contentType: service.asIs,
+			body: service.asIs,
 			raw: service.defaultNullOrEmptyBoolean
 		}, params);
+
+		try {
+			params.body = JSON.parse(params.body);
+		} catch (ex) {}
 
 		return (params);
 	};
@@ -1534,18 +1537,14 @@ module.exports = function (RED) {
 	service.ModifyVersion = function (n, node, oa3legged, msg, cb) {
 		var params = service.ModifyVersionParams(n, msg);
 
-		var body = {};
-
 		var api = new ForgeAPI.VersionsApi();
-		// api.postFolderRelationshipsRef(params.projectid, params.versionid, body, oa3legged, oa3legged.credentials)
-		// 	.then(function (results) {
-		// 		cb(null, service.formatResponseOldSDK(results, params.raw));
-		// 	})
-		// 	.catch(function (error) {
-		// 		cb(service.formatErrorOldSDK(error), null);
-		// 	});
-
-		cb(new Error('Not Implemented'), null);
+		api.patchVersion(params.projectid, params.versionid, params.body, params, oa3legged, oa3legged.credentials)
+			.then(function (results) {
+				cb(null, service.formatResponseOldSDK(results, params.raw));
+			})
+			.catch(function (error) {
+				cb(service.formatErrorOldSDK(error), null);
+			});
 	};
 
 	// #endregion

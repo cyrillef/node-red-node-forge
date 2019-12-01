@@ -91,7 +91,7 @@ SOFTWARE.
 
 			<option value="">--- Versions ---</option>
 			<option value="VersionDetails">Version Details</option>
-			<option value="VersionFileFormats">Version FileFormats</option>
+			<option value="VersionDownloadFormats">Version Download Formats</option>
 			<option value="VersionDownloads">Version Downloads</option>
 			<option value="VersionItem">Version Item</option>
 			<option value="VersionRefs">Version Refs</option>
@@ -298,27 +298,27 @@ SOFTWARE.
 			// --- Items ---
 			ItemDetails: [ '#projectidAttr', '#itemidAttr', '#includePathInProjectAttr', '#xuseridAttr' ],
 			ItemParentFolder: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
-			ItemRefs: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
-			ItemRelationshipsLinks: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
-			ItemRelationshipsRefs: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
+			ItemRefs: [ '#projectidAttr', '#itemidAttr', '#filtersAttr', '#xuseridAttr' ],
+			ItemRelationshipsLinks: [ '#projectidAttr', '#itemidAttr', '#filtersAttr', '#xuseridAttr' ],
+			ItemRelationshipsRefs: [ '#projectidAttr', '#itemidAttr', '#filtersAttr', '#xuseridAttr' ],
 			ItemTip: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
-			ItemVersions: [ '#projectidAttr', '#itemidAttr', '#xuseridAttr' ],
+			ItemVersions: [ '#projectidAttr', '#itemidAttr', '#filtersAttr', '#pageNumberAttr', '#pageLimitAttr', '#xuseridAttr' ],
 			CreateItemVersion: [ '#projectidAttr' /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#copyFromAttr', '#xuseridAttr' ],
 			CreateItemRelationshipsRef: [ '#projectidAttr', '#itemidAttr' /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#xuseridAttr' ],
-			ModifyItem: [ '#projectidAttr', '#itemidAttr' /*, '#contentTypeAttr'*/, '#xuseridAttr' ],
+			ModifyItem: [ '#projectidAttr', '#itemidAttr' /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#xuseridAttr' ],
 
 			// --- Versions ---
 
 			VersionDetails: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
-			VersionFileFormats: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
-			VersionDownloads: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
+			VersionDownloadFormats: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
+			VersionDownloads: [ '#projectidAttr', '#versionidAttr', '#filtersAttr', '#xuseridAttr' ],
 			VersionItem: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
-			VersionRefs: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
-			VersionRelationshipsLinks: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
-			VersionRelationshipsRefs: [ '#projectidAttr', '#versionidAttr', '#xuseridAttr' ],
-			CreateVersion: [ '#projectidAttr', /*, '#contentTypeAttr'*/, '#xuseridAttr' ],
-			CreateVersionRelationshipsRef: [ '#projectidAttr', '#versionidAttr' /*, '#contentTypeAttr'*/, '#xuseridAttr' ],
-			ModifyVersion: [ '#projectidAttr', '#versionidAttr' /*, '#contentTypeAttr'*/, '#xuseridAttr' ],
+			VersionRefs: [ '#projectidAttr', '#versionidAttr', '#filtersAttr', '#xuseridAttr' ],
+			VersionRelationshipsLinks: [ '#projectidAttr', '#versionidAttr', '#filtersAttr', '#xuseridAttr' ],
+			VersionRelationshipsRefs: [ '#projectidAttr', '#versionidAttr', '#filtersAttr', '#xuseridAttr' ],
+			CreateVersion: [ '#projectidAttr', /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#copyFromAttr', '#xuseridAttr' ],
+			CreateVersionRelationshipsRef: [ '#projectidAttr', '#versionidAttr' /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#xuseridAttr' ],
+			ModifyVersion: [ '#projectidAttr', '#versionidAttr' /*, '#contentTypeAttr'*/, '#bodyEditorAttr', '#xuseridAttr' ],
 
 		};
 		$('#node-input-operation').on('change', function () {
