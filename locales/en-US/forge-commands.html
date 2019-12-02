@@ -1,0 +1,91 @@
+<script type="text/x-red" data-help-name="forge-commands">
+	<p>Forge Commands node.</p>
+	<p>The node contains several operations; each operation requires specific mandatory and optional fields to run.</p>
+
+	<h3>Operations</h3>
+	<dl class="message-properties">
+		<dt>operation <span class="property-type">string</span></dt>
+		<dd>The Forge Data Management (OSS) operation/endpoint to execute.</dd>
+		
+		<h3 class="forge">CheckPermission</h3>
+		<dl class="message-properties forge">
+			<dd>Checks if a user has permission to perform specified actions on specified resources.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#projectid">projectid</a>, <a href="#body">body</a>, <a href="#xx">xuserid</a></dd>
+		</dl>
+
+		<h3 class="forge">ListRefs</h3>
+		<dl class="message-properties forge">
+			<dd>Retrieves the custom relationships between specified versions of items and other resources in the data domain service (folders, items, and versions). You can retrieve the relationships of up to 50 versions.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#projectid">projectid</a>, <a href="#body">body</a>, <a href="#xx">xuserid</a></dd>
+		</dl>
+
+		<h3 class="forge">ListItems</h3>
+		<dl class="message-properties forge">
+			<dd>Retrieves metadata for up to 50 specified items. For example, an item name, or the date it was created. It returns the tip (latest) version of the items.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#projectid">projectid</a>, <a href="#body">body</a>, <a href="#xx">xuserid</a></dd>
+		</dl>
+
+		<h3 class="forge">CreateFolder</h3>
+		<dl class="message-properties forge">
+			<dd>Creates folders in BIM 360 Docs. We recommend that you use POST projects/:project_id/folders to create folders.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#projectid">projectid</a>, <a href="#body">body</a>, <a href="#xx">xuserid</a></dd>
+		</dl>
+
+		<h3 class="forge">PublishModel</h3>
+		<dl class="message-properties forge">
+			<dd>Publishes the latest version of a Collaboration for Revit (C4R) model to BIM 360 Docs. This enables other people to view, search, and socially interact with the model. Note that only the 3D default view and sheets are published.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#projectid">projectid</a>, <a href="#body">body</a>, <a href="#xx">xuserid</a></dd>
+		</dl>
+
+		<h3 class="forge">GetPublishModelJob</h3>
+		<dl class="message-properties forge">
+			<dd>Verifies whether a Collaboration for Revit (C4R) model needs to be published to BIM 360 Docs.</dd>
+			<dd><b>Parameters</b></dd>
+			<dd><a href="#projectid">projectid</a>, <a href="#body">body</a>, <a href="#xx">xuserid</a></dd>
+		</dl>
+
+	</dl>
+
+	<h3>Parameters</h3>
+
+	<a name="projectid" />
+	<dl class="message-properties">
+		<dt>projectid <span class="property-type">string</span></dt>
+		<dd>The unique identifier of a project.</dd>
+	</dl>
+
+	<a name="body" />
+	<dl class="message-properties">
+		<dt>body <span class="property-type">object</span></dt>
+		<dd>The POST body is a JSON object with the command attributes.</dd>
+	</dl>
+
+	<a name="xuserid" />
+	<dl class="message-properties">
+		<dt>xuserid <span class="property-type">string</span></dt>
+		<dd>In a two-legged authentication context, the app has access to all users specified by the administrator in the SaaS integrations UI. By providing this header, the API call will be limited to act on behalf of only the user specified.</dd>
+	</dl>
+
+	<a name="raw" />
+	<dl class="message-properties">
+		<dt>raw <span class="property-type">boolean</span></dt>
+		<dd>Get the raw HTPP response (includes headers and statusCode).</dd>
+	</dl>
+
+<h3>Details</h3>
+	<p><code>msg.payload</code> is used as the payload of the published message.</p>
+	<p>The topic used can be configured in the node or, if left blank, can be set by <code>msg.topic</code>.</p>
+	
+<h3>References</h3>
+	<ul>
+	<li><a href="https://forge.autodesk.com/en/docs/data/v2/developers_guide/overview/">Forge Data Management</a></li>
+	<li><a href="https://forge.autodesk.com/en/docs/data/v2/reference/http/">API Reference</a></li>
+	<li><a href="https://forge.autodesk.com/blog">Forge Blogs</a></li>
+	</ul>
+
+</script>

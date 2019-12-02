@@ -465,7 +465,6 @@ SOFTWARE.
 				});
 			},
 			_fill: function (filter, rows) {
-				debugger;
 				this._switch (filter.id, filter, rows);
 
 				var parent = rows[1].parent().parent();
@@ -497,7 +496,6 @@ SOFTWARE.
 				}
 			},
 			_save: function (itemUI) {
-				debugger;
 				var result = {
 					id: $(itemUI).find('.node-input-filter-id').val(),
 					custom: '', //custom: $(itemUI).find('.node-input-filter-custom').val(),
@@ -529,7 +527,6 @@ SOFTWARE.
 				return (result);
 			},
 			_switch: function (value, filter, rows) {
-				debugger;
 				var parent = rows[1].parent().parent();
 				var custom = $(parent).find('.node-input-filter-custom');
 				var expr = $(parent).find('.node-input-filter-expr');
@@ -671,13 +668,13 @@ SOFTWARE.
 		// oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
 		// oneditresize is called when the edit dialog is resized.
 		oneditprepare: function () {
-			// AppBundles editor
+			// body editor
 			this._def.createEditor(this, 'node-input-body', 'ace/mode/javascript');
 			// Filters
 			this._def.createListContainer(this, 'node-input-filters', this.filters, filterParameters(), 3, 300);
 		},
 		oneditcancel: function () {
-			// AppBundles editor
+			// body editor
 			this._def.cancelEditor(this, 'node-input-body');
 		},
 		oneditsave: function () {

@@ -1,3 +1,312 @@
 <script type="text/x-red" data-help-name="forge-dm">
 	<p>Forge Data Management node. Manage Hubs, Projects, ...</p>
+	<p>The node contains several operations; each operation requires specific mandatory and optional fields to run.</p>
+
+	<h3>Operations</h3>
+	<dl class="message-properties">
+		<dt>operation <span class="property-type">string</span></dt>
+		<dd>The Forge Data Management (DM) operation/endpoint to execute.</dd>
+		
+		<h3 class="forge">3 legged</h3>
+		<dl class="message-properties forge">
+
+			<h3 class="forge">Authorize</h3>
+			<dl class="message-properties forge">
+				<dd>This is the browser URL to redirect an end user to in order to acquire the user’s consent for your app to access the specified resources.</dd>
+			</dl>
+
+			<h3 class="forge">GetToken</h3>
+			<dl class="message-properties forge">
+				<dd>Exchange an authorization code extracted from a GET authorize callback for a three-legged access token. This API will only be used when the “Authorization Code” grant type is being adopted.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#code">code</a></dd>
+			</dl>
+
+			<h3 class="forge">Refresh</h3>
+			<dl class="message-properties forge">
+				<dd>Acquire a new access token by using the refresh token provided by the POST gettoken endpoint.</dd>
+			</dl>
+
+			<h3 class="forge">Me</h3>
+			<dl class="message-properties forge">
+				<dd>Get the profile information of an authorizing end user in a three-legged context.</dd>
+			</dl>
+
+		</dl>
+
+		<h3 class="forge">Hubs</h3>
+		<dl class="message-properties forge">
+
+			<h3 class="forge">ListHubs</h3>
+			<dl class="message-properties forge">
+				<dd>Returns a collection of accessible hubs for this member.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">HubDetails</h3>
+			<dl class="message-properties forge">
+				<dd>Returns data on a specific hub_id.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#hubid">hubid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+		</dl>
+
+		<h3 class="forge">Projects</h3>
+		<dl class="message-properties forge">
+
+			<h3 class="forge">ListProjects</h3>
+			<dl class="message-properties forge">
+				<dd>Returns a collection of projects for a given hub_id. A project represents a BIM 360 Team project, a Fusion Team project, a BIM 360 Docs project, or an A360 Personal project. Multiple projects can be created within a single hub.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#hubid">hubid</a>, <a href="#filters">filters</a>, <a href="#pageNumber">pageNumber</a>, <a href="#pageLimit">pageLimit</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ProjectDetails</h3>
+			<dl class="message-properties forge">
+				<dd>Returns a project for a given project_id.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#hubid">hubid</a>, <a href="#projectid">projectid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ProjectHubDetails</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the hub for a given project_id.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#hubid">hubid</a>, <a href="#projectid">projectid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ListFolders</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the details of the highest level folders the user has access to for a given project. The user must have at least read access to the folders.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#hubid">hubid</a>, <a href="#projectid">projectid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">Download</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the details for a specific download.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#downloadid">downloadid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">JobInfo</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the job_id object.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#jobid">jobid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateDownloadType</h3>
+			<dl class="message-properties forge">
+				<dd>Request the creation of a new download for a specific and supported file type.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateStorage</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a storage location in the OSS where data can be uploaded to.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+		</dl>
+
+		<h3 class="forge">Folders</h3>
+		<dl class="message-properties forge">
+
+			<h3 class="forge">FolderDetails</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the folder by ID for any folder within a given project. All folders or sub-folders within a project are associated with their own unique ID, including the root folder.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#folderid">folderid</a>, <a href="#ifModifiedSince">ifModifiedSince</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">FolderContents</h3>
+			<dl class="message-properties forge">
+				<dd>Returns a collection of items and folders within a folder. Items represent word documents, fusion design files, drawings, spreadsheets, etc.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#folderid">folderid</a>, <a href="#filters">filters</a>, <a href="#includeHidden">includeHidden</a>, <a href="#pageNumber">pageNumber</a>, <a href="#pageLimit">pageLimit</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">FolderParent</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the parent folder (if it exists). In a project, subfolders and resource items are stored under a folder except the root folder which does not have a parent of its own.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#folderid">folderid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">FolderRefs</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the resources (items, folders, and versions) that have a custom relationship with the given folder_id. </dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#folderid">folderid</a>, <a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">FolderRelationshipsLinks</h3>
+			<dl class="message-properties forge">
+				<dd>Returns a collection of links for the given folder_id. Custom relationships can be established between a folder and other external resources residing outside the data domain service. A link’s href defines the target URI to access a resource.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+			</dl>
+
+			<h3 class="forge">FolderRelationshipsRefs</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the custom relationships that are associated with the given folder_id. Custom relationships can be established between a folder and other resources within the data domain service (folders, items, and versions).</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+			</dl>
+
+			<h3 class="forge">Search</h3>
+			<dl class="message-properties forge">
+				<dd>Filters the data of a folder and recursively in the subfolders of any project accessible to you, using the filter query string parameter.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateFolder</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a new folder. To delete and restore folders, use the PATCH projects/:project_id/folders/:folder_id endpoint.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateFolderRelationshipsRef</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a custom relationship between a folder and another resource within the data domain service (folder, item, or version).</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+			</dl>
+
+			<h3 class="forge">ModifyFolder</h3>
+			<dl class="message-properties forge">
+				<dd>Modifies folder names. You can also use this endpoint to delete and restore BIM 360 Docs folders by using the hidden attribute.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+			</dl>
+
+		</dl>
+
+		<h3 class="forge">Items</h3>
+		<dl class="message-properties forge">
+
+			<h3 class="forge">XX</h3>
+			<dl class="message-properties forge">
+				<dd>XX</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+			</dl>
+
+		</dl>
+
+		<h3 class="forge">Versions</h3>
+		<dl class="message-properties forge">
+
+			<h3 class="forge">XX</h3>
+			<dl class="message-properties forge">
+				<dd>XX</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+			</dl>
+
+		</dl>
+
+	</dl>
+
+	<h3>Parameters</h3>
+
+	<a name="hubid" />
+	<dl class="message-properties">
+		<dt>hubid <span class="property-type">string</span></dt>
+		<dd>The unique identifier of a hub.</dd>
+	</dl>
+
+	<a name="projectid" />
+	<dl class="message-properties">
+		<dt>projectid <span class="property-type">string</span></dt>
+		<dd>The unique identifier of a project.</dd>
+	</dl>
+
+	<a name="folderid" />
+	<dl class="message-properties">
+		<dt>folderid <span class="property-type">string</span></dt>
+		<dd>The unique identifier of a folder.</dd>
+	</dl>
+	
+	<a name="filters" />
+	<dl class="message-properties">
+		<dt>filters <span class="property-type">array<object></span></dt>
+		<dd>Filters query's reponse. Array of objects { id: '', custom: '', modifier: '', expr: '' }</ br>
+			filter[<id>]=<expr></ br>
+			filter[<custom fieldname>]=<expr></ br>
+			filter[<id>]<modifier>=<expr></dd>
+	</dl>
+
+	<a name="ifModifiedSince" />
+	<dl class="message-properties">
+		<dt>ifModifiedSince <span class="property-type">string</span></dt>
+		<dd>If the requested object has not been modified since the time specified in this field, an entity will not be returned from the server; instead, a 304 (not modified) response will be returned without any message-body.</dd>
+	</dl>
+
+	<a name="pageNumber" />
+	<dl class="message-properties">
+		<dt>pageNumber <span class="property-type">integer</span></dt>
+		<dd>Specify the page number.</dd>
+	</dl>
+
+	<a name="pageLimit" />
+	<dl class="message-properties">
+		<dt>pageLimit <span class="property-type">integer</span></dt>
+		<dd>Specify the maximal number of elements per page.</dd>
+	</dl>
+
+	<a name="downloadid" />
+	<dl class="message-properties">
+		<dt>downloadid <span class="property-type">string</span></dt>
+		<dd>The unique identifier of a download job.</dd>
+	</dl>
+
+	<a name="jobid" />
+	<dl class="message-properties">
+		<dt>jobid <span class="property-type">string</span></dt>
+		<dd>The unique identifier of a job.</dd>
+	</dl>
+
+	<a name="body" />
+	<dl class="message-properties">
+		<dt>body <span class="property-type">object</span></dt>
+		<dd>The POST body is a JSON object.</dd>
+	</dl>
+
+	<a name="includeHidden" />
+	<dl class="message-properties">
+		<dt>includeHidden <span class="property-type">boolean</span></dt>
+		<dd>Refers to items and folders that were deleted from BIM 360 Docs projects.</dd>
+	</dl>
+
+	<a name="code" />
+	<dl class="message-properties">
+		<dt>code <span class="property-type">string</span></dt>
+		<dd>The authorization code captured from the code query parameter when the GET authorize redirected back to the callback URL.</dd>
+	</dl>
+
+	<a name="raw" />
+	<dl class="message-properties">
+		<dt>raw <span class="property-type">boolean</span></dt>
+		<dd>Get the raw HTPP response (includes headers and statusCode).</dd>
+	</dl>
+
+<h3>Details</h3>
+	<p><code>msg.payload</code> is used as the payload of the published message.</p>
+	<p>The topic used can be configured in the node or, if left blank, can be set by <code>msg.topic</code>.</p>
+	
+<h3>References</h3>
+	<ul>
+	<li><a href="https://forge.autodesk.com/en/docs/data/v2/developers_guide/overview/">Forge Data Management</a></li>
+	<li><a href="https://forge.autodesk.com/en/docs/data/v2/reference/http/">API Reference</a></li>
+	<li><a href="https://forge.autodesk.com/blog">Forge Blogs</a></li>
+	</ul>
+
 </script>

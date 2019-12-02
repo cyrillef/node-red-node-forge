@@ -1549,26 +1549,4 @@ module.exports = function (RED) {
 
 	// #endregion
 
-	// #region --- Commands ---
-
-	// POST /projects/:project_id/commands - CheckPermission
-	// https://forge.autodesk.com/en/docs/data/v2/reference/http/CheckPermission/
-
-	// POST projects/:project_id/commands - ListRefs
-	// https://forge.autodesk.com/en/docs/data/v2/reference/http/ListRefs/
-
-	// POST projects/:project_id/commands - ListItems
-	// https://forge.autodesk.com/en/docs/data/v2/reference/http/ListItems/
-
-	// POST projects/:project_id/commands - CreateFolder
-	// https://forge.autodesk.com/en/docs/data/v2/reference/http/CreateFolder/
-
-	// POST projects/:project_id/commands - PublishModel
-	// https://forge.autodesk.com/en/docs/data/v2/reference/http/PublishModel/
-
-	// POST projects/:project_id/commands - GetPublishModelJob
-	// https://forge.autodesk.com/en/docs/data/v2/reference/http/GetPublishModelJob/
-
-	// #endregion
-
 };

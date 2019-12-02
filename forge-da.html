@@ -597,7 +597,6 @@
 					.isEnvironmentVariable);
 			},
 			_save: function (itemUI) {
-				//debugger;
 				var result = {
 					value: $(itemUI).find('.' + this.className + '-value').val(),
 					isEnvironmentVariable: $(itemUI).find('.' + this.className + '-isEnvironmentVariable')
@@ -699,7 +698,6 @@
 				$(parent).find('.' + this.className + '-description').val(item.description);
 			},
 			_save: function (itemUI) {
-				//debugger;
 				var result = {
 					url: $(itemUI).find('.' + this.className + '-url').val(),
 					headers: $(itemUI).find('.' + this.className + '-headers').val(),
@@ -740,7 +738,6 @@
 					$(rows[i]).empty();
 			},
 			_create: function (item, rows, container) {
-				//debugger;
 				/* beautify preserve:start */
 				var selectField = $('<select />', {
 					class: this.className + '-type',
@@ -790,7 +787,6 @@
 				this.controllers[item.type]._fill(item, rows);
 			},
 			_save: function (itemUI) {
-				//debugger;
 				var itemType = $(itemUI).find('.' + this.className + '-type').val();
 				var result = this.controllers[itemType]._save(itemUI);
 				result.key = $(itemUI).find('.' + this.className + '-key').val();
@@ -826,7 +822,6 @@
 				$(parent).find('.' + this.className + '-value').val(item.value);
 			},
 			_save: function (itemUI) {
-				//debugger;
 				var result = {
 					value: $(itemUI).find('.' + this.className + '-value').val(),
 				};
@@ -842,7 +837,6 @@
 			type: 'XrefTreeArgument',
 
 			_defaults: function (item) {
-				//debugger;
 				item.optional = item.optional || false;
 				item.localName = item.localName || this.localName;
 				item.pathInZip = item.pathInZip || this.pathInZip;
@@ -969,7 +963,6 @@
 				$(parent).find('.' + this.className + '-parent').val(item.parent);
 			},
 			_save: function (itemUI) {
-				//debugger;
 				var result = {
 					optional: $(itemUI).find('.' + this.className + '-optional').is(':checked'),
 					localName: $(itemUI).find('.' + this.className + '-localName').val(),
@@ -1013,7 +1006,6 @@
 					$(rows[i]).empty();
 			},
 			_create: function (item, rows, container) {
-				//debugger;
 				/* beautify preserve:start */
 				var selectField = $('<select />', {
 					class: this.className + '-type',
@@ -1063,7 +1055,6 @@
 				this.controllers[item.type]._fill(item, rows);
 			},
 			_save: function (itemUI) {
-				//debugger;
 				var itemType = $(itemUI).find('.' + this.className + '-type').val();
 				var result = this.controllers[itemType]._save(itemUI);
 				result.key = $(itemUI).find('.' + this.className + '-key').val();
@@ -1319,7 +1310,6 @@
 			this._def.saveEditor(this, 'node-input-appbundles');
 			// CommandLine editor
 			this._def.saveEditor(this, 'node-input-commandline');
-			//debugger;
 		},
 		oneditresize: function (size) {
 			// Parameters
@@ -1450,7 +1440,6 @@
 				$('#' + id + '-container').editableList('addItem', items[i]);
 		},
 		saveListContainer: function (that, id, controller) {
-			//debugger;
 			var items = $('#' + id + '-container').editableList('items');
 			var results = [];
 			items.each(function (i) {

@@ -1,0 +1,356 @@
+<!--
+  Copyright (c) Autodesk, Inc.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+-->
+
+<!-- forge-commands -->
+<script type="text/x-red" data-template-name="forge-commands">
+	<style scoped>
+		.hiddenAttrs {
+			display: none;
+		}
+
+		.visibleAttrs {
+			display: block;
+		}
+	</style>
+
+	<div class="form-row">
+		<label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="forge.label.name"></span></label>
+		<input type="text" id="node-input-name" data-i18n="[placeholder]forge.placeholder.name">
+	</div>
+	<div class="form-row">
+		<label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="forge.label.topic"></span></label>
+		<input type="text" id="node-input-topic" />
+	</div>
+	<div class="form-row">
+		<label for="node-input-forge"><i class="fa fa-user"></i> <span data-i18n="forge.label.forge"></span></label>
+		<input type="text" id="node-input-forge">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-operation"><i class="fa fa-wrench"></i> <span
+				data-i18n="forge.label.operation"></span></label>
+		<select type="text" id="node-input-operation">
+			<option value="CheckPermission">Check Permission</option>
+			<option value="ListRefs">List Refs</option>
+			<option value="ListItems">List Items</option>
+			<option value="CreateFolder">Create Folder</option>
+			<option value="PublishModel">Publish Model</option>
+			<option value="GetPublishModelJob">Get Publish Model Job</option>
+		</select>
+	</div>
+
+	<div id="AttrHolder">
+
+		<div id="projectidAttr" class="form-row node-input-projectid hiddenAttrs">
+			<label for="node-input-projectid"><i class="fa fa-key"></i> <span data-i18n="forge.label.projectid"></span></label>
+			<input type="text" id="node-input-projectid" data-i18n="[placeholder]forge.placeholder.projectid" />
+		</div>
+
+		<div id="bodyEditorAttr" class="form-row hiddenAttrs">
+			<div class="form-row" style="margin-bottom: 0px;">
+				<label for="node-input-body"><i class="fa fa-square-o"></i> <span
+						data-i18n="forge.label.body"></span></label>
+				<input type="hidden" id="node-input-body" autofocus="autofocus">
+				<input type="hidden" id="node-input-body-noerr">
+			</div>
+			<div class="form-row node-text-editor-row" style="position:relative">
+				<div style="position: absolute; right:0; bottom:calc(100% + 3px);"><button id="node-input-body-expand-js"
+						class="editor-button editor-button-small"><i class="fa fa-expand"></i></button></div>
+				<div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-body-editor"></div>
+			</div>
+		</div>
+		
+		<div id="xuseridAttr" class="form-row node-input-xuserid hiddenAttrs">
+			<label for="node-input-xuserid"><i class="fa fa-key"></i> <span data-i18n="forge.label.xuserid"></span></label>
+			<input type="text" id="node-input-xuserid" data-i18n="[placeholder]forge.placeholder.xuserid" autocomplete="off" />
+		</div>
+
+	</div>
+
+	<div id="RawResponseAttr" class="form-row node-input-raw">
+		<label for="node-input-raw"><i class="fa fa-tag"></i> <span
+				data-i18n="forge.label.raw"></span></label>
+		<input type="checkbox" id="node-input-raw" />
+	</div>
+
+	<script type="text/javascript">
+		var nodeOps = {
+			CheckPermission: [ '#projectidAttr', '#bodyEditorAttr', '#xuseridAttr' ],
+			ListRefs: [ '#projectidAttr', '#bodyEditorAttr', '#xuseridAttr' ],
+			ListItems: [ '#projectidAttr', '#bodyEditorAttr', '#xuseridAttr' ],
+			CreateFolder: [ '#projectidAttr', '#bodyEditorAttr', '#xuseridAttr' ],
+			PublishModel: [ '#projectidAttr', '#bodyEditorAttr', '#xuseridAttr' ],
+			GetPublishModelJob: [ '#projectidAttr', '#bodyEditorAttr', '#xuseridAttr' ]
+		};
+		$('#node-input-operation').on('change', function () {
+			$('#AttrHolder').children().addClass('hiddenAttrs').removeClass('visibleAttrs');
+			if (nodeOps[this.value])
+				$(nodeOps[this.value].join()).addClass('visibleAttrs').removeClass('hiddenAttrs');
+		});
+
+	</script>
+</script>
+
+<script type="text/javascript">
+	RED.nodes.registerType('forge-commands', {
+		category: 'forge',
+		color: '#0696D7',
+		icon: 'forge.png',
+		align: 'right',
+		defaults: {
+			name: {
+				value: ''
+			},
+			topic: {
+				value: ''
+			},
+			forge: {
+				type: 'forge-credentials',
+				required: true
+			},
+			operation: {
+				value: 'CheckPermission'
+			},
+			raw: {
+				value: false
+			},
+
+			projectid: {
+				value: ''
+			},
+			body: {
+				value: ''
+			},
+
+			xuserid: {
+				value: null
+			}
+			
+		},
+		inputs: 1,
+		//inputLabels: [ 'credentials', 'in' ],
+		outputs: 2,
+		outputLabels: [ 'response', 'err' ],
+		label: function () {
+			return (this.name || 'commands ' + this.operation);
+		},
+		// oneditprepare is called immediately before the dialog is displayed.
+		// oneditsave is called when the edit dialog is okayed.
+		// oneditcancel is called when the edit dialog is cancelled.
+		// oneditdelete is called when the delete button in a configuration node’s edit dialog is pressed.
+		// oneditresize is called when the edit dialog is resized.
+
+		bodyPayload: function (bForce) {
+			bForce = bForce || false;
+			if ( $('#node-input-body').val() === '' || bForce == true ) {
+				var body = { 
+					jsonapi: { 
+							version: '1.0' 
+					}, 
+					data: { 
+						type: 'commands', 
+						attributes: { 
+							extension: { 
+								type: '', 
+								version: '1.0.0'
+							} 
+						}, 
+						relationships: { 
+							resources: { 
+								data: [ { type: '', id: '' } ] 
+							} 
+						} 
+					} 
+				};
+				switch ( $('#node-input-operation').val() ) {
+					case 'CheckPermission':
+						body.data.attributes.extension.type = 'commands:autodesk.core:CheckPermission';
+						body.data.attributes.extension.data = {
+							requiredActions: []
+						};
+						//body.data.relationships.resources.data[0].type = ''; // Possible values: folders, items, versions
+						break;
+					case 'ListRefs':
+						body.data.attributes.extension.type = 'commands:autodesk.core:ListRefs';
+						body.data.relationships.resources.data[0].type = 'versions';
+						break;
+					case 'ListItems':
+						body.data.attributes.extension.type = 'commands:autodesk.core:ListItems';
+						body.data.relationships.resources.data[0].type = 'items';
+						break;
+					case 'CreateFolder':
+						body.data.attributes.extension.type = 'commands:autodesk.core:CreateFolder';
+						body.data.attributes.relationships = {
+							resources: {
+								data: [ { type: 'folders', id: '' } ]
+							}
+						};
+						delete body.data.relationships;
+						body.included = [
+							{
+								type: 'folders',
+								id: '',
+								attributes: {
+									name: '',
+									extension: {
+										type: 'folders:autodesk.bim360:Folder',
+										version: '1.0'
+									}
+								},
+								relationships: {
+									parent: {
+										data: {
+											type: 'folders',
+											id: ''
+										}
+									}
+								}
+							}
+						];
+						break;
+					case 'PublishModel':
+						body.data.attributes.extension.type = 'commands:autodesk.bim360:C4RModelPublish';
+						break;
+					case 'GetPublishModelJob':
+						body.data.attributes.extension.type = 'commands:autodesk.bim360:C4RModelGetPublishJob';
+						break;
+				}
+				$('#node-input-body').val(JSON.stringify (body, null, 4));
+				return (JSON.stringify(body, null, 4));
+			}
+			return(null);
+		},
+
+		oneditprepare: function () {
+			// body editor
+			this._def.createEditor(this, 'node-input-body', 'ace/mode/javascript');
+			// Change default payload on operation change
+			var that = this;
+			that.__bodyMarker__ = false;
+			$('#node-input-operation').on('change', function (evt) {
+				var value = that._def.bodyPayload(that.__bodyMarker__);
+				that.__bodyMarker__ = true;
+
+				if ( value )
+					that._editors['node-input-body'].setValue(value);
+			});  
+		},
+		oneditcancel: function () {
+			// body editor
+			this._def.cancelEditor(this, 'node-input-body');
+			delete this.__bodyMarker__;
+		},
+		oneditsave: function () {
+			var trimFields = [
+				'projectid',
+			];
+			// Just in case any whitespace has crept in with the copy-paste of the fields
+			trimFields.forEach(function (field) {
+				var v = $('#node-input-' + field).val();
+				v = v.trim();
+				$('#node-input-' + field).val(v);
+			});
+
+			// body editor
+			this._def.saveEditor(this, 'node-input-body');
+			
+			// Debug
+			var elt =$('#node-input-xuserid');
+			if ( elt.val() === 'autodesk' ) {
+				elt.val('');
+				this.xuserid ='';
+			}
+		},
+		oneditresize: function (size) {
+			// body
+			$('#node-input-body-editor').css({
+				height: '70px',
+				'min-height': '70px'
+			})
+			this._def.resizeEditor(this, 'node-input-body', size);
+		},
+		
+		createEditor: function (that, id /*'node-input-appbundles'*/ , mode /*'ace/mode/text'*/ ) {
+			if (!that._editors)
+				that._editors = {};
+			that._editors[id] = RED.editor.createEditor({
+				id: id + '-editor',
+				mode: mode,
+				value: $('#' + id).val(),
+				globals: {
+					msg: true,
+					context: true,
+					RED: true,
+					util: true,
+					flow: true,
+					global: true,
+					console: true,
+					Buffer: true,
+					setTimeout: true,
+					clearTimeout: true,
+					setInterval: true,
+					clearInterval: true
+				}
+			});
+
+			RED.library.create({
+				url: 'functions', // where to get the data from
+				type: 'function', // the type of object the library is for
+				editor: that._editors[id], // the field name the main text body goes to
+				mode: mode, //'ace/mode/nrjavascript',
+				fields: ['name', 'outputs']
+			});
+			that._editors[id].focus();
+
+			$('#' + id + '-expand-js').click(function (e) {
+				e.preventDefault();
+				var value = that._editors[id].getValue();
+				RED.editor.editJavaScript({
+					value: value,
+					width: 'Infinity',
+					cursor: that._editors[id].getCursorPosition(),
+					mode: mode,
+					complete: function (v, cursor) {
+						that._editors[id].setValue(v, -1);
+						that._editors[id].gotoLine(cursor.row + 1, cursor.column, false);
+						setTimeout(function () {
+							that._editors[id].focus();
+						}, 300);
+					}
+				});
+			});
+		},
+		cancelEditor: function (that, id) {
+			that._editors[id].destroy();
+			delete that._editors[id];
+		},
+		saveEditor: function (that, id) {
+			$('#' + id).val(that._editors[id].getValue());
+			that._editors[id].destroy();
+			delete that._editors[id];
+		},
+		resizeEditor: function (that, id, size) {
+			that._editors[id].resize();
+		},
+
+	});
+</script>

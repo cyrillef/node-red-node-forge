@@ -256,7 +256,6 @@
 				return (job);
 			},
 			_create: function (rows) {
-				//debugger;
 				var label = $('<label />', {
 						width: '40px;'
 					})
@@ -301,7 +300,6 @@
 					.prependTo(label);
 			},
 			_fill: function (job, rows) {
-				//debugger;
 				var parent = rows[1].parent().parent();
 				$(parent).find('.node-input-job-2d').prop('checked', job.views.includes('2d'));
 				$(parent).find('.node-input-job-3d').prop('checked', job.views.includes('3d'));
@@ -375,7 +373,6 @@
 				return (job);
 			},
 			_create: function (rows) {
-				//debugger;
 				var propertyValue = $('<input />', {
 						class: 'node-input-job-exportSettingName',
 						type: 'text'
@@ -425,7 +422,6 @@
 				return (job);
 			},
 			_create: function (rows) {
-				//debugger;
 				var label = $('<label />', {
 						width: '40px;'
 					})
@@ -507,7 +503,6 @@
 					.appendTo(rows[4]);
 			},
 			_fill: function (job, rows) {
-				//debugger;
 				var parent = rows[1].parent().parent();
 				$(parent).find('.node-input-job-exportFileStructure').val(job.advanced.exportFileStructure);
 				$(parent).find('.node-input-job-unit').val(job.advanced.unit);
@@ -551,7 +546,6 @@
 				return (job);
 			},
 			_create: function (rows) {
-				//debugger;
 				var label = $('<label />', {
 						width: '40px;'
 					})
@@ -591,7 +585,6 @@
 				}
 			},
 			_fill: function (job, rows) {
-				//debugger;
 				var parent = rows[1].parent().parent();
 				$(parent).find('.node-input-job-applicationProtocol').val(job.advanced.applicationProtocol);
 				$(parent).find('.node-input-job-tolerance').val(job.advanced.tolerance);
@@ -625,7 +618,6 @@
 				return (job);
 			},
 			_create: function (rows) {
-				//debugger;
 				var label = $('<label />', {
 						width: '40px;'
 					})
@@ -692,7 +684,6 @@
 				}
 			},
 			_fill: function (job, rows) {
-				//debugger;
 				var parent = rows[1].parent().parent();
 				$(parent).find('.node-input-job-stlformat').val(job.advanced.format);
 				$(parent).find('.node-input-job-exportColor').prop('checked', job.advanced.exportColor);
@@ -729,7 +720,6 @@
 				return (job);
 			},
 			_create: function (rows) {
-				//debugger;
 				var label = $('<label />', {
 						width: '40px;'
 					})
@@ -809,7 +799,6 @@
 				}
 			},
 			_fill: function (job, rows) {
-				//debugger;
 				var parent = rows[1].parent().parent();
 				$(parent).find('.node-input-job-tolerance').val(job.advanced.tolerance);
 				$(parent).find('.node-input-job-surfaceType').val(job.advanced.surfaceType);
@@ -844,7 +833,6 @@
 				return (job);
 			},
 			_create: function (rows) {
-				//debugger;
 				var label = $('<label />', {
 						width: '40px;'
 					})
@@ -866,12 +854,10 @@
 				}
 			},
 			_fill: function (job, rows) {
-				//debugger;
 				var parent = rows[1].parent().parent();
 				$(parent).find('.node-input-job-dim').val(job.advanced.width);
 			},
 			_save: function (job, type) {
-				//debugger;
 				var result = {
 					type: type,
 					advanced: {
@@ -1032,8 +1018,7 @@
 						var job = opt;
 						if (!job.hasOwnProperty('type'))
 							job = svf()._defaults(job);
-						//debugger;
-
+		
 						container.css({
 							overflow: 'hidden',
 							whiteSpace: 'nowrap'
@@ -1066,8 +1051,7 @@
 							fbx: fbx()
 						};
 
-						//debugger;
-						var items = Object.values(selectOptions);
+								var items = Object.values(selectOptions);
 						for (var i = 0; i < items.length; i++) {
 							selectField.append(
 								$('<option></option>').val(items[i].type).text(
@@ -1075,10 +1059,8 @@
 							);
 						}
 
-						//debugger;
-						selectField.change(function () {
-							//debugger;
-							var width = $('#node-input-job-container').width();
+								selectField.change(function () {
+										var width = $('#node-input-job-container').width();
 							var formatType = $(this.selectField).val();
 
 							cleanupRows(rows);
@@ -1094,8 +1076,7 @@
 							job: job
 						}));
 
-						//debugger;
-						selectField.val(job.type);
+								selectField.val(job.type);
 						// selectOptions[job.type]._fill(job, rows);
 						selectField.change();
 
@@ -1141,7 +1122,6 @@
 				}
 			});
 
-			//debugger;
 			RED.library.create({
 				url: 'functions', // where to get the data from
 				type: 'function', // the type of object the library is for
@@ -1176,7 +1156,6 @@
 		oneditsave: function () {
 			var jobs = $('#node-input-job-container').editableList('items');
 			var node = this;
-			//debugger;
 
 			var selectOptions = {
 				svf: svf(),
@@ -1191,7 +1170,6 @@
 			};
 
 			node.jobs = [];
-			//debugger;
 			jobs.each(function (i) {
 				var job = $(jobs[i]);
 				var formatType = job.find('.node-input-job-type').val();

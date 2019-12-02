@@ -28,6 +28,7 @@
             "forge-default-credentials": "forge-default-credentials.js",
             "forge-oss": "forge-oss.js",
             "forge-dm": "forge-dm.js",
+            "forge-commands": "forge-commands.js",
             "forge-model-derivative": "forge-model-derivative.js",
             "forge-da": "forge-da.js",
             "forge-wait-and-go": "forge-wait-and-go.js"
