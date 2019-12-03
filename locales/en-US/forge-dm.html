@@ -149,42 +149,42 @@
 			<dl class="message-properties forge">
 				<dd>Returns a collection of links for the given folder_id. Custom relationships can be established between a folder and other external resources residing outside the data domain service. A link’s href defines the target URI to access a resource.</dd>
 				<dd><b>Parameters</b></dd>
-				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#folderid">folderid</a>, <a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
 			</dl>
 
 			<h3 class="forge">FolderRelationshipsRefs</h3>
 			<dl class="message-properties forge">
 				<dd>Returns the custom relationships that are associated with the given folder_id. Custom relationships can be established between a folder and other resources within the data domain service (folders, items, and versions).</dd>
 				<dd><b>Parameters</b></dd>
-				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#folderid">folderid</a>, <a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
 			</dl>
 
 			<h3 class="forge">Search</h3>
 			<dl class="message-properties forge">
 				<dd>Filters the data of a folder and recursively in the subfolders of any project accessible to you, using the filter query string parameter.</dd>
 				<dd><b>Parameters</b></dd>
-				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#folderid">folderid</a>, <a href="#filters">filters</a>, <a href="#pageNumber">pageNumber</a>, <a href="#pageLimit">pageLimit</a></dd>
 			</dl>
 
 			<h3 class="forge">CreateFolder</h3>
 			<dl class="message-properties forge">
 				<dd>Creates a new folder. To delete and restore folders, use the PATCH projects/:project_id/folders/:folder_id endpoint.</dd>
 				<dd><b>Parameters</b></dd>
-				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
 			</dl>
 
 			<h3 class="forge">CreateFolderRelationshipsRef</h3>
 			<dl class="message-properties forge">
 				<dd>Creates a custom relationship between a folder and another resource within the data domain service (folder, item, or version).</dd>
 				<dd><b>Parameters</b></dd>
-				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#folderid">folderid</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
 			</dl>
 
 			<h3 class="forge">ModifyFolder</h3>
 			<dl class="message-properties forge">
 				<dd>Modifies folder names. You can also use this endpoint to delete and restore BIM 360 Docs folders by using the hidden attribute.</dd>
 				<dd><b>Parameters</b></dd>
-				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#folderid">folderid</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
 			</dl>
 
 		</dl>
@@ -192,11 +192,74 @@
 		<h3 class="forge">Items</h3>
 		<dl class="message-properties forge">
 
-			<h3 class="forge">XX</h3>
+			<h3 class="forge">ItemDetails</h3>
 			<dl class="message-properties forge">
-				<dd>XX</dd>
+				<dd>Retrieves metadata for a specified item. Items represent word documents, fusion design files, drawings, spreadsheets, etc.</dd>
 				<dd><b>Parameters</b></dd>
-				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#itemid">itemid</a>, <a href="#includePathInProject">includePathInProject</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ItemParentFolder</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the “parent” folder for the given item.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#itemid">itemid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ItemRefs</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the resources (items, folders, and versions) that have a custom relationship with the given item_id.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#itemid">itemid</a>, <a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ItemRelationshipsLinks</h3>
+			<dl class="message-properties forge">
+				<dd>Returns a collection of links for the given item_id.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#itemid">itemid</a>, <a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ItemRelationshipsRefs</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the custom relationships that are associated with the given item_id.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#itemid">itemid</a>, <a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ItemTip</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the “tip” version for the given item. Multiple versions of a resource item can be uploaded in a project. The tip version is the most recent one.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#itemid">itemid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ItemVersions</h3>
+			<dl class="message-properties forge">
+				<dd>Returns versions for the given item. Multiple versions of a resource item can be uploaded in a project.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#itemid">itemid</a>, <a href="#filters">filters</a>, <a href="#pageNumber">pageNumber</a>, <a href="#pageLimit">pageLimit</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateItemVersion</h3>
+			<dl class="message-properties forge">
+				<dd>Creates versions of uploaded files (items) and makes copies of existing files. You can only copy BIM 360 Docs files.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#copyFrom">copyFrom</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateItemRelationshipsRef</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a custom relationship between an item and another resource within the data domain service (folder, item, or version).</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#itemid">itemid</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ModifyItem</h3>
+			<dl class="message-properties forge">
+				<dd>Updates the properties of the given item_id object.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#itemid">itemid</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
 			</dl>
 
 		</dl>
@@ -204,11 +267,74 @@
 		<h3 class="forge">Versions</h3>
 		<dl class="message-properties forge">
 
-			<h3 class="forge">XX</h3>
+			<h3 class="forge">VersionDetails</h3>
 			<dl class="message-properties forge">
-				<dd>XX</dd>
+				<dd>Returns the version with the given version_id.</dd>
 				<dd><b>Parameters</b></dd>
-				<dd><a href="#XX">XX</a>, <a href="#XX">XX</a>, <a href="#XX">XX</a></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#versionid">versionid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">VersionDownloadFormats</h3>
+			<dl class="message-properties forge">
+				<dd>Returns a collection of file formats this version could be converted to and downloaded as.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#versionid">versionid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">VersionDownloads</h3>
+			<dl class="message-properties forge">
+				<dd>Returns a set of already available downloads for this version.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#versionid">versionid</a>, <a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">VersionItem</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the item the given version is associated with.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#versionid">versionid</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">VersionRefs</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the resources (items, folders, and versions) that have a custom relationship with the given version_id.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#versionid">versionid</a>, <a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">VersionRelationshipsLinks</h3>
+			<dl class="message-properties forge">
+				<dd>Returns a collection of links for the given item_id-version_id object. Custom relationships can be established between a version of an item and other external resources residing outside the data domain service. A link’s href defines the target URI to access a resource.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#versionid">versionid</a>, <a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">VersionRelationshipsRefs</h3>
+			<dl class="message-properties forge">
+				<dd>Returns the custom relationships that are associated with the given version_id. Custom relationships can be established between a version of an item and other resources within the data domain service (folders, items, and versions).</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#versionid">versionid</a>, <a href="#filters">filters</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateVersion</h3>
+			<dl class="message-properties forge">
+				<dd>Creates new versions of a file (item), except for the first version of the item. To create the first version of the item, use POST items.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#copyFrom">copyFrom</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">CreateVersionRelationshipsRef</h3>
+			<dl class="message-properties forge">
+				<dd>Creates a custom relationship between a version and another resource within the data domain service (folder, item, or version).</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#versionid">versionid</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
+			</dl>
+
+			<h3 class="forge">ModifyVersion</h3>
+			<dl class="message-properties forge">
+				<dd>Updates the properties of the given version_id object.</dd>
+				<dd><b>Parameters</b></dd>
+				<dd><a href="#projectid">projectid</a>, <a href="#versionid">versionid</a>, <a href="#body">body</a>, <a href="#xuserid">xuserid</a></dd>
 			</dl>
 
 		</dl>
@@ -234,20 +360,39 @@
 		<dt>folderid <span class="property-type">string</span></dt>
 		<dd>The unique identifier of a folder.</dd>
 	</dl>
-	
+
+	<a name="itemid" />
+	<dl class="message-properties">
+		<dt>itemid <span class="property-type">string</span></dt>
+		<dd>The unique identifier of an item.</dd>
+	</dl>
+
+	<a name="versionid" />
+	<dl class="message-properties">
+		<dt>versionid <span class="property-type">string</span></dt>
+		<dd>The unique identifier of a version.</dd>
+	</dl>
+
 	<a name="filters" />
 	<dl class="message-properties">
-		<dt>filters <span class="property-type">array<object></span></dt>
-		<dd>Filters query's reponse. Array of objects { id: '', custom: '', modifier: '', expr: '' }</ br>
-			filter[<id>]=<expr></ br>
-			filter[<custom fieldname>]=<expr></ br>
-			filter[<id>]<modifier>=<expr></dd>
+		<dt>filters <span class="property-type">string</span></dt>
+		<dd>Filters query reponse. Array of objects of type { id: '', custom: '', modifier: '', expr: '' } </ br>
+			filter[&lt;id&gt;]=&lt;expr&gt;</ br>
+			filter[&lt;custom fieldname&gt;]=&lt;expr&gt;</ br>
+			filter[&lt;id>]&lt;modifier&gt;=&lt;expr&gt;
+		</dd>
 	</dl>
 
 	<a name="ifModifiedSince" />
 	<dl class="message-properties">
 		<dt>ifModifiedSince <span class="property-type">string</span></dt>
 		<dd>If the requested object has not been modified since the time specified in this field, an entity will not be returned from the server; instead, a 304 (not modified) response will be returned without any message-body.</dd>
+	</dl>
+
+	<a name="includePathInProject" />
+	<dl class="message-properties">
+		<dt>includePathInProject <span class="property-type">boolean</span></dt>
+		<dd>Specify whether to return pathInProject attribute in response for BIM 360 Docs projects. pathInProject is the relative path of the item starting from project’s root folder.</dd>
 	</dl>
 
 	<a name="pageNumber" />
@@ -278,6 +423,12 @@
 	<dl class="message-properties">
 		<dt>body <span class="property-type">object</span></dt>
 		<dd>The POST body is a JSON object.</dd>
+	</dl>
+
+	<a name="copyFrom" />
+	<dl class="message-properties">
+		<dt>copyFrom <span class="property-type">string</span></dt>
+		<dd>Only relevant for copying files to BIM 360 Docs - the version ID (URN) of the file to copy.</dd>
 	</dl>
 
 	<a name="includeHidden" />
