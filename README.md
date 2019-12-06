@@ -1,7 +1,5 @@
 # Autodesk Forge Node-RED Nodes
 
-**This is work in progress and the readme below does not yet reflect its final state. For example the NPM information is not yet working.**
-
 [![Node.js](https://img.shields.io/badge/Node.js-8.0.0-blue.svg)](https://nodejs.org/)
 [![npm](https://img.shields.io/badge/npm-0.0.1-blue.svg)](https://www.npmjs.com/)
 ![Platforms](https://img.shields.io/badge/platform-windows%20%7C%20osx%20%7C%20linux-lightgray.svg)
