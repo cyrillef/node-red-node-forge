@@ -140,7 +140,7 @@ module.exports = function (RED) {
     var service = {};
     utils(service);
 
-    // #region --- Model Serivative ---
+    // #region --- Model Derivative ---
 
     // POST	job
     // https://forge.autodesk.com/en/docs/model-derivative/v2/reference/http/job-POST/
@@ -156,6 +156,7 @@ module.exports = function (RED) {
             rootFilename: service.defaultNullOrEmptyString,
             checkReferences: service.defaultNullOrEmptyString,
             region: service.asIs,
+            datacenter: service.asIs,
             workflow: service.defaultNullOrEmptyString,
             workflowAttribute: service.defaultNullOrEmptyString,
             raw: service.defaultNullOrEmptyBoolean
@@ -197,7 +198,7 @@ module.exports = function (RED) {
             }
         }
 
-        var apis = new ForgeAPI.DerivativesApi();
+        var apis = new ForgeAPI.DerivativesApi(undefined, params.datacenter);
         apis.translate(jobs, params, oa2legged, oa2legged.getCredentials())
             .then(function (results) {
                 cb(null, service.formatResponseOldSDK(results, params.raw));
@@ -216,6 +217,7 @@ module.exports = function (RED) {
         service.getParams(n, msg, {
             urn: service.asIs,
             acceptEncoding: service.defaultNullOrEmptyString,
+            datacenter: service.asIs,
             raw: service.defaultNullOrEmptyBoolean
         }, params);
 
@@ -225,7 +227,7 @@ module.exports = function (RED) {
     service.GetManifest = function (n, node, oa2legged, msg, cb) {
         var params = service.GetManifestParams(n, msg);
 
-        var apis = new ForgeAPI.DerivativesApi();
+        var apis = new ForgeAPI.DerivativesApi(undefined, params.datacenter);
         apis.getManifest(params.urn, params, oa2legged, oa2legged.getCredentials())
             .then(function (results) {
                 cb(null, service.formatResponseOldSDK(results, params.raw));
@@ -243,6 +245,7 @@ module.exports = function (RED) {
         //service.getParamsSimple(n, msg, ['limit', 'startAt', 'region'], params);
         service.getParams(n, msg, {
             urn: service.asIs,
+            datacenter: service.asIs,
             raw: service.defaultNullOrEmptyBoolean
         }, params);
 
@@ -252,7 +255,7 @@ module.exports = function (RED) {
     service.DeleteManifest = function (n, node, oa2legged, msg, cb) {
         var params = service.DeleteManifestParams(n, msg);
 
-        var apis = new ForgeAPI.DerivativesApi();
+        var apis = new ForgeAPI.DerivativesApi(undefined, params.datacenter);
         apis.deleteManifest(params.urn, oa2legged, oa2legged.getCredentials())
             .then(function (results) {
                 cb(null, service.formatResponseOldSDK(results, params.raw));
@@ -271,6 +274,7 @@ module.exports = function (RED) {
         service.getParams(n, msg, {
             urn: service.asIs,
             acceptEncoding: service.defaultNullOrEmptyString,
+            datacenter: service.asIs,
             raw: service.defaultNullOrEmptyBoolean
         }, params);
 
@@ -280,7 +284,7 @@ module.exports = function (RED) {
     service.GetMetadata = function (n, node, oa2legged, msg, cb) {
         var params = service.GetMetadataParams(n, msg);
 
-        var apis = new ForgeAPI.DerivativesApi();
+        var apis = new ForgeAPI.DerivativesApi(undefined, params.datacenter);
         apis.getMetadata(params.urn, params, oa2legged, oa2legged.getCredentials())
             .then(function (results) {
                 cb(null, service.formatResponseOldSDK(results, params.raw));
@@ -303,6 +307,7 @@ module.exports = function (RED) {
             },
             guid: service.asIs,
             acceptEncoding: service.defaultNullOrEmptyString,
+            datacenter: service.asIs,
             raw: service.defaultNullOrEmptyBoolean
         }, params);
 
@@ -312,7 +317,7 @@ module.exports = function (RED) {
     service.GetObjectTree = function (n, node, oa2legged, msg, cb) {
         var params = service.GetObjectTreeParams(n, msg);
 
-        var apis = new ForgeAPI.DerivativesApi();
+        var apis = new ForgeAPI.DerivativesApi(undefined, params.datacenter);
         apis.getModelviewMetadata(params.urn, params.guid, params, oa2legged, oa2legged.getCredentials())
             .then(function (results) {
                 cb(null, service.formatResponseOldSDK(results, params.raw));
@@ -336,6 +341,7 @@ module.exports = function (RED) {
             guid: service.asIs,
             objectid: service.defaultNullOrEmptyString,
             acceptEncoding: service.defaultNullOrEmptyString,
+            datacenter: service.asIs,
             raw: service.defaultNullOrEmptyBoolean
         }, params);
 
@@ -345,7 +351,7 @@ module.exports = function (RED) {
     service.GetProperties = function (n, node, oa2legged, msg, cb) {
         var params = service.GetPropertiesParams(n, msg);
 
-        var apis = new ForgeAPI.DerivativesApi();
+        var apis = new ForgeAPI.DerivativesApi(undefined, params.datacenter);
         apis.getModelviewProperties(params.urn, params.guid, params, oa2legged, oa2legged.getCredentials())
             .then(function (results) {
                 cb(null, service.formatResponseOldSDK(results, params.raw));
@@ -364,6 +370,7 @@ module.exports = function (RED) {
         service.getParams(n, msg, {
             urn: service.asIs,
             region: service.asIs,
+            datacenter: service.asIs,
             rootFilename: {
                 rename: 'filename'
             },
@@ -383,17 +390,17 @@ module.exports = function (RED) {
     service.SetReferences = function (n, node, oa2legged, msg, cb) {
         var params = service.SetReferencesParams(n, msg);
 
-        var returnType = null;
+        //var returnType = null;
         var urn = params.urn;
         params.urn = service.safeBase64decode(params.urn);
 
-        var apis = new ForgeAPI.DerivativesApi();
-        apis.apiClient.callApi(
-                '/modelderivative/v2/designdata/' + urn + '/references', 'POST', {}, {}, {}, {}, params,
-                ['application/json'], ['application/vnd.api+json', 'application/json'],
-                returnType, oa2legged, oa2legged.getCredentials()
-            )
-            // apis.getModelviewProperties(params.urn, params.guid, params, oa2legged, oa2legged.getCredentials())
+        var apis = new ForgeAPI.DerivativesApi(undefined, params.datacenter);
+        // apis.apiClient.callApi(
+        //         '/modelderivative/v2/designdata/' + urn + '/references', 'POST', {}, {}, {}, {}, params,
+        //         ['application/json'], ['application/vnd.api+json', 'application/json'],
+        //         returnType, oa2legged, oa2legged.getCredentials()
+        //     )
+        apis.setReferences(urn, params.references, params, oa2legged, oa2legged.getCredentials())
             .then(function (results) {
                 cb(null, service.formatResponseOldSDK(results, params.raw));
             })
@@ -412,6 +419,7 @@ module.exports = function (RED) {
             urn: service.asIs,
             width: service.asIs,
             height: service.asIs,
+            datacenter: service.asIs,
             raw: service.defaultNullOrEmptyBoolean
         }, params);
 
@@ -421,7 +429,7 @@ module.exports = function (RED) {
     service.GetThumbnail = function (n, node, oa2legged, msg, cb) {
         var params = service.GetThumbnailParams(n, msg);
 
-        var apis = new ForgeAPI.DerivativesApi();
+        var apis = new ForgeAPI.DerivativesApi(undefined, params.datacenter);
         apis.getThumbnail(params.urn, params, oa2legged, oa2legged.getCredentials())
             .then(function (results) {
                 cb(null, service.formatResponseOldSDK(results, params.raw));
@@ -441,6 +449,7 @@ module.exports = function (RED) {
             urn: service.asIs,
             derivativeurn: service.asIs,
             range: service.defaultNullOrEmptyString,
+            datacenter: service.asIs,
             raw: service.defaultNullOrEmptyBoolean
         }, params);
 
@@ -450,7 +459,7 @@ module.exports = function (RED) {
     service.GetDerivativeManifest = function (n, node, oa2legged, msg, cb) {
         var params = service.GetDerivativeManifestParams(n, msg);
 
-        var apis = new ForgeAPI.DerivativesApi();
+        var apis = new ForgeAPI.DerivativesApi(undefined, params.datacenter);
         apis.getDerivativeManifest(params.urn, params.derivativeurn, params, oa2legged, oa2legged.getCredentials())
             .then(function (results) {
                 cb(null, service.formatResponseOldSDK(results, params.raw));
@@ -469,6 +478,7 @@ module.exports = function (RED) {
         service.getParams(n, msg, {
             ifModifiedSince: service.defaultNullOrEmptyDate,
             acceptEncoding: service.defaultNullOrEmptyString,
+            datacenter: service.asIs,
             raw: service.defaultNullOrEmptyBoolean
         }, params);
 
@@ -478,7 +488,7 @@ module.exports = function (RED) {
     service.GetFormats = function (n, node, oa2legged, msg, cb) {
         var params = service.GetFormatsParams(n, msg);
 
-        var apis = new ForgeAPI.DerivativesApi();
+        var apis = new ForgeAPI.DerivativesApi(undefined, params.datacenter);
         apis.getFormats(params, oa2legged, oa2legged.getCredentials())
             .then(function (results) {
                 cb(null, service.formatResponseOldSDK(results, params.raw));

@@ -192,6 +192,14 @@
 
 	</div>
 
+	<div id="datacenterAttr" class="form-row node-input-datacenter">
+		<label for="node-input-datacenter"><i class="fa fa-globe"></i> <span data-i18n="forge.label.datacenter"></span></label>
+		<select type="text" id="node-input-datacenter" style="width:72%;">
+			<option selected value="US">US</option>
+			<option value="EMEA">EMEA</option>
+		</select>
+	</div>
+
 	<div id="RawResponseAttr" class="form-row node-input-raw">
 		<label for="node-input-raw"><i class="fa fa-tag"></i> <span
 				data-i18n="forge.label.raw"></span></label>
@@ -975,6 +983,10 @@
 				value: null
 			},
 			region: { // Acceptable values: US, EMEA
+				value: 'US',
+				required: true
+			},
+			datacenter: {
 				value: 'US',
 				required: true
 			},

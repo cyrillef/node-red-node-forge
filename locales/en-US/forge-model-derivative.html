@@ -17,43 +17,44 @@
 			<dd><b>Parameters</b></dd>
 			<dd><a href="#urn">urn</a>, <a href="#xAdsForce">xAdsForce</a>, <a href="#checkReferences">checkReferences</a>
 				<a href="#rootFilename">rootFilename</a>, <a href="#jobs">jobs</a>, <a href="#region">region</a>,
-				<a href="#workflow">workflow</a>, <a href="#workflowAttribute">workflowAttribute</a></dd>
+				<a href="#workflow">workflow</a>, <a href="#workflowAttribute">workflowAttribute</a>, <a href="#datacenter">datacenter</a></dd>
 		</dl>
 
 		<h3 class="forge">SetReferences</h3>
 		<dl class="message-properties forge">
 			<dd>To create references for a composite design in Model Derivative. The description of references is stored in Model Derivative. To use it with the POST job endpoint, you need to set checkReferences to true</dd>
 			<dd><b>Parameters</b></dd>
-			<dd><a href="#urn">urn</a>, <a href="#references">references</a>
-				<a href="#rootFilename">rootFilename</a>, <a href="#region">region</a></dd>
+			<dd><a href="#urn">urn</a>, <a href="#references">references</a>,
+				<a href="#rootFilename">rootFilename</a>, <a href="#region">region</a>, <a href="#datacenter">datacenter</a></dd>
 		</dl>
 
 		<h3 class="forge">GetManifest</h3>
 		<dl class="message-properties forge">
 			<dd>Returns information about derivatives that correspond to a specific source file, including derivative URNs and statuses.</dd>
 			<dd><b>Parameters</b></dd>
-			<dd><a href="#urn">urn</a>, <a href="#acceptEncoding">acceptEncoding</a></dd>
+			<dd><a href="#urn">urn</a>, <a href="#acceptEncoding">acceptEncoding</a>, <a href="#datacenter">datacenter</a></dd>
 		</dl>
 
 		<h3 class="forge">DeleteManifest</h3>
 		<dl class="message-properties forge">
 			<dd>Deletes the manifest and all its translated output files (derivatives). However, it does not delete the design source file.</dd>
 			<dd><b>Parameters</b></dd>
-			<dd><a href="#urn">urn</a></dd>
+			<dd><a href="#urn">urn</a>, <a href="#datacenter">datacenter</a></dd>
 		</dl>
 
 		<h3 class="forge">GetMetadata</h3>
 		<dl class="message-properties forge">
 			<dd>Returns a list of model view (metadata) IDs for a design model. The metadata ID enables end users to select an object tree and properties for a specific model view.</dd>
 			<dd><b>Parameters</b></dd>
-			<dd><a href="#urn">urn</a>, <a href="#acceptEncoding">acceptEncoding</a></dd>
+			<dd><a href="#urn">urn</a>, <a href="#acceptEncoding">acceptEncoding</a>, <a href="#datacenter">datacenter</a></dd>
 		</dl>
 
 		<h3 class="forge">GetObjectTree</h3>
 		<dl class="message-properties forge">
 			<dd>Returns an object tree, i.e., a hierarchical list of objects for a model view.</dd>
 			<dd><b>Parameters</b></dd>
-			<dd><a href="#urn">urn</a>, <a href="#guid">guid</a>, <a href="#forceget">forceget</a>, <a href="#acceptEncoding">acceptEncoding</a></dd>
+			<dd><a href="#urn">urn</a>, <a href="#guid">guid</a>, <a href="#forceget">forceget</a>,
+				<a href="#acceptEncoding">acceptEncoding</a>, <a href="#datacenter">datacenter</a></dd>
 		</dl>
 
 		<h3 class="forge">GetProperties</h3>
@@ -61,28 +62,31 @@
 			<dd>Returns a list of properties for each object in an object tree. Properties are returned according to object ID and do not follow a hierarchical structure.</dd>
 			<dd><b>Parameters</b></dd>
 			<dd><a href="#urn">urn</a>, <a href="#guid">guid</a>, <a href="#objectid">objectid</a>,
-				<a href="#forceget">forceget</a>, <a href="#acceptEncoding">acceptEncoding</a></dd>
+				<a href="#forceget">forceget</a>, <a href="#acceptEncoding">acceptEncoding</a>, <a href="#datacenter">datacenter</a></dd>
 		</dl>
 
 		<h3 class="forge">GetDerivativeManifest</h3>
 		<dl class="message-properties forge">
 			<dd>Downloads a selected derivative. To download the file, you need to specify the file’s URN, which you retrieve by calling the GET :urn/manifest endpoint.</dd>
 			<dd><b>Parameters</b></dd>
-			<dd><a href="#urn">urn</a>, <a href="#derivativeurn">derivativeurn</a>, <a href="#range">range</a></dd>
+			<dd><a href="#urn">urn</a>, <a href="#derivativeurn">derivativeurn</a>,
+				<a href="#range">range</a>, <a href="#datacenter">datacenter</a></dd>
 		</dl>
 
 		<h3 class="forge">GetThumbnail</h3>
 		<dl class="message-properties forge">
 			<dd>Downloads the thumbnail for the source file.</dd>
 			<dd><b>Parameters</b></dd>
-			<dd><a href="#urn">urn</a>, <a href="#width">width</a>, <a href="#height">height</a></dd>
+			<dd><a href="#urn">urn</a>, <a href="#width">width</a>, <a href="#height">height</a>,
+				<a href="#datacenter">datacenter</a></dd>
 		</dl>
 
 		<h3 class="forge">GetFormats</h3>
 		<dl class="message-properties forge">
 			<dd>Returns an up-to-date list of Forge-supported translations, that you can use to identify which types of derivatives are supported for each source file type. You can set this endpoint to only return the list of supported translations if they have been updated since a specified date.</dd>
 			<dd><b>Parameters</b></dd>
-			<dd><a href="#ifModifiedSince">ifModifiedSince</a>, <<a href="#acceptEncoding">acceptEncoding</a></dd>
+			<dd><a href="#ifModifiedSince">ifModifiedSince</a>, <<a href="#acceptEncoding">acceptEncoding</a>,
+				<a href="#datacenter">datacenter</a></dd>
 		</dl>
 
 	</dl>
@@ -184,6 +188,12 @@
 	<dl class="message-properties">
 		<dt>region <span class="property-type">enum(string)</span></dt>
 		<dd>Region in which to store references. Possible values: US, EMEA. By default, it is set to US.</dd>
+	</dl>
+
+	<a name="datacenter" />
+	<dl class="message-properties">
+		<dt>datacenter <span class="property-type">enum(string)</span></dt>
+		<dd>Region in which to process the data / Data Center region for processing. Possible values: US, EMEA. By default, it is set to US.</dd>
 	</dl>
 
 	<a name="workflow" />
