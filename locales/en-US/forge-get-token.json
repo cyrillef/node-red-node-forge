@@ -1,0 +1,22 @@
+{
+  "forge": {
+    "label": {
+      "forge": "Forge",
+      "name": "Name",
+      "topic": "Topic"
+    },
+    "placeholder": {
+      "name": "Name",
+      "topic": "Topic"
+    },
+    "tip": {
+      "config1": "",
+      "config2": ""
+    },
+    "warn": {
+      "missing-credentials": "Missing Forge credentials"
+    },
+    "error": {
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
     "name": "node-red-node-forge",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Autodesk Forge Nodes Node-RED nodes",
     "license": "MIT",
     "author": "Cyrille Fauvel",
@@ -28,6 +28,7 @@
         "nodes": {
             "forge-credentials": "forge-credentials.js",
             "forge-default-credentials": "forge-default-credentials.js",
+            "forge-get-token": "forge-get-token.js",
             "forge-oss": "forge-oss.js",
             "forge-dm": "forge-dm.js",
             "forge-commands": "forge-commands.js",
@@ -37,10 +38,10 @@
         }
     },
     "dependencies": {
-        "autodesk.forge.designautomation": "^3.0.1",
-        "forge-apis": "^0.7.0",
-        "node-red-contrib-loop-processing": "^0.3.1",
-        "node-red-node-base64": "^0.2.0",
+        "autodesk.forge.designautomation": "^3.0.3",
+        "forge-apis": "^0.8.6",
+        "node-red-contrib-loop-processing": "^0.5.1",
+        "node-red-node-base64": "^0.3.0",
         "stream-buffers": "^3.0.2",
         "uuid": "^3.3.3"
     },
