@@ -39,6 +39,10 @@ To install - either use the manage palette option in the editor, or change to yo
 
 ## Developer section only
 
+For Windows - Install all the required tools and configurations using Microsoft's windows-build-tools using npm install --global --production windows-build-tools from an elevated PowerShell or CMD.exe (run as Administrator).
+
+Then
+
 - Clone Node-red repo: ```git clone https://github.com/node-red/node-red.git```
 - Clone this repo: ```git clone https://github.com/cyrillef/node-red-node-forge.git```
 - ```cd node-red-node-forge```
