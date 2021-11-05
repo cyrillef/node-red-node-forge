@@ -36,7 +36,7 @@ module.exports = function (RED) {
 		this.commandsProperties = n;
 		var node = this;
 
-		function onInput(msg) {
+		async function onInput(msg) {
 			//msg.topic = node.topic;
 			//var _msg = RED.util.cloneMessage(msg);
 
@@ -135,7 +135,7 @@ module.exports = function (RED) {
 					shape: 'dot',
 					text: node.commandsProperties.operation
 				});
-				service[node.commandsProperties.operation](n, node, FORGE, msg, _cb);
+				service[node.commandsProperties.operation](n, node, await FORGE, msg, _cb);
 			} else {
 				node.error(RED._('forge.error.unknown-operation', {
 					op: node.commandsProperties.operation

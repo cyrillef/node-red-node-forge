@@ -31,7 +31,7 @@ module.exports = function (RED) {
 		this.tokenProperties = n;
 		var node = this;
 
-		function onInput(msg) {
+		async function onInput(msg) {
 			var FORGE = node.forgeCredentials ? node.forgeCredentials.FORGE : null;
 			if (!FORGE) {
 				if (node._forgeCredentials) {
@@ -69,6 +69,7 @@ module.exports = function (RED) {
 
 			if ( typeof msg.payload !== 'object' )
 				msg.payload = {};
+			FORGE = await FORGE;
 			msg.payload.token = FORGE.getCredentials();
 			node.status({});
 			msg.topic = node.tokenProperties.topic || node.topic;

@@ -1,1 +1,4907 @@
-[{"id":"72895e62.f5b93","type":"tab","label":"Hubs/Projects/Folders/Items/Versions","disabled":false,"info":""},{"id":"c99632e2.735e1","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":220,"wires":[["8ac624ea.246578"]]},{"id":"8ac624ea.246578","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ListHubs","raw":false,"hubid":"autodesk","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","xuserid":"","x":550,"y":220,"wires":[["13093ca1.9f0d03","abaea8d1.4ea4e8"],["32628758.294568"]]},{"id":"13093ca1.9f0d03","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":220,"wires":[]},{"id":"32628758.294568","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":220,"wires":[]},{"id":"8d1d0fc4.c6269","type":"comment","z":"72895e62.f5b93","name":"Hubs - 3legged","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":120,"y":180,"wires":[]},{"id":"19f86fa1.79bd2","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"HubDetails","raw":false,"hubid":"","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":560,"y":300,"wires":[["eef82b38.3b0bb8"],["50a82bab.39d484"]]},{"id":"eef82b38.3b0bb8","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":300,"wires":[]},{"id":"50a82bab.39d484","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":300,"wires":[]},{"id":"322db6b6.45277a","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1180,"wires":[["dd836fc8.202fd"]]},{"id":"e492f74a.fad8f8","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ListProjects","raw":false,"hubid":"","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":560,"y":1180,"wires":[["65928700.755a28"],["27c1e94e.5beed6"]]},{"id":"65928700.755a28","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1180,"wires":[]},{"id":"27c1e94e.5beed6","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1180,"wires":[]},{"id":"bd273862.dc35b8","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1280,"wires":[["dad64188.12272"]]},{"id":"8c16903b.f0631","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ProjectDetails","raw":false,"hubid":"","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":570,"y":1280,"wires":[["538fc8c6.296078"],["775f4352.15899c"]]},{"id":"538fc8c6.296078","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1280,"wires":[]},{"id":"775f4352.15899c","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1280,"wires":[]},{"id":"db5bf7b1.971368","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1340,"wires":[["923a68c1.860768"]]},{"id":"98ca8fe6.7acbd","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ProjectHubDetails","raw":false,"hubid":"","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":580,"y":1340,"wires":[["1ef25abb.a713a5"],["f26c04e8.b6b948"]]},{"id":"1ef25abb.a713a5","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1340,"wires":[]},{"id":"f26c04e8.b6b948","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1340,"wires":[]},{"id":"bb718a0f.b7dd68","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1400,"wires":[["97eff701.b30d48"]]},{"id":"7b10283.c8fedd8","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ListFolders","raw":false,"hubid":"","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":560,"y":1400,"wires":[["23dd7d3f.177a22"],["63911e90.9754f"]]},{"id":"23dd7d3f.177a22","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1400,"wires":[]},{"id":"63911e90.9754f","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1400,"wires":[]},{"id":"3593a533.91472a","type":"comment","z":"72895e62.f5b93","name":"Projects","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":100,"y":1140,"wires":[]},{"id":"4b62f75d.63ce18","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":420,"wires":[["802b305a.b0727"]]},{"id":"802b305a.b0727","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ListHubs","raw":false,"hubid":"autodesk","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","xuserid":"","x":550,"y":420,"wires":[["eb253240.edfc5","8398d759.253378"],["71fa6636.76a8b8"]]},{"id":"eb253240.edfc5","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":420,"wires":[]},{"id":"71fa6636.76a8b8","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":420,"wires":[]},{"id":"ab41521.cb642b","type":"comment","z":"72895e62.f5b93","name":"Hubs - 2legged","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":120,"y":380,"wires":[]},{"id":"bde6bd8d.93ffb","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"HubDetails","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"xuserid":"","x":560,"y":500,"wires":[["7fd4958b.6d73cc"],["e1cd0332.d92a1"]]},{"id":"7fd4958b.6d73cc","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":500,"wires":[]},{"id":"e1cd0332.d92a1","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":500,"wires":[]},{"id":"fc1bdf6b.6f941","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":640,"wires":[["7805dd77.40cfc4"]]},{"id":"d13dd448.cb7088","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ListHubs","raw":false,"hubid":"autodesk","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"xuserid":"","x":550,"y":640,"wires":[["5a4746ef.686f88","93abdd31.01b86"],["fb3d30e0.9492a"]]},{"id":"5a4746ef.686f88","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":640,"wires":[]},{"id":"fb3d30e0.9492a","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":640,"wires":[]},{"id":"183bdf73.6bb811","type":"comment","z":"72895e62.f5b93","name":"Hubs - 2legged with userid","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":150,"y":600,"wires":[]},{"id":"ff2cfe38.55935","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"HubDetails","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"xuserid":"","x":560,"y":760,"wires":[["a5a8a640.28b438"],["97433d4.76298c"]]},{"id":"a5a8a640.28b438","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":760,"wires":[]},{"id":"97433d4.76298c","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":760,"wires":[]},{"id":"7805dd77.40cfc4","type":"change","z":"72895e62.f5b93","name":"hubid / xuserid","rules":[{"t":"set","p":"xuserid","pt":"msg","to":"xuserid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":300,"y":640,"wires":[["d13dd448.cb7088"]]},{"id":"51122185.d1978","type":"change","z":"72895e62.f5b93","name":"xuserid","rules":[{"t":"set","p":"xuserid","pt":"msg","to":"xuserid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":280,"y":760,"wires":[["ff2cfe38.55935"]]},{"id":"5e1dc364.5e0f3c","type":"inject","z":"72895e62.f5b93","name":"Starts with Autodesk","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":150,"y":880,"wires":[["cf3b76b3.f2b5f8"]]},{"id":"cf3b76b3.f2b5f8","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ListHubs","raw":false,"hubid":"autodesk","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[{"id":"attributes.name","custom":"","modifier":"-starts","expr":"Autodesk"}],"body":"","copyFrom":"","xuserid":"","x":550,"y":880,"wires":[["4462e1ab.43d6d"],["651843dd.1e0aac"]]},{"id":"4462e1ab.43d6d","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":880,"wires":[]},{"id":"651843dd.1e0aac","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":880,"wires":[]},{"id":"e60b838e.fc573","type":"comment","z":"72895e62.f5b93","name":"Hubs - 2legged - filters","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":140,"y":840,"wires":[]},{"id":"7930691c.855e68","type":"inject","z":"72895e62.f5b93","name":"Region is EMEA","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":140,"y":940,"wires":[["1b74a08a.0257cf"]]},{"id":"1b74a08a.0257cf","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ListHubs","raw":false,"hubid":"autodesk","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[{"id":"attributes.region","custom":"","modifier":"","expr":"EMEA"}],"body":"","copyFrom":"","xuserid":"","x":550,"y":940,"wires":[["502ca065.8085"],["2a61dac3.499d46"]]},{"id":"502ca065.8085","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":940,"wires":[]},{"id":"2a61dac3.499d46","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":940,"wires":[]},{"id":"e2a37931.f9d9f8","type":"inject","z":"72895e62.f5b93","name":"Ext Type is Bim360docs","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":160,"y":1040,"wires":[["540d833a.4a7b9c"]]},{"id":"540d833a.4a7b9c","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ListHubs","raw":false,"hubid":"autodesk","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[{"id":"attributes.extension.type","custom":"","modifier":"","expr":"hubs:autodesk.bim360:Account"}],"body":"","copyFrom":"","xuserid":"","x":550,"y":1040,"wires":[["7646b982.59ead8"],["5f3400fb.9f22f"]]},{"id":"7646b982.59ead8","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1040,"wires":[]},{"id":"5f3400fb.9f22f","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1040,"wires":[]},{"id":"287d3ef9.656602","type":"inject","z":"72895e62.f5b93","name":"Region is EMEA or US","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":160,"y":980,"wires":[["56dc3134.cb05a"]]},{"id":"56dc3134.cb05a","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ListHubs","raw":false,"hubid":"autodesk","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[{"id":"attributes.region","custom":"","modifier":"","expr":"EMEA"},{"id":"attributes.region","custom":"","modifier":"","expr":"US"}],"body":"","copyFrom":"","xuserid":"","x":550,"y":980,"wires":[["bf645583.cb65b8"],["ecc11e0b.055b7"]]},{"id":"bf645583.cb65b8","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":980,"wires":[]},{"id":"ecc11e0b.055b7","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":980,"wires":[]},{"id":"b91cd91a.39f4e8","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1220,"wires":[["8b73943a.2e5c48"]]},{"id":"4bb56747.1c1a48","type":"forge-dm","z":"72895e62.f5b93","name":"List Projects page#0 (2)","topic":"","forge":"","operation":"ListProjects","raw":false,"hubid":"","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"0","pageLimit":"2","filters":[],"body":"","copyFrom":"","xuserid":"","x":590,"y":1220,"wires":[["a551c2b0.4ab9a"],["ffd3e422.6e9938"]]},{"id":"a551c2b0.4ab9a","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1220,"wires":[]},{"id":"ffd3e422.6e9938","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1220,"wires":[]},{"id":"31cc9c03.67df64","type":"comment","z":"72895e62.f5b93","name":"Folders","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":90,"y":1500,"wires":[]},{"id":"bb150d44.7215","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1540,"wires":[["a8b1db26.e91d18"]]},{"id":"4bf77783.114f88","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"FolderDetails","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":570,"y":1540,"wires":[["2dcef3bb.2c133c"],["7352702b.643b9"]]},{"id":"2dcef3bb.2c133c","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1540,"wires":[]},{"id":"7352702b.643b9","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1540,"wires":[]},{"id":"c5a816a6.d66768","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1600,"wires":[["374dcdbc.eb8bf2"]]},{"id":"92997783.98acb8","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"FolderContents","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":570,"y":1600,"wires":[["3a46a6db.b591da"],["e73a109f.e3f13"]]},{"id":"3a46a6db.b591da","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1600,"wires":[]},{"id":"e73a109f.e3f13","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1600,"wires":[]},{"id":"3a701920.948db6","type":"forge-dm","z":"72895e62.f5b93","name":"Folders only","topic":"","forge":"","operation":"FolderContents","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[{"id":"type","custom":"","modifier":"","expr":"folders"}],"body":"","copyFrom":"","xuserid":"","x":550,"y":1640,"wires":[["ba32d09.4b74d3"],["75c40488.b88cdc"]]},{"id":"ba32d09.4b74d3","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1640,"wires":[]},{"id":"75c40488.b88cdc","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1640,"wires":[]},{"id":"216796ad.33449a","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1700,"wires":[["8efb5900.bc43e8"]]},{"id":"add22d58.bc047","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"FolderParent","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":570,"y":1700,"wires":[["8b8ce40e.e6a628"],["56fd62e1.f0740c"]]},{"id":"8b8ce40e.e6a628","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1700,"wires":[]},{"id":"56fd62e1.f0740c","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1700,"wires":[]},{"id":"594f146f.ec741c","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1760,"wires":[["df5ffa09.d64158"]]},{"id":"7aeb9ec5.b3779","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"FolderRefs","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":560,"y":1760,"wires":[["ace6611e.d90e9"],["848eeea5.8265b"]]},{"id":"ace6611e.d90e9","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1760,"wires":[]},{"id":"848eeea5.8265b","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1760,"wires":[]},{"id":"355fa6c7.8aa2da","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1820,"wires":[["a77c8467.750f88"]]},{"id":"15987aa5.821525","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"FolderRelationshipsLinks","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":600,"y":1820,"wires":[["d831d5f2.140208"],["28e911cb.58c7de"]]},{"id":"d831d5f2.140208","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1820,"wires":[]},{"id":"28e911cb.58c7de","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1820,"wires":[]},{"id":"cf2d7e80.64932","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1880,"wires":[["ce25658e.988958"]]},{"id":"5643607e.1180d","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"FolderRelationshipsRefs","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":600,"y":1880,"wires":[["6b1aabe5.7ed8c4"],["316f5019.3b9b1"]]},{"id":"6b1aabe5.7ed8c4","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1880,"wires":[]},{"id":"316f5019.3b9b1","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1880,"wires":[]},{"id":"fd401cee.0b068","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1940,"wires":[["65546812.680038"]]},{"id":"329fc4e6.58b96c","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"Search","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":550,"y":1940,"wires":[["8ea8b283.5f722"],["a9dc482c.2ce498"]]},{"id":"8ea8b283.5f722","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1940,"wires":[]},{"id":"a9dc482c.2ce498","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1940,"wires":[]},{"id":"927751e9.2f53a","type":"forge-dm","z":"72895e62.f5b93","name":"displayName contains rvt","topic":"","forge":"","operation":"Search","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[{"id":"custom","custom":"attributes.displayName","modifier":"-contains","expr":"rvt"}],"body":"","copyFrom":"","xuserid":"","x":590,"y":1980,"wires":[["612bd85c.bebde8"],["e5d19a2d.3502b8"]]},{"id":"612bd85c.bebde8","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1980,"wires":[]},{"id":"e5d19a2d.3502b8","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":1980,"wires":[]},{"id":"907bf52.f5c8408","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2060,"wires":[["deaaa027.0a2f5"]]},{"id":"b2d1e050.47e8b","type":"forge-dm","z":"72895e62.f5b93","name":"displayName contains dwg","topic":"","forge":"","operation":"Search","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[{"id":"custom","custom":"attributes.displayName","modifier":"-contains","expr":"dwg"}],"body":"","copyFrom":"","xuserid":"","x":600,"y":2020,"wires":[["4e86ea7c.877ee4"],["a3eb5ed.c9450a"]]},{"id":"4e86ea7c.877ee4","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2020,"wires":[]},{"id":"a3eb5ed.c9450a","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2020,"wires":[]},{"id":"e59249b8.75f458","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2260,"wires":[["66f7cdf8.406ea4"]]},{"id":"19828cf2.a1af63","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ItemParentFolder","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":580,"y":2320,"wires":[["bcbaa081.977ce"],["2d63d911.89ebc6"]]},{"id":"bcbaa081.977ce","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2320,"wires":[]},{"id":"2d63d911.89ebc6","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2320,"wires":[]},{"id":"ae01137b.dbbf9","type":"comment","z":"72895e62.f5b93","name":"Items","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":90,"y":2220,"wires":[]},{"id":"2005480e.4dbf78","type":"forge-dm","z":"72895e62.f5b93","name":"fileType is rvt","topic":"","forge":"","operation":"Search","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[{"id":"fileType","custom":"","modifier":"","expr":"rvt"}],"body":"","copyFrom":"","xuserid":"","x":550,"y":2060,"wires":[["3c2ca3fb.2e001c"],["ad471816.1e70c8"]]},{"id":"5a97e6f8.291748","type":"forge-dm","z":"72895e62.f5b93","name":"fileType is dwg","topic":"","forge":"","operation":"Search","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[{"id":"fileType","custom":"","modifier":"","expr":"dwg"}],"body":"","copyFrom":"","xuserid":"","x":560,"y":2100,"wires":[["9b8e33c2.9db29"],["4282c1a8.8fe2e"]]},{"id":"9b8e33c2.9db29","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2100,"wires":[]},{"id":"3c2ca3fb.2e001c","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2060,"wires":[]},{"id":"ad471816.1e70c8","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2060,"wires":[]},{"id":"4282c1a8.8fe2e","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2100,"wires":[]},{"id":"f0a70332.11992","type":"forge-dm","z":"72895e62.f5b93","name":"lastModifiedTime >= 2018-01-01","topic":"","forge":"","operation":"Search","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[{"id":"lastModifiedTime","custom":"","modifier":"-ge","expr":"2018-01-01T00:00"}],"body":"","copyFrom":"","xuserid":"","x":620,"y":2140,"wires":[["bee63a67.a2ad28"],["5def6627.ff0188"]]},{"id":"bee63a67.a2ad28","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2140,"wires":[]},{"id":"5def6627.ff0188","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2140,"wires":[]},{"id":"162c4e13.0ccff2","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ItemDetails","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":560,"y":2260,"wires":[["b0e57cc6.f74c2"],["5c660ff6.0276c"]]},{"id":"b0e57cc6.f74c2","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2260,"wires":[]},{"id":"5c660ff6.0276c","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2260,"wires":[]},{"id":"f5c99e02.153ec","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ItemRefs","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":550,"y":2380,"wires":[["64a02635.a92288"],["53e57785.c528b8"]]},{"id":"64a02635.a92288","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2380,"wires":[]},{"id":"53e57785.c528b8","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2380,"wires":[]},{"id":"9eb4a6d2.9d9e68","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2320,"wires":[["2663fc8a.7f3e04"]]},{"id":"955fa75f.b3e038","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2380,"wires":[["83c433a0.e7e78"]]},{"id":"9b496d69.ef4c8","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ItemRelationshipsLinks","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":600,"y":2440,"wires":[["fce43922.a8ac88"],["3c534ab8.c006d6"]]},{"id":"fce43922.a8ac88","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2440,"wires":[]},{"id":"3c534ab8.c006d6","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2440,"wires":[]},{"id":"bd02f97.c2a8708","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2440,"wires":[["5075db4c.f6cc04"]]},{"id":"7f0c8f92.9f55e","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ItemRelationshipsRefs","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":600,"y":2500,"wires":[["a9a04bee.7931e8"],["fbdebe5a.e843f"]]},{"id":"a9a04bee.7931e8","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2500,"wires":[]},{"id":"fbdebe5a.e843f","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2500,"wires":[]},{"id":"655a9e6e.e32b1","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2500,"wires":[["7cf0075f.061ce8"]]},{"id":"902a90b0.03068","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ItemTip","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":550,"y":2560,"wires":[["545c143d.a4ef1c"],["f194766b.d38d28"]]},{"id":"545c143d.a4ef1c","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2560,"wires":[]},{"id":"f194766b.d38d28","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2560,"wires":[]},{"id":"c8dc28da.5f5478","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2560,"wires":[["dadb7fec.e28fc"]]},{"id":"9d58429a.9053d","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"ItemVersions","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":570,"y":2620,"wires":[["8b201b68.aab718"],["836c172a.a51f68"]]},{"id":"8b201b68.aab718","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2620,"wires":[]},{"id":"836c172a.a51f68","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2620,"wires":[]},{"id":"ee6c35cc.520ed8","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2620,"wires":[["5d2953f6.a7c76c"]]},{"id":"f48e88f4.9c6108","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2740,"wires":[["c18a0949.79e608"]]},{"id":"d39eb885.e6dae8","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"VersionDownloadFormats","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":610,"y":2800,"wires":[["7e95ccb3.8d4924"],["763f63b6.f242cc"]]},{"id":"7e95ccb3.8d4924","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2800,"wires":[]},{"id":"763f63b6.f242cc","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2800,"wires":[]},{"id":"1029fa31.f678f6","type":"comment","z":"72895e62.f5b93","name":"Versions","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":100,"y":2700,"wires":[]},{"id":"b41467a4.5185e8","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"VersionDetails","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":570,"y":2740,"wires":[["f976b6ba.9d7b78"],["c091711c.267ba"]]},{"id":"f976b6ba.9d7b78","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2740,"wires":[]},{"id":"c091711c.267ba","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2740,"wires":[]},{"id":"515527a.dffcdd8","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"VersionDownloads","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":580,"y":2860,"wires":[["d6dd0c26.dbbdf"],["47fb3129.1e121"]]},{"id":"d6dd0c26.dbbdf","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2860,"wires":[]},{"id":"47fb3129.1e121","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2860,"wires":[]},{"id":"571ffb8d.1bfc04","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2800,"wires":[["940393be.21139"]]},{"id":"ecf485f8.3399e8","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2860,"wires":[["2fd0783d.c48bf8"]]},{"id":"fb031481.d56b58","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"VersionItem","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":560,"y":2920,"wires":[["9e656713.8795e8"],["148026e4.b84f99"]]},{"id":"9e656713.8795e8","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2920,"wires":[]},{"id":"148026e4.b84f99","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2920,"wires":[]},{"id":"6b3fbbc4.4a3ec4","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2920,"wires":[["dffbd326.dd572"]]},{"id":"4d6db466.56bf4c","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"VersionRefs","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":560,"y":2980,"wires":[["44bae4c6.8d35cc"],["5a70b0a7.f5594"]]},{"id":"44bae4c6.8d35cc","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":2980,"wires":[]},{"id":"5a70b0a7.f5594","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":2980,"wires":[]},{"id":"4b4e9477.05ca0c","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":2980,"wires":[["1650e1d7.f20bfe"]]},{"id":"a53817af.7d38e8","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"VersionRelationshipsLinks","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":610,"y":3040,"wires":[["f382703b.f5877"],["b60003c1.be9e6"]]},{"id":"f382703b.f5877","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":3040,"wires":[]},{"id":"b60003c1.be9e6","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":3040,"wires":[]},{"id":"d6479f27.b554c","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":3040,"wires":[["70978573.090f1c"]]},{"id":"7f932240.298a6c","type":"forge-dm","z":"72895e62.f5b93","name":"","topic":"","forge":"","operation":"VersionRelationshipsRefs","raw":false,"hubid":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","projectid":"","folderid":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","copyFrom":"","xuserid":"","x":600,"y":3100,"wires":[["b5f77638.914828"],["b9b988e8.01ba68"]]},{"id":"b5f77638.914828","type":"debug","z":"72895e62.f5b93","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":3100,"wires":[]},{"id":"b9b988e8.01ba68","type":"debug","z":"72895e62.f5b93","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":3100,"wires":[]},{"id":"21e81a5c.2bdcf6","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":3100,"wires":[["12526cea.1823f3"]]},{"id":"abaea8d1.4ea4e8","type":"change","z":"72895e62.f5b93","name":"hubid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"payload.data[11].id","tot":"msg"},{"t":"delete","p":"payload","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":410,"y":260,"wires":[["19f86fa1.79bd2"]]},{"id":"8398d759.253378","type":"change","z":"72895e62.f5b93","name":"hubid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"payload.data[1].id","tot":"msg"},{"t":"delete","p":"payload","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":410,"y":460,"wires":[["bde6bd8d.93ffb"]]},{"id":"93abdd31.01b86","type":"change","z":"72895e62.f5b93","name":"hubid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"payload.data[1].id","tot":"msg"},{"t":"delete","p":"payload","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":470,"y":700,"wires":[["51122185.d1978"]]},{"id":"7b2a8c2f.f1e994","type":"inject","z":"72895e62.f5b93","name":"Init variables","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":130,"y":80,"wires":[["af35ab5c.85b428"]]},{"id":"a2f080ab.eb5fd","type":"comment","z":"72895e62.f5b93","name":"Initialization for tests","info":"","x":130,"y":40,"wires":[]},{"id":"af35ab5c.85b428","type":"change","z":"72895e62.f5b93","name":"hubid / projectid / folderid / itemid / versionid / xuserid","rules":[{"t":"set","p":"hubid","pt":"flow","to":"b.a4f95080-84fe-4281-8d0a-bd8c885695e0","tot":"str"},{"t":"set","p":"projectid","pt":"flow","to":"b.dd31c918-027a-4a29-9946-ec292facdf7a","tot":"str"},{"t":"set","p":"folderid","pt":"flow","to":"urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg","tot":"str"},{"t":"set","p":"itemid","pt":"msg","to":"urn:adsk.wipprod:dm.lineage:kx1IY6oATMWpb_aHugMv-g","tot":"str"},{"t":"set","p":"versionid","pt":"msg","to":"urn:adsk.wipprod:fs.file:vf._3AoTpMBQDm060PABvgQKg?version=4","tot":"str"},{"t":"set","p":"xuserid","pt":"flow","to":"xuserid","tot":"global"},{"t":"set","p":"itemid2","pt":"flow","to":"urn:adsk.wipprod:dm.lineage:_3AoTpMBQDm060PABvgQKg","tot":"str"},{"t":"set","p":"versionid2","pt":"flow","to":"urn:adsk.wipprod:fs.file:vf._3AoTpMBQDm060PABvgQKg?version=5","tot":"str"}],"action":"","property":"","from":"","to":"","reg":false,"x":520,"y":80,"wires":[[]]},{"id":"9a666c0a.28b01","type":"change","z":"72895e62.f5b93","name":"hubid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"hubid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":270,"y":300,"wires":[["19f86fa1.79bd2"]]},{"id":"579bd5cb.32427c","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":300,"wires":[["9a666c0a.28b01"]]},{"id":"c635d68f.7e6fb8","type":"change","z":"72895e62.f5b93","name":"hubid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"hubid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":270,"y":500,"wires":[["bde6bd8d.93ffb"]]},{"id":"19a438fc.aa1497","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":500,"wires":[["c635d68f.7e6fb8"]]},{"id":"dbc8500.c782db","type":"inject","z":"72895e62.f5b93","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":700,"wires":[["65d4f9c6.0354b8"]]},{"id":"65d4f9c6.0354b8","type":"change","z":"72895e62.f5b93","name":"hubid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"hubid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":270,"y":700,"wires":[["51122185.d1978"]]},{"id":"dd836fc8.202fd","type":"change","z":"72895e62.f5b93","name":"hubid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"hubid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":290,"y":1180,"wires":[["e492f74a.fad8f8"]]},{"id":"8b73943a.2e5c48","type":"change","z":"72895e62.f5b93","name":"hubid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"hubid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":290,"y":1220,"wires":[["4bb56747.1c1a48"]]},{"id":"dad64188.12272","type":"change","z":"72895e62.f5b93","name":"hubid / projectid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"hubid","tot":"flow"},{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":300,"y":1280,"wires":[["8c16903b.f0631"]]},{"id":"97eff701.b30d48","type":"change","z":"72895e62.f5b93","name":"hubid / projectid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"hubid","tot":"flow"},{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":300,"y":1400,"wires":[["7b10283.c8fedd8"]]},{"id":"923a68c1.860768","type":"change","z":"72895e62.f5b93","name":"hubid / projectid","rules":[{"t":"set","p":"hubid","pt":"msg","to":"hubid","tot":"flow"},{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":300,"y":1340,"wires":[["98ca8fe6.7acbd"]]},{"id":"a8b1db26.e91d18","type":"change","z":"72895e62.f5b93","name":"projectid / folderid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"folderid","pt":"msg","to":"folderid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":1540,"wires":[["4bf77783.114f88"]]},{"id":"374dcdbc.eb8bf2","type":"change","z":"72895e62.f5b93","name":"projectid / folderid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"folderid","pt":"msg","to":"folderid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":1600,"wires":[["92997783.98acb8","3a701920.948db6"]]},{"id":"8efb5900.bc43e8","type":"change","z":"72895e62.f5b93","name":"projectid / folderid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"folderid","pt":"msg","to":"folderid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":1700,"wires":[["add22d58.bc047"]]},{"id":"df5ffa09.d64158","type":"change","z":"72895e62.f5b93","name":"projectid / folderid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"folderid","pt":"msg","to":"folderid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":1760,"wires":[["7aeb9ec5.b3779"]]},{"id":"ce25658e.988958","type":"change","z":"72895e62.f5b93","name":"projectid / folderid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"folderid","pt":"msg","to":"folderid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":1880,"wires":[["5643607e.1180d"]]},{"id":"65546812.680038","type":"change","z":"72895e62.f5b93","name":"projectid / folderid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"folderid","pt":"msg","to":"folderid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":1940,"wires":[["329fc4e6.58b96c"]]},{"id":"a77c8467.750f88","type":"change","z":"72895e62.f5b93","name":"projectid / folderid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"folderid","pt":"msg","to":"folderid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":1820,"wires":[["15987aa5.821525"]]},{"id":"deaaa027.0a2f5","type":"change","z":"72895e62.f5b93","name":"projectid / folderid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"folderid","pt":"msg","to":"folderid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":2060,"wires":[["2005480e.4dbf78","b2d1e050.47e8b","927751e9.2f53a","5a97e6f8.291748","f0a70332.11992"]]},{"id":"66f7cdf8.406ea4","type":"change","z":"72895e62.f5b93","name":"projectid / itemid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"itemid","pt":"msg","to":"itemid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":2260,"wires":[["162c4e13.0ccff2"]]},{"id":"2663fc8a.7f3e04","type":"change","z":"72895e62.f5b93","name":"projectid / itemid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"itemid","pt":"msg","to":"itemid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":2320,"wires":[["19828cf2.a1af63"]]},{"id":"83c433a0.e7e78","type":"change","z":"72895e62.f5b93","name":"projectid / itemid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"itemid","pt":"msg","to":"itemid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":2380,"wires":[["f5c99e02.153ec"]]},{"id":"5075db4c.f6cc04","type":"change","z":"72895e62.f5b93","name":"projectid / itemid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"itemid","pt":"msg","to":"itemid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":2440,"wires":[["9b496d69.ef4c8"]]},{"id":"7cf0075f.061ce8","type":"change","z":"72895e62.f5b93","name":"projectid / itemid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"itemid","pt":"msg","to":"itemid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":2500,"wires":[["7f0c8f92.9f55e"]]},{"id":"dadb7fec.e28fc","type":"change","z":"72895e62.f5b93","name":"projectid / itemid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"itemid","pt":"msg","to":"itemid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":2560,"wires":[["902a90b0.03068"]]},{"id":"5d2953f6.a7c76c","type":"change","z":"72895e62.f5b93","name":"projectid / itemid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"itemid","pt":"msg","to":"itemid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":310,"y":2620,"wires":[["9d58429a.9053d"]]},{"id":"c18a0949.79e608","type":"change","z":"72895e62.f5b93","name":"projectid / versionid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"versionid","pt":"msg","to":"versionid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":320,"y":2740,"wires":[["b41467a4.5185e8"]]},{"id":"dffbd326.dd572","type":"change","z":"72895e62.f5b93","name":"projectid / versionid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"versionid","pt":"msg","to":"versionid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":320,"y":2920,"wires":[["fb031481.d56b58"]]},{"id":"1650e1d7.f20bfe","type":"change","z":"72895e62.f5b93","name":"projectid / versionid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"versionid","pt":"msg","to":"versionid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":320,"y":2980,"wires":[["4d6db466.56bf4c"]]},{"id":"70978573.090f1c","type":"change","z":"72895e62.f5b93","name":"projectid / versionid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"versionid","pt":"msg","to":"versionid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":320,"y":3040,"wires":[["a53817af.7d38e8"]]},{"id":"12526cea.1823f3","type":"change","z":"72895e62.f5b93","name":"projectid / versionid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"versionid","pt":"msg","to":"versionid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":320,"y":3100,"wires":[["7f932240.298a6c"]]},{"id":"940393be.21139","type":"change","z":"72895e62.f5b93","name":"projectid / versionid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"versionid","pt":"msg","to":"versionid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":320,"y":2800,"wires":[["d39eb885.e6dae8"]]},{"id":"2fd0783d.c48bf8","type":"change","z":"72895e62.f5b93","name":"projectid / versionid","rules":[{"t":"set","p":"projectid","pt":"msg","to":"projectid","tot":"flow"},{"t":"set","p":"versionid","pt":"msg","to":"versionid","tot":"flow"}],"action":"","property":"","from":"","to":"","reg":false,"x":320,"y":2860,"wires":[["515527a.dffcdd8"]]}]
+[
+	{
+		"id": "72895e62.f5b93",
+		"type": "tab",
+		"label": "Hubs/Projects/Folders/Items/Versions",
+		"disabled": false,
+		"info": ""
+	},
+	{
+		"id": "c99632e2.735e1",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 220,
+		"wires": [
+			[
+				"8ac624ea.246578"
+			]
+		]
+	},
+	{
+		"id": "8ac624ea.246578",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListHubs",
+		"raw": false,
+		"hubid": "autodesk",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 220,
+		"wires": [
+			[
+				"13093ca1.9f0d03",
+				"abaea8d1.4ea4e8"
+			],
+			[
+				"32628758.294568"
+			]
+		]
+	},
+	{
+		"id": "13093ca1.9f0d03",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 220,
+		"wires": []
+	},
+	{
+		"id": "32628758.294568",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 220,
+		"wires": []
+	},
+	{
+		"id": "8d1d0fc4.c6269",
+		"type": "comment",
+		"z": "72895e62.f5b93",
+		"name": "Hubs - 3legged",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 120,
+		"y": 180,
+		"wires": []
+	},
+	{
+		"id": "19f86fa1.79bd2",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "HubDetails",
+		"raw": false,
+		"hubid": "",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 560,
+		"y": 300,
+		"wires": [
+			[
+				"eef82b38.3b0bb8"
+			],
+			[
+				"50a82bab.39d484"
+			]
+		]
+	},
+	{
+		"id": "eef82b38.3b0bb8",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 300,
+		"wires": []
+	},
+	{
+		"id": "50a82bab.39d484",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 300,
+		"wires": []
+	},
+	{
+		"id": "322db6b6.45277a",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1180,
+		"wires": [
+			[
+				"dd836fc8.202fd"
+			]
+		]
+	},
+	{
+		"id": "e492f74a.fad8f8",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListProjects",
+		"raw": false,
+		"hubid": "",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 560,
+		"y": 1180,
+		"wires": [
+			[
+				"65928700.755a28"
+			],
+			[
+				"27c1e94e.5beed6"
+			]
+		]
+	},
+	{
+		"id": "65928700.755a28",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1180,
+		"wires": []
+	},
+	{
+		"id": "27c1e94e.5beed6",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1180,
+		"wires": []
+	},
+	{
+		"id": "bd273862.dc35b8",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1280,
+		"wires": [
+			[
+				"dad64188.12272"
+			]
+		]
+	},
+	{
+		"id": "8c16903b.f0631",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ProjectDetails",
+		"raw": false,
+		"hubid": "",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 570,
+		"y": 1280,
+		"wires": [
+			[
+				"538fc8c6.296078"
+			],
+			[
+				"775f4352.15899c"
+			]
+		]
+	},
+	{
+		"id": "538fc8c6.296078",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1280,
+		"wires": []
+	},
+	{
+		"id": "775f4352.15899c",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1280,
+		"wires": []
+	},
+	{
+		"id": "db5bf7b1.971368",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1340,
+		"wires": [
+			[
+				"923a68c1.860768"
+			]
+		]
+	},
+	{
+		"id": "98ca8fe6.7acbd",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ProjectHubDetails",
+		"raw": false,
+		"hubid": "",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 580,
+		"y": 1340,
+		"wires": [
+			[
+				"1ef25abb.a713a5"
+			],
+			[
+				"f26c04e8.b6b948"
+			]
+		]
+	},
+	{
+		"id": "1ef25abb.a713a5",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1340,
+		"wires": []
+	},
+	{
+		"id": "f26c04e8.b6b948",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1340,
+		"wires": []
+	},
+	{
+		"id": "bb718a0f.b7dd68",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1400,
+		"wires": [
+			[
+				"97eff701.b30d48"
+			]
+		]
+	},
+	{
+		"id": "7b10283.c8fedd8",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListFolders",
+		"raw": false,
+		"hubid": "",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 560,
+		"y": 1400,
+		"wires": [
+			[
+				"23dd7d3f.177a22"
+			],
+			[
+				"63911e90.9754f"
+			]
+		]
+	},
+	{
+		"id": "23dd7d3f.177a22",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1400,
+		"wires": []
+	},
+	{
+		"id": "63911e90.9754f",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1400,
+		"wires": []
+	},
+	{
+		"id": "3593a533.91472a",
+		"type": "comment",
+		"z": "72895e62.f5b93",
+		"name": "Projects",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 100,
+		"y": 1140,
+		"wires": []
+	},
+	{
+		"id": "4b62f75d.63ce18",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 420,
+		"wires": [
+			[
+				"802b305a.b0727"
+			]
+		]
+	},
+	{
+		"id": "802b305a.b0727",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListHubs",
+		"raw": false,
+		"hubid": "autodesk",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 420,
+		"wires": [
+			[
+				"eb253240.edfc5",
+				"8398d759.253378"
+			],
+			[
+				"71fa6636.76a8b8"
+			]
+		]
+	},
+	{
+		"id": "eb253240.edfc5",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 420,
+		"wires": []
+	},
+	{
+		"id": "71fa6636.76a8b8",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 420,
+		"wires": []
+	},
+	{
+		"id": "ab41521.cb642b",
+		"type": "comment",
+		"z": "72895e62.f5b93",
+		"name": "Hubs - 2legged",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 120,
+		"y": 380,
+		"wires": []
+	},
+	{
+		"id": "bde6bd8d.93ffb",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "HubDetails",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"xuserid": "",
+		"x": 560,
+		"y": 500,
+		"wires": [
+			[
+				"7fd4958b.6d73cc"
+			],
+			[
+				"e1cd0332.d92a1"
+			]
+		]
+	},
+	{
+		"id": "7fd4958b.6d73cc",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 500,
+		"wires": []
+	},
+	{
+		"id": "e1cd0332.d92a1",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 500,
+		"wires": []
+	},
+	{
+		"id": "fc1bdf6b.6f941",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 640,
+		"wires": [
+			[
+				"7805dd77.40cfc4"
+			]
+		]
+	},
+	{
+		"id": "d13dd448.cb7088",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListHubs",
+		"raw": false,
+		"hubid": "autodesk",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"xuserid": "",
+		"x": 550,
+		"y": 640,
+		"wires": [
+			[
+				"5a4746ef.686f88",
+				"93abdd31.01b86"
+			],
+			[
+				"fb3d30e0.9492a"
+			]
+		]
+	},
+	{
+		"id": "5a4746ef.686f88",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 640,
+		"wires": []
+	},
+	{
+		"id": "fb3d30e0.9492a",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 640,
+		"wires": []
+	},
+	{
+		"id": "183bdf73.6bb811",
+		"type": "comment",
+		"z": "72895e62.f5b93",
+		"name": "Hubs - 2legged with userid",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 150,
+		"y": 600,
+		"wires": []
+	},
+	{
+		"id": "ff2cfe38.55935",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "HubDetails",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"xuserid": "",
+		"x": 560,
+		"y": 760,
+		"wires": [
+			[
+				"a5a8a640.28b438"
+			],
+			[
+				"97433d4.76298c"
+			]
+		]
+	},
+	{
+		"id": "a5a8a640.28b438",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 760,
+		"wires": []
+	},
+	{
+		"id": "97433d4.76298c",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 760,
+		"wires": []
+	},
+	{
+		"id": "7805dd77.40cfc4",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid / xuserid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "xuserid",
+				"pt": "msg",
+				"to": "xuserid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 300,
+		"y": 640,
+		"wires": [
+			[
+				"d13dd448.cb7088"
+			]
+		]
+	},
+	{
+		"id": "51122185.d1978",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "xuserid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "xuserid",
+				"pt": "msg",
+				"to": "xuserid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 280,
+		"y": 760,
+		"wires": [
+			[
+				"ff2cfe38.55935"
+			]
+		]
+	},
+	{
+		"id": "5e1dc364.5e0f3c",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "Starts with Autodesk",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 150,
+		"y": 880,
+		"wires": [
+			[
+				"cf3b76b3.f2b5f8"
+			]
+		]
+	},
+	{
+		"id": "cf3b76b3.f2b5f8",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListHubs",
+		"raw": false,
+		"hubid": "autodesk",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [
+			{
+				"id": "attributes.name",
+				"custom": "",
+				"modifier": "-starts",
+				"expr": "Autodesk"
+			}
+		],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 880,
+		"wires": [
+			[
+				"4462e1ab.43d6d"
+			],
+			[
+				"651843dd.1e0aac"
+			]
+		]
+	},
+	{
+		"id": "4462e1ab.43d6d",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 880,
+		"wires": []
+	},
+	{
+		"id": "651843dd.1e0aac",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 880,
+		"wires": []
+	},
+	{
+		"id": "e60b838e.fc573",
+		"type": "comment",
+		"z": "72895e62.f5b93",
+		"name": "Hubs - 2legged - filters",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 140,
+		"y": 840,
+		"wires": []
+	},
+	{
+		"id": "7930691c.855e68",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "Region is EMEA",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 140,
+		"y": 940,
+		"wires": [
+			[
+				"1b74a08a.0257cf"
+			]
+		]
+	},
+	{
+		"id": "1b74a08a.0257cf",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListHubs",
+		"raw": false,
+		"hubid": "autodesk",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [
+			{
+				"id": "attributes.region",
+				"custom": "",
+				"modifier": "",
+				"expr": "EMEA"
+			}
+		],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 940,
+		"wires": [
+			[
+				"502ca065.8085"
+			],
+			[
+				"2a61dac3.499d46"
+			]
+		]
+	},
+	{
+		"id": "502ca065.8085",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 940,
+		"wires": []
+	},
+	{
+		"id": "2a61dac3.499d46",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 940,
+		"wires": []
+	},
+	{
+		"id": "e2a37931.f9d9f8",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "Ext Type is Bim360docs",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 160,
+		"y": 1040,
+		"wires": [
+			[
+				"540d833a.4a7b9c"
+			]
+		]
+	},
+	{
+		"id": "540d833a.4a7b9c",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListHubs",
+		"raw": false,
+		"hubid": "autodesk",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [
+			{
+				"id": "attributes.extension.type",
+				"custom": "",
+				"modifier": "",
+				"expr": "hubs:autodesk.bim360:Account"
+			}
+		],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 1040,
+		"wires": [
+			[
+				"7646b982.59ead8"
+			],
+			[
+				"5f3400fb.9f22f"
+			]
+		]
+	},
+	{
+		"id": "7646b982.59ead8",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1040,
+		"wires": []
+	},
+	{
+		"id": "5f3400fb.9f22f",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1040,
+		"wires": []
+	},
+	{
+		"id": "287d3ef9.656602",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "Region is EMEA or US",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 160,
+		"y": 980,
+		"wires": [
+			[
+				"56dc3134.cb05a"
+			]
+		]
+	},
+	{
+		"id": "56dc3134.cb05a",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListHubs",
+		"raw": false,
+		"hubid": "autodesk",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [
+			{
+				"id": "attributes.region",
+				"custom": "",
+				"modifier": "",
+				"expr": "EMEA"
+			},
+			{
+				"id": "attributes.region",
+				"custom": "",
+				"modifier": "",
+				"expr": "US"
+			}
+		],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 980,
+		"wires": [
+			[
+				"bf645583.cb65b8"
+			],
+			[
+				"ecc11e0b.055b7"
+			]
+		]
+	},
+	{
+		"id": "bf645583.cb65b8",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 980,
+		"wires": []
+	},
+	{
+		"id": "ecc11e0b.055b7",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 980,
+		"wires": []
+	},
+	{
+		"id": "b91cd91a.39f4e8",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1220,
+		"wires": [
+			[
+				"8b73943a.2e5c48"
+			]
+		]
+	},
+	{
+		"id": "4bb56747.1c1a48",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "List Projects page#0 (2)",
+		"topic": "",
+		"forge": "",
+		"operation": "ListProjects",
+		"raw": false,
+		"hubid": "",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "0",
+		"pageLimit": "2",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 590,
+		"y": 1220,
+		"wires": [
+			[
+				"a551c2b0.4ab9a"
+			],
+			[
+				"ffd3e422.6e9938"
+			]
+		]
+	},
+	{
+		"id": "a551c2b0.4ab9a",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1220,
+		"wires": []
+	},
+	{
+		"id": "ffd3e422.6e9938",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1220,
+		"wires": []
+	},
+	{
+		"id": "31cc9c03.67df64",
+		"type": "comment",
+		"z": "72895e62.f5b93",
+		"name": "Folders",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 90,
+		"y": 1500,
+		"wires": []
+	},
+	{
+		"id": "bb150d44.7215",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1540,
+		"wires": [
+			[
+				"a8b1db26.e91d18"
+			]
+		]
+	},
+	{
+		"id": "4bf77783.114f88",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "FolderDetails",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 570,
+		"y": 1540,
+		"wires": [
+			[
+				"2dcef3bb.2c133c"
+			],
+			[
+				"7352702b.643b9"
+			]
+		]
+	},
+	{
+		"id": "2dcef3bb.2c133c",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1540,
+		"wires": []
+	},
+	{
+		"id": "7352702b.643b9",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1540,
+		"wires": []
+	},
+	{
+		"id": "c5a816a6.d66768",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1600,
+		"wires": [
+			[
+				"374dcdbc.eb8bf2"
+			]
+		]
+	},
+	{
+		"id": "92997783.98acb8",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "FolderContents",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 570,
+		"y": 1600,
+		"wires": [
+			[
+				"3a46a6db.b591da"
+			],
+			[
+				"e73a109f.e3f13"
+			]
+		]
+	},
+	{
+		"id": "3a46a6db.b591da",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1600,
+		"wires": []
+	},
+	{
+		"id": "e73a109f.e3f13",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1600,
+		"wires": []
+	},
+	{
+		"id": "3a701920.948db6",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "Folders only",
+		"topic": "",
+		"forge": "",
+		"operation": "FolderContents",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [
+			{
+				"id": "type",
+				"custom": "",
+				"modifier": "",
+				"expr": "folders"
+			}
+		],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 1640,
+		"wires": [
+			[
+				"ba32d09.4b74d3"
+			],
+			[
+				"75c40488.b88cdc"
+			]
+		]
+	},
+	{
+		"id": "ba32d09.4b74d3",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1640,
+		"wires": []
+	},
+	{
+		"id": "75c40488.b88cdc",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1640,
+		"wires": []
+	},
+	{
+		"id": "216796ad.33449a",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1700,
+		"wires": [
+			[
+				"8efb5900.bc43e8"
+			]
+		]
+	},
+	{
+		"id": "add22d58.bc047",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "FolderParent",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 570,
+		"y": 1700,
+		"wires": [
+			[
+				"8b8ce40e.e6a628"
+			],
+			[
+				"56fd62e1.f0740c"
+			]
+		]
+	},
+	{
+		"id": "8b8ce40e.e6a628",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1700,
+		"wires": []
+	},
+	{
+		"id": "56fd62e1.f0740c",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1700,
+		"wires": []
+	},
+	{
+		"id": "594f146f.ec741c",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1760,
+		"wires": [
+			[
+				"df5ffa09.d64158"
+			]
+		]
+	},
+	{
+		"id": "7aeb9ec5.b3779",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "FolderRefs",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 560,
+		"y": 1760,
+		"wires": [
+			[
+				"ace6611e.d90e9"
+			],
+			[
+				"848eeea5.8265b"
+			]
+		]
+	},
+	{
+		"id": "ace6611e.d90e9",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1760,
+		"wires": []
+	},
+	{
+		"id": "848eeea5.8265b",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1760,
+		"wires": []
+	},
+	{
+		"id": "355fa6c7.8aa2da",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1820,
+		"wires": [
+			[
+				"a77c8467.750f88"
+			]
+		]
+	},
+	{
+		"id": "15987aa5.821525",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "FolderRelationshipsLinks",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 600,
+		"y": 1820,
+		"wires": [
+			[
+				"d831d5f2.140208"
+			],
+			[
+				"28e911cb.58c7de"
+			]
+		]
+	},
+	{
+		"id": "d831d5f2.140208",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1820,
+		"wires": []
+	},
+	{
+		"id": "28e911cb.58c7de",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1820,
+		"wires": []
+	},
+	{
+		"id": "cf2d7e80.64932",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1880,
+		"wires": [
+			[
+				"ce25658e.988958"
+			]
+		]
+	},
+	{
+		"id": "5643607e.1180d",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "FolderRelationshipsRefs",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 600,
+		"y": 1880,
+		"wires": [
+			[
+				"6b1aabe5.7ed8c4"
+			],
+			[
+				"316f5019.3b9b1"
+			]
+		]
+	},
+	{
+		"id": "6b1aabe5.7ed8c4",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1880,
+		"wires": []
+	},
+	{
+		"id": "316f5019.3b9b1",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1880,
+		"wires": []
+	},
+	{
+		"id": "fd401cee.0b068",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1940,
+		"wires": [
+			[
+				"65546812.680038"
+			]
+		]
+	},
+	{
+		"id": "329fc4e6.58b96c",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "Search",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 1940,
+		"wires": [
+			[
+				"8ea8b283.5f722"
+			],
+			[
+				"a9dc482c.2ce498"
+			]
+		]
+	},
+	{
+		"id": "8ea8b283.5f722",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1940,
+		"wires": []
+	},
+	{
+		"id": "a9dc482c.2ce498",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1940,
+		"wires": []
+	},
+	{
+		"id": "927751e9.2f53a",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "displayName contains rvt",
+		"topic": "",
+		"forge": "",
+		"operation": "Search",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [
+			{
+				"id": "custom",
+				"custom": "attributes.displayName",
+				"modifier": "-contains",
+				"expr": "rvt"
+			}
+		],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 590,
+		"y": 1980,
+		"wires": [
+			[
+				"612bd85c.bebde8"
+			],
+			[
+				"e5d19a2d.3502b8"
+			]
+		]
+	},
+	{
+		"id": "612bd85c.bebde8",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1980,
+		"wires": []
+	},
+	{
+		"id": "e5d19a2d.3502b8",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 1980,
+		"wires": []
+	},
+	{
+		"id": "907bf52.f5c8408",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2060,
+		"wires": [
+			[
+				"deaaa027.0a2f5"
+			]
+		]
+	},
+	{
+		"id": "b2d1e050.47e8b",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "displayName contains dwg",
+		"topic": "",
+		"forge": "",
+		"operation": "Search",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [
+			{
+				"id": "custom",
+				"custom": "attributes.displayName",
+				"modifier": "-contains",
+				"expr": "dwg"
+			}
+		],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 600,
+		"y": 2020,
+		"wires": [
+			[
+				"4e86ea7c.877ee4"
+			],
+			[
+				"a3eb5ed.c9450a"
+			]
+		]
+	},
+	{
+		"id": "4e86ea7c.877ee4",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2020,
+		"wires": []
+	},
+	{
+		"id": "a3eb5ed.c9450a",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2020,
+		"wires": []
+	},
+	{
+		"id": "e59249b8.75f458",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2260,
+		"wires": [
+			[
+				"66f7cdf8.406ea4"
+			]
+		]
+	},
+	{
+		"id": "19828cf2.a1af63",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ItemParentFolder",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 580,
+		"y": 2320,
+		"wires": [
+			[
+				"bcbaa081.977ce"
+			],
+			[
+				"2d63d911.89ebc6"
+			]
+		]
+	},
+	{
+		"id": "bcbaa081.977ce",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2320,
+		"wires": []
+	},
+	{
+		"id": "2d63d911.89ebc6",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2320,
+		"wires": []
+	},
+	{
+		"id": "ae01137b.dbbf9",
+		"type": "comment",
+		"z": "72895e62.f5b93",
+		"name": "Items",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 90,
+		"y": 2220,
+		"wires": []
+	},
+	{
+		"id": "2005480e.4dbf78",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "fileType is rvt",
+		"topic": "",
+		"forge": "",
+		"operation": "Search",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [
+			{
+				"id": "fileType",
+				"custom": "",
+				"modifier": "",
+				"expr": "rvt"
+			}
+		],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 2060,
+		"wires": [
+			[
+				"3c2ca3fb.2e001c"
+			],
+			[
+				"ad471816.1e70c8"
+			]
+		]
+	},
+	{
+		"id": "5a97e6f8.291748",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "fileType is dwg",
+		"topic": "",
+		"forge": "",
+		"operation": "Search",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [
+			{
+				"id": "fileType",
+				"custom": "",
+				"modifier": "",
+				"expr": "dwg"
+			}
+		],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 560,
+		"y": 2100,
+		"wires": [
+			[
+				"9b8e33c2.9db29"
+			],
+			[
+				"4282c1a8.8fe2e"
+			]
+		]
+	},
+	{
+		"id": "9b8e33c2.9db29",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2100,
+		"wires": []
+	},
+	{
+		"id": "3c2ca3fb.2e001c",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2060,
+		"wires": []
+	},
+	{
+		"id": "ad471816.1e70c8",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2060,
+		"wires": []
+	},
+	{
+		"id": "4282c1a8.8fe2e",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2100,
+		"wires": []
+	},
+	{
+		"id": "f0a70332.11992",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "lastModifiedTime >= 2018-01-01",
+		"topic": "",
+		"forge": "",
+		"operation": "Search",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [
+			{
+				"id": "lastModifiedTime",
+				"custom": "",
+				"modifier": "-ge",
+				"expr": "2018-01-01T00:00"
+			}
+		],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 620,
+		"y": 2140,
+		"wires": [
+			[
+				"bee63a67.a2ad28"
+			],
+			[
+				"5def6627.ff0188"
+			]
+		]
+	},
+	{
+		"id": "bee63a67.a2ad28",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2140,
+		"wires": []
+	},
+	{
+		"id": "5def6627.ff0188",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2140,
+		"wires": []
+	},
+	{
+		"id": "162c4e13.0ccff2",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ItemDetails",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 560,
+		"y": 2260,
+		"wires": [
+			[
+				"b0e57cc6.f74c2"
+			],
+			[
+				"5c660ff6.0276c"
+			]
+		]
+	},
+	{
+		"id": "b0e57cc6.f74c2",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2260,
+		"wires": []
+	},
+	{
+		"id": "5c660ff6.0276c",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2260,
+		"wires": []
+	},
+	{
+		"id": "f5c99e02.153ec",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ItemRefs",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 2380,
+		"wires": [
+			[
+				"64a02635.a92288"
+			],
+			[
+				"53e57785.c528b8"
+			]
+		]
+	},
+	{
+		"id": "64a02635.a92288",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2380,
+		"wires": []
+	},
+	{
+		"id": "53e57785.c528b8",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2380,
+		"wires": []
+	},
+	{
+		"id": "9eb4a6d2.9d9e68",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2320,
+		"wires": [
+			[
+				"2663fc8a.7f3e04"
+			]
+		]
+	},
+	{
+		"id": "955fa75f.b3e038",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2380,
+		"wires": [
+			[
+				"83c433a0.e7e78"
+			]
+		]
+	},
+	{
+		"id": "9b496d69.ef4c8",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ItemRelationshipsLinks",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 600,
+		"y": 2440,
+		"wires": [
+			[
+				"fce43922.a8ac88"
+			],
+			[
+				"3c534ab8.c006d6"
+			]
+		]
+	},
+	{
+		"id": "fce43922.a8ac88",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2440,
+		"wires": []
+	},
+	{
+		"id": "3c534ab8.c006d6",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2440,
+		"wires": []
+	},
+	{
+		"id": "bd02f97.c2a8708",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2440,
+		"wires": [
+			[
+				"5075db4c.f6cc04"
+			]
+		]
+	},
+	{
+		"id": "7f0c8f92.9f55e",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ItemRelationshipsRefs",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 600,
+		"y": 2500,
+		"wires": [
+			[
+				"a9a04bee.7931e8"
+			],
+			[
+				"fbdebe5a.e843f"
+			]
+		]
+	},
+	{
+		"id": "a9a04bee.7931e8",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2500,
+		"wires": []
+	},
+	{
+		"id": "fbdebe5a.e843f",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2500,
+		"wires": []
+	},
+	{
+		"id": "655a9e6e.e32b1",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2500,
+		"wires": [
+			[
+				"7cf0075f.061ce8"
+			]
+		]
+	},
+	{
+		"id": "902a90b0.03068",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ItemTip",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 550,
+		"y": 2560,
+		"wires": [
+			[
+				"545c143d.a4ef1c"
+			],
+			[
+				"f194766b.d38d28"
+			]
+		]
+	},
+	{
+		"id": "545c143d.a4ef1c",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2560,
+		"wires": []
+	},
+	{
+		"id": "f194766b.d38d28",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2560,
+		"wires": []
+	},
+	{
+		"id": "c8dc28da.5f5478",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2560,
+		"wires": [
+			[
+				"dadb7fec.e28fc"
+			]
+		]
+	},
+	{
+		"id": "9d58429a.9053d",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ItemVersions",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 570,
+		"y": 2620,
+		"wires": [
+			[
+				"8b201b68.aab718"
+			],
+			[
+				"836c172a.a51f68"
+			]
+		]
+	},
+	{
+		"id": "8b201b68.aab718",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2620,
+		"wires": []
+	},
+	{
+		"id": "836c172a.a51f68",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2620,
+		"wires": []
+	},
+	{
+		"id": "ee6c35cc.520ed8",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2620,
+		"wires": [
+			[
+				"5d2953f6.a7c76c"
+			]
+		]
+	},
+	{
+		"id": "f48e88f4.9c6108",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2740,
+		"wires": [
+			[
+				"c18a0949.79e608"
+			]
+		]
+	},
+	{
+		"id": "d39eb885.e6dae8",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "VersionDownloadFormats",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 610,
+		"y": 2800,
+		"wires": [
+			[
+				"7e95ccb3.8d4924"
+			],
+			[
+				"763f63b6.f242cc"
+			]
+		]
+	},
+	{
+		"id": "7e95ccb3.8d4924",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2800,
+		"wires": []
+	},
+	{
+		"id": "763f63b6.f242cc",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2800,
+		"wires": []
+	},
+	{
+		"id": "1029fa31.f678f6",
+		"type": "comment",
+		"z": "72895e62.f5b93",
+		"name": "Versions",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 100,
+		"y": 2700,
+		"wires": []
+	},
+	{
+		"id": "b41467a4.5185e8",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "VersionDetails",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 570,
+		"y": 2740,
+		"wires": [
+			[
+				"f976b6ba.9d7b78"
+			],
+			[
+				"c091711c.267ba"
+			]
+		]
+	},
+	{
+		"id": "f976b6ba.9d7b78",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2740,
+		"wires": []
+	},
+	{
+		"id": "c091711c.267ba",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2740,
+		"wires": []
+	},
+	{
+		"id": "515527a.dffcdd8",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "VersionDownloads",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 580,
+		"y": 2860,
+		"wires": [
+			[
+				"d6dd0c26.dbbdf"
+			],
+			[
+				"47fb3129.1e121"
+			]
+		]
+	},
+	{
+		"id": "d6dd0c26.dbbdf",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2860,
+		"wires": []
+	},
+	{
+		"id": "47fb3129.1e121",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2860,
+		"wires": []
+	},
+	{
+		"id": "571ffb8d.1bfc04",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2800,
+		"wires": [
+			[
+				"940393be.21139"
+			]
+		]
+	},
+	{
+		"id": "ecf485f8.3399e8",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2860,
+		"wires": [
+			[
+				"2fd0783d.c48bf8"
+			]
+		]
+	},
+	{
+		"id": "fb031481.d56b58",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "VersionItem",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 560,
+		"y": 2920,
+		"wires": [
+			[
+				"9e656713.8795e8"
+			],
+			[
+				"148026e4.b84f99"
+			]
+		]
+	},
+	{
+		"id": "9e656713.8795e8",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2920,
+		"wires": []
+	},
+	{
+		"id": "148026e4.b84f99",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2920,
+		"wires": []
+	},
+	{
+		"id": "6b3fbbc4.4a3ec4",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2920,
+		"wires": [
+			[
+				"dffbd326.dd572"
+			]
+		]
+	},
+	{
+		"id": "4d6db466.56bf4c",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "VersionRefs",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 560,
+		"y": 2980,
+		"wires": [
+			[
+				"44bae4c6.8d35cc"
+			],
+			[
+				"5a70b0a7.f5594"
+			]
+		]
+	},
+	{
+		"id": "44bae4c6.8d35cc",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 2980,
+		"wires": []
+	},
+	{
+		"id": "5a70b0a7.f5594",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 2980,
+		"wires": []
+	},
+	{
+		"id": "4b4e9477.05ca0c",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 2980,
+		"wires": [
+			[
+				"1650e1d7.f20bfe"
+			]
+		]
+	},
+	{
+		"id": "a53817af.7d38e8",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "VersionRelationshipsLinks",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 610,
+		"y": 3040,
+		"wires": [
+			[
+				"f382703b.f5877"
+			],
+			[
+				"b60003c1.be9e6"
+			]
+		]
+	},
+	{
+		"id": "f382703b.f5877",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 3040,
+		"wires": []
+	},
+	{
+		"id": "b60003c1.be9e6",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 3040,
+		"wires": []
+	},
+	{
+		"id": "d6479f27.b554c",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 3040,
+		"wires": [
+			[
+				"70978573.090f1c"
+			]
+		]
+	},
+	{
+		"id": "7f932240.298a6c",
+		"type": "forge-dm",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "VersionRelationshipsRefs",
+		"raw": false,
+		"hubid": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+		"projectid": "",
+		"folderid": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"copyFrom": "",
+		"xuserid": "",
+		"x": 600,
+		"y": 3100,
+		"wires": [
+			[
+				"b5f77638.914828"
+			],
+			[
+				"b9b988e8.01ba68"
+			]
+		]
+	},
+	{
+		"id": "b5f77638.914828",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 3100,
+		"wires": []
+	},
+	{
+		"id": "b9b988e8.01ba68",
+		"type": "debug",
+		"z": "72895e62.f5b93",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 3100,
+		"wires": []
+	},
+	{
+		"id": "21e81a5c.2bdcf6",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 3100,
+		"wires": [
+			[
+				"12526cea.1823f3"
+			]
+		]
+	},
+	{
+		"id": "abaea8d1.4ea4e8",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "payload.data[11].id",
+				"tot": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "payload",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 410,
+		"y": 260,
+		"wires": [
+			[
+				"19f86fa1.79bd2"
+			]
+		]
+	},
+	{
+		"id": "8398d759.253378",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "payload.data[1].id",
+				"tot": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "payload",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 410,
+		"y": 460,
+		"wires": [
+			[
+				"bde6bd8d.93ffb"
+			]
+		]
+	},
+	{
+		"id": "93abdd31.01b86",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "payload.data[1].id",
+				"tot": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "payload",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 470,
+		"y": 700,
+		"wires": [
+			[
+				"51122185.d1978"
+			]
+		]
+	},
+	{
+		"id": "7b2a8c2f.f1e994",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "Init variables",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 130,
+		"y": 80,
+		"wires": [
+			[
+				"af35ab5c.85b428"
+			]
+		]
+	},
+	{
+		"id": "a2f080ab.eb5fd",
+		"type": "comment",
+		"z": "72895e62.f5b93",
+		"name": "Initialization for tests",
+		"info": "",
+		"x": 130,
+		"y": 40,
+		"wires": []
+	},
+	{
+		"id": "af35ab5c.85b428",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid / projectid / folderid / itemid / versionid / xuserid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "flow",
+				"to": "b.a4f95080-84fe-4281-8d0a-bd8c885695e0",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "flow",
+				"to": "b.dd31c918-027a-4a29-9946-ec292facdf7a",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "folderid",
+				"pt": "flow",
+				"to": "urn:adsk.wipprod:fs.folder:co.rzxjppPYRsmNydaxgykFBg",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "itemid",
+				"pt": "msg",
+				"to": "urn:adsk.wipprod:dm.lineage:kx1IY6oATMWpb_aHugMv-g",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "versionid",
+				"pt": "msg",
+				"to": "urn:adsk.wipprod:fs.file:vf._3AoTpMBQDm060PABvgQKg?version=4",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "xuserid",
+				"pt": "flow",
+				"to": "xuserid",
+				"tot": "global"
+			},
+			{
+				"t": "set",
+				"p": "itemid2",
+				"pt": "flow",
+				"to": "urn:adsk.wipprod:dm.lineage:_3AoTpMBQDm060PABvgQKg",
+				"tot": "str"
+			},
+			{
+				"t": "set",
+				"p": "versionid2",
+				"pt": "flow",
+				"to": "urn:adsk.wipprod:fs.file:vf._3AoTpMBQDm060PABvgQKg?version=5",
+				"tot": "str"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 520,
+		"y": 80,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "9a666c0a.28b01",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "hubid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 270,
+		"y": 300,
+		"wires": [
+			[
+				"19f86fa1.79bd2"
+			]
+		]
+	},
+	{
+		"id": "579bd5cb.32427c",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 300,
+		"wires": [
+			[
+				"9a666c0a.28b01"
+			]
+		]
+	},
+	{
+		"id": "c635d68f.7e6fb8",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "hubid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 270,
+		"y": 500,
+		"wires": [
+			[
+				"bde6bd8d.93ffb"
+			]
+		]
+	},
+	{
+		"id": "19a438fc.aa1497",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 500,
+		"wires": [
+			[
+				"c635d68f.7e6fb8"
+			]
+		]
+	},
+	{
+		"id": "dbc8500.c782db",
+		"type": "inject",
+		"z": "72895e62.f5b93",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 700,
+		"wires": [
+			[
+				"65d4f9c6.0354b8"
+			]
+		]
+	},
+	{
+		"id": "65d4f9c6.0354b8",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "hubid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 270,
+		"y": 700,
+		"wires": [
+			[
+				"51122185.d1978"
+			]
+		]
+	},
+	{
+		"id": "dd836fc8.202fd",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "hubid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 290,
+		"y": 1180,
+		"wires": [
+			[
+				"e492f74a.fad8f8"
+			]
+		]
+	},
+	{
+		"id": "8b73943a.2e5c48",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "hubid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 290,
+		"y": 1220,
+		"wires": [
+			[
+				"4bb56747.1c1a48"
+			]
+		]
+	},
+	{
+		"id": "dad64188.12272",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid / projectid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "hubid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 300,
+		"y": 1280,
+		"wires": [
+			[
+				"8c16903b.f0631"
+			]
+		]
+	},
+	{
+		"id": "97eff701.b30d48",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid / projectid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "hubid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 300,
+		"y": 1400,
+		"wires": [
+			[
+				"7b10283.c8fedd8"
+			]
+		]
+	},
+	{
+		"id": "923a68c1.860768",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "hubid / projectid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "hubid",
+				"pt": "msg",
+				"to": "hubid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 300,
+		"y": 1340,
+		"wires": [
+			[
+				"98ca8fe6.7acbd"
+			]
+		]
+	},
+	{
+		"id": "a8b1db26.e91d18",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / folderid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "folderid",
+				"pt": "msg",
+				"to": "folderid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 1540,
+		"wires": [
+			[
+				"4bf77783.114f88"
+			]
+		]
+	},
+	{
+		"id": "374dcdbc.eb8bf2",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / folderid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "folderid",
+				"pt": "msg",
+				"to": "folderid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 1600,
+		"wires": [
+			[
+				"92997783.98acb8",
+				"3a701920.948db6"
+			]
+		]
+	},
+	{
+		"id": "8efb5900.bc43e8",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / folderid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "folderid",
+				"pt": "msg",
+				"to": "folderid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 1700,
+		"wires": [
+			[
+				"add22d58.bc047"
+			]
+		]
+	},
+	{
+		"id": "df5ffa09.d64158",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / folderid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "folderid",
+				"pt": "msg",
+				"to": "folderid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 1760,
+		"wires": [
+			[
+				"7aeb9ec5.b3779"
+			]
+		]
+	},
+	{
+		"id": "ce25658e.988958",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / folderid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "folderid",
+				"pt": "msg",
+				"to": "folderid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 1880,
+		"wires": [
+			[
+				"5643607e.1180d"
+			]
+		]
+	},
+	{
+		"id": "65546812.680038",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / folderid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "folderid",
+				"pt": "msg",
+				"to": "folderid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 1940,
+		"wires": [
+			[
+				"329fc4e6.58b96c"
+			]
+		]
+	},
+	{
+		"id": "a77c8467.750f88",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / folderid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "folderid",
+				"pt": "msg",
+				"to": "folderid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 1820,
+		"wires": [
+			[
+				"15987aa5.821525"
+			]
+		]
+	},
+	{
+		"id": "deaaa027.0a2f5",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / folderid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "folderid",
+				"pt": "msg",
+				"to": "folderid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 2060,
+		"wires": [
+			[
+				"2005480e.4dbf78",
+				"b2d1e050.47e8b",
+				"927751e9.2f53a",
+				"5a97e6f8.291748",
+				"f0a70332.11992"
+			]
+		]
+	},
+	{
+		"id": "66f7cdf8.406ea4",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / itemid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "itemid",
+				"pt": "msg",
+				"to": "itemid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 2260,
+		"wires": [
+			[
+				"162c4e13.0ccff2"
+			]
+		]
+	},
+	{
+		"id": "2663fc8a.7f3e04",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / itemid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "itemid",
+				"pt": "msg",
+				"to": "itemid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 2320,
+		"wires": [
+			[
+				"19828cf2.a1af63"
+			]
+		]
+	},
+	{
+		"id": "83c433a0.e7e78",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / itemid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "itemid",
+				"pt": "msg",
+				"to": "itemid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 2380,
+		"wires": [
+			[
+				"f5c99e02.153ec"
+			]
+		]
+	},
+	{
+		"id": "5075db4c.f6cc04",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / itemid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "itemid",
+				"pt": "msg",
+				"to": "itemid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 2440,
+		"wires": [
+			[
+				"9b496d69.ef4c8"
+			]
+		]
+	},
+	{
+		"id": "7cf0075f.061ce8",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / itemid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "itemid",
+				"pt": "msg",
+				"to": "itemid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 2500,
+		"wires": [
+			[
+				"7f0c8f92.9f55e"
+			]
+		]
+	},
+	{
+		"id": "dadb7fec.e28fc",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / itemid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "itemid",
+				"pt": "msg",
+				"to": "itemid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 2560,
+		"wires": [
+			[
+				"902a90b0.03068"
+			]
+		]
+	},
+	{
+		"id": "5d2953f6.a7c76c",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / itemid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "itemid",
+				"pt": "msg",
+				"to": "itemid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 2620,
+		"wires": [
+			[
+				"9d58429a.9053d"
+			]
+		]
+	},
+	{
+		"id": "c18a0949.79e608",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / versionid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "versionid",
+				"pt": "msg",
+				"to": "versionid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 320,
+		"y": 2740,
+		"wires": [
+			[
+				"b41467a4.5185e8"
+			]
+		]
+	},
+	{
+		"id": "dffbd326.dd572",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / versionid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "versionid",
+				"pt": "msg",
+				"to": "versionid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 320,
+		"y": 2920,
+		"wires": [
+			[
+				"fb031481.d56b58"
+			]
+		]
+	},
+	{
+		"id": "1650e1d7.f20bfe",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / versionid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "versionid",
+				"pt": "msg",
+				"to": "versionid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 320,
+		"y": 2980,
+		"wires": [
+			[
+				"4d6db466.56bf4c"
+			]
+		]
+	},
+	{
+		"id": "70978573.090f1c",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / versionid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "versionid",
+				"pt": "msg",
+				"to": "versionid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 320,
+		"y": 3040,
+		"wires": [
+			[
+				"a53817af.7d38e8"
+			]
+		]
+	},
+	{
+		"id": "12526cea.1823f3",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / versionid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "versionid",
+				"pt": "msg",
+				"to": "versionid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 320,
+		"y": 3100,
+		"wires": [
+			[
+				"7f932240.298a6c"
+			]
+		]
+	},
+	{
+		"id": "940393be.21139",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / versionid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "versionid",
+				"pt": "msg",
+				"to": "versionid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 320,
+		"y": 2800,
+		"wires": [
+			[
+				"d39eb885.e6dae8"
+			]
+		]
+	},
+	{
+		"id": "2fd0783d.c48bf8",
+		"type": "change",
+		"z": "72895e62.f5b93",
+		"name": "projectid / versionid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "projectid",
+				"pt": "msg",
+				"to": "projectid",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "versionid",
+				"pt": "msg",
+				"to": "versionid",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 320,
+		"y": 2860,
+		"wires": [
+			[
+				"515527a.dffcdd8"
+			]
+		]
+	}
+]

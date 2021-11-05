@@ -1,1 +1,587 @@
-[{"id":"37461fc6.8e9f5","type":"tab","label":"3legged","disabled":false,"info":""},{"id":"5860304b.b17e1","type":"forge-default-credentials","z":"37461fc6.8e9f5","name":"Forge Credentials 3 legged","forge":"","x":150,"y":60,"wires":[]},{"id":"2b90d6.11dadf2a","type":"forge-dm","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"Authorize","raw":false,"hubid":"autodesk","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"pageNumber":"","pageLimit":"","filters":[],"body":"","xuserid":"","x":470,"y":160,"wires":[["5e094d0b.c050f4","5aee6441.fa81dc","54e464a9.b3ae6c"],["f189c35f.64d94"]]},{"id":"5e094d0b.c050f4","type":"debug","z":"37461fc6.8e9f5","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":160,"wires":[]},{"id":"f189c35f.64d94","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":160,"wires":[]},{"id":"b8c8707a.af1f4","type":"inject","z":"37461fc6.8e9f5","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":160,"wires":[["2b90d6.11dadf2a"]]},{"id":"5aee6441.fa81dc","type":"exec","z":"37461fc6.8e9f5","command":"/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --incognito --new-window","addpay":true,"append":"","useSpawn":"false","timer":"60","oldrc":false,"name":"OSX","x":630,"y":220,"wires":[["85af13c1.34cf7"],["53f9fd1a.1dd034"],["16365981.ab8266"]],"info":"This uses `exec` node to launch another browser window with Autodesk SSO login page.\n\nPlease read and edit the command definition of `exec` or OpenBrowser node, you need to edit the clientId with yours\n"},{"id":"85af13c1.34cf7","type":"debug","z":"37461fc6.8e9f5","name":"Result","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":200,"wires":[]},{"id":"53f9fd1a.1dd034","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":240,"wires":[]},{"id":"16365981.ab8266","type":"debug","z":"37461fc6.8e9f5","name":"Result","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":280,"wires":[]},{"id":"3f17ce67.047542","type":"http in","z":"37461fc6.8e9f5","name":"","url":"/callback","method":"get","upload":false,"swaggerDoc":"","x":110,"y":380,"wires":[["1be9ad4b.9704b3","f6e5ea50.973838","f82842f1.06627"]]},{"id":"dd8235e6.5b1388","type":"http response","z":"37461fc6.8e9f5","name":"","statusCode":"200","headers":{},"x":580,"y":380,"wires":[]},{"id":"1be9ad4b.9704b3","type":"forge-dm","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"GetToken","raw":false,"hubid":"autodesk","projectid":"","x":480,"y":420,"wires":[["bc650aff.5a9708","b5cc3e6d.d8037"],["b0925a5d.760db8"]]},{"id":"2e335cb0.b77294","type":"forge-dm","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"Refresh","raw":false,"hubid":"autodesk","projectid":"","x":470,"y":580,"wires":[["65e2ced2.c54d7","b5cc3e6d.d8037"],["f8e4645b.305078"]]},{"id":"bc650aff.5a9708","type":"debug","z":"37461fc6.8e9f5","name":"Result","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":420,"wires":[]},{"id":"b0925a5d.760db8","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":420,"wires":[]},{"id":"65e2ced2.c54d7","type":"debug","z":"37461fc6.8e9f5","name":"Result","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":580,"wires":[]},{"id":"f8e4645b.305078","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":580,"wires":[]},{"id":"72601804.d5a578","type":"inject","z":"37461fc6.8e9f5","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":580,"wires":[["2e335cb0.b77294"]]},{"id":"f6e5ea50.973838","type":"debug","z":"37461fc6.8e9f5","name":"Debug","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":130,"y":420,"wires":[]},{"id":"f82842f1.06627","type":"template","z":"37461fc6.8e9f5","name":"html","field":"payload","fieldType":"msg","format":"html","syntax":"plain","template":"<!DOCTYPE html>\n\n<html\n    style=\"background: url(https://cdn.accounts.autodesk.com/consumerimages/bd7f11e5e2ee2d78589c564dbcdb7d69/bg/2/bg.jpg)no-repeat center center fixed\"\n    class=\" normal_mode\">\n\n<head>\n    <meta name=\"viewport\" content=\"width=device-width\" />\n    <title>Signed in</title>\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"msapplication-tap-highlight\" content=\"no\" />\n    <meta name=\"referrer\" content=\"no-referrer\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n    <link rel=\"shortcut icon\"\n        href=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/images/favicon.ico\" />\n    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->\n    <link rel=\"stylesheet\"\n        href=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/css/identity-base-compact-light.min.css\" />\n    <script type=\"text/javascript\"\n        src=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/js/identity-base-compact.min.js\">\n    </script>\n    <script async=\"true\" src=\"https://tags.tiqcdn.com/utag/autodesk/oxygen/prod/utag.js\"></script>\n    <script type=\"text/javascript\"\n        src=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/js/client-resources.js\">\n    </script>\n</head>\n\n<body class=\" oxygen-body compact  normal_mode  mac en\">\n    <div id=\"wrapper\" class=\"wrapper\">\n        <div class=\"environmentDivPosition\">\n\n        </div>\n        <div>\n            <div class=\"adsk-alert-container\" id=\"alert_container\"></div>\n        </div>\n        <!--[if lte IE 9]>\n             <![if IE 8]>\n                <div class=\"ie8\">\n             <![endif]>\n            <![if gt IE 8]>\n                <div class=\"ie8 ie9\">\n             <![endif]>\n        <![endif]-->\n        <!--[if (gt IE 9)|!(IE)]><!-->\n        <div>\n            <!--<![endif]-->\n            <div id=\"content_div\" class=\"container\">\n\n                <div class=\"signinWrapper\">\n                    <div class=\"usernameInputCont\">\n                        <div class=\"row\">\n                            <div class=\"col-xs-12\">\n                                <div id=\"signin_header\" class=\"row\">\n                                    <div class=\"col-xs-8 col-sm-10\">\n                                        <h2 class=\"adsk-header\">You are Signed in</h2>\n                                    </div>\n\n                                    <div class=\"cardFlip col-xs-4 col-sm-2\">\n                                        <div class=\"frontFlip\">\n                                            <img class=\"adsk-small-img\"\n                                                src=\"https://cdn.accounts.autodesk.com/consumerimages/bd7f11e5e2ee2d78589c564dbcdb7d69/sl/2/sl.png\" />\n                                        </div>\n                                        <div class=\"backFlip\">\n                                            <div class=\"adsk-small-img logo\"></div>\n                                        </div>\n                                    </div>\n                                </div>\n\n                                <div id=\"social_header\" class=\"hide text-center \">\n                                    <div class=\"pull-left passwordBack pointer show-signin\">\n                                        <object class=\"adsk-back\"\n                                            data=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/images/svg/back.svg\"></object>\n                                    </div>\n                                    <h2 class=\"adsk-social-header\">Sign in with</h2>\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row signinEmailInput halfSecTrans adsk-row-margin-top-sm-md\"\n                            style=\"opacity: 1; display: block;\">\n                            <div class=\"col-xs-12\">\n                                <div>\n                                    <div class=\"custom-form\">\n                                        <label for=\"userName\" style=\"position:static;\">You can now close this window</label>\n                                    </div>\n\n                                </div>\n                            </div>\n                        </div>\n\n                    </div>\n                    <!--/usernameInputCont-->\n                </div>\n\n                <div class=\"footerNote halfSecTrans\">\n                    <span>Your account for everything Autodesk</span>\n                    <br />\n                    <a href=\"#\">LEARN MORE</a>\n                </div>\n\n                <script type=\"text/javascript\"\n                    src=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/js/identity-compact-signin.min.js\">\n                </script>\n\n            </div>\n            <!--[if IE 9]>\n                    <div class=\"ie9 footerNote halfSecTrans\" id=\"footerNote_div\">\n                <![endif]-->\n            <!--[if (gt IE 9)|(IE 8)]><!-->\n            <div class=\"footerNote halfSecTrans\" id=\"footerNote_div\">\n                <!--<![endif]-->\n                <span>Your account for everything Autodesk</span>\n                <br />\n                <a style=\"cursor: pointer;\">LEARN MORE</a>\n            </div>\n            <div class=\"hide\" id=\"learn_more_div\">\n                <div class=\"learnMoreWrapper\">\n                    <div class=\"learnMore halfSecTrans\">\n\n                        <div class=\"row text-center copy\">\n                            <div class=\"col-xs-12 text\">\n                                <div class=\"col-xs-12 adsk-social-header\">\n                                    Why ?\n                                </div>\n\n                            </div>\n                            <div class=\"col-xs-12 margin-top-33\">\n                                Gain access to Autodesk products and services with a single set of credentials.\n                            </div>\n\n                            <div class=\"col-xs-12 text-center margin-top-50\">\n                                <div id=\"thumb\" class=\"learn-icon inline-element\"></div>\n                                <div id=\"gear\" class=\"learn-icon inline-element\"></div>\n                                <div id=\"lock\" class=\"learn-icon inline-element\"></div>\n                            </div>\n\n                            <div class=\"col-xs-12 margin-top-50 font-size-12 panel-content\">\n                                <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n\n                                    <div class=\"panel panel-default first\">\n                                        <div class=\"panel-heading\" role=\"tab\" id=\"learn-more-2\">\n                                            <h4 class=\"panel-title\">\n                                                <a class=\"block collapsed\" role=\"button\" data-toggle=\"collapse\"\n                                                    data-parent=\"#accordion\" href=\"#collapse-learn-more-2\"\n                                                    aria-expanded=\"false\" aria-controls=\"collapse-learn-more-2\">\n                                                    Access all your applications <i class=\"pull-right chevron-down\"></i>\n                                                </a>\n                                            </h4>\n                                        </div>\n                                        <div id=\"collapse-learn-more-2\" class=\"panel-collapse collapse\" role=\"tabpanel\"\n                                            aria-labelledby=\"learn-more-2\" aria-expanded=\"false\" style=\"height: 0px;\">\n                                            <div class=\"panel-body\">\n                                                Your account is what you use for everything you do with Autodesk\n                                                products and services, such as Fusion, A360, Sketchbook, 123d App, Store\n                                                and much more.&#13;&#10;With just one account, you can sign into all\n                                                your Autodesk entitlements and get access to new ones.\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"panel panel-default\">\n                                        <div class=\"border100p\"></div>\n                                        <div class=\"panel-heading\" role=\"tab\" id=\"learn-more-3\">\n                                            <h4 class=\"panel-title\">\n                                                <a class=\"block collapsed\" role=\"button\" data-toggle=\"collapse\"\n                                                    data-parent=\"#accordion\" href=\"#collapse-learn-more-3\"\n                                                    aria-expanded=\"false\" aria-controls=\"collapse-learn-more-3\">\n                                                    Manage your preferences <i class=\"pull-right chevron-down\"></i>\n                                                </a>\n                                            </h4>\n                                        </div>\n                                        <div id=\"collapse-learn-more-3\" class=\"panel-collapse collapse\" role=\"tabpanel\"\n                                            aria-labelledby=\"learn-more-3\" aria-expanded=\"false\" style=\"height: 0px;\">\n                                            <div class=\"panel-body\">\n                                                Access and update your marketing subscriptions, and language preferences\n                                                for Autodesk products and services.\n                                                <br> Need to update your contact email? Just head into your account and\n                                                make the necessary updates to your profile.\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"panel panel-default\">\n                                        <div class=\"border100p\"></div>\n                                        <div class=\"panel-heading\" role=\"tab\" id=\"learn-more-5\">\n                                            <h4 class=\"panel-title\">\n                                                <a class=\"collapsed block\" role=\"button\" data-toggle=\"collapse\"\n                                                    data-parent=\"#accordion\" href=\"#collapse-learn-more-5\"\n                                                    aria-expanded=\"false\" aria-controls=\"collapse-learn-more-5\">\n                                                    Privacy and security <i class=\"chevron-down pull-right\"></i>\n                                                </a>\n                                            </h4>\n                                        </div>\n                                        <div id=\"collapse-learn-more-5\" class=\"panel-collapse collapse\" role=\"tabpanel\"\n                                            aria-labelledby=\"learn-more-5\" aria-expanded=\"false\">\n                                            <div class=\"panel-body\">\n                                                Because your security is our utmost priority here at\n                                                Autodesk,&#13;&#10;we allow updating any of your access credentials at\n                                                any point of time should you feel that your account has been\n                                                compromised.&#13;&#10;In addition, we offer enhanced security features\n                                                to help you feel secure with your account.\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"border100p\"></div>\n                                </div>\n\n\n                            </div>\n\n                        </div>\n\n                    </div>\n                    <a class=\"strong back\" id=\"close_learn_more\">\n                        <div class=\"halfSecTrans text-uppercase\">\n                            Back\n                        </div>\n                    </a>\n\n                </div>\n            </div>\n        </div>\n\n        <script type=\"text/javascript\"\n            src=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/js/identity-ensighten.min.js\">\n        </script>\n\n    </div>\n</body>\n\n</html>","output":"str","x":450,"y":380,"wires":[["dd8235e6.5b1388"]]},{"id":"bbeb50ed.560b8","type":"comment","z":"37461fc6.8e9f5","name":"Authorize 3legged flow","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":140,"y":120,"wires":[]},{"id":"693da848.d831e8","type":"comment","z":"37461fc6.8e9f5","name":"Callback implementation and get a 3legged token","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":230,"y":340,"wires":[]},{"id":"20f3d7fa.d1ce58","type":"comment","z":"37461fc6.8e9f5","name":"Refresh a 3legged token","info":"Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information","x":150,"y":540,"wires":[]},{"id":"54e464a9.b3ae6c","type":"exec","z":"37461fc6.8e9f5","command":"start chrome --incognito --new-window","addpay":true,"append":"","useSpawn":"false","timer":"60","oldrc":false,"name":"Windows","x":640,"y":260,"wires":[["85af13c1.34cf7"],["53f9fd1a.1dd034"],["16365981.ab8266"]],"info":"This uses `exec` node to launch another browser window with Autodesk SSO login page.\n\nPlease read and edit the command definition of `exec` or OpenBrowser node, you need to edit the clientId with yours\n"},{"id":"b5cc3e6d.d8037","type":"forge-dm","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"Me","raw":false,"hubid":"","projectid":"","folderid":"","itemid":"","versionid":"","downloadid":"","jobid":"","ifModifiedSince":"","includeHidden":false,"includePathInProject":false,"contentType":"application/vnd.api+json","x":460,"y":480,"wires":[["e638ee9c.9899f","e22ffadb.b7c918"],["77e8cda7.1e5e44"]]},{"id":"e638ee9c.9899f","type":"debug","z":"37461fc6.8e9f5","name":"Result","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":480,"wires":[]},{"id":"77e8cda7.1e5e44","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1010,"y":480,"wires":[]},{"id":"cee844d2.5fd888","type":"inject","z":"37461fc6.8e9f5","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":480,"wires":[["b5cc3e6d.d8037"]]},{"id":"80933c6.a4a2ac","type":"inject","z":"37461fc6.8e9f5","name":"","topic":"","payload":"","payloadType":"date","repeat":"1800","crontab":"","once":true,"onceDelay":"2","x":130,"y":620,"wires":[["2e335cb0.b77294"]]},{"id":"e22ffadb.b7c918","type":"change","z":"37461fc6.8e9f5","name":"userid","rules":[{"t":"set","p":"xuserid","pt":"global","to":"payload.userId","tot":"msg"},{"t":"delete","p":"req","pt":"msg"},{"t":"delete","p":"res","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":630,"y":520,"wires":[["17d69578.8746db"]]},{"id":"17d69578.8746db","type":"debug","z":"37461fc6.8e9f5","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":520,"wires":[]},{"id":"a05b62f0.f9882","type":"forge-default-credentials","z":"37461fc6.8e9f5","name":"Forge Credentials 2 legged","forge":"","x":410,"y":60,"wires":[]}]
+[
+	{
+		"id": "37461fc6.8e9f5",
+		"type": "tab",
+		"label": "3legged",
+		"disabled": false,
+		"info": ""
+	},
+	{
+		"id": "5860304b.b17e1",
+		"type": "forge-default-credentials",
+		"z": "37461fc6.8e9f5",
+		"name": "Forge Credentials 3 legged",
+		"forge": "",
+		"x": 150,
+		"y": 60,
+		"wires": []
+	},
+	{
+		"id": "2b90d6.11dadf2a",
+		"type": "forge-dm",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "Authorize",
+		"raw": false,
+		"hubid": "autodesk",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"pageNumber": "",
+		"pageLimit": "",
+		"filters": [],
+		"body": "",
+		"xuserid": "",
+		"x": 470,
+		"y": 160,
+		"wires": [
+			[
+				"5e094d0b.c050f4",
+				"5aee6441.fa81dc",
+				"54e464a9.b3ae6c"
+			],
+			[
+				"f189c35f.64d94"
+			]
+		]
+	},
+	{
+		"id": "5e094d0b.c050f4",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 160,
+		"wires": []
+	},
+	{
+		"id": "f189c35f.64d94",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 160,
+		"wires": []
+	},
+	{
+		"id": "b8c8707a.af1f4",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 160,
+		"wires": [
+			[
+				"2b90d6.11dadf2a"
+			]
+		]
+	},
+	{
+		"id": "5aee6441.fa81dc",
+		"type": "exec",
+		"z": "37461fc6.8e9f5",
+		"command": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --incognito --new-window",
+		"addpay": true,
+		"append": "",
+		"useSpawn": "false",
+		"timer": "60",
+		"oldrc": false,
+		"name": "OSX",
+		"x": 630,
+		"y": 220,
+		"wires": [
+			[
+				"85af13c1.34cf7"
+			],
+			[
+				"53f9fd1a.1dd034"
+			],
+			[
+				"16365981.ab8266"
+			]
+		],
+		"info": "This uses `exec` node to launch another browser window with Autodesk SSO login page.\n\nPlease read and edit the command definition of `exec` or OpenBrowser node, you need to edit the clientId with yours\n"
+	},
+	{
+		"id": "85af13c1.34cf7",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Result",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 200,
+		"wires": []
+	},
+	{
+		"id": "53f9fd1a.1dd034",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 240,
+		"wires": []
+	},
+	{
+		"id": "16365981.ab8266",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Result",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 280,
+		"wires": []
+	},
+	{
+		"id": "3f17ce67.047542",
+		"type": "http in",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"url": "/callback",
+		"method": "get",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 110,
+		"y": 380,
+		"wires": [
+			[
+				"1be9ad4b.9704b3",
+				"f6e5ea50.973838",
+				"f82842f1.06627"
+			]
+		]
+	},
+	{
+		"id": "dd8235e6.5b1388",
+		"type": "http response",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"statusCode": "200",
+		"headers": {},
+		"x": 580,
+		"y": 380,
+		"wires": []
+	},
+	{
+		"id": "1be9ad4b.9704b3",
+		"type": "forge-dm",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "GetToken",
+		"raw": false,
+		"hubid": "autodesk",
+		"projectid": "",
+		"x": 480,
+		"y": 420,
+		"wires": [
+			[
+				"bc650aff.5a9708",
+				"b5cc3e6d.d8037"
+			],
+			[
+				"b0925a5d.760db8"
+			]
+		]
+	},
+	{
+		"id": "2e335cb0.b77294",
+		"type": "forge-dm",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "Refresh",
+		"raw": false,
+		"hubid": "autodesk",
+		"projectid": "",
+		"x": 470,
+		"y": 580,
+		"wires": [
+			[
+				"65e2ced2.c54d7",
+				"b5cc3e6d.d8037"
+			],
+			[
+				"f8e4645b.305078"
+			]
+		]
+	},
+	{
+		"id": "bc650aff.5a9708",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Result",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 420,
+		"wires": []
+	},
+	{
+		"id": "b0925a5d.760db8",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 420,
+		"wires": []
+	},
+	{
+		"id": "65e2ced2.c54d7",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Result",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 580,
+		"wires": []
+	},
+	{
+		"id": "f8e4645b.305078",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 580,
+		"wires": []
+	},
+	{
+		"id": "72601804.d5a578",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 580,
+		"wires": [
+			[
+				"2e335cb0.b77294"
+			]
+		]
+	},
+	{
+		"id": "f6e5ea50.973838",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Debug",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 130,
+		"y": 420,
+		"wires": []
+	},
+	{
+		"id": "f82842f1.06627",
+		"type": "template",
+		"z": "37461fc6.8e9f5",
+		"name": "html",
+		"field": "payload",
+		"fieldType": "msg",
+		"format": "html",
+		"syntax": "plain",
+		"template": "<!DOCTYPE html>\n\n<html\n    style=\"background: url(https://cdn.accounts.autodesk.com/consumerimages/bd7f11e5e2ee2d78589c564dbcdb7d69/bg/2/bg.jpg)no-repeat center center fixed\"\n    class=\" normal_mode\">\n\n<head>\n    <meta name=\"viewport\" content=\"width=device-width\" />\n    <title>Signed in</title>\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"msapplication-tap-highlight\" content=\"no\" />\n    <meta name=\"referrer\" content=\"no-referrer\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n    <link rel=\"shortcut icon\"\n        href=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/images/favicon.ico\" />\n    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->\n    <link rel=\"stylesheet\"\n        href=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/css/identity-base-compact-light.min.css\" />\n    <script type=\"text/javascript\"\n        src=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/js/identity-base-compact.min.js\">\n    </script>\n    <script async=\"true\" src=\"https://tags.tiqcdn.com/utag/autodesk/oxygen/prod/utag.js\"></script>\n    <script type=\"text/javascript\"\n        src=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/js/client-resources.js\">\n    </script>\n</head>\n\n<body class=\" oxygen-body compact  normal_mode  mac en\">\n    <div id=\"wrapper\" class=\"wrapper\">\n        <div class=\"environmentDivPosition\">\n\n        </div>\n        <div>\n            <div class=\"adsk-alert-container\" id=\"alert_container\"></div>\n        </div>\n        <!--[if lte IE 9]>\n             <![if IE 8]>\n                <div class=\"ie8\">\n             <![endif]>\n            <![if gt IE 8]>\n                <div class=\"ie8 ie9\">\n             <![endif]>\n        <![endif]-->\n        <!--[if (gt IE 9)|!(IE)]><!-->\n        <div>\n            <!--<![endif]-->\n            <div id=\"content_div\" class=\"container\">\n\n                <div class=\"signinWrapper\">\n                    <div class=\"usernameInputCont\">\n                        <div class=\"row\">\n                            <div class=\"col-xs-12\">\n                                <div id=\"signin_header\" class=\"row\">\n                                    <div class=\"col-xs-8 col-sm-10\">\n                                        <h2 class=\"adsk-header\">You are Signed in</h2>\n                                    </div>\n\n                                    <div class=\"cardFlip col-xs-4 col-sm-2\">\n                                        <div class=\"frontFlip\">\n                                            <img class=\"adsk-small-img\"\n                                                src=\"https://cdn.accounts.autodesk.com/consumerimages/bd7f11e5e2ee2d78589c564dbcdb7d69/sl/2/sl.png\" />\n                                        </div>\n                                        <div class=\"backFlip\">\n                                            <div class=\"adsk-small-img logo\"></div>\n                                        </div>\n                                    </div>\n                                </div>\n\n                                <div id=\"social_header\" class=\"hide text-center \">\n                                    <div class=\"pull-left passwordBack pointer show-signin\">\n                                        <object class=\"adsk-back\"\n                                            data=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/images/svg/back.svg\"></object>\n                                    </div>\n                                    <h2 class=\"adsk-social-header\">Sign in with</h2>\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"row signinEmailInput halfSecTrans adsk-row-margin-top-sm-md\"\n                            style=\"opacity: 1; display: block;\">\n                            <div class=\"col-xs-12\">\n                                <div>\n                                    <div class=\"custom-form\">\n                                        <label for=\"userName\" style=\"position:static;\">You can now close this window</label>\n                                    </div>\n\n                                </div>\n                            </div>\n                        </div>\n\n                    </div>\n                    <!--/usernameInputCont-->\n                </div>\n\n                <div class=\"footerNote halfSecTrans\">\n                    <span>Your account for everything Autodesk</span>\n                    <br />\n                    <a href=\"#\">LEARN MORE</a>\n                </div>\n\n                <script type=\"text/javascript\"\n                    src=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/js/identity-compact-signin.min.js\">\n                </script>\n\n            </div>\n            <!--[if IE 9]>\n                    <div class=\"ie9 footerNote halfSecTrans\" id=\"footerNote_div\">\n                <![endif]-->\n            <!--[if (gt IE 9)|(IE 8)]><!-->\n            <div class=\"footerNote halfSecTrans\" id=\"footerNote_div\">\n                <!--<![endif]-->\n                <span>Your account for everything Autodesk</span>\n                <br />\n                <a style=\"cursor: pointer;\">LEARN MORE</a>\n            </div>\n            <div class=\"hide\" id=\"learn_more_div\">\n                <div class=\"learnMoreWrapper\">\n                    <div class=\"learnMore halfSecTrans\">\n\n                        <div class=\"row text-center copy\">\n                            <div class=\"col-xs-12 text\">\n                                <div class=\"col-xs-12 adsk-social-header\">\n                                    Why ?\n                                </div>\n\n                            </div>\n                            <div class=\"col-xs-12 margin-top-33\">\n                                Gain access to Autodesk products and services with a single set of credentials.\n                            </div>\n\n                            <div class=\"col-xs-12 text-center margin-top-50\">\n                                <div id=\"thumb\" class=\"learn-icon inline-element\"></div>\n                                <div id=\"gear\" class=\"learn-icon inline-element\"></div>\n                                <div id=\"lock\" class=\"learn-icon inline-element\"></div>\n                            </div>\n\n                            <div class=\"col-xs-12 margin-top-50 font-size-12 panel-content\">\n                                <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n\n                                    <div class=\"panel panel-default first\">\n                                        <div class=\"panel-heading\" role=\"tab\" id=\"learn-more-2\">\n                                            <h4 class=\"panel-title\">\n                                                <a class=\"block collapsed\" role=\"button\" data-toggle=\"collapse\"\n                                                    data-parent=\"#accordion\" href=\"#collapse-learn-more-2\"\n                                                    aria-expanded=\"false\" aria-controls=\"collapse-learn-more-2\">\n                                                    Access all your applications <i class=\"pull-right chevron-down\"></i>\n                                                </a>\n                                            </h4>\n                                        </div>\n                                        <div id=\"collapse-learn-more-2\" class=\"panel-collapse collapse\" role=\"tabpanel\"\n                                            aria-labelledby=\"learn-more-2\" aria-expanded=\"false\" style=\"height: 0px;\">\n                                            <div class=\"panel-body\">\n                                                Your account is what you use for everything you do with Autodesk\n                                                products and services, such as Fusion, A360, Sketchbook, 123d App, Store\n                                                and much more.&#13;&#10;With just one account, you can sign into all\n                                                your Autodesk entitlements and get access to new ones.\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"panel panel-default\">\n                                        <div class=\"border100p\"></div>\n                                        <div class=\"panel-heading\" role=\"tab\" id=\"learn-more-3\">\n                                            <h4 class=\"panel-title\">\n                                                <a class=\"block collapsed\" role=\"button\" data-toggle=\"collapse\"\n                                                    data-parent=\"#accordion\" href=\"#collapse-learn-more-3\"\n                                                    aria-expanded=\"false\" aria-controls=\"collapse-learn-more-3\">\n                                                    Manage your preferences <i class=\"pull-right chevron-down\"></i>\n                                                </a>\n                                            </h4>\n                                        </div>\n                                        <div id=\"collapse-learn-more-3\" class=\"panel-collapse collapse\" role=\"tabpanel\"\n                                            aria-labelledby=\"learn-more-3\" aria-expanded=\"false\" style=\"height: 0px;\">\n                                            <div class=\"panel-body\">\n                                                Access and update your marketing subscriptions, and language preferences\n                                                for Autodesk products and services.\n                                                <br> Need to update your contact email? Just head into your account and\n                                                make the necessary updates to your profile.\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"panel panel-default\">\n                                        <div class=\"border100p\"></div>\n                                        <div class=\"panel-heading\" role=\"tab\" id=\"learn-more-5\">\n                                            <h4 class=\"panel-title\">\n                                                <a class=\"collapsed block\" role=\"button\" data-toggle=\"collapse\"\n                                                    data-parent=\"#accordion\" href=\"#collapse-learn-more-5\"\n                                                    aria-expanded=\"false\" aria-controls=\"collapse-learn-more-5\">\n                                                    Privacy and security <i class=\"chevron-down pull-right\"></i>\n                                                </a>\n                                            </h4>\n                                        </div>\n                                        <div id=\"collapse-learn-more-5\" class=\"panel-collapse collapse\" role=\"tabpanel\"\n                                            aria-labelledby=\"learn-more-5\" aria-expanded=\"false\">\n                                            <div class=\"panel-body\">\n                                                Because your security is our utmost priority here at\n                                                Autodesk,&#13;&#10;we allow updating any of your access credentials at\n                                                any point of time should you feel that your account has been\n                                                compromised.&#13;&#10;In addition, we offer enhanced security features\n                                                to help you feel secure with your account.\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"border100p\"></div>\n                                </div>\n\n\n                            </div>\n\n                        </div>\n\n                    </div>\n                    <a class=\"strong back\" id=\"close_learn_more\">\n                        <div class=\"halfSecTrans text-uppercase\">\n                            Back\n                        </div>\n                    </a>\n\n                </div>\n            </div>\n        </div>\n\n        <script type=\"text/javascript\"\n            src=\"https://cdn.accounts.autodesk.com/content/identity/28.0.77.6fd4fac/z/Content/js/identity-ensighten.min.js\">\n        </script>\n\n    </div>\n</body>\n\n</html>",
+		"output": "str",
+		"x": 450,
+		"y": 380,
+		"wires": [
+			[
+				"dd8235e6.5b1388"
+			]
+		]
+	},
+	{
+		"id": "bbeb50ed.560b8",
+		"type": "comment",
+		"z": "37461fc6.8e9f5",
+		"name": "Authorize 3legged flow",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 140,
+		"y": 120,
+		"wires": []
+	},
+	{
+		"id": "693da848.d831e8",
+		"type": "comment",
+		"z": "37461fc6.8e9f5",
+		"name": "Callback implementation and get a 3legged token",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 230,
+		"y": 340,
+		"wires": []
+	},
+	{
+		"id": "20f3d7fa.d1ce58",
+		"type": "comment",
+		"z": "37461fc6.8e9f5",
+		"name": "Refresh a 3legged token",
+		"info": "Please refer [https://forge.autodesk.com/en/docs/oauth/v2/tutorials/get-3-legged-token/](Forge 3 Legged OAuth) for more information",
+		"x": 150,
+		"y": 540,
+		"wires": []
+	},
+	{
+		"id": "54e464a9.b3ae6c",
+		"type": "exec",
+		"z": "37461fc6.8e9f5",
+		"command": "start chrome --incognito --new-window",
+		"addpay": true,
+		"append": "",
+		"useSpawn": "false",
+		"timer": "60",
+		"oldrc": false,
+		"name": "Windows",
+		"x": 640,
+		"y": 260,
+		"wires": [
+			[
+				"85af13c1.34cf7"
+			],
+			[
+				"53f9fd1a.1dd034"
+			],
+			[
+				"16365981.ab8266"
+			]
+		],
+		"info": "This uses `exec` node to launch another browser window with Autodesk SSO login page.\n\nPlease read and edit the command definition of `exec` or OpenBrowser node, you need to edit the clientId with yours\n"
+	},
+	{
+		"id": "b5cc3e6d.d8037",
+		"type": "forge-dm",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "Me",
+		"raw": false,
+		"hubid": "",
+		"projectid": "",
+		"folderid": "",
+		"itemid": "",
+		"versionid": "",
+		"downloadid": "",
+		"jobid": "",
+		"ifModifiedSince": "",
+		"includeHidden": false,
+		"includePathInProject": false,
+		"contentType": "application/vnd.api+json",
+		"x": 460,
+		"y": 480,
+		"wires": [
+			[
+				"e638ee9c.9899f",
+				"e22ffadb.b7c918"
+			],
+			[
+				"77e8cda7.1e5e44"
+			]
+		]
+	},
+	{
+		"id": "e638ee9c.9899f",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Result",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 480,
+		"wires": []
+	},
+	{
+		"id": "77e8cda7.1e5e44",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1010,
+		"y": 480,
+		"wires": []
+	},
+	{
+		"id": "cee844d2.5fd888",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 480,
+		"wires": [
+			[
+				"b5cc3e6d.d8037"
+			]
+		]
+	},
+	{
+		"id": "80933c6.a4a2ac",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "1800",
+		"crontab": "",
+		"once": true,
+		"onceDelay": "2",
+		"x": 130,
+		"y": 620,
+		"wires": [
+			[
+				"2e335cb0.b77294"
+			]
+		]
+	},
+	{
+		"id": "e22ffadb.b7c918",
+		"type": "change",
+		"z": "37461fc6.8e9f5",
+		"name": "userid",
+		"rules": [
+			{
+				"t": "set",
+				"p": "xuserid",
+				"pt": "global",
+				"to": "payload.userId",
+				"tot": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "req",
+				"pt": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "res",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 630,
+		"y": 520,
+		"wires": [
+			[
+				"17d69578.8746db"
+			]
+		]
+	},
+	{
+		"id": "17d69578.8746db",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 520,
+		"wires": []
+	},
+	{
+		"id": "a05b62f0.f9882",
+		"type": "forge-default-credentials",
+		"z": "37461fc6.8e9f5",
+		"name": "Forge Credentials 2 legged",
+		"forge": "",
+		"x": 410,
+		"y": 60,
+		"wires": []
+	}
+]

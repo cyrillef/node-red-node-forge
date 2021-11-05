@@ -1,1 +1,1938 @@
-[{"id":"3352373b.5611d8","type":"forge-default-credentials","z":"57e501ae.a095a","name":"","forge":"","x":130,"y":40,"wires":[]},{"id":"d474d17d.34554","type":"debug","z":"57e501ae.a095a","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":750,"y":180,"wires":[]},{"id":"1c548f7a.5fff81","type":"forge-da","z":"57e501ae.a095a","name":"Appbundles","topic":"","forge":"","operation":"ListAppbundles","raw":false,"page":"","all":false,"description":"","alias":"","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":"","verb":"get","zip":false,"ondemand":false,"required":false,"description":""}],"settings":[{"value":"","isEnvironmentVariable":false,"key":"key"}],"engine":"","appbundlesId":"","package":"","nickname":"","exponent":"","modulus":"","workitemId":"","x":430,"y":180,"wires":[["b1c98b34.877908"],["d474d17d.34554"]]},{"id":"b1c98b34.877908","type":"switch","z":"57e501ae.a095a","name":"","property":"payload.paginationToken","propertyType":"msg","rules":[{"t":"nnull"},{"t":"null"}],"checkall":"true","repair":false,"outputs":2,"x":390,"y":240,"wires":[["1902436a.25213d","178deb7f.756095"],["e03561dd.9567b"]]},{"id":"1902436a.25213d","type":"change","z":"57e501ae.a095a","name":"","rules":[{"t":"set","p":"payload.page","pt":"msg","to":"payload.paginationToken","tot":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":600,"y":240,"wires":[["1c548f7a.5fff81"]]},{"id":"178deb7f.756095","type":"join","z":"57e501ae.a095a","name":"","mode":"custom","build":"array","property":"payload","propertyType":"msg","key":"topic","joiner":"\\n","joinerType":"str","accumulate":false,"timeout":"","count":"","reduceRight":false,"reduceExp":"","reduceInit":"","reduceInitType":"num","reduceFixup":"","x":550,"y":300,"wires":[["46589ac8.e52544"]]},{"id":"e03561dd.9567b","type":"function","z":"57e501ae.a095a","name":"Done","func":"msg.complete =true;\n// delete msg.payload\n// delete msg.op;\nreturn msg;","outputs":1,"noerr":0,"x":410,"y":300,"wires":[["178deb7f.756095"]]},{"id":"2cf31f21.de37e","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":610,"y":920,"wires":[]},{"id":"eab92934.28bcf8","type":"debug","z":"57e501ae.a095a","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1080,"wires":[]},{"id":"c8f41c1d.b39e","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":850,"y":300,"wires":[]},{"id":"46589ac8.e52544","type":"function","z":"57e501ae.a095a","name":"Merge","func":"var results = msg.payload.reduce (\n    function (sum, elt) {\n        //return ([...sum, ...elt.data]);\n        return (sum.concat(elt.data));\n    },\n    []\n);\nreturn ({ results: results, op: \"Appbundles\" });","outputs":1,"noerr":0,"x":710,"y":300,"wires":[["c8f41c1d.b39e"]]},{"id":"a81259c4.587718","type":"forge-da","z":"57e501ae.a095a","name":"Aliases","topic":"","forge":"","operation":"ListAppbundlesAliases","raw":true,"page":"","all":false,"description":"","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":null,"verb":"get","zip":false,"ondemand":false,"required":false,"description":null}],"settings":[{"key":"key","type":"StringSetting"}],"appbundlesId":"","workitemId":"","x":420,"y":440,"wires":[["53cbbd07.e38e94"],["a67cf313.c2016"]]},{"id":"53cbbd07.e38e94","type":"switch","z":"57e501ae.a095a","name":"","property":"payload.body.paginationToken","propertyType":"msg","rules":[{"t":"nnull"},{"t":"null"}],"checkall":"true","repair":false,"outputs":2,"x":390,"y":500,"wires":[["1f3089ca.b2f156","f0e75378.479c4"],["34cfcfb6.fbf5d"]]},{"id":"1f3089ca.b2f156","type":"change","z":"57e501ae.a095a","name":"","rules":[{"t":"set","p":"payload.page","pt":"msg","to":"payload.body.paginationToken","tot":"msg"},{"t":"delete","p":"payload.body","pt":"msg"},{"t":"delete","p":"payload.headers","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":580,"y":500,"wires":[["a81259c4.587718"]]},{"id":"f0e75378.479c4","type":"join","z":"57e501ae.a095a","name":"","mode":"custom","build":"array","property":"payload","propertyType":"msg","key":"topic","joiner":"\\n","joinerType":"str","accumulate":false,"timeout":"","count":"","reduceRight":false,"reduceExp":"","reduceInit":"","reduceInitType":"num","reduceFixup":"","x":550,"y":560,"wires":[["322491ec.e6b9de"]]},{"id":"34cfcfb6.fbf5d","type":"function","z":"57e501ae.a095a","name":"Done","func":"msg.complete =true;\n// delete msg.payload\n// delete msg.op;\nreturn msg;","outputs":1,"noerr":0,"x":410,"y":560,"wires":[["f0e75378.479c4"]]},{"id":"322491ec.e6b9de","type":"function","z":"57e501ae.a095a","name":"Merge","func":"var results = msg.payload.reduce (\n    function (sum, elt) {\n        //return ([...sum, ...elt.body.data]);\n        return (sum.concat(elt.body.data));\n    },\n    []\n);\nreturn ({ results: results, op: \"Aliases\" });","outputs":1,"noerr":0,"x":710,"y":560,"wires":[["1dec4a36.f041d6"]]},{"id":"1dec4a36.f041d6","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":850,"y":560,"wires":[]},{"id":"a67cf313.c2016","type":"debug","z":"57e501ae.a095a","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":750,"y":440,"wires":[]},{"id":"663323bb.e15bcc","type":"inject","z":"57e501ae.a095a","name":"UpdateDWGParamAppBundle","topic":"","payload":"{\"appbundlesId\":\"oZZ0CN7qXTGAiqSbmEhLlmYcKXt0YVoU.UpdateDWGParamAppBundle+dev\",\"version\":1,\"appbundlesAliasId\":\"dev\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":180,"y":400,"wires":[["a81259c4.587718","742c600e.35617"]]},{"id":"557f892b.0af3e8","type":"forge-da","z":"57e501ae.a095a","name":"Versions","topic":"","forge":"","operation":"ListAppbundlesVersions","raw":true,"page":"","all":false,"description":"","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":"","verb":"get","zip":false,"ondemand":false,"required":false,"description":""}],"settings":[{"value":"","isEnvironmentVariable":false,"key":"key"}],"appbundlesId":"","workitemId":"","x":420,"y":700,"wires":[["1520744d.c46e5c"],["4888602c.10818"]]},{"id":"1520744d.c46e5c","type":"switch","z":"57e501ae.a095a","name":"","property":"payload.body.paginationToken","propertyType":"msg","rules":[{"t":"nnull"},{"t":"null"}],"checkall":"true","repair":false,"outputs":2,"x":390,"y":760,"wires":[["4804be11.6ec1f","9554621c.702bd"],["58796c85.1a8b04"]]},{"id":"4804be11.6ec1f","type":"change","z":"57e501ae.a095a","name":"","rules":[{"t":"set","p":"payload.page","pt":"msg","to":"payload.body.paginationToken","tot":"msg"},{"t":"delete","p":"payload.body","pt":"msg"},{"t":"delete","p":"payload.headers","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":580,"y":760,"wires":[["557f892b.0af3e8"]]},{"id":"4888602c.10818","type":"debug","z":"57e501ae.a095a","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":750,"y":700,"wires":[]},{"id":"14426e2a.891e12","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":850,"y":820,"wires":[]},{"id":"8f1481a8.2e2f","type":"function","z":"57e501ae.a095a","name":"Merge","func":"var results = msg.payload.reduce (\n    function (sum, elt) {\n        //return ([...sum, ...elt.body.data]);\n        return (sum.concat(elt.body.data));\n    },\n    []\n);\nreturn ({ results: results, op: \"Versions\" });","outputs":1,"noerr":0,"x":710,"y":820,"wires":[["14426e2a.891e12"]]},{"id":"9554621c.702bd","type":"join","z":"57e501ae.a095a","name":"","mode":"custom","build":"array","property":"payload","propertyType":"msg","key":"topic","joiner":"\\n","joinerType":"str","accumulate":false,"timeout":"","count":"","reduceRight":false,"reduceExp":"","reduceInit":"","reduceInitType":"num","reduceFixup":"","x":550,"y":820,"wires":[["8f1481a8.2e2f"]]},{"id":"58796c85.1a8b04","type":"function","z":"57e501ae.a095a","name":"Done","func":"msg.complete =true;\n// delete msg.payload\n// delete msg.op;\nreturn msg;","outputs":1,"noerr":0,"x":410,"y":820,"wires":[["9554621c.702bd"]]},{"id":"2b241a0.3ba0be6","type":"forge-da","z":"57e501ae.a095a","name":"Details","topic":"","forge":"","operation":"GetAppbundles","raw":false,"page":"","all":false,"description":"","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":"","verb":"get","zip":false,"ondemand":false,"required":false,"description":""}],"settings":[{"value":"","isEnvironmentVariable":false,"key":"key"}],"appbundlesId":"","workitemId":"","x":410,"y":900,"wires":[["2cf31f21.de37e"],["6eb2bc69.84c564"]]},{"id":"6eb2bc69.84c564","type":"debug","z":"57e501ae.a095a","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":610,"y":960,"wires":[]},{"id":"14bbb2f2.62367d","type":"forge-da","z":"57e501ae.a095a","name":"Version","topic":"","forge":"","operation":"GetAppbundlesVersion","raw":false,"page":"","all":false,"description":"","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":"","verb":"get","zip":false,"ondemand":false,"required":false,"description":""}],"settings":[{"value":"","isEnvironmentVariable":false,"key":"key"}],"appbundlesId":"","workitemId":"","x":420,"y":980,"wires":[["2cf31f21.de37e"],["6eb2bc69.84c564"]]},{"id":"1aa266c2.3c0849","type":"forge-da","z":"57e501ae.a095a","name":"Alias","topic":"","forge":"","operation":"GetAppbundlesAlias","raw":false,"page":"","all":false,"description":"","alias":"","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":"","verb":"get","zip":false,"ondemand":false,"required":false,"description":""}],"settings":[{"value":"","isEnvironmentVariable":false,"key":"key"}],"engine":"","appbundlesId":"","package":"","nickname":"","exponent":"","modulus":"","workitemId":"","x":410,"y":940,"wires":[["2cf31f21.de37e"],["6eb2bc69.84c564"]]},{"id":"911cfd3e.793f","type":"inject","z":"57e501ae.a095a","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1080,"wires":[["3066f18c.c9f43e","7a7afbe4.0dd0c4"]]},{"id":"7a7afbe4.0dd0c4","type":"forge-da","z":"57e501ae.a095a","name":"Create Appbundles","topic":"","forge":"","operation":"CreateAppbundles","raw":false,"page":"","all":false,"description":"Cyrille Test","alias":"","version":"","activityId":"UpdateDWGParamActivityCyrille","receiver":"","appbundles":"oZZ0CN7qXTGAiqSbmEhLlmYcKXt0YVoU.UpdateDWGParamAppBundle+dev","commandline":"$(engine.path)\\accoreconsole.exe /i $(args[inputFile].path) /al $(appbundles[UpdateDWGParamAppBundle].path) /s $(settings[script].path)","parameters":[{"id":"inputFile","localName":"$(inputFile)","verb":"get","zip":false,"ondemand":false,"required":true,"description":"inputFile desc"},{"id":"inputJson","localName":"params.json","verb":"get","zip":false,"ondemand":false,"required":false,"description":"inputJson desc"},{"id":"outputFile","localName":"outputFile.dwg","verb":"get","zip":false,"ondemand":false,"required":true,"description":"outputFile desc"}],"settings":[],"engine":"Autodesk.AutoCAD+23","appbundlesId":"UpdateDWGParamAppBundle","package":"UpdateDWGParamAppBundle","nickname":"","exponent":"","modulus":"","workitemId":"","limitProcessingTimeSec":"","baseUrls":"","signature":"","arguments":[],"limitPayloadSizeInKB":"","limitVersions":"","limitAliases":"","limitPublicAliases":"","limitAppUploadSizeInMB":"","limitMonthlyProcessingTimeInHours":"","backendLimits":[],"x":330,"y":1080,"wires":[["48c6755a.af049c","6d152538.52b38c","1825bbe7.6f6b64","14ad8f43.4dfef1"],["eab92934.28bcf8"]]},{"id":"1825bbe7.6f6b64","type":"change","z":"57e501ae.a095a","name":"","rules":[{"t":"set","p":"appbundlesId","pt":"msg","to":"payload.id","tot":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":340,"y":1280,"wires":[["6503600f.531ee","1c193ab9.e2b305","c6aa6645.aab8e8"]]},{"id":"6503600f.531ee","type":"forge-da","z":"57e501ae.a095a","name":"Create Alias","topic":"","forge":"","operation":"CreateAppbundlesAlias","raw":false,"page":"","all":false,"description":"","alias":"dev","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":"","verb":"get","zip":false,"ondemand":false,"required":false,"description":""}],"settings":[{"value":"","isEnvironmentVariable":false,"key":"key"}],"engine":"","appbundlesId":"","package":"","nickname":"","exponent":"","modulus":"","workitemId":"","limitProcessingTimeSec":"","baseUrls":"","signature":"","arguments":[],"limitPayloadSizeInKB":"","limitVersions":"","limitAliases":"","limitPublicAliases":"","limitAppUploadSizeInMB":"","limitMonthlyProcessingTimeInHours":"","backendLimits":[],"x":530,"y":1280,"wires":[["57228854.b1b7d8","2e66910d.48ec1e"],["1e719d42.c8a683"]]},{"id":"57228854.b1b7d8","type":"function","z":"57e501ae.a095a","name":"appbundlesId","func":"msg.appbundlesId +='+' + msg.payload.id;\nreturn msg;","outputs":1,"noerr":0,"x":260,"y":1380,"wires":[["297a10a0.8c15"]]},{"id":"e2be0ba1.5d37e8","type":"forge-da","z":"57e501ae.a095a","name":"Get Appbundle","topic":"","forge":"","operation":"GetAppbundles","raw":false,"page":"","all":false,"description":"","alias":"","version":"","activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[],"settings":[],"engine":"","appbundlesId":"","package":"","nickname":"","exponent":"","modulus":"","workitemId":"","limitProcessingTimeSec":"","baseUrls":"","signature":"","arguments":[],"limitPayloadSizeInKB":"","limitVersions":"","limitAliases":"","limitPublicAliases":"","limitAppUploadSizeInMB":"","limitMonthlyProcessingTimeInHours":"","backendLimits":[],"x":580,"y":1380,"wires":[["c12c1823.5f2238"],["2a32f35c.308a4c"]]},{"id":"14ad8f43.4dfef1","type":"change","z":"57e501ae.a095a","name":"","rules":[{"t":"set","p":"appbundlesId","pt":"msg","to":"payload.id","tot":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":280,"y":1460,"wires":[["5b5c595b.43f108"]]},{"id":"5b5c595b.43f108","type":"delay","z":"57e501ae.a095a","name":"","pauseType":"delay","timeout":"4","timeoutUnits":"seconds","rate":"1","nbRateUnits":"1","rateUnits":"second","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":false,"x":480,"y":1460,"wires":[["276c3d41.6025a2","8130b79e.015c18"]]},{"id":"8130b79e.015c18","type":"forge-da","z":"57e501ae.a095a","name":"Delete Appbundles","topic":"","forge":"","operation":"DeleteAppbundles","raw":false,"page":"","all":false,"description":"","alias":"","version":"","activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":"","verb":"get","zip":false,"ondemand":false,"required":false,"description":""}],"settings":[],"engine":"","appbundlesId":"","package":"","nickname":"","exponent":"","modulus":"","workitemId":"","limitProcessingTimeSec":"","baseUrls":"","signature":"","arguments":[],"limitPayloadSizeInKB":"","limitVersions":"","limitAliases":"","limitPublicAliases":"","limitAppUploadSizeInMB":"","limitMonthlyProcessingTimeInHours":"","backendLimits":[],"x":690,"y":1460,"wires":[["a95de996.2fe968"],["7221348d.52603c"]]},{"id":"61f01b9.e0e5ce4","type":"forge-da","z":"57e501ae.a095a","name":"List Appbundles","topic":"","forge":"","operation":"ListAppbundles","raw":false,"page":"","all":true,"description":"","alias":"","version":"4","activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[],"settings":[],"engine":"","appbundlesId":"","package":"","nickname":"","exponent":"","modulus":"","workitemId":"","limitProcessingTimeSec":"","baseUrls":"","signature":"","arguments":[],"limitPayloadSizeInKB":"","limitVersions":"","limitAliases":"","limitPublicAliases":"","limitAppUploadSizeInMB":"","limitMonthlyProcessingTimeInHours":"","backendLimits":[],"x":680,"y":1520,"wires":[["e93b9502.ab65a8"],["a29d63f5.7a73"]]},{"id":"276c3d41.6025a2","type":"delay","z":"57e501ae.a095a","name":"","pauseType":"delay","timeout":"2","timeoutUnits":"seconds","rate":"1","nbRateUnits":"1","rateUnits":"second","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":false,"x":480,"y":1520,"wires":[["61f01b9.e0e5ce4"]]},{"id":"99ee7371.a0d","type":"inject","z":"57e501ae.a095a","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":300,"y":1520,"wires":[["61f01b9.e0e5ce4"]]},{"id":"1e719d42.c8a683","type":"debug","z":"57e501ae.a095a","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1280,"wires":[]},{"id":"2a32f35c.308a4c","type":"debug","z":"57e501ae.a095a","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1380,"wires":[]},{"id":"7221348d.52603c","type":"debug","z":"57e501ae.a095a","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1480,"wires":[]},{"id":"a29d63f5.7a73","type":"debug","z":"57e501ae.a095a","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1560,"wires":[]},{"id":"c12c1823.5f2238","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":730,"y":1380,"wires":[]},{"id":"a95de996.2fe968","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1440,"wires":[]},{"id":"e93b9502.ab65a8","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1520,"wires":[]},{"id":"1c193ab9.e2b305","type":"forge-da","z":"57e501ae.a095a","name":"Create Version","topic":"","forge":"","operation":"CreateAppbundlesVersion","raw":false,"page":"","all":false,"description":"Cyrille prod","alias":"","version":1,"activityId":"","receiver":"","appbundles":"oZZ0CN7qXTGAiqSbmEhLlmYcKXt0YVoU.UpdateDWGParamAppBundle+dev","commandline":"$(engine.path)\\accoreconsole.exe /i test /al $(appbundles[UpdateDWGParamAppBundle].path) /s script","parameters":[],"settings":[],"engine":"","appbundlesId":"","package":"UpdateDWGParamAppBundle","nickname":"","exponent":"","modulus":"","workitemId":"","limitProcessingTimeSec":"","baseUrls":"","signature":"","arguments":[],"limitPayloadSizeInKB":"","limitVersions":"","limitAliases":"","limitPublicAliases":"","limitAppUploadSizeInMB":"","limitMonthlyProcessingTimeInHours":"","backendLimits":[],"x":540,"y":1320,"wires":[["87d0ffb.b7389"],["62ea3eed.b918f"]]},{"id":"87d0ffb.b7389","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":730,"y":1320,"wires":[]},{"id":"62ea3eed.b918f","type":"debug","z":"57e501ae.a095a","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":870,"y":1320,"wires":[]},{"id":"2e66910d.48ec1e","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":730,"y":1280,"wires":[]},{"id":"48c6755a.af049c","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":730,"y":1080,"wires":[]},{"id":"297a10a0.8c15","type":"delay","z":"57e501ae.a095a","name":"","pauseType":"delay","timeout":"1","timeoutUnits":"seconds","rate":"1","nbRateUnits":"1","rateUnits":"second","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":false,"x":420,"y":1380,"wires":[["e2be0ba1.5d37e8"]]},{"id":"c2b216d0.cc2358","type":"forge-da","z":"57e501ae.a095a","name":"All Appbundles","topic":"","forge":"","operation":"ListAppbundles","raw":false,"page":"","all":true,"description":"","alias":"","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":"","verb":"get","zip":false,"ondemand":false,"required":false,"description":""}],"settings":[{"value":"","isEnvironmentVariable":false,"key":"key"}],"engine":"","appbundlesId":"","package":"","nickname":"","exponent":"","modulus":"","workitemId":"","x":440,"y":140,"wires":[["eeeee4dc.8d6f38"],["d474d17d.34554"]]},{"id":"eeeee4dc.8d6f38","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":750,"y":140,"wires":[]},{"id":"9c167b60.f92878","type":"forge-da","z":"57e501ae.a095a","name":"All Versions","topic":"","forge":"","operation":"ListAppbundlesVersions","raw":false,"page":"","all":true,"description":"","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":"","verb":"get","zip":false,"ondemand":false,"required":false,"description":""}],"settings":[{"value":"","isEnvironmentVariable":false,"key":"key"}],"appbundlesId":"","workitemId":"","x":430,"y":660,"wires":[["37bf61bf.d25e3e"],["4888602c.10818"]]},{"id":"742c600e.35617","type":"forge-da","z":"57e501ae.a095a","name":"All Aliases","topic":"","forge":"","operation":"ListAppbundlesAliases","raw":false,"page":"","all":true,"description":"","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":"","verb":"get","zip":false,"ondemand":false,"required":false,"description":""}],"settings":[{"value":"","isEnvironmentVariable":false,"key":"key"}],"appbundlesId":"","workitemId":"","x":430,"y":400,"wires":[["a48dd9ce.996598"],["a67cf313.c2016"]]},{"id":"37bf61bf.d25e3e","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":750,"y":660,"wires":[]},{"id":"a48dd9ce.996598","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":750,"y":400,"wires":[]},{"id":"779dcdc9.e6da44","type":"inject","z":"57e501ae.a095a","name":"UpdateDWGParamAppBundle","topic":"","payload":"{\"appbundlesId\":\"oZZ0CN7qXTGAiqSbmEhLlmYcKXt0YVoU.UpdateDWGParamAppBundle+dev\",\"version\":1,\"appbundlesAliasId\":\"dev\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":180,"y":660,"wires":[["9c167b60.f92878","557f892b.0af3e8"]]},{"id":"49f76536.8439dc","type":"inject","z":"57e501ae.a095a","name":"UpdateDWGParamAppBundle","topic":"","payload":"{\"appbundlesId\":\"oZZ0CN7qXTGAiqSbmEhLlmYcKXt0YVoU.UpdateDWGParamAppBundle+dev\",\"version\":1,\"appbundlesAliasId\":\"dev\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":180,"y":900,"wires":[["2b241a0.3ba0be6","1aa266c2.3c0849","14bbb2f2.62367d"]]},{"id":"a181c940.357bf8","type":"inject","z":"57e501ae.a095a","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":140,"wires":[["c2b216d0.cc2358"]]},{"id":"904fffcf.d86c4","type":"inject","z":"57e501ae.a095a","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":180,"wires":[["1c548f7a.5fff81"]]},{"id":"3066f18c.c9f43e","type":"file in","z":"57e501ae.a095a","name":"Bundle","filename":"/Users/cyrille/Projects/forge-rsdk-codegen/samples/UpdateDWGParam.zip","format":"","chunk":false,"sendError":false,"encoding":"none","x":400,"y":1140,"wires":[["6d152538.52b38c"]]},{"id":"6d152538.52b38c","type":"join","z":"57e501ae.a095a","name":"","mode":"custom","build":"array","property":"payload","propertyType":"msg","key":"topic","joiner":"\\n","joinerType":"str","accumulate":false,"timeout":"","count":"2","reduceRight":false,"reduceExp":"","reduceInit":"","reduceInitType":"","reduceFixup":"","x":550,"y":1140,"wires":[["c84a32ce.9fea7"]]},{"id":"5e3f7ac9.f66784","type":"http request","z":"57e501ae.a095a","name":"to S3","method":"POST","ret":"obj","paytoqs":false,"url":"","tls":"","proxy":"","authType":"basic","x":670,"y":1200,"wires":[["a483cc56.0c746"]]},{"id":"c84a32ce.9fea7","type":"function","z":"57e501ae.a095a","name":"set payload and headers","func":"var buffer =msg.payload[0];\nmsg.url = msg.payload[1].uploadParameters.endpointURL;\n//msg.headers = msg.payload[1].uploadParameters.formData;\nmsg.headers = {\n    'Content-Type': 'multipart/form-data'\n};\nmsg.payload = msg.payload[1].uploadParameters.formData;\nmsg.payload.file = buffer;\n \nreturn msg;","outputs":1,"noerr":0,"x":490,"y":1200,"wires":[["5e3f7ac9.f66784"]]},{"id":"a483cc56.0c746","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":790,"y":1200,"wires":[]},{"id":"c6aa6645.aab8e8","type":"debug","z":"57e501ae.a095a","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":1130,"y":1200,"wires":[]},{"id":"31821284.4ccefe","type":"comment","z":"57e501ae.a095a","name":"AppBundles","info":"","x":110,"y":100,"wires":[]}]
+[
+	{
+		"id": "3352373b.5611d8",
+		"type": "forge-default-credentials",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"forge": "",
+		"x": 130,
+		"y": 40,
+		"wires": []
+	},
+	{
+		"id": "d474d17d.34554",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 750,
+		"y": 180,
+		"wires": []
+	},
+	{
+		"id": "1c548f7a.5fff81",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Appbundles",
+		"topic": "",
+		"forge": "",
+		"operation": "ListAppbundles",
+		"raw": false,
+		"page": "",
+		"all": false,
+		"description": "",
+		"alias": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": "",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": ""
+			}
+		],
+		"settings": [
+			{
+				"value": "",
+				"isEnvironmentVariable": false,
+				"key": "key"
+			}
+		],
+		"engine": "",
+		"appbundlesId": "",
+		"package": "",
+		"nickname": "",
+		"exponent": "",
+		"modulus": "",
+		"workitemId": "",
+		"x": 430,
+		"y": 180,
+		"wires": [
+			[
+				"b1c98b34.877908"
+			],
+			[
+				"d474d17d.34554"
+			]
+		]
+	},
+	{
+		"id": "b1c98b34.877908",
+		"type": "switch",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"property": "payload.paginationToken",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "nnull"
+			},
+			{
+				"t": "null"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 390,
+		"y": 240,
+		"wires": [
+			[
+				"1902436a.25213d",
+				"178deb7f.756095"
+			],
+			[
+				"e03561dd.9567b"
+			]
+		]
+	},
+	{
+		"id": "1902436a.25213d",
+		"type": "change",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload.page",
+				"pt": "msg",
+				"to": "payload.paginationToken",
+				"tot": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 600,
+		"y": 240,
+		"wires": [
+			[
+				"1c548f7a.5fff81"
+			]
+		]
+	},
+	{
+		"id": "178deb7f.756095",
+		"type": "join",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"mode": "custom",
+		"build": "array",
+		"property": "payload",
+		"propertyType": "msg",
+		"key": "topic",
+		"joiner": "\\n",
+		"joinerType": "str",
+		"accumulate": false,
+		"timeout": "",
+		"count": "",
+		"reduceRight": false,
+		"reduceExp": "",
+		"reduceInit": "",
+		"reduceInitType": "num",
+		"reduceFixup": "",
+		"x": 550,
+		"y": 300,
+		"wires": [
+			[
+				"46589ac8.e52544"
+			]
+		]
+	},
+	{
+		"id": "e03561dd.9567b",
+		"type": "function",
+		"z": "57e501ae.a095a",
+		"name": "Done",
+		"func": "msg.complete =true;\n// delete msg.payload\n// delete msg.op;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 410,
+		"y": 300,
+		"wires": [
+			[
+				"178deb7f.756095"
+			]
+		]
+	},
+	{
+		"id": "2cf31f21.de37e",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 610,
+		"y": 920,
+		"wires": []
+	},
+	{
+		"id": "eab92934.28bcf8",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1080,
+		"wires": []
+	},
+	{
+		"id": "c8f41c1d.b39e",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 850,
+		"y": 300,
+		"wires": []
+	},
+	{
+		"id": "46589ac8.e52544",
+		"type": "function",
+		"z": "57e501ae.a095a",
+		"name": "Merge",
+		"func": "var results = msg.payload.reduce (\n    function (sum, elt) {\n        //return ([...sum, ...elt.data]);\n        return (sum.concat(elt.data));\n    },\n    []\n);\nreturn ({ results: results, op: \"Appbundles\" });",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 710,
+		"y": 300,
+		"wires": [
+			[
+				"c8f41c1d.b39e"
+			]
+		]
+	},
+	{
+		"id": "a81259c4.587718",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Aliases",
+		"topic": "",
+		"forge": "",
+		"operation": "ListAppbundlesAliases",
+		"raw": true,
+		"page": "",
+		"all": false,
+		"description": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": null,
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": null
+			}
+		],
+		"settings": [
+			{
+				"key": "key",
+				"type": "StringSetting"
+			}
+		],
+		"appbundlesId": "",
+		"workitemId": "",
+		"x": 420,
+		"y": 440,
+		"wires": [
+			[
+				"53cbbd07.e38e94"
+			],
+			[
+				"a67cf313.c2016"
+			]
+		]
+	},
+	{
+		"id": "53cbbd07.e38e94",
+		"type": "switch",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"property": "payload.body.paginationToken",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "nnull"
+			},
+			{
+				"t": "null"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 390,
+		"y": 500,
+		"wires": [
+			[
+				"1f3089ca.b2f156",
+				"f0e75378.479c4"
+			],
+			[
+				"34cfcfb6.fbf5d"
+			]
+		]
+	},
+	{
+		"id": "1f3089ca.b2f156",
+		"type": "change",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload.page",
+				"pt": "msg",
+				"to": "payload.body.paginationToken",
+				"tot": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "payload.body",
+				"pt": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "payload.headers",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 580,
+		"y": 500,
+		"wires": [
+			[
+				"a81259c4.587718"
+			]
+		]
+	},
+	{
+		"id": "f0e75378.479c4",
+		"type": "join",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"mode": "custom",
+		"build": "array",
+		"property": "payload",
+		"propertyType": "msg",
+		"key": "topic",
+		"joiner": "\\n",
+		"joinerType": "str",
+		"accumulate": false,
+		"timeout": "",
+		"count": "",
+		"reduceRight": false,
+		"reduceExp": "",
+		"reduceInit": "",
+		"reduceInitType": "num",
+		"reduceFixup": "",
+		"x": 550,
+		"y": 560,
+		"wires": [
+			[
+				"322491ec.e6b9de"
+			]
+		]
+	},
+	{
+		"id": "34cfcfb6.fbf5d",
+		"type": "function",
+		"z": "57e501ae.a095a",
+		"name": "Done",
+		"func": "msg.complete =true;\n// delete msg.payload\n// delete msg.op;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 410,
+		"y": 560,
+		"wires": [
+			[
+				"f0e75378.479c4"
+			]
+		]
+	},
+	{
+		"id": "322491ec.e6b9de",
+		"type": "function",
+		"z": "57e501ae.a095a",
+		"name": "Merge",
+		"func": "var results = msg.payload.reduce (\n    function (sum, elt) {\n        //return ([...sum, ...elt.body.data]);\n        return (sum.concat(elt.body.data));\n    },\n    []\n);\nreturn ({ results: results, op: \"Aliases\" });",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 710,
+		"y": 560,
+		"wires": [
+			[
+				"1dec4a36.f041d6"
+			]
+		]
+	},
+	{
+		"id": "1dec4a36.f041d6",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 850,
+		"y": 560,
+		"wires": []
+	},
+	{
+		"id": "a67cf313.c2016",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 750,
+		"y": 440,
+		"wires": []
+	},
+	{
+		"id": "663323bb.e15bcc",
+		"type": "inject",
+		"z": "57e501ae.a095a",
+		"name": "UpdateDWGParamAppBundle",
+		"topic": "",
+		"payload": "{\"appbundlesId\":\"oZZ0CN7qXTGAiqSbmEhLlmYcKXt0YVoU.UpdateDWGParamAppBundle+dev\",\"version\":1,\"appbundlesAliasId\":\"dev\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 180,
+		"y": 400,
+		"wires": [
+			[
+				"a81259c4.587718",
+				"742c600e.35617"
+			]
+		]
+	},
+	{
+		"id": "557f892b.0af3e8",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Versions",
+		"topic": "",
+		"forge": "",
+		"operation": "ListAppbundlesVersions",
+		"raw": true,
+		"page": "",
+		"all": false,
+		"description": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": "",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": ""
+			}
+		],
+		"settings": [
+			{
+				"value": "",
+				"isEnvironmentVariable": false,
+				"key": "key"
+			}
+		],
+		"appbundlesId": "",
+		"workitemId": "",
+		"x": 420,
+		"y": 700,
+		"wires": [
+			[
+				"1520744d.c46e5c"
+			],
+			[
+				"4888602c.10818"
+			]
+		]
+	},
+	{
+		"id": "1520744d.c46e5c",
+		"type": "switch",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"property": "payload.body.paginationToken",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "nnull"
+			},
+			{
+				"t": "null"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 390,
+		"y": 760,
+		"wires": [
+			[
+				"4804be11.6ec1f",
+				"9554621c.702bd"
+			],
+			[
+				"58796c85.1a8b04"
+			]
+		]
+	},
+	{
+		"id": "4804be11.6ec1f",
+		"type": "change",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload.page",
+				"pt": "msg",
+				"to": "payload.body.paginationToken",
+				"tot": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "payload.body",
+				"pt": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "payload.headers",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 580,
+		"y": 760,
+		"wires": [
+			[
+				"557f892b.0af3e8"
+			]
+		]
+	},
+	{
+		"id": "4888602c.10818",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 750,
+		"y": 700,
+		"wires": []
+	},
+	{
+		"id": "14426e2a.891e12",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 850,
+		"y": 820,
+		"wires": []
+	},
+	{
+		"id": "8f1481a8.2e2f",
+		"type": "function",
+		"z": "57e501ae.a095a",
+		"name": "Merge",
+		"func": "var results = msg.payload.reduce (\n    function (sum, elt) {\n        //return ([...sum, ...elt.body.data]);\n        return (sum.concat(elt.body.data));\n    },\n    []\n);\nreturn ({ results: results, op: \"Versions\" });",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 710,
+		"y": 820,
+		"wires": [
+			[
+				"14426e2a.891e12"
+			]
+		]
+	},
+	{
+		"id": "9554621c.702bd",
+		"type": "join",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"mode": "custom",
+		"build": "array",
+		"property": "payload",
+		"propertyType": "msg",
+		"key": "topic",
+		"joiner": "\\n",
+		"joinerType": "str",
+		"accumulate": false,
+		"timeout": "",
+		"count": "",
+		"reduceRight": false,
+		"reduceExp": "",
+		"reduceInit": "",
+		"reduceInitType": "num",
+		"reduceFixup": "",
+		"x": 550,
+		"y": 820,
+		"wires": [
+			[
+				"8f1481a8.2e2f"
+			]
+		]
+	},
+	{
+		"id": "58796c85.1a8b04",
+		"type": "function",
+		"z": "57e501ae.a095a",
+		"name": "Done",
+		"func": "msg.complete =true;\n// delete msg.payload\n// delete msg.op;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 410,
+		"y": 820,
+		"wires": [
+			[
+				"9554621c.702bd"
+			]
+		]
+	},
+	{
+		"id": "2b241a0.3ba0be6",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Details",
+		"topic": "",
+		"forge": "",
+		"operation": "GetAppbundles",
+		"raw": false,
+		"page": "",
+		"all": false,
+		"description": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": "",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": ""
+			}
+		],
+		"settings": [
+			{
+				"value": "",
+				"isEnvironmentVariable": false,
+				"key": "key"
+			}
+		],
+		"appbundlesId": "",
+		"workitemId": "",
+		"x": 410,
+		"y": 900,
+		"wires": [
+			[
+				"2cf31f21.de37e"
+			],
+			[
+				"6eb2bc69.84c564"
+			]
+		]
+	},
+	{
+		"id": "6eb2bc69.84c564",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 610,
+		"y": 960,
+		"wires": []
+	},
+	{
+		"id": "14bbb2f2.62367d",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Version",
+		"topic": "",
+		"forge": "",
+		"operation": "GetAppbundlesVersion",
+		"raw": false,
+		"page": "",
+		"all": false,
+		"description": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": "",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": ""
+			}
+		],
+		"settings": [
+			{
+				"value": "",
+				"isEnvironmentVariable": false,
+				"key": "key"
+			}
+		],
+		"appbundlesId": "",
+		"workitemId": "",
+		"x": 420,
+		"y": 980,
+		"wires": [
+			[
+				"2cf31f21.de37e"
+			],
+			[
+				"6eb2bc69.84c564"
+			]
+		]
+	},
+	{
+		"id": "1aa266c2.3c0849",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Alias",
+		"topic": "",
+		"forge": "",
+		"operation": "GetAppbundlesAlias",
+		"raw": false,
+		"page": "",
+		"all": false,
+		"description": "",
+		"alias": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": "",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": ""
+			}
+		],
+		"settings": [
+			{
+				"value": "",
+				"isEnvironmentVariable": false,
+				"key": "key"
+			}
+		],
+		"engine": "",
+		"appbundlesId": "",
+		"package": "",
+		"nickname": "",
+		"exponent": "",
+		"modulus": "",
+		"workitemId": "",
+		"x": 410,
+		"y": 940,
+		"wires": [
+			[
+				"2cf31f21.de37e"
+			],
+			[
+				"6eb2bc69.84c564"
+			]
+		]
+	},
+	{
+		"id": "911cfd3e.793f",
+		"type": "inject",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1080,
+		"wires": [
+			[
+				"3066f18c.c9f43e",
+				"7a7afbe4.0dd0c4"
+			]
+		]
+	},
+	{
+		"id": "7a7afbe4.0dd0c4",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Create Appbundles",
+		"topic": "",
+		"forge": "",
+		"operation": "CreateAppbundles",
+		"raw": false,
+		"page": "",
+		"all": false,
+		"description": "Cyrille Test",
+		"alias": "",
+		"version": "",
+		"activityId": "UpdateDWGParamActivityCyrille",
+		"receiver": "",
+		"appbundles": "oZZ0CN7qXTGAiqSbmEhLlmYcKXt0YVoU.UpdateDWGParamAppBundle+dev",
+		"commandline": "$(engine.path)\\accoreconsole.exe /i $(args[inputFile].path) /al $(appbundles[UpdateDWGParamAppBundle].path) /s $(settings[script].path)",
+		"parameters": [
+			{
+				"id": "inputFile",
+				"localName": "$(inputFile)",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": true,
+				"description": "inputFile desc"
+			},
+			{
+				"id": "inputJson",
+				"localName": "params.json",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": "inputJson desc"
+			},
+			{
+				"id": "outputFile",
+				"localName": "outputFile.dwg",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": true,
+				"description": "outputFile desc"
+			}
+		],
+		"settings": [],
+		"engine": "Autodesk.AutoCAD+23",
+		"appbundlesId": "UpdateDWGParamAppBundle",
+		"package": "UpdateDWGParamAppBundle",
+		"nickname": "",
+		"exponent": "",
+		"modulus": "",
+		"workitemId": "",
+		"limitProcessingTimeSec": "",
+		"baseUrls": "",
+		"signature": "",
+		"arguments": [],
+		"limitPayloadSizeInKB": "",
+		"limitVersions": "",
+		"limitAliases": "",
+		"limitPublicAliases": "",
+		"limitAppUploadSizeInMB": "",
+		"limitMonthlyProcessingTimeInHours": "",
+		"backendLimits": [],
+		"x": 330,
+		"y": 1080,
+		"wires": [
+			[
+				"48c6755a.af049c",
+				"6d152538.52b38c",
+				"1825bbe7.6f6b64",
+				"14ad8f43.4dfef1"
+			],
+			[
+				"eab92934.28bcf8"
+			]
+		]
+	},
+	{
+		"id": "1825bbe7.6f6b64",
+		"type": "change",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "appbundlesId",
+				"pt": "msg",
+				"to": "payload.id",
+				"tot": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 340,
+		"y": 1280,
+		"wires": [
+			[
+				"6503600f.531ee",
+				"1c193ab9.e2b305",
+				"c6aa6645.aab8e8"
+			]
+		]
+	},
+	{
+		"id": "6503600f.531ee",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Create Alias",
+		"topic": "",
+		"forge": "",
+		"operation": "CreateAppbundlesAlias",
+		"raw": false,
+		"page": "",
+		"all": false,
+		"description": "",
+		"alias": "dev",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": "",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": ""
+			}
+		],
+		"settings": [
+			{
+				"value": "",
+				"isEnvironmentVariable": false,
+				"key": "key"
+			}
+		],
+		"engine": "",
+		"appbundlesId": "",
+		"package": "",
+		"nickname": "",
+		"exponent": "",
+		"modulus": "",
+		"workitemId": "",
+		"limitProcessingTimeSec": "",
+		"baseUrls": "",
+		"signature": "",
+		"arguments": [],
+		"limitPayloadSizeInKB": "",
+		"limitVersions": "",
+		"limitAliases": "",
+		"limitPublicAliases": "",
+		"limitAppUploadSizeInMB": "",
+		"limitMonthlyProcessingTimeInHours": "",
+		"backendLimits": [],
+		"x": 530,
+		"y": 1280,
+		"wires": [
+			[
+				"57228854.b1b7d8",
+				"2e66910d.48ec1e"
+			],
+			[
+				"1e719d42.c8a683"
+			]
+		]
+	},
+	{
+		"id": "57228854.b1b7d8",
+		"type": "function",
+		"z": "57e501ae.a095a",
+		"name": "appbundlesId",
+		"func": "msg.appbundlesId +='+' + msg.payload.id;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 260,
+		"y": 1380,
+		"wires": [
+			[
+				"297a10a0.8c15"
+			]
+		]
+	},
+	{
+		"id": "e2be0ba1.5d37e8",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Get Appbundle",
+		"topic": "",
+		"forge": "",
+		"operation": "GetAppbundles",
+		"raw": false,
+		"page": "",
+		"all": false,
+		"description": "",
+		"alias": "",
+		"version": "",
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [],
+		"settings": [],
+		"engine": "",
+		"appbundlesId": "",
+		"package": "",
+		"nickname": "",
+		"exponent": "",
+		"modulus": "",
+		"workitemId": "",
+		"limitProcessingTimeSec": "",
+		"baseUrls": "",
+		"signature": "",
+		"arguments": [],
+		"limitPayloadSizeInKB": "",
+		"limitVersions": "",
+		"limitAliases": "",
+		"limitPublicAliases": "",
+		"limitAppUploadSizeInMB": "",
+		"limitMonthlyProcessingTimeInHours": "",
+		"backendLimits": [],
+		"x": 580,
+		"y": 1380,
+		"wires": [
+			[
+				"c12c1823.5f2238"
+			],
+			[
+				"2a32f35c.308a4c"
+			]
+		]
+	},
+	{
+		"id": "14ad8f43.4dfef1",
+		"type": "change",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "appbundlesId",
+				"pt": "msg",
+				"to": "payload.id",
+				"tot": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 280,
+		"y": 1460,
+		"wires": [
+			[
+				"5b5c595b.43f108"
+			]
+		]
+	},
+	{
+		"id": "5b5c595b.43f108",
+		"type": "delay",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"pauseType": "delay",
+		"timeout": "4",
+		"timeoutUnits": "seconds",
+		"rate": "1",
+		"nbRateUnits": "1",
+		"rateUnits": "second",
+		"randomFirst": "1",
+		"randomLast": "5",
+		"randomUnits": "seconds",
+		"drop": false,
+		"x": 480,
+		"y": 1460,
+		"wires": [
+			[
+				"276c3d41.6025a2",
+				"8130b79e.015c18"
+			]
+		]
+	},
+	{
+		"id": "8130b79e.015c18",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Delete Appbundles",
+		"topic": "",
+		"forge": "",
+		"operation": "DeleteAppbundles",
+		"raw": false,
+		"page": "",
+		"all": false,
+		"description": "",
+		"alias": "",
+		"version": "",
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": "",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": ""
+			}
+		],
+		"settings": [],
+		"engine": "",
+		"appbundlesId": "",
+		"package": "",
+		"nickname": "",
+		"exponent": "",
+		"modulus": "",
+		"workitemId": "",
+		"limitProcessingTimeSec": "",
+		"baseUrls": "",
+		"signature": "",
+		"arguments": [],
+		"limitPayloadSizeInKB": "",
+		"limitVersions": "",
+		"limitAliases": "",
+		"limitPublicAliases": "",
+		"limitAppUploadSizeInMB": "",
+		"limitMonthlyProcessingTimeInHours": "",
+		"backendLimits": [],
+		"x": 690,
+		"y": 1460,
+		"wires": [
+			[
+				"a95de996.2fe968"
+			],
+			[
+				"7221348d.52603c"
+			]
+		]
+	},
+	{
+		"id": "61f01b9.e0e5ce4",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "List Appbundles",
+		"topic": "",
+		"forge": "",
+		"operation": "ListAppbundles",
+		"raw": false,
+		"page": "",
+		"all": true,
+		"description": "",
+		"alias": "",
+		"version": "4",
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [],
+		"settings": [],
+		"engine": "",
+		"appbundlesId": "",
+		"package": "",
+		"nickname": "",
+		"exponent": "",
+		"modulus": "",
+		"workitemId": "",
+		"limitProcessingTimeSec": "",
+		"baseUrls": "",
+		"signature": "",
+		"arguments": [],
+		"limitPayloadSizeInKB": "",
+		"limitVersions": "",
+		"limitAliases": "",
+		"limitPublicAliases": "",
+		"limitAppUploadSizeInMB": "",
+		"limitMonthlyProcessingTimeInHours": "",
+		"backendLimits": [],
+		"x": 680,
+		"y": 1520,
+		"wires": [
+			[
+				"e93b9502.ab65a8"
+			],
+			[
+				"a29d63f5.7a73"
+			]
+		]
+	},
+	{
+		"id": "276c3d41.6025a2",
+		"type": "delay",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"pauseType": "delay",
+		"timeout": "2",
+		"timeoutUnits": "seconds",
+		"rate": "1",
+		"nbRateUnits": "1",
+		"rateUnits": "second",
+		"randomFirst": "1",
+		"randomLast": "5",
+		"randomUnits": "seconds",
+		"drop": false,
+		"x": 480,
+		"y": 1520,
+		"wires": [
+			[
+				"61f01b9.e0e5ce4"
+			]
+		]
+	},
+	{
+		"id": "99ee7371.a0d",
+		"type": "inject",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 300,
+		"y": 1520,
+		"wires": [
+			[
+				"61f01b9.e0e5ce4"
+			]
+		]
+	},
+	{
+		"id": "1e719d42.c8a683",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1280,
+		"wires": []
+	},
+	{
+		"id": "2a32f35c.308a4c",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1380,
+		"wires": []
+	},
+	{
+		"id": "7221348d.52603c",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1480,
+		"wires": []
+	},
+	{
+		"id": "a29d63f5.7a73",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1560,
+		"wires": []
+	},
+	{
+		"id": "c12c1823.5f2238",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 730,
+		"y": 1380,
+		"wires": []
+	},
+	{
+		"id": "a95de996.2fe968",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1440,
+		"wires": []
+	},
+	{
+		"id": "e93b9502.ab65a8",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1520,
+		"wires": []
+	},
+	{
+		"id": "1c193ab9.e2b305",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "Create Version",
+		"topic": "",
+		"forge": "",
+		"operation": "CreateAppbundlesVersion",
+		"raw": false,
+		"page": "",
+		"all": false,
+		"description": "Cyrille prod",
+		"alias": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "oZZ0CN7qXTGAiqSbmEhLlmYcKXt0YVoU.UpdateDWGParamAppBundle+dev",
+		"commandline": "$(engine.path)\\accoreconsole.exe /i test /al $(appbundles[UpdateDWGParamAppBundle].path) /s script",
+		"parameters": [],
+		"settings": [],
+		"engine": "",
+		"appbundlesId": "",
+		"package": "UpdateDWGParamAppBundle",
+		"nickname": "",
+		"exponent": "",
+		"modulus": "",
+		"workitemId": "",
+		"limitProcessingTimeSec": "",
+		"baseUrls": "",
+		"signature": "",
+		"arguments": [],
+		"limitPayloadSizeInKB": "",
+		"limitVersions": "",
+		"limitAliases": "",
+		"limitPublicAliases": "",
+		"limitAppUploadSizeInMB": "",
+		"limitMonthlyProcessingTimeInHours": "",
+		"backendLimits": [],
+		"x": 540,
+		"y": 1320,
+		"wires": [
+			[
+				"87d0ffb.b7389"
+			],
+			[
+				"62ea3eed.b918f"
+			]
+		]
+	},
+	{
+		"id": "87d0ffb.b7389",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 730,
+		"y": 1320,
+		"wires": []
+	},
+	{
+		"id": "62ea3eed.b918f",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 870,
+		"y": 1320,
+		"wires": []
+	},
+	{
+		"id": "2e66910d.48ec1e",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 730,
+		"y": 1280,
+		"wires": []
+	},
+	{
+		"id": "48c6755a.af049c",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 730,
+		"y": 1080,
+		"wires": []
+	},
+	{
+		"id": "297a10a0.8c15",
+		"type": "delay",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"pauseType": "delay",
+		"timeout": "1",
+		"timeoutUnits": "seconds",
+		"rate": "1",
+		"nbRateUnits": "1",
+		"rateUnits": "second",
+		"randomFirst": "1",
+		"randomLast": "5",
+		"randomUnits": "seconds",
+		"drop": false,
+		"x": 420,
+		"y": 1380,
+		"wires": [
+			[
+				"e2be0ba1.5d37e8"
+			]
+		]
+	},
+	{
+		"id": "c2b216d0.cc2358",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "All Appbundles",
+		"topic": "",
+		"forge": "",
+		"operation": "ListAppbundles",
+		"raw": false,
+		"page": "",
+		"all": true,
+		"description": "",
+		"alias": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": "",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": ""
+			}
+		],
+		"settings": [
+			{
+				"value": "",
+				"isEnvironmentVariable": false,
+				"key": "key"
+			}
+		],
+		"engine": "",
+		"appbundlesId": "",
+		"package": "",
+		"nickname": "",
+		"exponent": "",
+		"modulus": "",
+		"workitemId": "",
+		"x": 440,
+		"y": 140,
+		"wires": [
+			[
+				"eeeee4dc.8d6f38"
+			],
+			[
+				"d474d17d.34554"
+			]
+		]
+	},
+	{
+		"id": "eeeee4dc.8d6f38",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 750,
+		"y": 140,
+		"wires": []
+	},
+	{
+		"id": "9c167b60.f92878",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "All Versions",
+		"topic": "",
+		"forge": "",
+		"operation": "ListAppbundlesVersions",
+		"raw": false,
+		"page": "",
+		"all": true,
+		"description": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": "",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": ""
+			}
+		],
+		"settings": [
+			{
+				"value": "",
+				"isEnvironmentVariable": false,
+				"key": "key"
+			}
+		],
+		"appbundlesId": "",
+		"workitemId": "",
+		"x": 430,
+		"y": 660,
+		"wires": [
+			[
+				"37bf61bf.d25e3e"
+			],
+			[
+				"4888602c.10818"
+			]
+		]
+	},
+	{
+		"id": "742c600e.35617",
+		"type": "forge-da",
+		"z": "57e501ae.a095a",
+		"name": "All Aliases",
+		"topic": "",
+		"forge": "",
+		"operation": "ListAppbundlesAliases",
+		"raw": false,
+		"page": "",
+		"all": true,
+		"description": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": "",
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": ""
+			}
+		],
+		"settings": [
+			{
+				"value": "",
+				"isEnvironmentVariable": false,
+				"key": "key"
+			}
+		],
+		"appbundlesId": "",
+		"workitemId": "",
+		"x": 430,
+		"y": 400,
+		"wires": [
+			[
+				"a48dd9ce.996598"
+			],
+			[
+				"a67cf313.c2016"
+			]
+		]
+	},
+	{
+		"id": "37bf61bf.d25e3e",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 750,
+		"y": 660,
+		"wires": []
+	},
+	{
+		"id": "a48dd9ce.996598",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 750,
+		"y": 400,
+		"wires": []
+	},
+	{
+		"id": "779dcdc9.e6da44",
+		"type": "inject",
+		"z": "57e501ae.a095a",
+		"name": "UpdateDWGParamAppBundle",
+		"topic": "",
+		"payload": "{\"appbundlesId\":\"oZZ0CN7qXTGAiqSbmEhLlmYcKXt0YVoU.UpdateDWGParamAppBundle+dev\",\"version\":1,\"appbundlesAliasId\":\"dev\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 180,
+		"y": 660,
+		"wires": [
+			[
+				"9c167b60.f92878",
+				"557f892b.0af3e8"
+			]
+		]
+	},
+	{
+		"id": "49f76536.8439dc",
+		"type": "inject",
+		"z": "57e501ae.a095a",
+		"name": "UpdateDWGParamAppBundle",
+		"topic": "",
+		"payload": "{\"appbundlesId\":\"oZZ0CN7qXTGAiqSbmEhLlmYcKXt0YVoU.UpdateDWGParamAppBundle+dev\",\"version\":1,\"appbundlesAliasId\":\"dev\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 180,
+		"y": 900,
+		"wires": [
+			[
+				"2b241a0.3ba0be6",
+				"1aa266c2.3c0849",
+				"14bbb2f2.62367d"
+			]
+		]
+	},
+	{
+		"id": "a181c940.357bf8",
+		"type": "inject",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 140,
+		"wires": [
+			[
+				"c2b216d0.cc2358"
+			]
+		]
+	},
+	{
+		"id": "904fffcf.d86c4",
+		"type": "inject",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 180,
+		"wires": [
+			[
+				"1c548f7a.5fff81"
+			]
+		]
+	},
+	{
+		"id": "3066f18c.c9f43e",
+		"type": "file in",
+		"z": "57e501ae.a095a",
+		"name": "Bundle",
+		"filename": "/Users/cyrille/Projects/forge-rsdk-codegen/samples/UpdateDWGParam.zip",
+		"format": "",
+		"chunk": false,
+		"sendError": false,
+		"encoding": "none",
+		"x": 400,
+		"y": 1140,
+		"wires": [
+			[
+				"6d152538.52b38c"
+			]
+		]
+	},
+	{
+		"id": "6d152538.52b38c",
+		"type": "join",
+		"z": "57e501ae.a095a",
+		"name": "",
+		"mode": "custom",
+		"build": "array",
+		"property": "payload",
+		"propertyType": "msg",
+		"key": "topic",
+		"joiner": "\\n",
+		"joinerType": "str",
+		"accumulate": false,
+		"timeout": "",
+		"count": "2",
+		"reduceRight": false,
+		"reduceExp": "",
+		"reduceInit": "",
+		"reduceInitType": "",
+		"reduceFixup": "",
+		"x": 550,
+		"y": 1140,
+		"wires": [
+			[
+				"c84a32ce.9fea7"
+			]
+		]
+	},
+	{
+		"id": "5e3f7ac9.f66784",
+		"type": "http request",
+		"z": "57e501ae.a095a",
+		"name": "to S3",
+		"method": "POST",
+		"ret": "obj",
+		"paytoqs": false,
+		"url": "",
+		"tls": "",
+		"proxy": "",
+		"authType": "basic",
+		"x": 670,
+		"y": 1200,
+		"wires": [
+			[
+				"a483cc56.0c746"
+			]
+		]
+	},
+	{
+		"id": "c84a32ce.9fea7",
+		"type": "function",
+		"z": "57e501ae.a095a",
+		"name": "set payload and headers",
+		"func": "var buffer =msg.payload[0];\nmsg.url = msg.payload[1].uploadParameters.endpointURL;\n//msg.headers = msg.payload[1].uploadParameters.formData;\nmsg.headers = {\n    'Content-Type': 'multipart/form-data'\n};\nmsg.payload = msg.payload[1].uploadParameters.formData;\nmsg.payload.file = buffer;\n \nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 490,
+		"y": 1200,
+		"wires": [
+			[
+				"5e3f7ac9.f66784"
+			]
+		]
+	},
+	{
+		"id": "a483cc56.0c746",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 790,
+		"y": 1200,
+		"wires": []
+	},
+	{
+		"id": "c6aa6645.aab8e8",
+		"type": "debug",
+		"z": "57e501ae.a095a",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1130,
+		"y": 1200,
+		"wires": []
+	},
+	{
+		"id": "31821284.4ccefe",
+		"type": "comment",
+		"z": "57e501ae.a095a",
+		"name": "AppBundles",
+		"info": "",
+		"x": 110,
+		"y": 100,
+		"wires": []
+	}
+]

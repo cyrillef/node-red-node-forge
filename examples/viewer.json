@@ -1,6 +1,6 @@
 [
 	{
-		"id": "0fb4d381edb684cd",
+		"id": "279b35cc.5bd67a",
 		"type": "subflow",
 		"name": "Translate and Wait",
 		"info": "\n\n### Parameters\n\n* **urn**: The design URN; returned when uploading the file to Forge. The URN needs to be safe base64 encoded.\n\n* **region** [optional]: Region in which to store outputs. Possible values: ```US```, ```EMEA```. By default, it is set to ```US```.\n\n* **xAdsForce** [optional]: ```true```: the endpoint replaces previously translated output file types with the newly generated derivatives\n  ```false``` (default): previously created derivatives are not replaced\n    \n## Outputs\n\n* **response**: the final manifest\n\n* **progress**: an object containing a status and progress field.\n  * status: Overall status for translation jobs in the “manifest”. Possible values: pending, ```success```, ```inprogress```, ```failed```, ```timeout```\n  * progress: Overall progress for all translation jobs in the “manifest”. Possible values: ```complete```, ```##% complete```\n\n\n* **error**: an error occured\n",
@@ -11,7 +11,7 @@
 				"y": 180,
 				"wires": [
 					{
-						"id": "c92acc66e60b524e"
+						"id": "2bcc5d7c.00a452"
 					}
 				]
 			}
@@ -22,7 +22,7 @@
 				"y": 520,
 				"wires": [
 					{
-						"id": "12dd37ea11b85405",
+						"id": "6e1dec20.96f0e4",
 						"port": 0
 					}
 				]
@@ -32,7 +32,7 @@
 				"y": 660,
 				"wires": [
 					{
-						"id": "1cf2a227bc456468",
+						"id": "e6e567df.820448",
 						"port": 0
 					}
 				]
@@ -42,19 +42,19 @@
 				"y": 360,
 				"wires": [
 					{
-						"id": "12dd37ea11b85405",
+						"id": "6e1dec20.96f0e4",
 						"port": 1
 					},
 					{
-						"id": "f925bb46529984a7",
+						"id": "e2e64dd3.f193a",
 						"port": 1
 					},
 					{
-						"id": "17e77d86901b17b1",
+						"id": "219663e5.19941c",
 						"port": 1
 					},
 					{
-						"id": "6a0929fb2acd2e82",
+						"id": "acbf48d1.899768",
 						"port": 1
 					}
 				]
@@ -72,16 +72,16 @@
 			"y": 80,
 			"wires": [
 				{
-					"id": "5071af37b91b3203",
+					"id": "f847c215.4e561",
 					"port": 0
 				}
 			]
 		}
 	},
 	{
-		"id": "2b31347df0723a6f",
+		"id": "203d88e2.0ca018",
 		"type": "change",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "Inject",
 		"rules": [
 			{
@@ -104,14 +104,14 @@
 		"y": 340,
 		"wires": [
 			[
-				"6a0929fb2acd2e82"
+				"acbf48d1.899768"
 			]
 		]
 	},
 	{
-		"id": "6a0929fb2acd2e82",
+		"id": "acbf48d1.899768",
 		"type": "forge-model-derivative",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -150,16 +150,16 @@
 		"y": 340,
 		"wires": [
 			[
-				"f9d2acd928326f75",
-				"783ac33476b19521"
+				"a7b33c56.bbc0d",
+				"28c77446.11d87c"
 			],
 			[]
 		]
 	},
 	{
-		"id": "f9d2acd928326f75",
+		"id": "a7b33c56.bbc0d",
 		"type": "delay",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "",
 		"pauseType": "delay",
 		"timeout": "30",
@@ -171,19 +171,18 @@
 		"randomLast": "5",
 		"randomUnits": "seconds",
 		"drop": false,
-		"outputs": 1,
 		"x": 500,
 		"y": 400,
 		"wires": [
 			[
-				"f925bb46529984a7"
+				"e2e64dd3.f193a"
 			]
 		]
 	},
 	{
-		"id": "f925bb46529984a7",
+		"id": "e2e64dd3.f193a",
 		"type": "forge-model-derivative",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "Manifest",
 		"topic": "",
 		"forge": "",
@@ -222,15 +221,15 @@
 		"y": 420,
 		"wires": [
 			[
-				"12dd37ea11b85405"
+				"6e1dec20.96f0e4"
 			],
 			[]
 		]
 	},
 	{
-		"id": "4482e690b32dbfb1",
+		"id": "9cf919b3.bb9c28",
 		"type": "delay",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "",
 		"pauseType": "delay",
 		"timeout": "1",
@@ -242,19 +241,18 @@
 		"randomLast": "5",
 		"randomUnits": "seconds",
 		"drop": false,
-		"outputs": 1,
 		"x": 500,
 		"y": 440,
 		"wires": [
 			[
-				"f925bb46529984a7"
+				"e2e64dd3.f193a"
 			]
 		]
 	},
 	{
-		"id": "12dd37ea11b85405",
+		"id": "6e1dec20.96f0e4",
 		"type": "switch",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "Ready?",
 		"property": "payload.status",
 		"propertyType": "msg",
@@ -275,17 +273,17 @@
 		"y": 520,
 		"wires": [
 			[
-				"1cf2a227bc456468"
+				"e6e567df.820448"
 			],
 			[
-				"4482e690b32dbfb1"
+				"9cf919b3.bb9c28"
 			]
 		]
 	},
 	{
-		"id": "5071af37b91b3203",
+		"id": "f847c215.4e561",
 		"type": "status",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "",
 		"scope": null,
 		"x": 120,
@@ -295,28 +293,25 @@
 		]
 	},
 	{
-		"id": "c92acc66e60b524e",
+		"id": "2bcc5d7c.00a452",
 		"type": "function",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "Inject",
-		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.urn =msg.payload.urn || msg.urn || env.get('urn');\n    msg.region =msg.payload.region || msg.region || env.get('region') || 'US';\n    msg.xAdsForce =false;\n    if (typeof msg.payload.xAdsForce === 'boolean')\n        msg.xAdsForce =msg.payload.xAdsForce === true;\n    else if (typeof msg.xAdsForce === 'boolean')\n        msg.xAdsForce =msg.xAdsForce === true;\n    else if (typeof env.get('bucket') === 'boolean')\n        msg.xAdsForce =env.get('bucket') === true ;\n} else {\n    msg.urn =msg.urn || env.get('urn');\n    msg.region =msg.region || env.get('region') || 'US';\n    if (typeof msg.xAdsForce === 'boolean')\n        msg.xAdsForce =msg.xAdsForce === true;\n    else if (typeof env.get('bucket') === 'boolean')\n        msg.xAdsForce =env.get('bucket') === true ;\n    else\n        msg.xAdsForce =false;\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid urn!'});\n    node.error('Provide a urn!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"The parameter 'urn' should be a nonempty string.\"\n    };\n}\n    \nreturn (msg);",
+		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nmsg.urn = (msg.payload && msg.payload.urn) || msg.urn || env.get('urn');\nmsg.region = (msg.payload && msg.payload.region) || msg.region || env.get('region') || 'US';\nmsg.xAdsForce = (msg.payload && msg.payload.xAdsForce) || msg.xAdsForce || false;\nmsg.xAdsForce = msg.xAdsForce === true || msg.xAdsForce === 'true'|| msg.xAdsForce === 1 || msg.xAdsForce === '1';\n\nnode.status ({});\nif ( !msg.urn || msg.urn === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid urn!'});\n    node.error('Provide a urn!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"The parameter 'urn' should be a nonempty string.\"\n    };\n}\n    \nreturn (msg);",
 		"outputs": 1,
 		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
 		"x": 190,
 		"y": 180,
 		"wires": [
 			[
-				"17e77d86901b17b1"
+				"219663e5.19941c"
 			]
 		]
 	},
 	{
-		"id": "17e77d86901b17b1",
+		"id": "219663e5.19941c",
 		"type": "switch",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "Params Ok?",
 		"property": "err",
 		"propertyType": "msg",
@@ -335,15 +330,15 @@
 		"y": 180,
 		"wires": [
 			[
-				"2b31347df0723a6f"
+				"203d88e2.0ca018"
 			],
 			[]
 		]
 	},
 	{
-		"id": "783ac33476b19521",
+		"id": "28c77446.11d87c",
 		"type": "function",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "Requested",
 		"func": "msg.payload ={\n    status: 'pending',\n    progress: '0% complete'\n};\nreturn msg;",
 		"outputs": 1,
@@ -352,21 +347,18 @@
 		"y": 660,
 		"wires": [
 			[
-				"1cf2a227bc456468"
+				"e6e567df.820448"
 			]
 		]
 	},
 	{
-		"id": "1cf2a227bc456468",
+		"id": "e6e567df.820448",
 		"type": "function",
-		"z": "0fb4d381edb684cd",
+		"z": "279b35cc.5bd67a",
 		"name": "",
 		"func": "node.status ({\n    fill: 'yellow',\n    shape: 'square',\n    text: msg.payload.progress\n});\n\nreturn (msg);",
 		"outputs": 1,
 		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
 		"x": 770,
 		"y": 660,
 		"wires": [
@@ -374,17 +366,9 @@
 		]
 	},
 	{
-		"id": "c0dd0cf59255e60e",
-		"type": "tab",
-		"label": "Flow 1",
-		"disabled": false,
-		"info": "",
-		"env": []
-	},
-	{
-		"id": "a19bd595eb24a118",
+		"id": "2150cfdf.c426",
 		"type": "forge-default-credentials",
-		"z": "c0dd0cf59255e60e",
+		"z": "e4198978.1215c8",
 		"name": "Dev Credentials",
 		"forge": "",
 		"x": 140,
@@ -392,9 +376,9 @@
 		"wires": []
 	},
 	{
-		"id": "222656ae.2907fa",
+		"id": "6c3fa957.a88558",
 		"type": "forge-oss",
-		"z": "c0dd0cf59255e60e",
+		"z": "e4198978.1215c8",
 		"name": "",
 		"topic": "",
 		"operation": "GetObject",
@@ -428,9 +412,9 @@
 		]
 	},
 	{
-		"id": "382d5e88.06abe2",
+		"id": "957625b0.9d54f8",
 		"type": "forge-da",
-		"z": "c0dd0cf59255e60e",
+		"z": "e4198978.1215c8",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -488,9 +472,9 @@
 		]
 	},
 	{
-		"id": "eef4c39f.22e7b",
+		"id": "c9dfaa61.62d458",
 		"type": "debug",
-		"z": "c0dd0cf59255e60e",
+		"z": "e4198978.1215c8",
 		"name": "",
 		"active": true,
 		"tosidebar": true,
@@ -503,9 +487,9 @@
 		"wires": []
 	},
 	{
-		"id": "e07c596c.0f2418",
+		"id": "1f2fc687.ed9e99",
 		"type": "debug",
-		"z": "c0dd0cf59255e60e",
+		"z": "e4198978.1215c8",
 		"name": "",
 		"active": true,
 		"tosidebar": true,
@@ -518,51 +502,9 @@
 		"wires": []
 	},
 	{
-		"id": "56158633.ab0618",
+		"id": "5ba63921.9656b8",
 		"type": "forge-oss",
-		"z": "c0dd0cf59255e60e",
-		"name": "",
-		"topic": "",
-		"forge": "",
-		"operation": "BucketDetails",
-		"raw": false,
-		"all": false,
-		"bucket": "",
-		"policyKey": "transient",
-		"key": "",
-		"contentType": "application/octet-stream",
-		"contentDisposition": "",
-		"copy": "",
-		"localFilename": "",
-		"limit": 10,
-		"startAt": "",
-		"beginsWith": "",
-		"with": [],
-		"ifMatch": "",
-		"ifNoneMatch": "",
-		"ifModifiedSince": "",
-		"range": "",
-		"access": "read",
-		"singleUse": false,
-		"minutesExpiration": 60,
-		"acceptEncoding": "",
-		"guid": "autodesk",
-		"region": "US",
-		"x": 730,
-		"y": 200,
-		"wires": [
-			[
-				"b1cd7aa4.687c68"
-			],
-			[
-				"ec68041295fef6b9"
-			]
-		]
-	},
-	{
-		"id": "9f2967b1.213358",
-		"type": "forge-oss",
-		"z": "c0dd0cf59255e60e",
+		"z": "e4198978.1215c8",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -590,40 +532,337 @@
 		"acceptEncoding": "",
 		"guid": "autodesk",
 		"region": "US",
-		"x": 450,
+		"x": 470,
 		"y": 160,
 		"wires": [
-			[
-				"56158633.ab0618"
-			],
-			[
-				"3586ad1c.4d2942"
-			]
+			[],
+			[]
 		]
 	},
 	{
-		"id": "98adc4c.7f3dd38",
+		"id": "9149a63c.ac2f98",
 		"type": "function",
-		"z": "c0dd0cf59255e60e",
+		"z": "e4198978.1215c8",
 		"name": "",
 		"func": "msg = msg.payload;\nreturn msg;",
 		"outputs": 1,
 		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 280,
+		"x": 290,
 		"y": 160,
 		"wires": [
 			[
-				"9f2967b1.213358"
+				"5ba63921.9656b8",
+				"3d9f18a9.16fdb8"
 			]
 		]
 	},
 	{
-		"id": "b1cd7aa4.687c68",
+		"id": "4fa843d2.13915c",
+		"type": "debug",
+		"z": "e4198978.1215c8",
+		"name": "Flow",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "payload",
+		"targetType": "msg",
+		"x": 430,
+		"y": 260,
+		"wires": []
+	},
+	{
+		"id": "ba14936d.19011",
+		"type": "debug",
+		"z": "e4198978.1215c8",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 990,
+		"y": 160,
+		"wires": []
+	},
+	{
+		"id": "4ae27d7f.72cbe4",
+		"type": "comment",
+		"z": "e4198978.1215c8",
+		"name": "Setup - Readme",
+		"info": "\nThe node below contains information to setup your environment.\n\n{\n    \"bucket\": \"your bucket name, should be unique\",\n    \"region\": \"US or EMEA - defines the region where you want to post the file\"\n}\n",
+		"x": 140,
+		"y": 120,
+		"wires": []
+	},
+	{
+		"id": "9a301ad5.f2e938",
+		"type": "inject",
+		"z": "e4198978.1215c8",
+		"name": "Settings",
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-models\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": true,
+		"onceDelay": 0.1,
+		"x": 140,
+		"y": 160,
+		"wires": [
+			[
+				"9149a63c.ac2f98"
+			]
+		]
+	},
+	{
+		"id": "5f2db427.29a03c",
+		"type": "debug",
+		"z": "e4198978.1215c8",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1000,
+		"y": 240,
+		"wires": []
+	},
+	{
+		"id": "c835ce82.bb6a3",
+		"type": "debug",
+		"z": "e4198978.1215c8",
+		"name": "Progress",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 1000,
+		"y": 280,
+		"wires": []
+	},
+	{
+		"id": "ee6d100e.76e82",
+		"type": "comment",
+		"z": "e4198978.1215c8",
+		"name": "View my file",
+		"info": "",
+		"x": 130,
+		"y": 820,
+		"wires": []
+	},
+	{
+		"id": "e214cc43.ab46a",
+		"type": "http response",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"statusCode": "200",
+		"headers": {
+			"content-type": "text/html"
+		},
+		"x": 960,
+		"y": 860,
+		"wires": []
+	},
+	{
+		"id": "c6417a14.0f41d8",
+		"type": "template",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"field": "payload",
+		"fieldType": "msg",
+		"format": "handlebars",
+		"syntax": "mustache",
+		"template": "<!DOCTYPE html>\n<html>\n\n<head>\n\t<title>Sample</title>\n\t<meta charset=\"utf-8\" />\n\n\t<!-- Autodesk Forge Viewer files -->\n\t<link rel=\"stylesheet\" href=\"https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css\"\n\t\ttype=\"text/css\">\n\t<script src=\"https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js\"></script>\n\n\t<script>\n\t\tvar viewer = null;\n\n\t\tfunction launchViewer() {\n\t\t\tconst options = {\n\t\t\t\tenv: 'AutodeskProduction',\n\t\t\t\tgetAccessToken: getForgeToken\n\t\t\t};\n\n\t\t\tAutodesk.Viewing.Initializer(options, () => {\n\t\t\t\tviewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'));\n\t\t\t\tviewer.start();\n\t\t\t\tconst documentId = 'urn:{{payload.urn}}';\n\t\t\t\tAutodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);\n\t\t\t});\n\t\t}\n\n\t\tfunction onDocumentLoadSuccess(doc) {\n\t\t\tconst viewables = doc.getRoot().getDefaultGeometry();\n\t\t\tviewer.loadDocumentNode(doc, viewables).then(i => {\n\t\t\t\t// documented loaded, any action?\n\t\t\t});\n\t\t}\n\n\t\tfunction onDocumentLoadFailure(viewerErrorCode) {\n\t\t\tconsole.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);\n\t\t}\n\n\t\tfunction getForgeToken(callback) {\n\t\t\tfetch('/api/forge/oauth/token').then(res => {\n\t\t\t\tres.json().then(data => {\n\t\t\t\t    console.log (JSON.stringify(data));\n\t\t\t\t\tcallback(data.access_token, data.expires_in);\n\t\t\t\t});\n\t\t\t});\n\t\t}\n\n\t</script>\n</head>\n\n<body onload=\"launchViewer()\">\n\t<div id=\"forgeViewer\"></div>\n</body>\n\n</html>",
+		"output": "str",
+		"x": 580,
+		"y": 860,
+		"wires": [
+			[
+				"e214cc43.ab46a"
+			]
+		]
+	},
+	{
+		"id": "caea75dd.b4b8a8",
+		"type": "http in",
+		"z": "e4198978.1215c8",
+		"name": "Get Token",
+		"url": "/api/forge/oauth/token",
+		"method": "get",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 120,
+		"y": 900,
+		"wires": [
+			[
+				"8d4166be.e9b458"
+			]
+		]
+	},
+	{
+		"id": "a80f3d49.a05a8",
+		"type": "http response",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"statusCode": "200",
+		"headers": {
+			"content-type": "application/json"
+		},
+		"x": 960,
+		"y": 900,
+		"wires": []
+	},
+	{
+		"id": "7a754831.a5eea8",
+		"type": "function",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"func": "msg.payload = msg.payload.token;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 570,
+		"y": 900,
+		"wires": [
+			[
+				"a80f3d49.a05a8"
+			]
+		]
+	},
+	{
+		"id": "8d4166be.e9b458",
+		"type": "forge-get-token",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"x": 370,
+		"y": 900,
+		"wires": [
+			[
+				"7a754831.a5eea8"
+			]
+		]
+	},
+	{
+		"id": "c6973fc2.b4f91",
+		"type": "http in",
+		"z": "e4198978.1215c8",
+		"name": "/index.html",
+		"url": "/index.html",
+		"method": "get",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 120,
+		"y": 860,
+		"wires": [
+			[
+				"dbc4cb7.f1d7e38"
+			]
+		]
+	},
+	{
+		"id": "69c34066.d49f9",
+		"type": "comment",
+		"z": "e4198978.1215c8",
+		"name": "Upload & Translate",
+		"info": "",
+		"x": 150,
+		"y": 320,
+		"wires": []
+	},
+	{
+		"id": "6d04a6dc.41f4f8",
+		"type": "http in",
+		"z": "e4198978.1215c8",
+		"name": "/select.html",
+		"url": "/select.html",
+		"method": "get",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 130,
+		"y": 360,
+		"wires": [
+			[
+				"3bc77a60.9a9936"
+			]
+		]
+	},
+	{
+		"id": "3bc77a60.9a9936",
+		"type": "template",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"field": "payload",
+		"fieldType": "msg",
+		"format": "handlebars",
+		"syntax": "mustache",
+		"template": "<!DOCTYPE html>\n<html>\n\n<head>\n\t<title>Sample</title>\n\t<meta charset=\"utf-8\" />\n</head>\n\n<body>\n\t<form action=\"/upload2bucket\" method=\"post\" enctype=\"multipart/form-data\">\n\t    <label for=\"uploadfile\">Choose file to upload</label>\n\t    <input type=\"file\" name=\"uploadfile\" id=\"uploadfile\" /><br />\n\t    <input type=\"submit\" value=\"Upload File\" />\n\t</form>\n</body>\n\n</html>",
+		"output": "str",
+		"x": 520,
+		"y": 360,
+		"wires": [
+			[
+				"a106e42c.13e3c8"
+			]
+		]
+	},
+	{
+		"id": "a106e42c.13e3c8",
+		"type": "http response",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"statusCode": "200",
+		"headers": {
+			"content-type": "text/html"
+		},
+		"x": 960,
+		"y": 360,
+		"wires": []
+	},
+	{
+		"id": "86e4fa86.8959c8",
+		"type": "http in",
+		"z": "e4198978.1215c8",
+		"name": "/upload2bucket",
+		"url": "/upload2bucket",
+		"method": "post",
+		"upload": true,
+		"swaggerDoc": "",
+		"x": 140,
+		"y": 420,
+		"wires": [
+			[
+				"6b1b3b63.ad5374",
+				"678f8559.3c040c"
+			]
+		]
+	},
+	{
+		"id": "6b1b3b63.ad5374",
+		"type": "function",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"func": "msg.payload = {\n    key: msg.req.files[0].originalname,\n    buffer: msg.req.files[0].buffer\n}\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 310,
+		"y": 420,
+		"wires": [
+			[
+				"9680e0fa.5329f"
+			]
+		]
+	},
+	{
+		"id": "8db8f256.0fe12",
 		"type": "forge-oss",
-		"z": "c0dd0cf59255e60e",
+		"z": "e4198978.1215c8",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -635,6 +874,7 @@
 		"key": "",
 		"contentType": "application/octet-stream",
 		"contentDisposition": "",
+		"copy": "",
 		"localFilename": "",
 		"limit": 10,
 		"startAt": "",
@@ -650,58 +890,133 @@
 		"acceptEncoding": "",
 		"guid": "autodesk",
 		"region": "US",
-		"x": 480,
-		"y": 380,
+		"x": 680,
+		"y": 420,
 		"wires": [
 			[
-				"3f5b61ee.2e222e"
+				"c5971cb2.5f33c"
 			],
 			[
-				"ec68041295fef6b9"
+				"9477967a.d48508"
 			]
 		]
 	},
 	{
-		"id": "3586ad1c.4d2942",
-		"type": "switch",
-		"z": "c0dd0cf59255e60e",
-		"name": "if 409",
-		"property": "err.statusCode",
-		"propertyType": "msg",
+		"id": "678f8559.3c040c",
+		"type": "http response",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"statusCode": "301",
+		"headers": {
+			"location": "/wait.html"
+		},
+		"x": 320,
+		"y": 480,
+		"wires": []
+	},
+	{
+		"id": "1839787b.71e508",
+		"type": "subflow:279b35cc.5bd67a",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"env": [],
+		"x": 650,
+		"y": 540,
+		"wires": [
+			[
+				"43fbddb9.5cdd94"
+			],
+			[
+				"f09eeea7.ff8a8"
+			],
+			[
+				"9477967a.d48508"
+			]
+		]
+	},
+	{
+		"id": "18673a30.b074d6",
+		"type": "function",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"func": "msg.payload = {\n    urn: msg.payload.urn,\n    region: msg.payload.region,\n    xAdsForce: true\n}\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 330,
+		"y": 540,
+		"wires": [
+			[
+				"662aa1c3.19634"
+			]
+		]
+	},
+	{
+		"id": "a3b42681.af93c8",
+		"type": "change",
+		"z": "e4198978.1215c8",
+		"name": "Progress",
 		"rules": [
 			{
-				"t": "eq",
-				"v": "409",
-				"vt": "num"
-			},
-			{
-				"t": "else"
+				"t": "set",
+				"p": "progress",
+				"pt": "flow",
+				"to": "payload.progress",
+				"tot": "msg"
 			}
 		],
-		"checkall": "true",
-		"repair": false,
-		"outputs": 2,
-		"x": 450,
-		"y": 220,
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 620,
+		"y": 600,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "f09eeea7.ff8a8",
+		"type": "function",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"func": "if ( msg.payload.status === 'success' )\n    return ({\n        payload: {\n            progress: 100\n        }\n    });\n    \nif ( msg.payload.status === 'pending' )\n    return ({\n        payload: {\n            progress: 0\n        }\n    });\n    \n    \nif ( msg.payload.status === 'inprogress' )\n    return ({\n        payload: {   \n            progress: parseInt(msg.payload.progress)\n        }\n    });\n\nreturn ({\n    payload: {   \n        progress: -1,\n        status: msg.payload.status\n    }\n});\n",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 470,
+		"y": 600,
 		"wires": [
 			[
-				"fc6b16f0.449ba8"
-			],
-			[
-				"ec68041295fef6b9"
+				"a3b42681.af93c8"
 			]
 		]
 	},
 	{
-		"id": "fc6b16f0.449ba8",
+		"id": "3d9f18a9.16fdb8",
 		"type": "change",
-		"z": "c0dd0cf59255e60e",
-		"name": "",
+		"z": "e4198978.1215c8",
+		"name": "bucket/region on Flow",
 		"rules": [
 			{
-				"t": "delete",
-				"p": "err",
-				"pt": "msg"
+				"t": "set",
+				"p": "bucket",
+				"pt": "flow",
+				"to": "bucket",
+				"tot": "msg"
+			},
+			{
+				"t": "set",
+				"p": "region",
+				"pt": "flow",
+				"to": "region",
+				"tot": "msg"
+			},
+			{
+				"t": "set",
+				"p": "progress",
+				"pt": "flow",
+				"to": "0",
+				"tot": "num"
 			}
 		],
 		"action": "",
@@ -710,446 +1025,361 @@
 		"to": "",
 		"reg": false,
 		"x": 480,
-		"y": 280,
+		"y": 200,
 		"wires": [
-			[
-				"56158633.ab0618"
-			]
+			[]
 		]
 	},
 	{
-		"id": "3f5b61ee.2e222e",
-		"type": "forge-oss",
-		"z": "c0dd0cf59255e60e",
-		"name": "",
-		"topic": "",
-		"forge": "",
-		"operation": "ObjectDetails",
-		"raw": false,
-		"all": false,
-		"bucket": "",
-		"policyKey": "transient",
-		"key": "",
-		"contentType": "application/octet-stream",
-		"contentDisposition": "",
-		"copy": "",
-		"localFilename": "",
-		"limit": 10,
-		"startAt": "",
-		"beginsWith": "",
-		"with": [],
-		"ifMatch": "",
-		"ifNoneMatch": "",
-		"ifModifiedSince": "",
-		"range": "",
-		"access": "read",
-		"singleUse": false,
-		"minutesExpiration": 60,
-		"acceptEncoding": "",
-		"guid": "autodesk",
-		"region": "US",
-		"x": 490,
-		"y": 440,
-		"wires": [
-			[
-				"f8c17e5326cabcc1"
-			],
-			[
-				"ec68041295fef6b9"
-			]
-		]
-	},
-	{
-		"id": "f8c17e5326cabcc1",
-		"type": "debug",
-		"z": "c0dd0cf59255e60e",
-		"name": "Results",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"x": 960,
-		"y": 420,
-		"wires": []
-	},
-	{
-		"id": "ec68041295fef6b9",
-		"type": "debug",
-		"z": "c0dd0cf59255e60e",
-		"name": "Error",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"x": 950,
-		"y": 320,
-		"wires": []
-	},
-	{
-		"id": "9a154dcefa1225f6",
+		"id": "5013ad27.d539c4",
 		"type": "comment",
-		"z": "c0dd0cf59255e60e",
-		"name": "Setup - Readme",
-		"info": "\nThe node below contains information to setup your environment. If you have a file already loaded and translate, you can skip that step.\n\n{\n    \"bucket\": \"your bucket name\",\n    \"key\": \"object name you want to use on OSS\",\n    \"localFilename\": \"full path to the file you want to uplaod\",\n    \"region\": \"US or EMEA - defines the region where you want to post the file\"\n    \n    \"sha1\": \"optional parameter to verify file content after upload\"\n}\n\nOnce the file is uploaded on OSS, you need to translate it, if this is not yet the case.",
-		"x": 140,
-		"y": 120,
-		"wires": []
-	},
-	{
-		"id": "4ec8f7b0f4e25327",
-		"type": "inject",
-		"z": "c0dd0cf59255e60e",
-		"name": "robot.f3d",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "topic",
-				"vt": "str"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"bucket\":\"cyrille-models\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
-		"payloadType": "json",
-		"x": 140,
+		"z": "e4198978.1215c8",
+		"name": "We can ignore responses here",
+		"info": "",
+		"x": 720,
 		"y": 160,
-		"wires": [
-			[
-				"98adc4c.7f3dd38"
-			]
-		]
+		"wires": []
 	},
 	{
-		"id": "8b81da3869806de8",
-		"type": "subflow:0fb4d381edb684cd",
-		"z": "c0dd0cf59255e60e",
+		"id": "9680e0fa.5329f",
+		"type": "change",
+		"z": "e4198978.1215c8",
 		"name": "",
-		"env": [],
-		"x": 730,
-		"y": 600,
-		"wires": [
-			[
-				"690be77431a1273e"
-			],
-			[
-				"70eaa37b15cdc815"
-			],
-			[
-				"fb8fcf6a6d466ba6"
-			]
-		]
-	},
-	{
-		"id": "690be77431a1273e",
-		"type": "debug",
-		"z": "c0dd0cf59255e60e",
-		"name": "Results",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"x": 960,
-		"y": 540,
-		"wires": []
-	},
-	{
-		"id": "70eaa37b15cdc815",
-		"type": "debug",
-		"z": "c0dd0cf59255e60e",
-		"name": "Progress",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"statusVal": "",
-		"statusType": "auto",
-		"x": 960,
-		"y": 600,
-		"wires": []
-	},
-	{
-		"id": "fb8fcf6a6d466ba6",
-		"type": "debug",
-		"z": "c0dd0cf59255e60e",
-		"name": "Error",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"statusVal": "",
-		"statusType": "auto",
-		"x": 950,
-		"y": 660,
-		"wires": []
-	},
-	{
-		"id": "c3cc7f74af9a4e79",
-		"type": "inject",
-		"z": "c0dd0cf59255e60e",
-		"name": "robot.f3d",
-		"props": [
+		"rules": [
 			{
-				"p": "payload"
+				"t": "set",
+				"p": "payload.region",
+				"pt": "msg",
+				"to": "region",
+				"tot": "flow"
 			},
 			{
-				"p": "topic",
-				"vt": "str"
+				"t": "set",
+				"p": "payload.bucket",
+				"pt": "msg",
+				"to": "bucket",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "key",
+				"pt": "flow",
+				"to": "payload.key",
+				"tot": "msg"
 			}
 		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"bucket\":\"cyrille-models\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
-		"payloadType": "json",
-		"x": 140,
-		"y": 600,
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 480,
+		"y": 420,
 		"wires": [
 			[
-				"57d6f14b7e848b83"
+				"8db8f256.0fe12"
 			]
 		]
 	},
 	{
-		"id": "57d6f14b7e848b83",
-		"type": "function",
-		"z": "c0dd0cf59255e60e",
+		"id": "c5971cb2.5f33c",
+		"type": "change",
+		"z": "e4198978.1215c8",
 		"name": "",
-		"func": "msg = msg.payload;\nmsg.urn = `urn:adsk.objects:os.object:${msg.bucket}/${msg.key}`;\nreturn msg;",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload.region",
+				"pt": "msg",
+				"to": "region",
+				"tot": "flow"
+			},
+			{
+				"t": "set",
+				"p": "urn",
+				"pt": "flow",
+				"to": "payload.urn",
+				"tot": "msg"
+			},
+			{
+				"t": "set",
+				"p": "progress",
+				"pt": "flow",
+				"to": "0",
+				"tot": "num"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 540,
+		"y": 480,
+		"wires": [
+			[
+				"18673a30.b074d6"
+			]
+		]
+	},
+	{
+		"id": "662aa1c3.19634",
+		"type": "function",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"func": "msg.payload.urn = msg.payload.urn\n    .replace(/\\+/g, '-') // Convert '+' to '-'\n\t.replace(/\\//g, '_') // Convert '/' to '_'\n\t.replace(/=+$/, '')\nreturn msg;",
 		"outputs": 1,
 		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 280,
-		"y": 600,
+		"x": 470,
+		"y": 540,
 		"wires": [
 			[
-				"2e399df834310f4d"
+				"1839787b.71e508"
 			]
 		]
 	},
 	{
-		"id": "2e399df834310f4d",
-		"type": "base64",
-		"z": "c0dd0cf59255e60e",
-		"name": "",
-		"action": "",
-		"property": "urn",
-		"x": 420,
-		"y": 600,
-		"wires": [
-			[
-				"8b81da3869806de8"
-			]
-		]
-	},
-	{
-		"id": "d1a90291d50cfab0",
-		"type": "comment",
-		"z": "c0dd0cf59255e60e",
-		"name": "View my file",
-		"info": "",
-		"x": 130,
-		"y": 740,
-		"wires": []
-	},
-	{
-		"id": "ed1e378fa53239f8",
+		"id": "cc7b1f4.ccc95e",
 		"type": "http in",
-		"z": "c0dd0cf59255e60e",
-		"name": "/",
-		"url": "/",
+		"z": "e4198978.1215c8",
+		"name": "/wait.html",
+		"url": "/wait.html",
 		"method": "get",
-		"upload": false,
+		"upload": true,
 		"swaggerDoc": "",
-		"x": 110,
-		"y": 780,
+		"x": 120,
+		"y": 700,
 		"wires": [
 			[
-				"0f574efdf65e2857"
+				"d001296c.028b18"
 			]
 		]
 	},
 	{
-		"id": "8846abe00f154629",
+		"id": "d001296c.028b18",
+		"type": "template",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"field": "payload",
+		"fieldType": "msg",
+		"format": "handlebars",
+		"syntax": "mustache",
+		"template": "<!DOCTYPE html>\n<html>\n\n<head>\n\t<title>Sample</title>\n\t<meta charset=\"utf-8\" />\n\t<script>\n\t    async function wait() {\n\t        var result = await fetch('/wait');\n\t        if ( result )\n\t            result = await result.json();\n\t        else\n\t            result = { progress: -1 };\n\t        if ( !result || result.progress === -1 )\n\t            result = 'failed';\n\t        else\n\t            result = result.progress + ' %';\n\t        document.getElementById('wait').innerHTML = result;\n\t        if ( result === '100 %' )\n\t            window.location = \"/index.html\";\n\t    }\n\t    \n\t    setInterval(wait, 1000);\n\t</script>\n</head>\n\n<body>\n\t<div id=\"wait\">Waiting</div>\n</body>\n\n</html>",
+		"output": "str",
+		"x": 580,
+		"y": 700,
+		"wires": [
+			[
+				"b5625b21.350f48"
+			]
+		]
+	},
+	{
+		"id": "b5625b21.350f48",
 		"type": "http response",
-		"z": "c0dd0cf59255e60e",
+		"z": "e4198978.1215c8",
 		"name": "",
 		"statusCode": "200",
 		"headers": {
 			"content-type": "text/html"
 		},
 		"x": 960,
-		"y": 780,
+		"y": 700,
 		"wires": []
 	},
 	{
-		"id": "ac96b5d7f27ebafb",
-		"type": "template",
-		"z": "c0dd0cf59255e60e",
+		"id": "45ac44ae.feccdc",
+		"type": "inject",
+		"z": "e4198978.1215c8",
+		"name": "Print Flow",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 140,
+		"y": 260,
+		"wires": [
+			[
+				"a146d25.4c6de3"
+			]
+		]
+	},
+	{
+		"id": "a146d25.4c6de3",
+		"type": "function",
+		"z": "e4198978.1215c8",
 		"name": "",
-		"field": "payload",
-		"fieldType": "msg",
-		"format": "handlebars",
-		"syntax": "mustache",
-		"template": "<!DOCTYPE html>\n<html>\n\n<head>\n\t<title>Sample</title>\n\t<meta charset=\"utf-8\" />\n\n\t<!-- Autodesk Forge Viewer files -->\n\t<link rel=\"stylesheet\" href=\"https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css\"\n\t\ttype=\"text/css\">\n\t<script src=\"https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js\"></script>\n\n\t<script>\n\t\tvar viewer = null;\n\n\t\tfunction launchViewer() {\n\t\t\tconst options = {\n\t\t\t\tenv: 'AutodeskProduction',\n\t\t\t\tgetAccessToken: getForgeToken\n\t\t\t};\n\n\t\t\tAutodesk.Viewing.Initializer(options, () => {\n\t\t\t\tviewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'));\n\t\t\t\tviewer.start();\n\t\t\t\tconst documentId = 'urn:{{payload.urn}}';\n\t\t\t\tAutodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);\n\t\t\t});\n\t\t}\n\n\t\tfunction onDocumentLoadSuccess(doc) {\n\t\t\tconst viewables = doc.getRoot().getDefaultGeometry();\n\t\t\tviewer.loadDocumentNode(doc, viewables).then(i => {\n\t\t\t\t// documented loaded, any action?\n\t\t\t});\n\t\t}\n\n\t\tfunction onDocumentLoadFailure(viewerErrorCode) {\n\t\t\tconsole.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);\n\t\t}\n\n\t\tfunction getForgeToken(callback) {\n\t\t\tfetch('/api/forge/oauth/token').then(res => {\n\t\t\t\tres.json().then(data => {\n\t\t\t\t    console.log (JSON.stringify(data));\n\t\t\t\t\tcallback(data.access_token, data.expires_in);\n\t\t\t\t});\n\t\t\t});\n\t\t}\n\n\t</script>\n</head>\n\n<body onload=\"launchViewer()\">\n\t<div id=\"forgeViewer\"></div>\n</body>\n\n</html>",
-		"output": "str",
-		"x": 760,
-		"y": 780,
+		"func": "msg.payload = flow.get([\"bucket\", \"key\", \"region\", \"progress\", \"urn\"]);\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 290,
+		"y": 260,
 		"wires": [
 			[
-				"8846abe00f154629"
+				"4fa843d2.13915c"
 			]
 		]
 	},
 	{
-		"id": "cbe4cbe572f6e33f",
+		"id": "43fbddb9.5cdd94",
+		"type": "change",
+		"z": "e4198978.1215c8",
+		"name": "Success",
+		"rules": [
+			{
+				"t": "set",
+				"p": "progress",
+				"pt": "flow",
+				"to": "100",
+				"tot": "num"
+			},
+			{
+				"t": "set",
+				"p": "urn",
+				"pt": "flow",
+				"to": "payload.urn",
+				"tot": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 960,
+		"y": 540,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "9477967a.d48508",
+		"type": "change",
+		"z": "e4198978.1215c8",
+		"name": "Failed",
+		"rules": [
+			{
+				"t": "set",
+				"p": "progress",
+				"pt": "flow",
+				"to": "-1",
+				"tot": "num"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 950,
+		"y": 580,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "f0a8c7fc.5ac6c8",
 		"type": "http in",
-		"z": "c0dd0cf59255e60e",
-		"name": "Get Token",
-		"url": "/api/forge/oauth/token",
+		"z": "e4198978.1215c8",
+		"name": "/wait",
+		"url": "/wait",
 		"method": "get",
-		"upload": false,
+		"upload": true,
 		"swaggerDoc": "",
-		"x": 120,
-		"y": 880,
+		"x": 110,
+		"y": 740,
 		"wires": [
 			[
-				"8da4b50a7ddd4b07"
+				"bb7afe44.213e4"
 			]
 		]
 	},
 	{
-		"id": "ab03e519bf95cb91",
+		"id": "b990606b.0a031",
 		"type": "http response",
-		"z": "c0dd0cf59255e60e",
+		"z": "e4198978.1215c8",
 		"name": "",
 		"statusCode": "200",
 		"headers": {
 			"content-type": "application/json"
 		},
 		"x": 960,
-		"y": 880,
+		"y": 740,
 		"wires": []
 	},
 	{
-		"id": "181ffdf1eef26825",
-		"type": "function",
-		"z": "c0dd0cf59255e60e",
+		"id": "f86cd4eb.524f08",
+		"type": "template",
+		"z": "e4198978.1215c8",
 		"name": "",
-		"func": "msg.payload = msg.payload.token;\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 700,
-		"y": 880,
-		"wires": [
-			[
-				"ab03e519bf95cb91"
-			]
-		]
-	},
-	{
-		"id": "8da4b50a7ddd4b07",
-		"type": "forge-get-token",
-		"z": "c0dd0cf59255e60e",
-		"name": "",
-		"topic": "",
-		"forge": "",
-		"x": 470,
-		"y": 880,
-		"wires": [
-			[
-				"181ffdf1eef26825"
-			]
-		]
-	},
-	{
-		"id": "0f574efdf65e2857",
-		"type": "function",
-		"z": "c0dd0cf59255e60e",
-		"name": "",
-		"func": "var obj = {\n    \"bucket\": \"cyrille-models\",\n    \"key\": \"robot.f3d\",\n    \"sha1\": \"669c20f8f5c0e85b1141a98a660f471455f7c281\",\n    \"localFilename\": \"/Users/cyrille/Box Sync/Models/robot.f3d\",\n    \"region\": \"US\"\n};\n\nmsg.payload = {\n    urn: `urn:adsk.objects:os.object:${obj.bucket}/${obj.key}`\n};\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 300,
-		"y": 780,
-		"wires": [
-			[
-				"9fdeeeacae8e3def"
-			]
-		]
-	},
-	{
-		"id": "9fdeeeacae8e3def",
-		"type": "base64",
-		"z": "c0dd0cf59255e60e",
-		"name": "",
-		"action": "",
-		"property": "payload.urn",
-		"x": 440,
-		"y": 780,
-		"wires": [
-			[
-				"53c9e205ff5e076f"
-			]
-		]
-	},
-	{
-		"id": "7231f07128524783",
-		"type": "http in",
-		"z": "c0dd0cf59255e60e",
-		"name": "/index.html",
-		"url": "/index.html",
-		"method": "get",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 120,
-		"y": 820,
-		"wires": [
-			[
-				"0f574efdf65e2857"
-			]
-		]
-	},
-	{
-		"id": "53c9e205ff5e076f",
-		"type": "function",
-		"z": "c0dd0cf59255e60e",
-		"name": "",
-		"func": "msg.payload.urn = msg.payload.urn\n    .replace(/\\+/g, '-') // Convert '+' to '-'\n\t.replace(/\\//g, '_') // Convert '/' to '_'\n\t.replace(/=+$/, '')\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
+		"field": "payload",
+		"fieldType": "msg",
+		"format": "handlebars",
+		"syntax": "mustache",
+		"template": "{ \"progress\": {{payload.progress}} }",
+		"output": "str",
 		"x": 580,
-		"y": 780,
+		"y": 740,
 		"wires": [
 			[
-				"ac96b5d7f27ebafb"
+				"b990606b.0a031"
+			]
+		]
+	},
+	{
+		"id": "bb7afe44.213e4",
+		"type": "change",
+		"z": "e4198978.1215c8",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload.progress",
+				"pt": "msg",
+				"to": "progress",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 330,
+		"y": 740,
+		"wires": [
+			[
+				"f86cd4eb.524f08"
+			]
+		]
+	},
+	{
+		"id": "dbc4cb7.f1d7e38",
+		"type": "change",
+		"z": "e4198978.1215c8",
+		"name": "Progress",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload.urn",
+				"pt": "msg",
+				"to": "urn",
+				"tot": "flow"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 380,
+		"y": 860,
+		"wires": [
+			[
+				"c6417a14.0f41d8"
 			]
 		]
 	}

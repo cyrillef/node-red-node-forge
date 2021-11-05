@@ -119,7 +119,7 @@ module.exports = function (service) {
 
 	service.filesize = function (filename, payload) {
 		return (new Promise(function (fulfill, reject) {
-			if (filename === '' && Buffer.isBuffer(payload))
+			if ((filename === undefined || filename === '') && payload && Buffer.isBuffer(payload))
 				return (fulfill(payload.length));
 
 			fs.stat(filename, function (err, stat) {

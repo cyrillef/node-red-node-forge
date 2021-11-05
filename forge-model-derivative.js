@@ -32,7 +32,7 @@ module.exports = function (RED) {
         this.mdProperties = n;
         var node = this;
 
-        function onInput(msg) {
+        async function onInput(msg) {
 
             if (msg.nodeFlowId) {
                 var flowNode = RED.nodes.getNode(msg.nodeFlowId);
@@ -123,7 +123,7 @@ module.exports = function (RED) {
                     shape: 'dot',
                     text: node.mdProperties.operation
                 });
-                service[node.mdProperties.operation](n, node, FORGE, msg, _cb);
+                service[node.mdProperties.operation](n, node, await FORGE, msg, _cb);
             } else {
                 node.error(RED._('forge.error.unknown-operation', {
                     op: node.mdProperties.operation

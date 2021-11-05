@@ -1049,7 +1049,7 @@
         ]
     },
     {
-        "id": "f1febe4f.97fd9",
+        "id": "279b35cc.5bd67a",
         "type": "subflow",
         "name": "Translate and Wait",
         "info": "\n\n### Parameters\n\n* **urn**: The design URN; returned when uploading the file to Forge. The URN needs to be safe base64 encoded.\n\n* **region** [optional]: Region in which to store outputs. Possible values: ```US```, ```EMEA```. By default, it is set to ```US```.\n\n* **xAdsForce** [optional]: ```true```: the endpoint replaces previously translated output file types with the newly generated derivatives\n  ```false``` (default): previously created derivatives are not replaced\n    \n## Outputs\n\n* **response**: the final manifest\n\n* **progress**: an object containing a status and progress field.\n  * status: Overall status for translation jobs in the “manifest”. Possible values: pending, ```success```, ```inprogress```, ```failed```, ```timeout```\n  * progress: Overall progress for all translation jobs in the “manifest”. Possible values: ```complete```, ```##% complete```\n\n\n* **error**: an error occured\n",
@@ -1130,7 +1130,7 @@
     {
         "id": "fca7e07e.5ad71",
         "type": "change",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "Inject",
         "rules": [
             {
@@ -1160,7 +1160,7 @@
     {
         "id": "230af144.090c9e",
         "type": "forge-model-derivative",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "",
         "topic": "",
         "forge": "",
@@ -1208,7 +1208,7 @@
     {
         "id": "80fdacbf.20a7",
         "type": "delay",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "",
         "pauseType": "delay",
         "timeout": "30",
@@ -1231,7 +1231,7 @@
     {
         "id": "779c29a9.5eaee8",
         "type": "forge-model-derivative",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "Manifest",
         "topic": "",
         "forge": "",
@@ -1278,7 +1278,7 @@
     {
         "id": "b40ea287.2aa9d",
         "type": "while-loop",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "Wait for Translation",
         "condi": "!['success' , 'failed', 'timeout'].includes (msg.payload.status)",
         "x": 510,
@@ -1296,7 +1296,7 @@
     {
         "id": "18ae35b7.6110ba",
         "type": "delay",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "",
         "pauseType": "delay",
         "timeout": "1",
@@ -1319,7 +1319,7 @@
     {
         "id": "12fb1468.5d5d8c",
         "type": "switch",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "Ready?",
         "property": "payload.status",
         "propertyType": "msg",
@@ -1348,7 +1348,7 @@
     {
         "id": "4b257ec1.1b9e8",
         "type": "status",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "",
         "scope": null,
         "x": 180,
@@ -1360,9 +1360,9 @@
     {
         "id": "ec1ff16b.974e7",
         "type": "function",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "Inject",
-        "func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.urn =msg.payload.urn || msg.urn || env.get('urn');\n    msg.region =msg.payload.region || msg.region || env.get('region') || 'US';\n    msg.xAdsForce =false;\n    if (typeof msg.payload.xAdsForce === 'boolean')\n        msg.xAdsForce =msg.payload.xAdsForce === true;\n    else if (typeof msg.xAdsForce === 'boolean')\n        msg.xAdsForce =msg.xAdsForce === true;\n    else if (typeof env.get('bucket') === 'boolean')\n        msg.xAdsForce =env.get('bucket') === true ;\n} else {\n    msg.urn =msg.urn || env.get('urn');\n    msg.region =msg.region || env.get('region') || 'US';\n    if (typeof msg.xAdsForce === 'boolean')\n        msg.xAdsForce =msg.xAdsForce === true;\n    else if (typeof env.get('bucket') === 'boolean')\n        msg.xAdsForce =env.get('bucket') === true ;\n    else\n        msg.xAdsForce =false;\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid urn!'});\n    node.error('Provide a urn!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"The parameter 'urn' should be a nonempty string.\"\n    };\n}\n    \nreturn (msg);",
+        "func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nmsg.urn = (msg.payload && msg.payload.urn) || msg.urn || env.get('urn');\nmsg.region = (msg.payload && msg.payload.region) || msg.region || env.get('region') || 'US';\nmsg.xAdsForce = (msg.payload && msg.payload.xAdsForce) || msg.xAdsForce || false;\nmsg.xAdsForce = msg.xAdsForce === true || msg.xAdsForce === 'true'|| msg.xAdsForce === 1 || msg.xAdsForce === '1';\n\nnode.status ({});\nif ( !msg.urn || msg.urn === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid urn!'});\n    node.error('Provide a urn!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"The parameter 'urn' should be a nonempty string.\"\n    };\n}\n    \nreturn (msg);",
         "outputs": 1,
         "noerr": 0,
         "x": 190,
@@ -1376,7 +1376,7 @@
     {
         "id": "9f6ff471.0ae0f8",
         "type": "switch",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "Params Ok?",
         "property": "err",
         "propertyType": "msg",
@@ -1403,7 +1403,7 @@
     {
         "id": "4db03c7e.3251b4",
         "type": "function",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "Requested",
         "func": "msg.payload ={\n    status: 'pending',\n    progress: '0% complete'\n};\nreturn msg;",
         "outputs": 1,
@@ -1419,7 +1419,7 @@
     {
         "id": "30271f6c.8fb83",
         "type": "function",
-        "z": "f1febe4f.97fd9",
+        "z": "279b35cc.5bd67a",
         "name": "",
         "func": "node.status ({\n    fill: 'yellow',\n    shape: 'square',\n    text: msg.payload.progress\n});\n\nreturn (msg);",
         "outputs": 1,
@@ -1432,7 +1432,7 @@
     },
     {
         "id": "4f3e1dd1.4c2764",
-        "type": "subflow:f1febe4f.97fd9",
+        "type": "subflow:279b35cc.5bd67a",
         "z": "2ee1364.2cb30ca",
         "name": "",
         "x": 230,

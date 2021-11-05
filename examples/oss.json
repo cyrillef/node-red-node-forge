@@ -1,1 +1,3521 @@
-[{"id":"c93aef0f.c6081","type":"subflow","name":"Upload to OSS","info":"Upload an object. If the specified object name already exists in \nthe bucket, the uploaded content will overwrite the existing content \nfor the bucket name/object name combination.\n\n### Parameters\n\n* **bucket**: bucket to upload object into\n\n* **key**: object name being uploaded\n\n* **contentType** [optional]: media type\n\n* **contentDisposition** [optional]: suggested default filename when downloading this object to a file after it has been uploaded\n\n* **ifMatch** [optional]: When overwriting an object, use the latest SHA-1 hash \n  to verify that you are overwriting the latest data.\n  A SHA-1 hash is returned every time you upload or overwrite an object. \n  If the SHA-1 hash in the header does not match the current SHA-1 hash \n  stored for this object in OSS, the request fails (status code 412).\n\n### Outputs\n\n* **response**: the object details\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **error**: an error occured","category":"forge","in":[{"x":100,"y":180,"wires":[{"id":"3e0684d2.fdf95c"}]}],"out":[{"x":880,"y":460,"wires":[{"id":"23ff6b3.d21ac94","port":0}]},{"x":880,"y":240,"wires":[{"id":"67c9a760.2b60d8","port":1},{"id":"8457e7df.678948","port":1}]}],"env":[{"name":"bucket","type":"str","value":""},{"name":"key","type":"str","value":""},{"name":"contentType","type":"str","value":""},{"name":"contentDisposition","type":"str","value":""},{"name":"ifMatch","type":"str","value":""}],"outputLabels":["response","error"],"icon":"node-red-node-forge/forge.png","status":{"x":360,"y":60,"wires":[{"id":"5524a60f.f3f968","port":0}]}},{"id":"dd35521f.f8b18","type":"switch","z":"c93aef0f.c6081","name":"","property":"filename","propertyType":"msg","rules":[{"t":"empty"},{"t":"else"}],"checkall":"true","repair":false,"outputs":2,"x":230,"y":340,"wires":[["805d7a22.305ae8"],["485d2c2b.21f7d4"]]},{"id":"805d7a22.305ae8","type":"change","z":"c93aef0f.c6081","name":"Buffer","rules":[{"t":"set","p":"payload","pt":"msg","to":"data","tot":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":430,"y":320,"wires":[["67c9a760.2b60d8"]]},{"id":"485d2c2b.21f7d4","type":"change","z":"c93aef0f.c6081","name":"local filename","rules":[{"t":"set","p":"payload.localFilename","pt":"msg","to":"filename","tot":"msg"},{"t":"delete","p":"err","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":400,"y":360,"wires":[["67c9a760.2b60d8"]]},{"id":"67c9a760.2b60d8","type":"forge-oss","z":"c93aef0f.c6081","name":"Upload file","topic":"details","forge":"","operation":"PutObject","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":630,"y":340,"wires":[["22c9fe1b.97fb72"],[]]},{"id":"22c9fe1b.97fb72","type":"change","z":"c93aef0f.c6081","name":"Add Force Translation","rules":[{"t":"set","p":"xAdsForce","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":660,"y":400,"wires":[["bea009e.c90c9f8"]]},{"id":"bea009e.c90c9f8","type":"function","z":"c93aef0f.c6081","name":"Get URN","func":"msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);","outputs":1,"noerr":0,"x":280,"y":460,"wires":[["50bff6f3.e779c8"]]},{"id":"50bff6f3.e779c8","type":"base64","z":"c93aef0f.c6081","name":"base64 urn","action":"str","property":"urn","x":430,"y":460,"wires":[["23ff6b3.d21ac94"]]},{"id":"23ff6b3.d21ac94","type":"function","z":"c93aef0f.c6081","name":"safe base64","func":"msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);","outputs":1,"noerr":0,"x":590,"y":460,"wires":[[]]},{"id":"5524a60f.f3f968","type":"status","z":"c93aef0f.c6081","name":"","scope":null,"x":200,"y":60,"wires":[[]]},{"id":"3e0684d2.fdf95c","type":"function","z":"c93aef0f.c6081","name":"Inject","func":"if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get('bucket');\n    msg.key =msg.payload.key || msg.key || env.get('key');\n    msg.contentType =msg.payload.contentType || msg.contentType || env.get('contentType') || '';\n    msg.contentDisposition =msg.payload.contentDisposition || msg.contentDisposition || env.get('contentDisposition') || '';\n    msg.ifMatch =msg.payload.ifMatch || msg.ifMatch || env.get('ifMatch') || '';\n} else {\n    msg.bucket =msg.bucket || env.get('bucket');\n    msg.key =msg.key || env.get('key');\n    msg.contentType =msg.contentType || env.get('contentType') || '';\n    msg.contentDisposition =msg.contentDisposition || env.get('contentDisposition') || '';\n    msg.ifMatch =msg.ifMatch || env.get('ifMatch') || '';\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n    return (null);\n} else if ( !msg.key || msg.key === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid key name!'});\n    node.error('Provide a valid key name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'key' cannot be empty\"\n    };\n    return (null);\n}\n\nreturn (msg);","outputs":1,"noerr":0,"x":230,"y":180,"wires":[["8457e7df.678948"]],"info":"Upload an object. If the specified object name already exists in \nthe bucket, the uploaded content will overwrite the existing content \nfor the bucket name/object name combination.\n\n### Parameters\n\n* **bucket**: bucket to upload object into\n\n* **key**: object name being uploaded\n\n* **contentType** [optional]: indicate the media type of the resource\n\n* **contentDisposition** [optional]: suggested default filename when \n  downloading this object\n\n* **ifMatch** [optional]: When overwriting an object, use the latest SHA-1 \n  hash to verify that you are overwriting the latest data.\n  A SHA-1 hash is returned every time you upload or overwrite an object. \n  If the SHA-1 hash in the header does not match the current SHA-1 hash \n  stored for this object in OSS, the request fails (status code 412).\n\n### Outputs: "},{"id":"8457e7df.678948","type":"switch","z":"c93aef0f.c6081","name":"Params Ok?","property":"err","propertyType":"msg","rules":[{"t":"null"},{"t":"else"}],"checkall":"true","repair":false,"outputs":2,"x":270,"y":240,"wires":[["dd35521f.f8b18"],[]]},{"id":"3f75d555.5599aa","type":"subflow","name":"Check or Create OSS Bucket","info":"Check and Create OSS Bucket\n\n### Parameters\n\n* **bucket**: A unique name you assign to a bucket. It must be globally \n  unique across all applications and regions, otherwise the call will \n  fail. Possible values: -_.a-z0-9 (between 3-128 characters in\n  length). Note that you cannot change a bucket key.\n\n* **region** [optional]: The region where the bucket resides Acceptable values: \n  ```US```, ```EMEA``` Default: ```US```\n\n* **policyKey** [optional]: Data retention policy - Acceptable values: transient, temporary, persistent.\n  Default: ```transient```.\n\n* **forceBucketCreation** [optional] : In case the bucketKey is already used by another\n  application, you can force the node to iterate and find a name. The \n  node will append 6 random characters to the given key until it finds\n  one. Default: ```false```\n\n### Outputs\n\n* **response**: the bucket details\n\n* **error**: an error occured","category":"forge","in":[{"x":60,"y":340,"wires":[{"id":"16a24040.2a12a"}]}],"out":[{"x":920,"y":260,"wires":[{"id":"3cdeb2c8.928e2e","port":0},{"id":"b331344f.d4c458","port":0}]},{"x":920,"y":520,"wires":[{"id":"b331344f.d4c458","port":1},{"id":"29a66b9d.032624","port":1},{"id":"cb381637.2c08b8","port":2},{"id":"2f78371.5b87ac8","port":1}]}],"env":[{"name":"bucket","type":"str","value":""},{"name":"region","type":"str","value":""},{"name":"policyKey","type":"str","value":""},{"name":"forceBucketCreation","type":"bool","value":"false"}],"outputLabels":["response","errors"],"icon":"node-red-node-forge/forge.png","status":{"x":360,"y":60,"wires":[{"id":"9e9d5cb.1a203a","port":0}]}},{"id":"3cdeb2c8.928e2e","type":"forge-oss","z":"3f75d555.5599aa","name":"Bucket Exists?","topic":"","forge":"","operation":"BucketDetails","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":440,"y":380,"wires":[[],["cb381637.2c08b8"]]},{"id":"29a66b9d.032624","type":"switch","z":"3f75d555.5599aa","name":"","property":"forceBucketCreation","propertyType":"msg","rules":[{"t":"true"},{"t":"else"}],"checkall":"true","repair":false,"outputs":2,"x":390,"y":260,"wires":[["f9e5b5d9.40e6a8"],[]]},{"id":"f9e5b5d9.40e6a8","type":"function","z":"3f75d555.5599aa","name":"Change Bucket Name","func":"msg.originalbucket = msg.originalbucket || msg.bucket,\nmsg.bucket = \n    msg.originalbucket + \n    Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);\nreturn (msg);","outputs":1,"noerr":0,"x":580,"y":260,"wires":[["3cdeb2c8.928e2e"]]},{"id":"cb381637.2c08b8","type":"switch","z":"3f75d555.5599aa","name":"Bucket Taken/Missing","property":"err.statusCode","propertyType":"msg","rules":[{"t":"eq","v":"403","vt":"num"},{"t":"eq","v":"404","vt":"num"},{"t":"else"}],"checkall":"true","repair":false,"outputs":3,"x":680,"y":380,"wires":[["29a66b9d.032624"],["5fca92da.ce863c"],[]]},{"id":"5fca92da.ce863c","type":"change","z":"3f75d555.5599aa","name":"Inject","rules":[{"t":"delete","p":"err","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":270,"y":500,"wires":[["b331344f.d4c458"]]},{"id":"b331344f.d4c458","type":"forge-oss","z":"3f75d555.5599aa","name":"","topic":"bucket-ok","forge":"","operation":"CreateBucket","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":430,"y":500,"wires":[[],[]]},{"id":"9e9d5cb.1a203a","type":"status","z":"3f75d555.5599aa","name":"","scope":null,"x":240,"y":60,"wires":[[]]},{"id":"2f78371.5b87ac8","type":"switch","z":"3f75d555.5599aa","name":"Params Ok?","property":"err","propertyType":"msg","rules":[{"t":"null"},{"t":"else"}],"checkall":"true","repair":false,"outputs":2,"x":250,"y":400,"wires":[["3cdeb2c8.928e2e"],[]]},{"id":"16a24040.2a12a","type":"function","z":"3f75d555.5599aa","name":"Inject","func":"if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get ('bucket');\n    msg.region =msg.payload.region || msg.region || env.get ('region') || 'US';\n    msg.policyKey =msg.payload.policyKey || msg.policyKey || env.get ('policyKey') || 'transient';\n    msg.forceBucketCreation =false;\n    if (typeof msg.payload.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.payload.forceBucketCreation === true;\n    else if (typeof msg.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.forceBucketCreation === true;\n    else if (typeof env.get('forceBucketCreation') === 'boolean')\n        msg.forceBucketCreation =env.get('bucket') === true ;    \n} else {\n    msg.bucket =msg.bucket || env.get ('bucket');\n    msg.region =msg.region || env.get ('region') || 'US';\n    msg.policyKey =msg.policyKey || env.get ('policyKey') || 'transient';\n    if (typeof msg.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.forceBucketCreation === true;\n    else if (typeof env.get('forceBucketCreation') === 'boolean')\n        msg.forceBucketCreation =env.get('bucket') === true ;    \n    else\n        msg.forceBucketCreation =false;\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n}\n    \nreturn (msg);","outputs":1,"noerr":0,"x":170,"y":340,"wires":[["2f78371.5b87ac8"]]},{"id":"4aecadf2.352044","type":"subflow","name":"OSS Object Exists?","info":"Check if an object exists\n\n### Parameters\n\n* **bucket**: bucket key\n\n* **key**: object name to get details for\n\n* **sha1** [optional]: use the SHA-1 hash to know if the file is the same\n\n* **ifModifiedSince** [optional]: If the requested object has not been modified \n  since the time specified in this field, an entity will not be returned \n  from the server; instead, a 304 (not modified) response will be \n  returned without any message body. (HTTP date - UTC format)\n\n### Outputs\n\n* **sameObject**: SHA-1 code was provided and the object on the server match that code\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **needsUpdate**:  SHA-1 code was provided and the object on the server does not match that code\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **notFound**: the object was not found on the server\n\n* **error**: an error occured\n","category":"forge","in":[{"x":80,"y":240,"wires":[{"id":"cd4ca6bf.a91398"}]}],"out":[{"x":960,"y":160,"wires":[{"id":"f378191f.bb72c8","port":0}]},{"x":960,"y":280,"wires":[{"id":"5760de98.b3949","port":0}]},{"x":960,"y":400,"wires":[{"id":"8d6819c6.ca4368","port":0}]},{"x":960,"y":500,"wires":[{"id":"a30f5db5.f98de","port":1},{"id":"2fc8f4fa.244c3c","port":1}]}],"env":[{"name":"bucket","type":"str","value":""},{"name":"key","type":"str","value":""},{"name":"sha1","type":"str","value":""},{"name":"ifModifiedSince","type":"str","value":""}],"outputLabels":["sameObject","needUpdate","notFound","error"],"icon":"node-red-node-forge/forge.png","status":{"x":420,"y":80,"wires":[{"id":"b48d897a.c9d238","port":0}]}},{"id":"519554b5.c479ac","type":"forge-oss","z":"4aecadf2.352044","name":"File Exists?","topic":"","forge":"","operation":"ObjectDetails","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":["createdDate","lastModifiedDate"],"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":450,"y":360,"wires":[["267a56b1.29195a"],["2fc8f4fa.244c3c"]]},{"id":"2fc8f4fa.244c3c","type":"switch","z":"4aecadf2.352044","name":"File Missing","property":"err.statusCode","propertyType":"msg","rules":[{"t":"eq","v":"404","vt":"num"},{"t":"else"}],"checkall":"true","repair":false,"outputs":2,"x":690,"y":380,"wires":[["8d6819c6.ca4368"],[]]},{"id":"267a56b1.29195a","type":"switch","z":"4aecadf2.352044","name":"sha1?","property":"payload.sha1","propertyType":"msg","rules":[{"t":"eq","v":"sha1","vt":"msg"},{"t":"else"}],"checkall":"true","repair":true,"outputs":2,"x":430,"y":160,"wires":[["d7e513f3.2c9c1"],["7658925d.5f746c"]]},{"id":"b48d897a.c9d238","type":"status","z":"4aecadf2.352044","name":"","scope":null,"x":280,"y":80,"wires":[[]]},{"id":"cd4ca6bf.a91398","type":"function","z":"4aecadf2.352044","name":"Inject","func":"if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get('bucket');\n    msg.key =msg.payload.key || msg.key || env.get('key');\n    msg.sha1 =msg.payload.sha1 || msg.sha1 || env.get('sha1') || '';\n    msg.ifModifiedSince =msg.payload.ifModifiedSince || msg.ifModifiedSince || env.get('ifModifiedSince') || '';\n} else {\n    msg.bucket =msg.bucket || env.get('bucket');\n    msg.key =msg.key || env.get('key');\n    msg.sha1 =msg.sha1 || env.get('sha1') || '';\n    msg.ifModifiedSince =msg.ifModifiedSince || env.get('ifModifiedSince') || '';\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n} else if ( !msg.key || msg.key === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid key name!'});\n    node.error('Provide a valid key name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'key' cannot be empty\"\n    };\n}\n\nreturn (msg);","outputs":1,"noerr":0,"x":130,"y":380,"wires":[["a30f5db5.f98de"]]},{"id":"a30f5db5.f98de","type":"switch","z":"4aecadf2.352044","name":"Params Ok?","property":"err","propertyType":"msg","rules":[{"t":"null"},{"t":"else"}],"checkall":"true","repair":false,"outputs":2,"x":290,"y":380,"wires":[["519554b5.c479ac"],[]]},{"id":"8d6819c6.ca4368","type":"change","z":"4aecadf2.352044","name":"Remove err","rules":[{"t":"delete","p":"err","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":890,"y":340,"wires":[[]]},{"id":"d7e513f3.2c9c1","type":"function","z":"4aecadf2.352044","name":"Get URN","func":"msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);","outputs":1,"noerr":0,"x":580,"y":100,"wires":[["ab4a41e3.e383"]]},{"id":"ab4a41e3.e383","type":"base64","z":"4aecadf2.352044","name":"base64 urn","action":"str","property":"urn","x":730,"y":100,"wires":[["f378191f.bb72c8"]]},{"id":"f378191f.bb72c8","type":"function","z":"4aecadf2.352044","name":"safe base64","func":"msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);","outputs":1,"noerr":0,"x":890,"y":100,"wires":[[]]},{"id":"7658925d.5f746c","type":"function","z":"4aecadf2.352044","name":"Get URN","func":"msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);","outputs":1,"noerr":0,"x":580,"y":220,"wires":[["6d3d3bd0.cea6f4"]]},{"id":"6d3d3bd0.cea6f4","type":"base64","z":"4aecadf2.352044","name":"base64 urn","action":"str","property":"urn","x":730,"y":220,"wires":[["5760de98.b3949"]]},{"id":"5760de98.b3949","type":"function","z":"4aecadf2.352044","name":"safe base64","func":"msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);","outputs":1,"noerr":0,"x":890,"y":220,"wires":[[]]},{"id":"7741760c.b49038","type":"subflow:4aecadf2.352044","z":"37461fc6.8e9f5","name":"","env":[],"x":450,"y":1660,"wires":[["db68397c.fb0878"],["b1e9eac3.5da8a8"],["d4ead94e.891de8"],["2d17a28f.ff70de"]]},{"id":"48492c7.5ee46d4","type":"inject","z":"37461fc6.8e9f5","name":"robot.f3d 404","topic":"","payload":"{\"bucket\":\"cyrille-test-bucket-node-red\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":130,"y":1680,"wires":[["7741760c.b49038"]]},{"id":"d4ead94e.891de8","type":"debug","z":"37461fc6.8e9f5","name":"404","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":790,"y":1680,"wires":[]},{"id":"b1e9eac3.5da8a8","type":"debug","z":"37461fc6.8e9f5","name":"Different","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":1640,"wires":[]},{"id":"db68397c.fb0878","type":"debug","z":"37461fc6.8e9f5","name":"Equal","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":790,"y":1600,"wires":[]},{"id":"2d17a28f.ff70de","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":790,"y":1720,"wires":[]},{"id":"59945960.7dded8","type":"forge-default-credentials","z":"37461fc6.8e9f5","name":"","forge":"","x":130,"y":60,"wires":[]},{"id":"222656ae.2907fa","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","operation":"GetObject","raw":false,"all":false,"bucket":"FORGE_BUCKET","bucketType":"env","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":null,"localFilename":"","limit":10,"startAt":null,"beginsWith":null,"with":null,"ifMatch":null,"ifNoneMatch":null,"ifModifiedSince":null,"range":null,"access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":null,"guid":null,"region":"US","x":1260,"y":1020,"wires":[[],[]]},{"id":"382d5e88.06abe2","type":"forge-da","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"CreateAppbundlesAlias","raw":false,"page":"","all":false,"description":"","alias":"","version":1,"activityId":"","receiver":"","appbundles":"","commandline":"","parameters":[{"id":"","localName":null,"verb":"get","zip":false,"ondemand":false,"required":false,"description":null}],"settings":[],"engine":"","appbundlesId":"","package":"","nickname":"me","exponent":"","modulus":"","workitemId":"","limitProcessingTimeSec":"","baseUrls":"","signature":"","arguments":[],"limitPayloadSizeInKB":"","limitVersions":"","limitAliases":"","limitPublicAliases":"","limitAppUploadSizeInMB":"","limitMonthlyProcessingTimeInHours":"","backendLimits":[{"id":"","limitProcessingTimeSec":null}],"x":1280,"y":1100,"wires":[[],[]]},{"id":"9a035d00.76ace","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":160,"wires":[]},{"id":"bb7f6032.e6e5a","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":160,"wires":[]},{"id":"eef4c39f.22e7b","type":"debug","z":"37461fc6.8e9f5","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":2070,"y":400,"wires":[]},{"id":"e07c596c.0f2418","type":"debug","z":"37461fc6.8e9f5","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":2070,"y":440,"wires":[]},{"id":"4b338a8c.2afa74","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"ListBuckets","raw":true,"all":true,"bucket":"FORGE_BUCKET","bucketType":"env","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":440,"y":160,"wires":[["9a035d00.76ace"],["bb7f6032.e6e5a"]]},{"id":"605255b.8f40eac","type":"inject","z":"37461fc6.8e9f5","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":160,"wires":[["4b338a8c.2afa74"]]},{"id":"dfb14b25.2fd388","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":790,"y":240,"wires":[]},{"id":"dcb12e0a.2da8","type":"switch","z":"37461fc6.8e9f5","name":"","property":"payload.next","propertyType":"msg","rules":[{"t":"nnull"},{"t":"null"}],"checkall":"true","repair":false,"outputs":2,"x":390,"y":300,"wires":[["d7fc09aa.20de58","4ec0ae8b.cc58c"],["87ebf43e.265328"]]},{"id":"d7fc09aa.20de58","type":"change","z":"37461fc6.8e9f5","name":"","rules":[{"t":"set","p":"payload.startAt","pt":"msg","to":"$match(payload.next, /startAt=([-_.a-z0-9]{3,128})/).groups[0]\t","tot":"jsonata"}],"action":"","property":"","from":"","to":"","reg":false,"x":610,"y":300,"wires":[["e11f6cc9.b8757"]]},{"id":"4ec0ae8b.cc58c","type":"join","z":"37461fc6.8e9f5","name":"","mode":"custom","build":"array","property":"payload","propertyType":"msg","key":"topic","joiner":"\\n","joinerType":"str","accumulate":false,"timeout":"","count":"","reduceRight":false,"reduceExp":"","reduceInit":"","reduceInitType":"num","reduceFixup":"","x":550,"y":360,"wires":[["e8910655.166f18"]]},{"id":"87ebf43e.265328","type":"function","z":"37461fc6.8e9f5","name":"Done","func":"msg.complete =true;\n// delete msg.payload\n// delete msg.op;\nreturn msg;","outputs":1,"noerr":0,"x":410,"y":360,"wires":[["4ec0ae8b.cc58c"]]},{"id":"45051319.17551c","type":"debug","z":"37461fc6.8e9f5","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":790,"y":360,"wires":[]},{"id":"e8910655.166f18","type":"function","z":"37461fc6.8e9f5","name":"Merge","func":"var results = msg.payload.reduce (\n    function (sum, elt) {\n        //return ([...sum, ...elt.items]);\n        return (sum.concat(elt.items));\n    },\n    []\n);\nreturn ({ results: results, op: \"ListBuckets\" });","outputs":1,"noerr":0,"x":670,"y":360,"wires":[["45051319.17551c"]]},{"id":"491a153.07342ec","type":"debug","z":"37461fc6.8e9f5","name":"Result","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":790,"y":200,"wires":[]},{"id":"f128863a.5f85e8","type":"inject","z":"37461fc6.8e9f5","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":200,"wires":[["29c37eea.ccd622"]]},{"id":"ac109ab3.a77dd8","type":"inject","z":"37461fc6.8e9f5","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":240,"wires":[["e11f6cc9.b8757"]]},{"id":"29c37eea.ccd622","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"ListBuckets","raw":false,"all":true,"bucket":"FORGE_BUCKET","bucketType":"env","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":440,"y":200,"wires":[["491a153.07342ec"],["dfb14b25.2fd388"]]},{"id":"e11f6cc9.b8757","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"ListBuckets","raw":false,"all":false,"bucket":"FORGE_BUCKET","bucketType":"env","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":440,"y":240,"wires":[["dcb12e0a.2da8"],["dfb14b25.2fd388"]]},{"id":"ae8a40cc.fde33","type":"comment","z":"37461fc6.8e9f5","name":"OSS","info":"","x":90,"y":120,"wires":[]},{"id":"56158633.ab0618","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"BucketDetails","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":450,"y":600,"wires":[["c12b9873.a71a08","b1cd7aa4.687c68"],["8662f223.32eca"]]},{"id":"c12b9873.a71a08","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":600,"wires":[]},{"id":"8662f223.32eca","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":600,"wires":[]},{"id":"9f2967b1.213358","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"CreateBucket","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":450,"y":460,"wires":[["314eb850.d8f3c8","56158633.ab0618"],["3586ad1c.4d2942"]]},{"id":"314eb850.d8f3c8","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":460,"wires":[]},{"id":"3d5e6727.368188","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":460,"wires":[]},{"id":"b22cc77c.c60f48","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":640,"wires":[]},{"id":"1b203d29.8a9583","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":640,"wires":[]},{"id":"eccc188b.94a098","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"DeleteBucket","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":450,"y":1120,"wires":[["d31faa4a.14c898"],["c6045df3.e9dd7"]]},{"id":"d31faa4a.14c898","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":1120,"wires":[]},{"id":"c6045df3.e9dd7","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":1120,"wires":[]},{"id":"ea4af3fe.b7d3","type":"inject","z":"37461fc6.8e9f5","name":"robot.f3d","topic":"","payload":"{\"bucket\":\"cyrille-test-bucket-node-red\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1080,"wires":[["cb690ba1.e4bd58"]]},{"id":"98adc4c.7f3dd38","type":"function","z":"37461fc6.8e9f5","name":"","func":"msg = msg.payload;\nreturn msg;","outputs":1,"noerr":0,"x":270,"y":460,"wires":[["9f2967b1.213358"]]},{"id":"b1cd7aa4.687c68","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"PutObject","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":440,"y":640,"wires":[["b22cc77c.c60f48","3f5b61ee.2e222e"],["1b203d29.8a9583"]]},{"id":"3586ad1c.4d2942","type":"switch","z":"37461fc6.8e9f5","name":"if 409","property":"err.statusCode","propertyType":"msg","rules":[{"t":"eq","v":"409","vt":"num"},{"t":"else"}],"checkall":"true","repair":false,"outputs":2,"x":410,"y":520,"wires":[["fc6b16f0.449ba8"],["3d5e6727.368188"]]},{"id":"fc6b16f0.449ba8","type":"change","z":"37461fc6.8e9f5","name":"","rules":[{"t":"delete","p":"err","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":440,"y":560,"wires":[["56158633.ab0618"]]},{"id":"3f5b61ee.2e222e","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"ObjectDetails","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":450,"y":700,"wires":[["12b665a3.fa2fea","b06c42e2.a94b5","a6b3d7cc.5da9d8","72faf5fe.e6a1ec"],["5207bd00.8354c4"]]},{"id":"12b665a3.fa2fea","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":700,"wires":[]},{"id":"5207bd00.8354c4","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":700,"wires":[]},{"id":"a6b3d7cc.5da9d8","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"CreateSignature","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":460,"y":940,"wires":[["697c3b3c.26d8b4","831b3a1e.1910c8"],["eb034a49.ae7f38"]]},{"id":"697c3b3c.26d8b4","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":940,"wires":[]},{"id":"eb034a49.ae7f38","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":940,"wires":[]},{"id":"6b50efd2.f46e5","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"GetSignedObject","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"","region":"US","x":460,"y":980,"wires":[["df9ea30a.eb4f9","8601f530.6d0ba8"],["1ede5a85.98fd65"]]},{"id":"c650cc8c.40017","type":"inject","z":"37461fc6.8e9f5","name":"robot.f3d","topic":"","payload":"{\"bucket\":\"cyrille-test-bucket-node-red\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":620,"wires":[["d9e0c356.89a71"]]},{"id":"d9e0c356.89a71","type":"function","z":"37461fc6.8e9f5","name":"","func":"msg = msg.payload;\nreturn msg;","outputs":1,"noerr":0,"x":130,"y":660,"wires":[["3f5b61ee.2e222e"]]},{"id":"831b3a1e.1910c8","type":"change","z":"37461fc6.8e9f5","name":"","rules":[{"t":"set","p":"guid","pt":"msg","to":"payload.guid","tot":"msg"},{"t":"set","p":"signedUrl","pt":"msg","to":"payload.signedUrl","tot":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":260,"y":980,"wires":[["6b50efd2.f46e5"]]},{"id":"df9ea30a.eb4f9","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":980,"wires":[]},{"id":"1ede5a85.98fd65","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":980,"wires":[]},{"id":"b06c42e2.a94b5","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"GetObject","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":440,"y":740,"wires":[["65a17596.c0d38c"],["994d7099.670cb"]]},{"id":"65a17596.c0d38c","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":740,"wires":[]},{"id":"994d7099.670cb","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":740,"wires":[]},{"id":"78655509.99f74c","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"CopyObject","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":441,"y":780,"wires":[["f1f58aa6.f473c8","33121f1e.82905"],["11a29676.57c38a"]]},{"id":"dae3ba77.bcfb18","type":"change","z":"37461fc6.8e9f5","name":"","rules":[{"t":"set","p":"copy","pt":"msg","to":"\"copy-\" & msg.key","tot":"jsonata"}],"action":"","property":"","from":"","to":"","reg":false,"x":260,"y":780,"wires":[["78655509.99f74c"]]},{"id":"f1f58aa6.f473c8","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":780,"wires":[]},{"id":"11a29676.57c38a","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":780,"wires":[]},{"id":"ac6a0698.ce6ab8","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"ObjectDetails","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":450,"y":840,"wires":[["7dd663c5.de957c","40437e99.3ebe8"],["71aa9a7f.6bd914"]]},{"id":"33121f1e.82905","type":"change","z":"37461fc6.8e9f5","name":"","rules":[{"t":"set","p":"key","pt":"msg","to":"copy","tot":"msg"},{"t":"delete","p":"copy","pt":"msg"}],"action":"","property":"","from":"","to":"","reg":false,"x":260,"y":840,"wires":[["ac6a0698.ce6ab8"]]},{"id":"7dd663c5.de957c","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":840,"wires":[]},{"id":"71aa9a7f.6bd914","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":840,"wires":[]},{"id":"40437e99.3ebe8","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"DeleteObject","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":450,"y":880,"wires":[["fd801398.d65f2"],["ec7868a3.8a3e88"]]},{"id":"fd801398.d65f2","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":880,"wires":[]},{"id":"ec7868a3.8a3e88","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":880,"wires":[]},{"id":"8601f530.6d0ba8","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"DeleteSignedObject","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"","region":"US","x":470,"y":1020,"wires":[["9d76afee.80984"],["3e24d44b.68e14c"]]},{"id":"9d76afee.80984","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":1020,"wires":[]},{"id":"3e24d44b.68e14c","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":1020,"wires":[]},{"id":"9674b46a.b6c818","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"ListObjects","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":440,"y":1080,"wires":[["ea087484.c678d8","eccc188b.94a098"],["61f7d43b.b45dcc"]]},{"id":"ea087484.c678d8","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":1080,"wires":[]},{"id":"61f7d43b.b45dcc","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":1080,"wires":[]},{"id":"5d0e63ae.85ff7c","type":"inject","z":"37461fc6.8e9f5","name":"robot.f3d","topic":"","payload":"{\"bucket\":\"cyrille-test-bucket-node-red\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":720,"wires":[["46bf76f5.46fe98"]]},{"id":"46bf76f5.46fe98","type":"function","z":"37461fc6.8e9f5","name":"","func":"msg = msg.payload;\nreturn msg;","outputs":1,"noerr":0,"x":110,"y":780,"wires":[["dae3ba77.bcfb18"]]},{"id":"cb690ba1.e4bd58","type":"function","z":"37461fc6.8e9f5","name":"","func":"msg = msg.payload;\nreturn msg;","outputs":1,"noerr":0,"x":270,"y":1080,"wires":[["9674b46a.b6c818"]]},{"id":"72faf5fe.e6a1ec","type":"delay","z":"37461fc6.8e9f5","name":"","pauseType":"delay","timeout":"5","timeoutUnits":"seconds","rate":"1","nbRateUnits":"1","rateUnits":"second","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":false,"x":640,"y":680,"wires":[["dae3ba77.bcfb18"]]},{"id":"525203d8.30f0ac","type":"inject","z":"37461fc6.8e9f5","name":"404","topic":"","payload":"{\"bucket\":\"cyrille-models\",\"key\":\"unknow.f3d\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":110,"y":1720,"wires":[["7741760c.b49038"]]},{"id":"99305373.9839e","type":"inject","z":"37461fc6.8e9f5","name":"Xray.fbx","topic":"","payload":"{\"bucket\":\"cyrille-models\",\"key\":\"Xray.fbx\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":110,"y":1640,"wires":[["7741760c.b49038"]]},{"id":"3ab367e4.67f238","type":"inject","z":"37461fc6.8e9f5","name":"Xray.fbx ==","topic":"","payload":"{\"bucket\":\"cyrille-models\",\"key\":\"Xray.fbx\",\"sha1\":\"a3d59ff64b0333e0e304d3a78c2e087c87722d28\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":130,"y":1600,"wires":[["7741760c.b49038"]]},{"id":"66edb98b.76cbe8","type":"function","z":"37461fc6.8e9f5","name":"","func":"return (msg.payload);","outputs":1,"noerr":0,"x":270,"y":1300,"wires":[["1e2d9e85.c8b011"]]},{"id":"1e2d9e85.c8b011","type":"subflow:3f75d555.5599aa","z":"37461fc6.8e9f5","name":"","env":[],"x":480,"y":1300,"wires":[["a34c1281.2f78"],["720a864d.8f7428"]]},{"id":"14e300d9.31545f","type":"inject","z":"37461fc6.8e9f5","name":"403","topic":"config","payload":"{\"bucket\":\"test1234\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":110,"y":1760,"wires":[["7741760c.b49038"]]},{"id":"f7c601fa.196f8","type":"inject","z":"37461fc6.8e9f5","name":"robot.f3d","topic":"","payload":"{\"bucket\":\"cyrille-test-bucket-node-red\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":460,"wires":[["98adc4c.7f3dd38"]]},{"id":"a34c1281.2f78","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":1300,"wires":[]},{"id":"720a864d.8f7428","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":1300,"wires":[]},{"id":"6285ad68.241c74","type":"inject","z":"37461fc6.8e9f5","name":"bucket","topic":"config","payload":"{\"bucket\":\"cyrille-tests-buckets\" }","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":110,"y":1300,"wires":[["66edb98b.76cbe8"]]},{"id":"ed1f25fb.32ede8","type":"inject","z":"37461fc6.8e9f5","name":"404","topic":"config","payload":"{\"bucket\":\"cyrille-tests-buckets-missing\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":110,"y":1260,"wires":[["66edb98b.76cbe8"]]},{"id":"f82ea6ef.70a458","type":"inject","z":"37461fc6.8e9f5","name":"404 - forced","topic":"config","payload":"{\"bucket\":\"cyrille-tests-buckets-missing\",\"forceBucketCreation\":true}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":130,"y":1220,"wires":[["66edb98b.76cbe8"]]},{"id":"77cd9ec6.80614","type":"inject","z":"37461fc6.8e9f5","name":"403","topic":"config","payload":"{\"bucket\":\"test1234\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":110,"y":1340,"wires":[["66edb98b.76cbe8"]]},{"id":"2215035c.cae42c","type":"inject","z":"37461fc6.8e9f5","name":"403 - forced","topic":"config","payload":"{\"bucket\":\"test1234\",\"forceBucketCreation\":true}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":130,"y":1380,"wires":[["66edb98b.76cbe8"]]},{"id":"7161a24a.00c8bc","type":"subflow:c93aef0f.c6081","z":"37461fc6.8e9f5","name":"","env":[],"x":440,"y":1840,"wires":[["6abab874.31a6c8"],["39345646.a54eba"]]},{"id":"6abab874.31a6c8","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":1840,"wires":[]},{"id":"39345646.a54eba","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":1840,"wires":[]},{"id":"826183a4.5c273","type":"function","z":"37461fc6.8e9f5","name":"","func":"return (msg.payload);","outputs":1,"noerr":0,"x":270,"y":1840,"wires":[["7161a24a.00c8bc"]]},{"id":"d69e66db.c13ef8","type":"inject","z":"37461fc6.8e9f5","name":"robot.f3d","topic":"config","payload":"{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1840,"wires":[["826183a4.5c273"]]},{"id":"94d42580.c30138","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"DeleteObject","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","copy":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":450,"y":1900,"wires":[["4de23420.02ca4c"],["802902b2.bed64"]]},{"id":"4de23420.02ca4c","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":1900,"wires":[]},{"id":"802902b2.bed64","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":1900,"wires":[]},{"id":"3bffc3ed.2d273c","type":"inject","z":"37461fc6.8e9f5","name":"robot.f3d","topic":"config","payload":"{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":120,"y":1900,"wires":[["b4c0e61e.783458"]]},{"id":"b4c0e61e.783458","type":"function","z":"37461fc6.8e9f5","name":"","func":"return (msg.payload);","outputs":1,"noerr":0,"x":270,"y":1900,"wires":[["94d42580.c30138"]]},{"id":"65f8f8e9.8bf218","type":"forge-oss","z":"37461fc6.8e9f5","name":"","topic":"","forge":"","operation":"DeleteBucket","raw":false,"all":false,"bucket":"","bucketType":"str","policyKey":"transient","key":"","contentType":"application/octet-stream","contentDisposition":"","localFilename":"","limit":10,"startAt":"","beginsWith":"","with":null,"ifMatch":"","ifNoneMatch":"","ifModifiedSince":"","range":"","access":"read","singleUse":false,"minutesExpiration":60,"acceptEncoding":"","guid":"autodesk","region":"US","x":450,"y":1480,"wires":[["9e57e984.093818"],["84bf0afe.9c0db8"]]},{"id":"9e57e984.093818","type":"debug","z":"37461fc6.8e9f5","name":"Results","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":800,"y":1480,"wires":[]},{"id":"84bf0afe.9c0db8","type":"debug","z":"37461fc6.8e9f5","name":"Error","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":950,"y":1480,"wires":[]},{"id":"f8c206fe.e5b818","type":"inject","z":"37461fc6.8e9f5","name":"404","topic":"config","payload":"{\"bucket\":\"cyrille-tests-buckets-missing\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":110,"y":1440,"wires":[["65f8f8e9.8bf218"]]},{"id":"9652ecd9.3f8be","type":"inject","z":"37461fc6.8e9f5","name":"bucket","topic":"config","payload":"{\"bucket\":\"cyrille-tests-buckets\" }","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":110,"y":1480,"wires":[["65f8f8e9.8bf218"]]},{"id":"4554c058.42e57","type":"inject","z":"37461fc6.8e9f5","name":"403","topic":"config","payload":"{\"bucket\":\"test1234\"}","payloadType":"json","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":110,"y":1520,"wires":[["65f8f8e9.8bf218"]]}]
+[
+	{
+		"id": "c93aef0f.c6081",
+		"type": "subflow",
+		"name": "Upload to OSS",
+		"info": "Upload an object. If the specified object name already exists in \nthe bucket, the uploaded content will overwrite the existing content \nfor the bucket name/object name combination.\n\n### Parameters\n\n* **bucket**: bucket to upload object into\n\n* **key**: object name being uploaded\n\n* **contentType** [optional]: media type\n\n* **contentDisposition** [optional]: suggested default filename when downloading this object to a file after it has been uploaded\n\n* **ifMatch** [optional]: When overwriting an object, use the latest SHA-1 hash \n  to verify that you are overwriting the latest data.\n  A SHA-1 hash is returned every time you upload or overwrite an object. \n  If the SHA-1 hash in the header does not match the current SHA-1 hash \n  stored for this object in OSS, the request fails (status code 412).\n\n### Outputs\n\n* **response**: the object details\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **error**: an error occured",
+		"category": "forge",
+		"in": [
+			{
+				"x": 100,
+				"y": 180,
+				"wires": [
+					{
+						"id": "3e0684d2.fdf95c"
+					}
+				]
+			}
+		],
+		"out": [
+			{
+				"x": 880,
+				"y": 460,
+				"wires": [
+					{
+						"id": "23ff6b3.d21ac94",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 880,
+				"y": 240,
+				"wires": [
+					{
+						"id": "67c9a760.2b60d8",
+						"port": 1
+					},
+					{
+						"id": "8457e7df.678948",
+						"port": 1
+					}
+				]
+			}
+		],
+		"env": [
+			{
+				"name": "bucket",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "key",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "contentType",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "contentDisposition",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "ifMatch",
+				"type": "str",
+				"value": ""
+			}
+		],
+		"outputLabels": [
+			"response",
+			"error"
+		],
+		"icon": "node-red-node-forge/forge.png",
+		"status": {
+			"x": 360,
+			"y": 60,
+			"wires": [
+				{
+					"id": "5524a60f.f3f968",
+					"port": 0
+				}
+			]
+		}
+	},
+	{
+		"id": "dd35521f.f8b18",
+		"type": "switch",
+		"z": "c93aef0f.c6081",
+		"name": "",
+		"property": "filename",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "empty"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 230,
+		"y": 340,
+		"wires": [
+			[
+				"805d7a22.305ae8"
+			],
+			[
+				"485d2c2b.21f7d4"
+			]
+		]
+	},
+	{
+		"id": "805d7a22.305ae8",
+		"type": "change",
+		"z": "c93aef0f.c6081",
+		"name": "Buffer",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload",
+				"pt": "msg",
+				"to": "data",
+				"tot": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 430,
+		"y": 320,
+		"wires": [
+			[
+				"67c9a760.2b60d8"
+			]
+		]
+	},
+	{
+		"id": "485d2c2b.21f7d4",
+		"type": "change",
+		"z": "c93aef0f.c6081",
+		"name": "local filename",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload.localFilename",
+				"pt": "msg",
+				"to": "filename",
+				"tot": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "err",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 400,
+		"y": 360,
+		"wires": [
+			[
+				"67c9a760.2b60d8"
+			]
+		]
+	},
+	{
+		"id": "67c9a760.2b60d8",
+		"type": "forge-oss",
+		"z": "c93aef0f.c6081",
+		"name": "Upload file",
+		"topic": "details",
+		"forge": "",
+		"operation": "PutObject",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 630,
+		"y": 340,
+		"wires": [
+			[
+				"22c9fe1b.97fb72"
+			],
+			[]
+		]
+	},
+	{
+		"id": "22c9fe1b.97fb72",
+		"type": "change",
+		"z": "c93aef0f.c6081",
+		"name": "Add Force Translation",
+		"rules": [
+			{
+				"t": "set",
+				"p": "xAdsForce",
+				"pt": "msg",
+				"to": "true",
+				"tot": "bool"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 660,
+		"y": 400,
+		"wires": [
+			[
+				"bea009e.c90c9f8"
+			]
+		]
+	},
+	{
+		"id": "bea009e.c90c9f8",
+		"type": "function",
+		"z": "c93aef0f.c6081",
+		"name": "Get URN",
+		"func": "msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 280,
+		"y": 460,
+		"wires": [
+			[
+				"50bff6f3.e779c8"
+			]
+		]
+	},
+	{
+		"id": "50bff6f3.e779c8",
+		"type": "base64",
+		"z": "c93aef0f.c6081",
+		"name": "base64 urn",
+		"action": "str",
+		"property": "urn",
+		"x": 430,
+		"y": 460,
+		"wires": [
+			[
+				"23ff6b3.d21ac94"
+			]
+		]
+	},
+	{
+		"id": "23ff6b3.d21ac94",
+		"type": "function",
+		"z": "c93aef0f.c6081",
+		"name": "safe base64",
+		"func": "msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 590,
+		"y": 460,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "5524a60f.f3f968",
+		"type": "status",
+		"z": "c93aef0f.c6081",
+		"name": "",
+		"scope": null,
+		"x": 200,
+		"y": 60,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "3e0684d2.fdf95c",
+		"type": "function",
+		"z": "c93aef0f.c6081",
+		"name": "Inject",
+		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get('bucket');\n    msg.key =msg.payload.key || msg.key || env.get('key');\n    msg.contentType =msg.payload.contentType || msg.contentType || env.get('contentType') || '';\n    msg.contentDisposition =msg.payload.contentDisposition || msg.contentDisposition || env.get('contentDisposition') || '';\n    msg.ifMatch =msg.payload.ifMatch || msg.ifMatch || env.get('ifMatch') || '';\n} else {\n    msg.bucket =msg.bucket || env.get('bucket');\n    msg.key =msg.key || env.get('key');\n    msg.contentType =msg.contentType || env.get('contentType') || '';\n    msg.contentDisposition =msg.contentDisposition || env.get('contentDisposition') || '';\n    msg.ifMatch =msg.ifMatch || env.get('ifMatch') || '';\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n    return (null);\n} else if ( !msg.key || msg.key === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid key name!'});\n    node.error('Provide a valid key name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'key' cannot be empty\"\n    };\n    return (null);\n}\n\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 230,
+		"y": 180,
+		"wires": [
+			[
+				"8457e7df.678948"
+			]
+		],
+		"info": "Upload an object. If the specified object name already exists in \nthe bucket, the uploaded content will overwrite the existing content \nfor the bucket name/object name combination.\n\n### Parameters\n\n* **bucket**: bucket to upload object into\n\n* **key**: object name being uploaded\n\n* **contentType** [optional]: indicate the media type of the resource\n\n* **contentDisposition** [optional]: suggested default filename when \n  downloading this object\n\n* **ifMatch** [optional]: When overwriting an object, use the latest SHA-1 \n  hash to verify that you are overwriting the latest data.\n  A SHA-1 hash is returned every time you upload or overwrite an object. \n  If the SHA-1 hash in the header does not match the current SHA-1 hash \n  stored for this object in OSS, the request fails (status code 412).\n\n### Outputs: "
+	},
+	{
+		"id": "8457e7df.678948",
+		"type": "switch",
+		"z": "c93aef0f.c6081",
+		"name": "Params Ok?",
+		"property": "err",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "null"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 270,
+		"y": 240,
+		"wires": [
+			[
+				"dd35521f.f8b18"
+			],
+			[]
+		]
+	},
+	{
+		"id": "3f75d555.5599aa",
+		"type": "subflow",
+		"name": "Check or Create OSS Bucket",
+		"info": "Check and Create OSS Bucket\n\n### Parameters\n\n* **bucket**: A unique name you assign to a bucket. It must be globally \n  unique across all applications and regions, otherwise the call will \n  fail. Possible values: -_.a-z0-9 (between 3-128 characters in\n  length). Note that you cannot change a bucket key.\n\n* **region** [optional]: The region where the bucket resides Acceptable values: \n  ```US```, ```EMEA``` Default: ```US```\n\n* **policyKey** [optional]: Data retention policy - Acceptable values: transient, temporary, persistent.\n  Default: ```transient```.\n\n* **forceBucketCreation** [optional] : In case the bucketKey is already used by another\n  application, you can force the node to iterate and find a name. The \n  node will append 6 random characters to the given key until it finds\n  one. Default: ```false```\n\n### Outputs\n\n* **response**: the bucket details\n\n* **error**: an error occured",
+		"category": "forge",
+		"in": [
+			{
+				"x": 60,
+				"y": 340,
+				"wires": [
+					{
+						"id": "16a24040.2a12a"
+					}
+				]
+			}
+		],
+		"out": [
+			{
+				"x": 920,
+				"y": 260,
+				"wires": [
+					{
+						"id": "3cdeb2c8.928e2e",
+						"port": 0
+					},
+					{
+						"id": "b331344f.d4c458",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 920,
+				"y": 520,
+				"wires": [
+					{
+						"id": "b331344f.d4c458",
+						"port": 1
+					},
+					{
+						"id": "29a66b9d.032624",
+						"port": 1
+					},
+					{
+						"id": "cb381637.2c08b8",
+						"port": 2
+					},
+					{
+						"id": "2f78371.5b87ac8",
+						"port": 1
+					}
+				]
+			}
+		],
+		"env": [
+			{
+				"name": "bucket",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "region",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "policyKey",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "forceBucketCreation",
+				"type": "bool",
+				"value": "false"
+			}
+		],
+		"outputLabels": [
+			"response",
+			"errors"
+		],
+		"icon": "node-red-node-forge/forge.png",
+		"status": {
+			"x": 360,
+			"y": 60,
+			"wires": [
+				{
+					"id": "9e9d5cb.1a203a",
+					"port": 0
+				}
+			]
+		}
+	},
+	{
+		"id": "3cdeb2c8.928e2e",
+		"type": "forge-oss",
+		"z": "3f75d555.5599aa",
+		"name": "Bucket Exists?",
+		"topic": "",
+		"forge": "",
+		"operation": "BucketDetails",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 440,
+		"y": 380,
+		"wires": [
+			[],
+			[
+				"cb381637.2c08b8"
+			]
+		]
+	},
+	{
+		"id": "29a66b9d.032624",
+		"type": "switch",
+		"z": "3f75d555.5599aa",
+		"name": "",
+		"property": "forceBucketCreation",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "true"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 390,
+		"y": 260,
+		"wires": [
+			[
+				"f9e5b5d9.40e6a8"
+			],
+			[]
+		]
+	},
+	{
+		"id": "f9e5b5d9.40e6a8",
+		"type": "function",
+		"z": "3f75d555.5599aa",
+		"name": "Change Bucket Name",
+		"func": "msg.originalbucket = msg.originalbucket || msg.bucket,\nmsg.bucket = \n    msg.originalbucket + \n    Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 580,
+		"y": 260,
+		"wires": [
+			[
+				"3cdeb2c8.928e2e"
+			]
+		]
+	},
+	{
+		"id": "cb381637.2c08b8",
+		"type": "switch",
+		"z": "3f75d555.5599aa",
+		"name": "Bucket Taken/Missing",
+		"property": "err.statusCode",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "403",
+				"vt": "num"
+			},
+			{
+				"t": "eq",
+				"v": "404",
+				"vt": "num"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 3,
+		"x": 680,
+		"y": 380,
+		"wires": [
+			[
+				"29a66b9d.032624"
+			],
+			[
+				"5fca92da.ce863c"
+			],
+			[]
+		]
+	},
+	{
+		"id": "5fca92da.ce863c",
+		"type": "change",
+		"z": "3f75d555.5599aa",
+		"name": "Inject",
+		"rules": [
+			{
+				"t": "delete",
+				"p": "err",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 270,
+		"y": 500,
+		"wires": [
+			[
+				"b331344f.d4c458"
+			]
+		]
+	},
+	{
+		"id": "b331344f.d4c458",
+		"type": "forge-oss",
+		"z": "3f75d555.5599aa",
+		"name": "",
+		"topic": "bucket-ok",
+		"forge": "",
+		"operation": "CreateBucket",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 430,
+		"y": 500,
+		"wires": [
+			[],
+			[]
+		]
+	},
+	{
+		"id": "9e9d5cb.1a203a",
+		"type": "status",
+		"z": "3f75d555.5599aa",
+		"name": "",
+		"scope": null,
+		"x": 240,
+		"y": 60,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "2f78371.5b87ac8",
+		"type": "switch",
+		"z": "3f75d555.5599aa",
+		"name": "Params Ok?",
+		"property": "err",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "null"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 250,
+		"y": 400,
+		"wires": [
+			[
+				"3cdeb2c8.928e2e"
+			],
+			[]
+		]
+	},
+	{
+		"id": "16a24040.2a12a",
+		"type": "function",
+		"z": "3f75d555.5599aa",
+		"name": "Inject",
+		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get ('bucket');\n    msg.region =msg.payload.region || msg.region || env.get ('region') || 'US';\n    msg.policyKey =msg.payload.policyKey || msg.policyKey || env.get ('policyKey') || 'transient';\n    msg.forceBucketCreation =false;\n    if (typeof msg.payload.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.payload.forceBucketCreation === true;\n    else if (typeof msg.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.forceBucketCreation === true;\n    else if (typeof env.get('forceBucketCreation') === 'boolean')\n        msg.forceBucketCreation =env.get('bucket') === true ;    \n} else {\n    msg.bucket =msg.bucket || env.get ('bucket');\n    msg.region =msg.region || env.get ('region') || 'US';\n    msg.policyKey =msg.policyKey || env.get ('policyKey') || 'transient';\n    if (typeof msg.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.forceBucketCreation === true;\n    else if (typeof env.get('forceBucketCreation') === 'boolean')\n        msg.forceBucketCreation =env.get('bucket') === true ;    \n    else\n        msg.forceBucketCreation =false;\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n}\n    \nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 170,
+		"y": 340,
+		"wires": [
+			[
+				"2f78371.5b87ac8"
+			]
+		]
+	},
+	{
+		"id": "4aecadf2.352044",
+		"type": "subflow",
+		"name": "OSS Object Exists?",
+		"info": "Check if an object exists\n\n### Parameters\n\n* **bucket**: bucket key\n\n* **key**: object name to get details for\n\n* **sha1** [optional]: use the SHA-1 hash to know if the file is the same\n\n* **ifModifiedSince** [optional]: If the requested object has not been modified \n  since the time specified in this field, an entity will not be returned \n  from the server; instead, a 304 (not modified) response will be \n  returned without any message body. (HTTP date - UTC format)\n\n### Outputs\n\n* **sameObject**: SHA-1 code was provided and the object on the server match that code\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **needsUpdate**:  SHA-1 code was provided and the object on the server does not match that code\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **notFound**: the object was not found on the server\n\n* **error**: an error occured\n",
+		"category": "forge",
+		"in": [
+			{
+				"x": 80,
+				"y": 240,
+				"wires": [
+					{
+						"id": "cd4ca6bf.a91398"
+					}
+				]
+			}
+		],
+		"out": [
+			{
+				"x": 960,
+				"y": 160,
+				"wires": [
+					{
+						"id": "f378191f.bb72c8",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 960,
+				"y": 280,
+				"wires": [
+					{
+						"id": "5760de98.b3949",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 960,
+				"y": 400,
+				"wires": [
+					{
+						"id": "8d6819c6.ca4368",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 960,
+				"y": 500,
+				"wires": [
+					{
+						"id": "a30f5db5.f98de",
+						"port": 1
+					},
+					{
+						"id": "2fc8f4fa.244c3c",
+						"port": 1
+					}
+				]
+			}
+		],
+		"env": [
+			{
+				"name": "bucket",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "key",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "sha1",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "ifModifiedSince",
+				"type": "str",
+				"value": ""
+			}
+		],
+		"outputLabels": [
+			"sameObject",
+			"needUpdate",
+			"notFound",
+			"error"
+		],
+		"icon": "node-red-node-forge/forge.png",
+		"status": {
+			"x": 420,
+			"y": 80,
+			"wires": [
+				{
+					"id": "b48d897a.c9d238",
+					"port": 0
+				}
+			]
+		}
+	},
+	{
+		"id": "519554b5.c479ac",
+		"type": "forge-oss",
+		"z": "4aecadf2.352044",
+		"name": "File Exists?",
+		"topic": "",
+		"forge": "",
+		"operation": "ObjectDetails",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": [
+			"createdDate",
+			"lastModifiedDate"
+		],
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 450,
+		"y": 360,
+		"wires": [
+			[
+				"267a56b1.29195a"
+			],
+			[
+				"2fc8f4fa.244c3c"
+			]
+		]
+	},
+	{
+		"id": "2fc8f4fa.244c3c",
+		"type": "switch",
+		"z": "4aecadf2.352044",
+		"name": "File Missing",
+		"property": "err.statusCode",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "404",
+				"vt": "num"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 690,
+		"y": 380,
+		"wires": [
+			[
+				"8d6819c6.ca4368"
+			],
+			[]
+		]
+	},
+	{
+		"id": "267a56b1.29195a",
+		"type": "switch",
+		"z": "4aecadf2.352044",
+		"name": "sha1?",
+		"property": "payload.sha1",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "sha1",
+				"vt": "msg"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": true,
+		"outputs": 2,
+		"x": 430,
+		"y": 160,
+		"wires": [
+			[
+				"d7e513f3.2c9c1"
+			],
+			[
+				"7658925d.5f746c"
+			]
+		]
+	},
+	{
+		"id": "b48d897a.c9d238",
+		"type": "status",
+		"z": "4aecadf2.352044",
+		"name": "",
+		"scope": null,
+		"x": 280,
+		"y": 80,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "cd4ca6bf.a91398",
+		"type": "function",
+		"z": "4aecadf2.352044",
+		"name": "Inject",
+		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get('bucket');\n    msg.key =msg.payload.key || msg.key || env.get('key');\n    msg.sha1 =msg.payload.sha1 || msg.sha1 || env.get('sha1') || '';\n    msg.ifModifiedSince =msg.payload.ifModifiedSince || msg.ifModifiedSince || env.get('ifModifiedSince') || '';\n} else {\n    msg.bucket =msg.bucket || env.get('bucket');\n    msg.key =msg.key || env.get('key');\n    msg.sha1 =msg.sha1 || env.get('sha1') || '';\n    msg.ifModifiedSince =msg.ifModifiedSince || env.get('ifModifiedSince') || '';\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n} else if ( !msg.key || msg.key === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid key name!'});\n    node.error('Provide a valid key name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'key' cannot be empty\"\n    };\n}\n\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 130,
+		"y": 380,
+		"wires": [
+			[
+				"a30f5db5.f98de"
+			]
+		]
+	},
+	{
+		"id": "a30f5db5.f98de",
+		"type": "switch",
+		"z": "4aecadf2.352044",
+		"name": "Params Ok?",
+		"property": "err",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "null"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 290,
+		"y": 380,
+		"wires": [
+			[
+				"519554b5.c479ac"
+			],
+			[]
+		]
+	},
+	{
+		"id": "8d6819c6.ca4368",
+		"type": "change",
+		"z": "4aecadf2.352044",
+		"name": "Remove err",
+		"rules": [
+			{
+				"t": "delete",
+				"p": "err",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 890,
+		"y": 340,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "d7e513f3.2c9c1",
+		"type": "function",
+		"z": "4aecadf2.352044",
+		"name": "Get URN",
+		"func": "msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 580,
+		"y": 100,
+		"wires": [
+			[
+				"ab4a41e3.e383"
+			]
+		]
+	},
+	{
+		"id": "ab4a41e3.e383",
+		"type": "base64",
+		"z": "4aecadf2.352044",
+		"name": "base64 urn",
+		"action": "str",
+		"property": "urn",
+		"x": 730,
+		"y": 100,
+		"wires": [
+			[
+				"f378191f.bb72c8"
+			]
+		]
+	},
+	{
+		"id": "f378191f.bb72c8",
+		"type": "function",
+		"z": "4aecadf2.352044",
+		"name": "safe base64",
+		"func": "msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 890,
+		"y": 100,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "7658925d.5f746c",
+		"type": "function",
+		"z": "4aecadf2.352044",
+		"name": "Get URN",
+		"func": "msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 580,
+		"y": 220,
+		"wires": [
+			[
+				"6d3d3bd0.cea6f4"
+			]
+		]
+	},
+	{
+		"id": "6d3d3bd0.cea6f4",
+		"type": "base64",
+		"z": "4aecadf2.352044",
+		"name": "base64 urn",
+		"action": "str",
+		"property": "urn",
+		"x": 730,
+		"y": 220,
+		"wires": [
+			[
+				"5760de98.b3949"
+			]
+		]
+	},
+	{
+		"id": "5760de98.b3949",
+		"type": "function",
+		"z": "4aecadf2.352044",
+		"name": "safe base64",
+		"func": "msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 890,
+		"y": 220,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "7741760c.b49038",
+		"type": "subflow:4aecadf2.352044",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"env": [],
+		"x": 450,
+		"y": 1660,
+		"wires": [
+			[
+				"db68397c.fb0878"
+			],
+			[
+				"b1e9eac3.5da8a8"
+			],
+			[
+				"d4ead94e.891de8"
+			],
+			[
+				"2d17a28f.ff70de"
+			]
+		]
+	},
+	{
+		"id": "48492c7.5ee46d4",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "robot.f3d 404",
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-test-bucket-node-red\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 130,
+		"y": 1680,
+		"wires": [
+			[
+				"7741760c.b49038"
+			]
+		]
+	},
+	{
+		"id": "d4ead94e.891de8",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "404",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 790,
+		"y": 1680,
+		"wires": []
+	},
+	{
+		"id": "b1e9eac3.5da8a8",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Different",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 1640,
+		"wires": []
+	},
+	{
+		"id": "db68397c.fb0878",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Equal",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 790,
+		"y": 1600,
+		"wires": []
+	},
+	{
+		"id": "2d17a28f.ff70de",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 790,
+		"y": 1720,
+		"wires": []
+	},
+	{
+		"id": "59945960.7dded8",
+		"type": "forge-default-credentials",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"forge": "",
+		"x": 130,
+		"y": 60,
+		"wires": []
+	},
+	{
+		"id": "222656ae.2907fa",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"operation": "GetObject",
+		"raw": false,
+		"all": false,
+		"bucket": "FORGE_BUCKET",
+		"bucketType": "env",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": null,
+		"localFilename": "",
+		"limit": 10,
+		"startAt": null,
+		"beginsWith": null,
+		"with": null,
+		"ifMatch": null,
+		"ifNoneMatch": null,
+		"ifModifiedSince": null,
+		"range": null,
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": null,
+		"guid": null,
+		"region": "US",
+		"x": 1260,
+		"y": 1020,
+		"wires": [
+			[],
+			[]
+		]
+	},
+	{
+		"id": "382d5e88.06abe2",
+		"type": "forge-da",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "CreateAppbundlesAlias",
+		"raw": false,
+		"page": "",
+		"all": false,
+		"description": "",
+		"alias": "",
+		"version": 1,
+		"activityId": "",
+		"receiver": "",
+		"appbundles": "",
+		"commandline": "",
+		"parameters": [
+			{
+				"id": "",
+				"localName": null,
+				"verb": "get",
+				"zip": false,
+				"ondemand": false,
+				"required": false,
+				"description": null
+			}
+		],
+		"settings": [],
+		"engine": "",
+		"appbundlesId": "",
+		"package": "",
+		"nickname": "me",
+		"exponent": "",
+		"modulus": "",
+		"workitemId": "",
+		"limitProcessingTimeSec": "",
+		"baseUrls": "",
+		"signature": "",
+		"arguments": [],
+		"limitPayloadSizeInKB": "",
+		"limitVersions": "",
+		"limitAliases": "",
+		"limitPublicAliases": "",
+		"limitAppUploadSizeInMB": "",
+		"limitMonthlyProcessingTimeInHours": "",
+		"backendLimits": [
+			{
+				"id": "",
+				"limitProcessingTimeSec": null
+			}
+		],
+		"x": 1280,
+		"y": 1100,
+		"wires": [
+			[],
+			[]
+		]
+	},
+	{
+		"id": "9a035d00.76ace",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 160,
+		"wires": []
+	},
+	{
+		"id": "bb7f6032.e6e5a",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 160,
+		"wires": []
+	},
+	{
+		"id": "eef4c39f.22e7b",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 2070,
+		"y": 400,
+		"wires": []
+	},
+	{
+		"id": "e07c596c.0f2418",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 2070,
+		"y": 440,
+		"wires": []
+	},
+	{
+		"id": "4b338a8c.2afa74",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListBuckets",
+		"raw": true,
+		"all": true,
+		"bucket": "FORGE_BUCKET",
+		"bucketType": "env",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 440,
+		"y": 160,
+		"wires": [
+			[
+				"9a035d00.76ace"
+			],
+			[
+				"bb7f6032.e6e5a"
+			]
+		]
+	},
+	{
+		"id": "605255b.8f40eac",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 160,
+		"wires": [
+			[
+				"4b338a8c.2afa74"
+			]
+		]
+	},
+	{
+		"id": "dfb14b25.2fd388",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 790,
+		"y": 240,
+		"wires": []
+	},
+	{
+		"id": "dcb12e0a.2da8",
+		"type": "switch",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"property": "payload.next",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "nnull"
+			},
+			{
+				"t": "null"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 390,
+		"y": 300,
+		"wires": [
+			[
+				"d7fc09aa.20de58",
+				"4ec0ae8b.cc58c"
+			],
+			[
+				"87ebf43e.265328"
+			]
+		]
+	},
+	{
+		"id": "d7fc09aa.20de58",
+		"type": "change",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload.startAt",
+				"pt": "msg",
+				"to": "$match(payload.next, /startAt=([-_.a-z0-9]{3,128})/).groups[0]\t",
+				"tot": "jsonata"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 610,
+		"y": 300,
+		"wires": [
+			[
+				"e11f6cc9.b8757"
+			]
+		]
+	},
+	{
+		"id": "4ec0ae8b.cc58c",
+		"type": "join",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"mode": "custom",
+		"build": "array",
+		"property": "payload",
+		"propertyType": "msg",
+		"key": "topic",
+		"joiner": "\\n",
+		"joinerType": "str",
+		"accumulate": false,
+		"timeout": "",
+		"count": "",
+		"reduceRight": false,
+		"reduceExp": "",
+		"reduceInit": "",
+		"reduceInitType": "num",
+		"reduceFixup": "",
+		"x": 550,
+		"y": 360,
+		"wires": [
+			[
+				"e8910655.166f18"
+			]
+		]
+	},
+	{
+		"id": "87ebf43e.265328",
+		"type": "function",
+		"z": "37461fc6.8e9f5",
+		"name": "Done",
+		"func": "msg.complete =true;\n// delete msg.payload\n// delete msg.op;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 410,
+		"y": 360,
+		"wires": [
+			[
+				"4ec0ae8b.cc58c"
+			]
+		]
+	},
+	{
+		"id": "45051319.17551c",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 790,
+		"y": 360,
+		"wires": []
+	},
+	{
+		"id": "e8910655.166f18",
+		"type": "function",
+		"z": "37461fc6.8e9f5",
+		"name": "Merge",
+		"func": "var results = msg.payload.reduce (\n    function (sum, elt) {\n        //return ([...sum, ...elt.items]);\n        return (sum.concat(elt.items));\n    },\n    []\n);\nreturn ({ results: results, op: \"ListBuckets\" });",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 670,
+		"y": 360,
+		"wires": [
+			[
+				"45051319.17551c"
+			]
+		]
+	},
+	{
+		"id": "491a153.07342ec",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Result",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 790,
+		"y": 200,
+		"wires": []
+	},
+	{
+		"id": "f128863a.5f85e8",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 200,
+		"wires": [
+			[
+				"29c37eea.ccd622"
+			]
+		]
+	},
+	{
+		"id": "ac109ab3.a77dd8",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 240,
+		"wires": [
+			[
+				"e11f6cc9.b8757"
+			]
+		]
+	},
+	{
+		"id": "29c37eea.ccd622",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListBuckets",
+		"raw": false,
+		"all": true,
+		"bucket": "FORGE_BUCKET",
+		"bucketType": "env",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 440,
+		"y": 200,
+		"wires": [
+			[
+				"491a153.07342ec"
+			],
+			[
+				"dfb14b25.2fd388"
+			]
+		]
+	},
+	{
+		"id": "e11f6cc9.b8757",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListBuckets",
+		"raw": false,
+		"all": false,
+		"bucket": "FORGE_BUCKET",
+		"bucketType": "env",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 440,
+		"y": 240,
+		"wires": [
+			[
+				"dcb12e0a.2da8"
+			],
+			[
+				"dfb14b25.2fd388"
+			]
+		]
+	},
+	{
+		"id": "ae8a40cc.fde33",
+		"type": "comment",
+		"z": "37461fc6.8e9f5",
+		"name": "OSS",
+		"info": "",
+		"x": 90,
+		"y": 120,
+		"wires": []
+	},
+	{
+		"id": "56158633.ab0618",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "BucketDetails",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 450,
+		"y": 600,
+		"wires": [
+			[
+				"c12b9873.a71a08",
+				"b1cd7aa4.687c68"
+			],
+			[
+				"8662f223.32eca"
+			]
+		]
+	},
+	{
+		"id": "c12b9873.a71a08",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 600,
+		"wires": []
+	},
+	{
+		"id": "8662f223.32eca",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 600,
+		"wires": []
+	},
+	{
+		"id": "9f2967b1.213358",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "CreateBucket",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 450,
+		"y": 460,
+		"wires": [
+			[
+				"314eb850.d8f3c8",
+				"56158633.ab0618"
+			],
+			[
+				"3586ad1c.4d2942"
+			]
+		]
+	},
+	{
+		"id": "314eb850.d8f3c8",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 460,
+		"wires": []
+	},
+	{
+		"id": "3d5e6727.368188",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 460,
+		"wires": []
+	},
+	{
+		"id": "b22cc77c.c60f48",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 640,
+		"wires": []
+	},
+	{
+		"id": "1b203d29.8a9583",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 640,
+		"wires": []
+	},
+	{
+		"id": "eccc188b.94a098",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "DeleteBucket",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 450,
+		"y": 1120,
+		"wires": [
+			[
+				"d31faa4a.14c898"
+			],
+			[
+				"c6045df3.e9dd7"
+			]
+		]
+	},
+	{
+		"id": "d31faa4a.14c898",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 1120,
+		"wires": []
+	},
+	{
+		"id": "c6045df3.e9dd7",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 1120,
+		"wires": []
+	},
+	{
+		"id": "ea4af3fe.b7d3",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "robot.f3d",
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-test-bucket-node-red\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1080,
+		"wires": [
+			[
+				"cb690ba1.e4bd58"
+			]
+		]
+	},
+	{
+		"id": "98adc4c.7f3dd38",
+		"type": "function",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"func": "msg = msg.payload;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 270,
+		"y": 460,
+		"wires": [
+			[
+				"9f2967b1.213358"
+			]
+		]
+	},
+	{
+		"id": "b1cd7aa4.687c68",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "PutObject",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 440,
+		"y": 640,
+		"wires": [
+			[
+				"b22cc77c.c60f48",
+				"3f5b61ee.2e222e"
+			],
+			[
+				"1b203d29.8a9583"
+			]
+		]
+	},
+	{
+		"id": "3586ad1c.4d2942",
+		"type": "switch",
+		"z": "37461fc6.8e9f5",
+		"name": "if 409",
+		"property": "err.statusCode",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "409",
+				"vt": "num"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 410,
+		"y": 520,
+		"wires": [
+			[
+				"fc6b16f0.449ba8"
+			],
+			[
+				"3d5e6727.368188"
+			]
+		]
+	},
+	{
+		"id": "fc6b16f0.449ba8",
+		"type": "change",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"rules": [
+			{
+				"t": "delete",
+				"p": "err",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 440,
+		"y": 560,
+		"wires": [
+			[
+				"56158633.ab0618"
+			]
+		]
+	},
+	{
+		"id": "3f5b61ee.2e222e",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ObjectDetails",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 450,
+		"y": 700,
+		"wires": [
+			[
+				"12b665a3.fa2fea",
+				"b06c42e2.a94b5",
+				"a6b3d7cc.5da9d8",
+				"72faf5fe.e6a1ec"
+			],
+			[
+				"5207bd00.8354c4"
+			]
+		]
+	},
+	{
+		"id": "12b665a3.fa2fea",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 700,
+		"wires": []
+	},
+	{
+		"id": "5207bd00.8354c4",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 700,
+		"wires": []
+	},
+	{
+		"id": "a6b3d7cc.5da9d8",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "CreateSignature",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 460,
+		"y": 940,
+		"wires": [
+			[
+				"697c3b3c.26d8b4",
+				"831b3a1e.1910c8"
+			],
+			[
+				"eb034a49.ae7f38"
+			]
+		]
+	},
+	{
+		"id": "697c3b3c.26d8b4",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 940,
+		"wires": []
+	},
+	{
+		"id": "eb034a49.ae7f38",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 940,
+		"wires": []
+	},
+	{
+		"id": "6b50efd2.f46e5",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "GetSignedObject",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "",
+		"region": "US",
+		"x": 460,
+		"y": 980,
+		"wires": [
+			[
+				"df9ea30a.eb4f9",
+				"8601f530.6d0ba8"
+			],
+			[
+				"1ede5a85.98fd65"
+			]
+		]
+	},
+	{
+		"id": "c650cc8c.40017",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "robot.f3d",
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-test-bucket-node-red\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 620,
+		"wires": [
+			[
+				"d9e0c356.89a71"
+			]
+		]
+	},
+	{
+		"id": "d9e0c356.89a71",
+		"type": "function",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"func": "msg = msg.payload;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 130,
+		"y": 660,
+		"wires": [
+			[
+				"3f5b61ee.2e222e"
+			]
+		]
+	},
+	{
+		"id": "831b3a1e.1910c8",
+		"type": "change",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "guid",
+				"pt": "msg",
+				"to": "payload.guid",
+				"tot": "msg"
+			},
+			{
+				"t": "set",
+				"p": "signedUrl",
+				"pt": "msg",
+				"to": "payload.signedUrl",
+				"tot": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 260,
+		"y": 980,
+		"wires": [
+			[
+				"6b50efd2.f46e5"
+			]
+		]
+	},
+	{
+		"id": "df9ea30a.eb4f9",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 980,
+		"wires": []
+	},
+	{
+		"id": "1ede5a85.98fd65",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 980,
+		"wires": []
+	},
+	{
+		"id": "b06c42e2.a94b5",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "GetObject",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 440,
+		"y": 740,
+		"wires": [
+			[
+				"65a17596.c0d38c"
+			],
+			[
+				"994d7099.670cb"
+			]
+		]
+	},
+	{
+		"id": "65a17596.c0d38c",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 740,
+		"wires": []
+	},
+	{
+		"id": "994d7099.670cb",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 740,
+		"wires": []
+	},
+	{
+		"id": "78655509.99f74c",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "CopyObject",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 441,
+		"y": 780,
+		"wires": [
+			[
+				"f1f58aa6.f473c8",
+				"33121f1e.82905"
+			],
+			[
+				"11a29676.57c38a"
+			]
+		]
+	},
+	{
+		"id": "dae3ba77.bcfb18",
+		"type": "change",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "copy",
+				"pt": "msg",
+				"to": "\"copy-\" & msg.key",
+				"tot": "jsonata"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 260,
+		"y": 780,
+		"wires": [
+			[
+				"78655509.99f74c"
+			]
+		]
+	},
+	{
+		"id": "f1f58aa6.f473c8",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 780,
+		"wires": []
+	},
+	{
+		"id": "11a29676.57c38a",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 780,
+		"wires": []
+	},
+	{
+		"id": "ac6a0698.ce6ab8",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ObjectDetails",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 450,
+		"y": 840,
+		"wires": [
+			[
+				"7dd663c5.de957c",
+				"40437e99.3ebe8"
+			],
+			[
+				"71aa9a7f.6bd914"
+			]
+		]
+	},
+	{
+		"id": "33121f1e.82905",
+		"type": "change",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "key",
+				"pt": "msg",
+				"to": "copy",
+				"tot": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "copy",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 260,
+		"y": 840,
+		"wires": [
+			[
+				"ac6a0698.ce6ab8"
+			]
+		]
+	},
+	{
+		"id": "7dd663c5.de957c",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 840,
+		"wires": []
+	},
+	{
+		"id": "71aa9a7f.6bd914",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 840,
+		"wires": []
+	},
+	{
+		"id": "40437e99.3ebe8",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "DeleteObject",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 450,
+		"y": 880,
+		"wires": [
+			[
+				"fd801398.d65f2"
+			],
+			[
+				"ec7868a3.8a3e88"
+			]
+		]
+	},
+	{
+		"id": "fd801398.d65f2",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 880,
+		"wires": []
+	},
+	{
+		"id": "ec7868a3.8a3e88",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 880,
+		"wires": []
+	},
+	{
+		"id": "8601f530.6d0ba8",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "DeleteSignedObject",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "",
+		"region": "US",
+		"x": 470,
+		"y": 1020,
+		"wires": [
+			[
+				"9d76afee.80984"
+			],
+			[
+				"3e24d44b.68e14c"
+			]
+		]
+	},
+	{
+		"id": "9d76afee.80984",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 1020,
+		"wires": []
+	},
+	{
+		"id": "3e24d44b.68e14c",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 1020,
+		"wires": []
+	},
+	{
+		"id": "9674b46a.b6c818",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "ListObjects",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 440,
+		"y": 1080,
+		"wires": [
+			[
+				"ea087484.c678d8",
+				"eccc188b.94a098"
+			],
+			[
+				"61f7d43b.b45dcc"
+			]
+		]
+	},
+	{
+		"id": "ea087484.c678d8",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 1080,
+		"wires": []
+	},
+	{
+		"id": "61f7d43b.b45dcc",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 1080,
+		"wires": []
+	},
+	{
+		"id": "5d0e63ae.85ff7c",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "robot.f3d",
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-test-bucket-node-red\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 720,
+		"wires": [
+			[
+				"46bf76f5.46fe98"
+			]
+		]
+	},
+	{
+		"id": "46bf76f5.46fe98",
+		"type": "function",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"func": "msg = msg.payload;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 110,
+		"y": 780,
+		"wires": [
+			[
+				"dae3ba77.bcfb18"
+			]
+		]
+	},
+	{
+		"id": "cb690ba1.e4bd58",
+		"type": "function",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"func": "msg = msg.payload;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 270,
+		"y": 1080,
+		"wires": [
+			[
+				"9674b46a.b6c818"
+			]
+		]
+	},
+	{
+		"id": "72faf5fe.e6a1ec",
+		"type": "delay",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"pauseType": "delay",
+		"timeout": "5",
+		"timeoutUnits": "seconds",
+		"rate": "1",
+		"nbRateUnits": "1",
+		"rateUnits": "second",
+		"randomFirst": "1",
+		"randomLast": "5",
+		"randomUnits": "seconds",
+		"drop": false,
+		"x": 640,
+		"y": 680,
+		"wires": [
+			[
+				"dae3ba77.bcfb18"
+			]
+		]
+	},
+	{
+		"id": "525203d8.30f0ac",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "404",
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-models\",\"key\":\"unknow.f3d\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 110,
+		"y": 1720,
+		"wires": [
+			[
+				"7741760c.b49038"
+			]
+		]
+	},
+	{
+		"id": "99305373.9839e",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "Xray.fbx",
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-models\",\"key\":\"Xray.fbx\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 110,
+		"y": 1640,
+		"wires": [
+			[
+				"7741760c.b49038"
+			]
+		]
+	},
+	{
+		"id": "3ab367e4.67f238",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "Xray.fbx ==",
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-models\",\"key\":\"Xray.fbx\",\"sha1\":\"a3d59ff64b0333e0e304d3a78c2e087c87722d28\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 130,
+		"y": 1600,
+		"wires": [
+			[
+				"7741760c.b49038"
+			]
+		]
+	},
+	{
+		"id": "66edb98b.76cbe8",
+		"type": "function",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"func": "return (msg.payload);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 270,
+		"y": 1300,
+		"wires": [
+			[
+				"1e2d9e85.c8b011"
+			]
+		]
+	},
+	{
+		"id": "1e2d9e85.c8b011",
+		"type": "subflow:3f75d555.5599aa",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"env": [],
+		"x": 480,
+		"y": 1300,
+		"wires": [
+			[
+				"a34c1281.2f78"
+			],
+			[
+				"720a864d.8f7428"
+			]
+		]
+	},
+	{
+		"id": "14e300d9.31545f",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "403",
+		"topic": "config",
+		"payload": "{\"bucket\":\"test1234\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 110,
+		"y": 1760,
+		"wires": [
+			[
+				"7741760c.b49038"
+			]
+		]
+	},
+	{
+		"id": "f7c601fa.196f8",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "robot.f3d",
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-test-bucket-node-red\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"localFilename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 460,
+		"wires": [
+			[
+				"98adc4c.7f3dd38"
+			]
+		]
+	},
+	{
+		"id": "a34c1281.2f78",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 1300,
+		"wires": []
+	},
+	{
+		"id": "720a864d.8f7428",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 1300,
+		"wires": []
+	},
+	{
+		"id": "6285ad68.241c74",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "bucket",
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\" }",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 110,
+		"y": 1300,
+		"wires": [
+			[
+				"66edb98b.76cbe8"
+			]
+		]
+	},
+	{
+		"id": "ed1f25fb.32ede8",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "404",
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets-missing\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 110,
+		"y": 1260,
+		"wires": [
+			[
+				"66edb98b.76cbe8"
+			]
+		]
+	},
+	{
+		"id": "f82ea6ef.70a458",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "404 - forced",
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets-missing\",\"forceBucketCreation\":true}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 130,
+		"y": 1220,
+		"wires": [
+			[
+				"66edb98b.76cbe8"
+			]
+		]
+	},
+	{
+		"id": "77cd9ec6.80614",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "403",
+		"topic": "config",
+		"payload": "{\"bucket\":\"test1234\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 110,
+		"y": 1340,
+		"wires": [
+			[
+				"66edb98b.76cbe8"
+			]
+		]
+	},
+	{
+		"id": "2215035c.cae42c",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "403 - forced",
+		"topic": "config",
+		"payload": "{\"bucket\":\"test1234\",\"forceBucketCreation\":true}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 130,
+		"y": 1380,
+		"wires": [
+			[
+				"66edb98b.76cbe8"
+			]
+		]
+	},
+	{
+		"id": "7161a24a.00c8bc",
+		"type": "subflow:c93aef0f.c6081",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"env": [],
+		"x": 440,
+		"y": 1840,
+		"wires": [
+			[
+				"6abab874.31a6c8"
+			],
+			[
+				"39345646.a54eba"
+			]
+		]
+	},
+	{
+		"id": "6abab874.31a6c8",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 1840,
+		"wires": []
+	},
+	{
+		"id": "39345646.a54eba",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 1840,
+		"wires": []
+	},
+	{
+		"id": "826183a4.5c273",
+		"type": "function",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"func": "return (msg.payload);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 270,
+		"y": 1840,
+		"wires": [
+			[
+				"7161a24a.00c8bc"
+			]
+		]
+	},
+	{
+		"id": "d69e66db.c13ef8",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "robot.f3d",
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1840,
+		"wires": [
+			[
+				"826183a4.5c273"
+			]
+		]
+	},
+	{
+		"id": "94d42580.c30138",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "DeleteObject",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 450,
+		"y": 1900,
+		"wires": [
+			[
+				"4de23420.02ca4c"
+			],
+			[
+				"802902b2.bed64"
+			]
+		]
+	},
+	{
+		"id": "4de23420.02ca4c",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 1900,
+		"wires": []
+	},
+	{
+		"id": "802902b2.bed64",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 1900,
+		"wires": []
+	},
+	{
+		"id": "3bffc3ed.2d273c",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "robot.f3d",
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 120,
+		"y": 1900,
+		"wires": [
+			[
+				"b4c0e61e.783458"
+			]
+		]
+	},
+	{
+		"id": "b4c0e61e.783458",
+		"type": "function",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"func": "return (msg.payload);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 270,
+		"y": 1900,
+		"wires": [
+			[
+				"94d42580.c30138"
+			]
+		]
+	},
+	{
+		"id": "65f8f8e9.8bf218",
+		"type": "forge-oss",
+		"z": "37461fc6.8e9f5",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "DeleteBucket",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"bucketType": "str",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 450,
+		"y": 1480,
+		"wires": [
+			[
+				"9e57e984.093818"
+			],
+			[
+				"84bf0afe.9c0db8"
+			]
+		]
+	},
+	{
+		"id": "9e57e984.093818",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Results",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 800,
+		"y": 1480,
+		"wires": []
+	},
+	{
+		"id": "84bf0afe.9c0db8",
+		"type": "debug",
+		"z": "37461fc6.8e9f5",
+		"name": "Error",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 950,
+		"y": 1480,
+		"wires": []
+	},
+	{
+		"id": "f8c206fe.e5b818",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "404",
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets-missing\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 110,
+		"y": 1440,
+		"wires": [
+			[
+				"65f8f8e9.8bf218"
+			]
+		]
+	},
+	{
+		"id": "9652ecd9.3f8be",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "bucket",
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\" }",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 110,
+		"y": 1480,
+		"wires": [
+			[
+				"65f8f8e9.8bf218"
+			]
+		]
+	},
+	{
+		"id": "4554c058.42e57",
+		"type": "inject",
+		"z": "37461fc6.8e9f5",
+		"name": "403",
+		"topic": "config",
+		"payload": "{\"bucket\":\"test1234\"}",
+		"payloadType": "json",
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"x": 110,
+		"y": 1520,
+		"wires": [
+			[
+				"65f8f8e9.8bf218"
+			]
+		]
+	}
+]

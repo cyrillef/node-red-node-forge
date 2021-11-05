@@ -36,7 +36,7 @@ module.exports = function (RED) {
 		this.ossProperties = n;
 		var node = this;
 
-		function onInput(msg) {
+		async function onInput(msg) {
 			//msg.topic = node.topic;
 			//var _msg = RED.util.cloneMessage(msg);
 
@@ -135,7 +135,7 @@ module.exports = function (RED) {
 					shape: 'dot',
 					text: node.ossProperties.operation
 				});
-				service[node.ossProperties.operation](n, node, FORGE, msg, _cb);
+				service[node.ossProperties.operation](n, node, await FORGE, msg, _cb);
 			} else {
 				node.error(RED._('forge.error.unknown-operation', {
 					op: node.ossProperties.operation
@@ -232,7 +232,7 @@ module.exports = function (RED) {
 		return (params);
 	};
 
-	service.CreateBucket = function (n, node, oa2legged, msg, cb) {
+	service.CreateBucket = async function (n, node, oa2legged, msg, cb) {
 		var params = service.CreateBucketParams(n, msg);
 
 		var postBuckets = {
@@ -399,6 +399,7 @@ module.exports = function (RED) {
 			bucket: service.asIs,
 			key: service.asIs,
 			localFilename: service.asIs,
+			buffer: service.asIs,
 			ifMatch: service.defaultNullOrEmptyString,
 			contentType: service.defaultNullOrEmptyString,
 			contentDisposition: service.defaultNullOrEmptyString,
@@ -470,7 +471,7 @@ module.exports = function (RED) {
 						throw new Error('Object size is empty!');
 					if (size <= service.chunkSize) {
 						var rstream = null;
-						if (options.localFilename !== '') {
+						if (options.localFilename !== undefined && options.localFilename !== '') {
 							rstream = fs.createReadStream(options.localFilename);
 						} else {
 							rstream = new streamBuffers.ReadableStreamBuffer({
