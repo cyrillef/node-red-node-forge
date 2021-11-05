@@ -1,6 +1,6 @@
 {
     "name": "node-red-node-forge",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Autodesk Forge Nodes Node-RED nodes",
     "license": "MIT",
     "author": "Cyrille Fauvel",
