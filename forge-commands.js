@@ -24,7 +24,8 @@ module.exports = function (RED) {
 	"use strict";
 	const url = require('url');
 	const fs = require('fs');
-	const uuidv4 = require('uuid/v4');
+	//const uuidv4 = require('uuid/v4');
+	const { v4: uuidv4 } = require('uuid');
 	const streamBuffers = require('stream-buffers');
 	const utils = require('./utils');
 	const ForgeAPI = require('forge-apis');

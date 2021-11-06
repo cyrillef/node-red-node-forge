@@ -43,7 +43,7 @@
         "node-red-contrib-loop-processing": "^0.5.1",
         "node-red-node-base64": "^0.3.0",
         "stream-buffers": "^3.0.2",
-        "uuid": "^3.3.3"
+        "uuid": "^8.3.2"
     },
     "engines": {
         "node": ">=8.0.0"

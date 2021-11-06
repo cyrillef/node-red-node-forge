@@ -255,18 +255,83 @@
 		return ({
 			type: 'svf',
 			views: ['2d', '3d'],
-			switchLoader: false,
+			//switchLoader: false, // Deprecated
+			// IFC
+			conversionMethod: ['modern', 'legacy'],
+			buildingStoreys: ['hide', 'show', 'skip'], // conversionMethod === 'modern'
+			spaces: ['hide', 'show', 'skip'], // conversionMethod === 'modern'
+			openingElements: ['hide', 'show', 'skip'], // conversionMethod === 'modern'
+			// Revit
+			generateMasterViews: false,
+			materialMode: ['auto', 'basic', 'autodesk'],
+			// Navisworks
+			hiddenObjects: false,
+			basicMaterialProperties: false,
+			autodeskMaterialProperties: false,
+			timelinerProperties: false,
+
 			_defaults: function (job) {
 				job.type = job.type || this.type;
 				job.views = job.views || this.views;
 				job.advanced = job.advanced || {};
-				job.advanced.switchLoader = job.advanced.switchLoader === true;
+				if (job.advanced.switchLoader === false && !job.advanced.conversionMethod) {
+					delete job.advanced.switchLoader;
+					job.advanced.conversionMethod = 'legacy';
+				}
+				// IFC
+				job.advanced.conversionMethod = job.advanced.conversionMethod || 'modern';
+				job.advanced.buildingStoreys = job.advanced.buildingStoreys || 'hide';
+				job.advanced.spaces = job.advanced.spaces || 'hide';
+				job.advanced.openingElements = job.advanced.openingElements || 'hide';
+				// Revit
+				job.advanced.generateMasterViews = job.advanced.generateMasterViews === true;
+				job.advanced.materialMode = job.advanced.materialMode || 'auto';
+				// Navisworks
+				job.advanced.hiddenObjects = job.advanced.hiddenObjects === true;
+				job.advanced.basicMaterialProperties = job.advanced.basicMaterialProperties === true;
+				job.advanced.autodeskMaterialProperties = job.advanced.autodeskMaterialProperties === true;
+				job.advanced.timelinerProperties = job.advanced.timelinerProperties === true;
 				return (job);
 			},
-			_create: function (rows) {
-				var label = $('<label />', {
-						width: '40px;'
+			_createCheckbox: function (row, label, value, indent = 0) {
+				/* beautify preserve:start */
+				$('<div />', { style: `display: inline-block; text-align: right; width: ${120 + indent}px; padding-right: 10px; box-sizing: border-box;` })
+					.text(' ')
+					.appendTo(row);
+				var ctrl = $('<label />', { /* width: '40px;' */ })
+					.text($.i18n.getResourceBundle('en-US', 'node-red-node-forge/forge-model-derivative').forge.label[label])
+					.appendTo(row);
+				$('<input />', {
+						class: `node-input-job-${label}`,
+						type: 'checkbox',
+						width: '20px'
 					})
+					.prependTo(ctrl);
+				/* beautify preserve:stop */
+			},
+			_createSelect: function (row, label, list, indent = 0) {
+				/* beautify preserve:start */
+				$('<div />', { style: `display: inline-block; text-align: right; width: ${120 + indent}px; padding-right: 10px; box-sizing: border-box;` })
+					.text(' ')
+					.appendTo(row);
+				$('<label />', { /* width: '40px;' */ })
+					.text($.i18n.getResourceBundle('en-US', 'node-red-node-forge/forge-model-derivative').forge.label[label])
+					.appendTo(row);
+				var selectField = $('<select />', {
+						class: `node-input-job-${label}`,
+						style: `width: ${110 - indent}px; margin-right: 10px;`
+					})
+					.appendTo(row);
+				list.map ((elt) => {
+					selectField.append($('<option></option>')
+						.val(elt)
+						.text(elt));
+				});
+				/* beautify preserve:stop */
+			},
+			_create: function (rows) {
+				/* beautify preserve:start */
+				var label = $('<label />', { width: '40px;' })
 					.text('2d')
 					.appendTo(rows[1]);
 				$('<input />', {
@@ -276,9 +341,9 @@
 						value: '2d'
 					})
 					.prependTo(label);
-				label = $('<label />', {
-					width: '40px;'
-				}).text('3d').appendTo(rows[1]);
+				label = $('<label />', { width: '40px;' })
+					.text('3d')
+					.appendTo(rows[1]);
 				$('<input />', {
 						class: 'node-input-job-3d',
 						type: 'checkbox',
@@ -287,40 +352,76 @@
 					})
 					.prependTo(label);
 
-				$('<div />', {
-						style: 'display: inline-block; text-align: right; width: 120px; padding-right: 10px; box-sizing: border-box;'
-					})
-					.text(' ')
-					.appendTo(rows[2]);
-				label = $('<label />', {
-						//width: '40px;'
-					})
-					.text($.i18n.getResourceBundle(
-							'en-US',
-							'node-red-node-forge/forge-model-derivative')
-						.forge.label.switchLoader)
-					.appendTo(rows[2]);
-				$('<input />', {
-						class: 'node-input-job-switchLoader',
-						type: 'checkbox',
-						width: '20px'
-					})
-					.prependTo(label);
+				// IFC
+				this._createSelect(rows[2], 'conversionMethod', this.conversionMethod);
+				this._createSelect(rows[3], 'buildingStoreys', this.buildingStoreys, 20);
+				this._createSelect(rows[4], 'spaces', this.spaces, 20);
+				this._createSelect(rows[5], 'openingElements', this.openingElements, 20);
+				// Revit
+				this._createCheckbox(rows[6], 'generateMasterViews', this.generateMasterViews);
+				this._createSelect(rows[7], 'materialMode', this.materialMode, 20);
+				// Navisworks
+				this._createCheckbox(rows[8], 'hiddenObjects', this.hiddenObjects);
+				this._createCheckbox(rows[9], 'basicMaterialProperties', this.basicMaterialProperties, 20);
+				this._createCheckbox(rows[10], 'autodeskMaterialProperties', this.autodeskMaterialProperties, 20);
+				this._createCheckbox(rows[11], 'timelinerProperties', this.timelinerProperties, 20);
+				/* beautify preserve:stop */
 			},
 			_fill: function (job, rows) {
+				/* beautify preserve:start */
 				var parent = rows[1].parent().parent();
 				$(parent).find('.node-input-job-2d').prop('checked', job.views.includes('2d'));
 				$(parent).find('.node-input-job-3d').prop('checked', job.views.includes('3d'));
-				$(parent).find('.node-input-job-switchLoader').prop('checked', job.advanced.switchLoader);
+				//$(parent).find('.node-input-job-switchLoader').prop('checked', job.advanced.switchLoader);
+				// IFC
+				$(parent).find('.node-input-job-conversionMethod').val(job.advanced.conversionMethod);
+				$(parent).find('.node-input-job-buildingStoreys').val(job.advanced.buildingStoreys);
+				$(parent).find('.node-input-job-spaces').val(job.advanced.spaces);
+				$(parent).find('.node-input-job-openingElements').val(job.advanced.openingElements);
+				// Revit
+				$(parent).find('.node-input-job-generateMasterViews').prop('checked', job.advanced.generateMasterViews);
+				$(parent).find('.node-input-job-materialMode').val(job.advanced.materialMode);
+				// Navisworks
+				$(parent).find('.node-input-job-hiddenObjects').prop('checked', job.advanced.hiddenObjects);
+				$(parent).find('.node-input-job-basicMaterialProperties').prop('checked', job.advanced.basicMaterialProperties);
+				$(parent).find('.node-input-job-autodeskMaterialProperties').prop('checked', job.advanced.autodeskMaterialProperties);
+				$(parent).find('.node-input-job-timelinerProperties').prop('checked', job.advanced.timelinerProperties);
+				/* beautify preserve:stop */
 			},
 			_save: function (job, type) {
 				var result = {
 					type: type,
 					views: [],
 					advanced: {
-						switchLoader: job.find('.node-input-job-switchLoader').is(':checked')
+						//switchLoader: job.find('.node-input-job-switchLoader').is(':checked')
 					}
 				};
+				/* beautify preserve:start */
+				// IFC
+				//if ($(job).find('.node-input-job-conversionMethod').val() !== 'legacy')
+				result.advanced.conversionMethod = $(job).find('.node-input-job-conversionMethod').val();
+				if ($(job).find('.node-input-job-buildingStoreys').val() !== 'hide')
+					result.advanced.buildingStoreys = $(job).find('.node-input-job-buildingStoreys').val();
+				if ($(job).find('.node-input-job-spaces').val() !== 'hide')
+					result.advanced.spaces = $(job).find('.node-input-job-spaces').val();
+				if ($(job).find('.node-input-job-openingElements').val() !== 'hide')
+					result.advanced.openingElements = $(job).find('.node-input-job-openingElements').val();
+				// Revit
+				if ($(job).find('.node-input-job-generateMasterViews').is(':checked'))
+					result.advanced.generateMasterViews = $(job).find('.node-input-job-generateMasterViews').is(':checked');
+				if ($(job).find('.node-input-job-materialMode').val() !== 'auto')
+					result.advanced.materialMode = $(job).find('.node-input-job-materialMode').val();
+				// Navisworks
+				if ($(job).find('.node-input-job-hiddenObjects').is(':checked'))
+					result.advanced.hiddenObjects = $(job).find('.node-input-job-hiddenObjects').is(':checked');
+				if ($(job).find('.node-input-job-basicMaterialProperties').is(':checked'))
+					result.advanced.basicMaterialProperties = $(job).find('.node-input-job-basicMaterialProperties').is(':checked');
+				if ($(job).find('.node-input-job-autodeskMaterialProperties').is(':checked'))
+					result.advanced.autodeskMaterialProperties = $(job).find('.node-input-job-autodeskMaterialProperties').is(':checked');
+				if ($(job).find('.node-input-job-timelinerProperties').is(':checked'))
+					result.advanced.timelinerProperties = $(job).find('.node-input-job-timelinerProperties').is(':checked');
+				/* beautify preserve:stop */
+
 				if ($(job).find('.node-input-job-2d').is(':checked'))
 					result.views.push($(job).find('.node-input-job-2d').val());
 				if ($(job).find('.node-input-job-3d').is(':checked'))
@@ -328,6 +429,12 @@
 				return (result);
 			}
 		});
+	}
+
+	function svf2() {
+		var obj = svf();
+		obj.type = 'svf2';
+		return (obj);
 	}
 
 	function dwg() {
@@ -841,25 +948,21 @@
 				return (job);
 			},
 			_create: function (rows) {
-				var label = $('<label />', {
-						width: '40px;'
-					})
-					.text($.i18n.getResourceBundle(
-							'en-US',
-							'node-red-node-forge/forge-model-derivative')
-						.forge.label.size)
-					.appendTo(rows[1]);
 				/* beautify preserve:start */
+				var label = $('<label />', { width: '40px;' })
+					.text($.i18n.getResourceBundle('en-US', 'node-red-node-forge/forge-model-derivative').forge.label.size)
+					.appendTo(rows[1]);
 				var selectField = $('<select />', {
-					class: 'node-input-job-dim',
-					style: 'width: 110px; margin-right: 10px;'
-				}).appendTo(rows [1]);
-				/* beautify preserve:end */
+						class: 'node-input-job-dim',
+						style: 'width: 110px; margin-right: 10px;'
+					})
+					.appendTo(rows [1]);
 				for (var i = 0; i < this.size.length; i++) {
 					selectField.append($('<option> </option>')
 						.val(this.size[i])
 						.text(this.size[i]));
 				}
+				/* beautify preserve:end */
 			},
 			_fill: function (job, rows) {
 				var parent = rows[1].parent().parent();
@@ -958,7 +1061,7 @@
 					type: 'svf',
 					views: ['2d', '3d'],
 					advanced: {
-						switchLoader: false
+						//switchLoader: false
 					}
 				}]
 			},
@@ -1041,7 +1144,14 @@
 						var row2 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
 						var row3 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
 						var row4 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
-						var rows =['', row1, row2, row3, row4 ];
+						var row5 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
+						var row6 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
+						var row7 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
+						var row8 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
+						var row9 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
+						var row10 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
+						var row11 = $('<div />', { style: 'margin-top:8px;' }).appendTo(container);
+						var rows =['', row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11 ];
 						/* beautify preserve:end */
 
 						/* beautify preserve:start */
@@ -1053,6 +1163,7 @@
 
 						var selectOptions = {
 							svf: svf(),
+							svf2: svf2(),
 							dwg: dwg(),
 							ifc: ifc(),
 							obj: obj(),
@@ -1105,7 +1216,7 @@
 					type: 'svf',
 					views: ['2d', '3d'],
 					advanced: {
-						switchLoader: false
+						//switchLoader: false
 					}
 				}];
 
@@ -1171,6 +1282,7 @@
 
 			var selectOptions = {
 				svf: svf(),
+				svf2: svf2(),
 				dwg: dwg(),
 				ifc: ifc(),
 				obj: obj(),

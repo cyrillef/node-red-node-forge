@@ -24,7 +24,8 @@ module.exports = function (RED) {
 	"use strict";
 	const url = require('url');
 	const fs = require('fs');
-	const uuidv4 = require('uuid/v4');
+	//const uuidv4 = require('uuid/v4');
+	const { v4: uuidv4 } = require('uuid');
 	const streamBuffers = require('stream-buffers');
 	const utils = require('./utils');
 	const ForgeAPI = require('forge-apis');
@@ -232,7 +233,7 @@ module.exports = function (RED) {
 		return (params);
 	};
 
-	service.CreateBucket = async function (n, node, oa2legged, msg, cb) {
+	service.CreateBucket = function (n, node, oa2legged, msg, cb) {
 		var params = service.CreateBucketParams(n, msg);
 
 		var postBuckets = {

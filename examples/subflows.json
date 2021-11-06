@@ -1,1484 +1,1492 @@
 [
-    {
-        "id": "4aecadf2.352044",
-        "type": "subflow",
-        "name": "OSS Object Exists?",
-        "info": "Check if an object exists\n\n### Parameters\n\n* **bucket**: bucket key\n\n* **key**: object name to get details for\n\n* **sha1** [optional]: use the SHA-1 hash to know if the file is the same\n\n* **ifModifiedSince** [optional]: If the requested object has not been modified \n  since the time specified in this field, an entity will not be returned \n  from the server; instead, a 304 (not modified) response will be \n  returned without any message body. (HTTP date - UTC format)\n\n### Outputs\n\n* **sameObject**: SHA-1 code was provided and the object on the server match that code\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **needsUpdate**:  SHA-1 code was provided and the object on the server does not match that code\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **notFound**: the object was not found on the server\n\n* **error**: an error occured\n",
-        "category": "forge",
-        "in": [
-            {
-                "x": 80,
-                "y": 240,
-                "wires": [
-                    {
-                        "id": "cd4ca6bf.a91398"
-                    }
-                ]
-            }
-        ],
-        "out": [
-            {
-                "x": 960,
-                "y": 160,
-                "wires": [
-                    {
-                        "id": "f378191f.bb72c8",
-                        "port": 0
-                    }
-                ]
-            },
-            {
-                "x": 960,
-                "y": 280,
-                "wires": [
-                    {
-                        "id": "5760de98.b3949",
-                        "port": 0
-                    }
-                ]
-            },
-            {
-                "x": 960,
-                "y": 400,
-                "wires": [
-                    {
-                        "id": "8d6819c6.ca4368",
-                        "port": 0
-                    }
-                ]
-            },
-            {
-                "x": 960,
-                "y": 500,
-                "wires": [
-                    {
-                        "id": "a30f5db5.f98de",
-                        "port": 1
-                    },
-                    {
-                        "id": "2fc8f4fa.244c3c",
-                        "port": 1
-                    }
-                ]
-            }
-        ],
-        "env": [
-            {
-                "name": "bucket",
-                "type": "str",
-                "value": ""
-            },
-            {
-                "name": "key",
-                "type": "str",
-                "value": ""
-            },
-            {
-                "name": "sha1",
-                "type": "str",
-                "value": ""
-            },
-            {
-                "name": "ifModifiedSince",
-                "type": "str",
-                "value": ""
-            }
-        ],
-        "outputLabels": [
-            "sameObject",
-            "needUpdate",
-            "notFound",
-            "error"
-        ],
-        "icon": "node-red-node-forge/forge.png",
-        "status": {
-            "x": 420,
-            "y": 80,
-            "wires": [
-                {
-                    "id": "b48d897a.c9d238",
-                    "port": 0
-                }
-            ]
-        }
-    },
-    {
-        "id": "519554b5.c479ac",
-        "type": "forge-oss",
-        "z": "4aecadf2.352044",
-        "name": "File Exists?",
-        "topic": "",
-        "forge": "",
-        "operation": "ObjectDetails",
-        "raw": false,
-        "all": false,
-        "bucket": "",
-        "policyKey": "transient",
-        "key": "",
-        "contentType": "application/octet-stream",
-        "contentDisposition": "",
-        "copy": "",
-        "localFilename": "",
-        "limit": 10,
-        "startAt": "",
-        "beginsWith": "",
-        "with": [
-            "createdDate",
-            "lastModifiedDate"
-        ],
-        "ifMatch": "",
-        "ifNoneMatch": "",
-        "ifModifiedSince": "",
-        "range": "",
-        "access": "read",
-        "singleUse": false,
-        "minutesExpiration": 60,
-        "acceptEncoding": "",
-        "guid": "autodesk",
-        "region": "US",
-        "x": 450,
-        "y": 360,
-        "wires": [
-            [
-                "267a56b1.29195a"
-            ],
-            [
-                "2fc8f4fa.244c3c"
-            ]
-        ]
-    },
-    {
-        "id": "2fc8f4fa.244c3c",
-        "type": "switch",
-        "z": "4aecadf2.352044",
-        "name": "File Missing",
-        "property": "err.statusCode",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "404",
-                "vt": "num"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 690,
-        "y": 380,
-        "wires": [
-            [
-                "8d6819c6.ca4368"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "267a56b1.29195a",
-        "type": "switch",
-        "z": "4aecadf2.352044",
-        "name": "sha1?",
-        "property": "payload.sha1",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "sha1",
-                "vt": "msg"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": true,
-        "outputs": 2,
-        "x": 430,
-        "y": 160,
-        "wires": [
-            [
-                "d7e513f3.2c9c1"
-            ],
-            [
-                "7658925d.5f746c"
-            ]
-        ]
-    },
-    {
-        "id": "b48d897a.c9d238",
-        "type": "status",
-        "z": "4aecadf2.352044",
-        "name": "",
-        "scope": null,
-        "x": 280,
-        "y": 80,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "cd4ca6bf.a91398",
-        "type": "function",
-        "z": "4aecadf2.352044",
-        "name": "Inject",
-        "func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get('bucket');\n    msg.key =msg.payload.key || msg.key || env.get('key');\n    msg.sha1 =msg.payload.sha1 || msg.sha1 || env.get('sha1') || '';\n    msg.ifModifiedSince =msg.payload.ifModifiedSince || msg.ifModifiedSince || env.get('ifModifiedSince') || '';\n} else {\n    msg.bucket =msg.bucket || env.get('bucket');\n    msg.key =msg.key || env.get('key');\n    msg.sha1 =msg.sha1 || env.get('sha1') || '';\n    msg.ifModifiedSince =msg.ifModifiedSince || env.get('ifModifiedSince') || '';\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n} else if ( !msg.key || msg.key === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid key name!'});\n    node.error('Provide a valid key name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'key' cannot be empty\"\n    };\n}\n\nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 130,
-        "y": 380,
-        "wires": [
-            [
-                "a30f5db5.f98de"
-            ]
-        ]
-    },
-    {
-        "id": "a30f5db5.f98de",
-        "type": "switch",
-        "z": "4aecadf2.352044",
-        "name": "Params Ok?",
-        "property": "err",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "null"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 290,
-        "y": 380,
-        "wires": [
-            [
-                "519554b5.c479ac"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "8d6819c6.ca4368",
-        "type": "change",
-        "z": "4aecadf2.352044",
-        "name": "Remove err",
-        "rules": [
-            {
-                "t": "delete",
-                "p": "err",
-                "pt": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 890,
-        "y": 340,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d7e513f3.2c9c1",
-        "type": "function",
-        "z": "4aecadf2.352044",
-        "name": "Get URN",
-        "func": "msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 580,
-        "y": 100,
-        "wires": [
-            [
-                "ab4a41e3.e383"
-            ]
-        ]
-    },
-    {
-        "id": "ab4a41e3.e383",
-        "type": "base64",
-        "z": "4aecadf2.352044",
-        "name": "base64 urn",
-        "action": "str",
-        "property": "urn",
-        "x": 730,
-        "y": 100,
-        "wires": [
-            [
-                "f378191f.bb72c8"
-            ]
-        ]
-    },
-    {
-        "id": "f378191f.bb72c8",
-        "type": "function",
-        "z": "4aecadf2.352044",
-        "name": "safe base64",
-        "func": "msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 890,
-        "y": 100,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "7658925d.5f746c",
-        "type": "function",
-        "z": "4aecadf2.352044",
-        "name": "Get URN",
-        "func": "msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 580,
-        "y": 220,
-        "wires": [
-            [
-                "6d3d3bd0.cea6f4"
-            ]
-        ]
-    },
-    {
-        "id": "6d3d3bd0.cea6f4",
-        "type": "base64",
-        "z": "4aecadf2.352044",
-        "name": "base64 urn",
-        "action": "str",
-        "property": "urn",
-        "x": 730,
-        "y": 220,
-        "wires": [
-            [
-                "5760de98.b3949"
-            ]
-        ]
-    },
-    {
-        "id": "5760de98.b3949",
-        "type": "function",
-        "z": "4aecadf2.352044",
-        "name": "safe base64",
-        "func": "msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 890,
-        "y": 220,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "3f75d555.5599aa",
-        "type": "subflow",
-        "name": "Check or Create OSS Bucket",
-        "info": "Check and Create OSS Bucket\n\n### Parameters\n\n* **bucket**: A unique name you assign to a bucket. It must be globally \n  unique across all applications and regions, otherwise the call will \n  fail. Possible values: -_.a-z0-9 (between 3-128 characters in\n  length). Note that you cannot change a bucket key.\n\n* **region** [optional]: The region where the bucket resides Acceptable values: \n  ```US```, ```EMEA``` Default: ```US```\n\n* **policyKey** [optional]: Data retention policy - Acceptable values: transient, temporary, persistent.\n  Default: ```transient```.\n\n* **forceBucketCreation** [optional] : In case the bucketKey is already used by another\n  application, you can force the node to iterate and find a name. The \n  node will append 6 random characters to the given key until it finds\n  one. Default: ```false```\n\n### Outputs\n\n* **response**: the bucket details\n\n* **error**: an error occured",
-        "category": "forge",
-        "in": [
-            {
-                "x": 60,
-                "y": 340,
-                "wires": [
-                    {
-                        "id": "16a24040.2a12a"
-                    }
-                ]
-            }
-        ],
-        "out": [
-            {
-                "x": 920,
-                "y": 260,
-                "wires": [
-                    {
-                        "id": "3cdeb2c8.928e2e",
-                        "port": 0
-                    },
-                    {
-                        "id": "b331344f.d4c458",
-                        "port": 0
-                    }
-                ]
-            },
-            {
-                "x": 920,
-                "y": 520,
-                "wires": [
-                    {
-                        "id": "b331344f.d4c458",
-                        "port": 1
-                    },
-                    {
-                        "id": "29a66b9d.032624",
-                        "port": 1
-                    },
-                    {
-                        "id": "cb381637.2c08b8",
-                        "port": 2
-                    },
-                    {
-                        "id": "2f78371.5b87ac8",
-                        "port": 1
-                    }
-                ]
-            }
-        ],
-        "env": [
-            {
-                "name": "bucket",
-                "type": "str",
-                "value": ""
-            },
-            {
-                "name": "region",
-                "type": "str",
-                "value": ""
-            },
-            {
-                "name": "policyKey",
-                "type": "str",
-                "value": ""
-            },
-            {
-                "name": "forceBucketCreation",
-                "type": "bool",
-                "value": "false"
-            }
-        ],
-        "outputLabels": [
-            "response",
-            "errors"
-        ],
-        "icon": "node-red-node-forge/forge.png",
-        "status": {
-            "x": 360,
-            "y": 60,
-            "wires": [
-                {
-                    "id": "9e9d5cb.1a203a",
-                    "port": 0
-                }
-            ]
-        }
-    },
-    {
-        "id": "3cdeb2c8.928e2e",
-        "type": "forge-oss",
-        "z": "3f75d555.5599aa",
-        "name": "Bucket Exists?",
-        "topic": "",
-        "forge": "",
-        "operation": "BucketDetails",
-        "raw": false,
-        "all": false,
-        "bucket": "",
-        "policyKey": "transient",
-        "key": "",
-        "contentType": "application/octet-stream",
-        "contentDisposition": "",
-        "copy": "",
-        "localFilename": "",
-        "limit": 10,
-        "startAt": "",
-        "beginsWith": "",
-        "with": [],
-        "ifMatch": "",
-        "ifNoneMatch": "",
-        "ifModifiedSince": "",
-        "range": "",
-        "access": "read",
-        "singleUse": false,
-        "minutesExpiration": 60,
-        "acceptEncoding": "",
-        "guid": "autodesk",
-        "region": "US",
-        "x": 440,
-        "y": 380,
-        "wires": [
-            [],
-            [
-                "cb381637.2c08b8"
-            ]
-        ]
-    },
-    {
-        "id": "29a66b9d.032624",
-        "type": "switch",
-        "z": "3f75d555.5599aa",
-        "name": "",
-        "property": "forceBucketCreation",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "true"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 390,
-        "y": 260,
-        "wires": [
-            [
-                "f9e5b5d9.40e6a8"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "f9e5b5d9.40e6a8",
-        "type": "function",
-        "z": "3f75d555.5599aa",
-        "name": "Change Bucket Name",
-        "func": "msg.originalbucket = msg.originalbucket || msg.bucket,\nmsg.bucket = \n    msg.originalbucket + \n    Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);\nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 580,
-        "y": 260,
-        "wires": [
-            [
-                "3cdeb2c8.928e2e"
-            ]
-        ]
-    },
-    {
-        "id": "cb381637.2c08b8",
-        "type": "switch",
-        "z": "3f75d555.5599aa",
-        "name": "Bucket Taken/Missing",
-        "property": "err.statusCode",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "403",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "404",
-                "vt": "num"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 3,
-        "x": 680,
-        "y": 380,
-        "wires": [
-            [
-                "29a66b9d.032624"
-            ],
-            [
-                "5fca92da.ce863c"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "5fca92da.ce863c",
-        "type": "change",
-        "z": "3f75d555.5599aa",
-        "name": "Inject",
-        "rules": [
-            {
-                "t": "delete",
-                "p": "err",
-                "pt": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 270,
-        "y": 500,
-        "wires": [
-            [
-                "b331344f.d4c458"
-            ]
-        ]
-    },
-    {
-        "id": "b331344f.d4c458",
-        "type": "forge-oss",
-        "z": "3f75d555.5599aa",
-        "name": "",
-        "topic": "bucket-ok",
-        "forge": "",
-        "operation": "CreateBucket",
-        "raw": false,
-        "all": false,
-        "bucket": "",
-        "policyKey": "transient",
-        "key": "",
-        "contentType": "application/octet-stream",
-        "contentDisposition": "",
-        "copy": "",
-        "localFilename": "",
-        "limit": 10,
-        "startAt": "",
-        "beginsWith": "",
-        "with": [],
-        "ifMatch": "",
-        "ifNoneMatch": "",
-        "ifModifiedSince": "",
-        "range": "",
-        "access": "read",
-        "singleUse": false,
-        "minutesExpiration": 60,
-        "acceptEncoding": "",
-        "guid": "autodesk",
-        "region": "US",
-        "x": 430,
-        "y": 500,
-        "wires": [
-            [],
-            []
-        ]
-    },
-    {
-        "id": "9e9d5cb.1a203a",
-        "type": "status",
-        "z": "3f75d555.5599aa",
-        "name": "",
-        "scope": null,
-        "x": 240,
-        "y": 60,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "2f78371.5b87ac8",
-        "type": "switch",
-        "z": "3f75d555.5599aa",
-        "name": "Params Ok?",
-        "property": "err",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "null"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 250,
-        "y": 400,
-        "wires": [
-            [
-                "3cdeb2c8.928e2e"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "16a24040.2a12a",
-        "type": "function",
-        "z": "3f75d555.5599aa",
-        "name": "Inject",
-        "func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get ('bucket');\n    msg.region =msg.payload.region || msg.region || env.get ('region') || 'US';\n    msg.policyKey =msg.payload.policyKey || msg.policyKey || env.get ('policyKey') || 'transient';\n    msg.forceBucketCreation =false;\n    if (typeof msg.payload.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.payload.forceBucketCreation === true;\n    else if (typeof msg.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.forceBucketCreation === true;\n    else if (typeof env.get('forceBucketCreation') === 'boolean')\n        msg.forceBucketCreation =env.get('bucket') === true ;    \n} else {\n    msg.bucket =msg.bucket || env.get ('bucket');\n    msg.region =msg.region || env.get ('region') || 'US';\n    msg.policyKey =msg.policyKey || env.get ('policyKey') || 'transient';\n    if (typeof msg.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.forceBucketCreation === true;\n    else if (typeof env.get('forceBucketCreation') === 'boolean')\n        msg.forceBucketCreation =env.get('bucket') === true ;    \n    else\n        msg.forceBucketCreation =false;\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n}\n    \nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 170,
-        "y": 340,
-        "wires": [
-            [
-                "2f78371.5b87ac8"
-            ]
-        ]
-    },
-    {
-        "id": "c93aef0f.c6081",
-        "type": "subflow",
-        "name": "Upload to OSS",
-        "info": "Upload an object. If the specified object name already exists in \nthe bucket, the uploaded content will overwrite the existing content \nfor the bucket name/object name combination.\n\n### Parameters\n\n* **bucket**: bucket to upload object into\n\n* **key**: object name being uploaded\n\n* **contentType** [optional]: media type\n\n* **contentDisposition** [optional]: suggested default filename when downloading this object to a file after it has been uploaded\n\n* **ifMatch** [optional]: When overwriting an object, use the latest SHA-1 hash \n  to verify that you are overwriting the latest data.\n  A SHA-1 hash is returned every time you upload or overwrite an object. \n  If the SHA-1 hash in the header does not match the current SHA-1 hash \n  stored for this object in OSS, the request fails (status code 412).\n\n### Outputs\n\n* **response**: the object details\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **error**: an error occured",
-        "category": "forge",
-        "in": [
-            {
-                "x": 100,
-                "y": 180,
-                "wires": [
-                    {
-                        "id": "3e0684d2.fdf95c"
-                    }
-                ]
-            }
-        ],
-        "out": [
-            {
-                "x": 880,
-                "y": 460,
-                "wires": [
-                    {
-                        "id": "23ff6b3.d21ac94",
-                        "port": 0
-                    }
-                ]
-            },
-            {
-                "x": 880,
-                "y": 240,
-                "wires": [
-                    {
-                        "id": "67c9a760.2b60d8",
-                        "port": 1
-                    },
-                    {
-                        "id": "8457e7df.678948",
-                        "port": 1
-                    }
-                ]
-            }
-        ],
-        "env": [
-            {
-                "name": "bucket",
-                "type": "str",
-                "value": ""
-            },
-            {
-                "name": "key",
-                "type": "str",
-                "value": ""
-            },
-            {
-                "name": "contentType",
-                "type": "str",
-                "value": ""
-            },
-            {
-                "name": "contentDisposition",
-                "type": "str",
-                "value": ""
-            },
-            {
-                "name": "ifMatch",
-                "type": "str",
-                "value": ""
-            }
-        ],
-        "outputLabels": [
-            "response",
-            "error"
-        ],
-        "icon": "node-red-node-forge/forge.png",
-        "status": {
-            "x": 360,
-            "y": 60,
-            "wires": [
-                {
-                    "id": "5524a60f.f3f968",
-                    "port": 0
-                }
-            ]
-        }
-    },
-    {
-        "id": "dd35521f.f8b18",
-        "type": "switch",
-        "z": "c93aef0f.c6081",
-        "name": "",
-        "property": "filename",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "empty"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 230,
-        "y": 340,
-        "wires": [
-            [
-                "805d7a22.305ae8"
-            ],
-            [
-                "485d2c2b.21f7d4"
-            ]
-        ]
-    },
-    {
-        "id": "805d7a22.305ae8",
-        "type": "change",
-        "z": "c93aef0f.c6081",
-        "name": "Buffer",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "data",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 430,
-        "y": 320,
-        "wires": [
-            [
-                "67c9a760.2b60d8"
-            ]
-        ]
-    },
-    {
-        "id": "485d2c2b.21f7d4",
-        "type": "change",
-        "z": "c93aef0f.c6081",
-        "name": "local filename",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.localFilename",
-                "pt": "msg",
-                "to": "filename",
-                "tot": "msg"
-            },
-            {
-                "t": "delete",
-                "p": "err",
-                "pt": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 400,
-        "y": 360,
-        "wires": [
-            [
-                "67c9a760.2b60d8"
-            ]
-        ]
-    },
-    {
-        "id": "67c9a760.2b60d8",
-        "type": "forge-oss",
-        "z": "c93aef0f.c6081",
-        "name": "Upload file",
-        "topic": "details",
-        "forge": "",
-        "operation": "PutObject",
-        "raw": false,
-        "all": false,
-        "bucket": "",
-        "policyKey": "transient",
-        "key": "",
-        "contentType": "application/octet-stream",
-        "contentDisposition": "",
-        "copy": "",
-        "localFilename": "",
-        "limit": 10,
-        "startAt": "",
-        "beginsWith": "",
-        "with": null,
-        "ifMatch": "",
-        "ifNoneMatch": "",
-        "ifModifiedSince": "",
-        "range": "",
-        "access": "read",
-        "singleUse": false,
-        "minutesExpiration": 60,
-        "acceptEncoding": "",
-        "guid": "autodesk",
-        "region": "US",
-        "x": 630,
-        "y": 340,
-        "wires": [
-            [
-                "22c9fe1b.97fb72"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "22c9fe1b.97fb72",
-        "type": "change",
-        "z": "c93aef0f.c6081",
-        "name": "Add Force Translation",
-        "rules": [
-            {
-                "t": "set",
-                "p": "xAdsForce",
-                "pt": "msg",
-                "to": "true",
-                "tot": "bool"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 660,
-        "y": 400,
-        "wires": [
-            [
-                "bea009e.c90c9f8"
-            ]
-        ]
-    },
-    {
-        "id": "bea009e.c90c9f8",
-        "type": "function",
-        "z": "c93aef0f.c6081",
-        "name": "Get URN",
-        "func": "msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 280,
-        "y": 460,
-        "wires": [
-            [
-                "50bff6f3.e779c8"
-            ]
-        ]
-    },
-    {
-        "id": "50bff6f3.e779c8",
-        "type": "base64",
-        "z": "c93aef0f.c6081",
-        "name": "base64 urn",
-        "action": "str",
-        "property": "urn",
-        "x": 430,
-        "y": 460,
-        "wires": [
-            [
-                "23ff6b3.d21ac94"
-            ]
-        ]
-    },
-    {
-        "id": "23ff6b3.d21ac94",
-        "type": "function",
-        "z": "c93aef0f.c6081",
-        "name": "safe base64",
-        "func": "msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 590,
-        "y": 460,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "5524a60f.f3f968",
-        "type": "status",
-        "z": "c93aef0f.c6081",
-        "name": "",
-        "scope": null,
-        "x": 200,
-        "y": 60,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "3e0684d2.fdf95c",
-        "type": "function",
-        "z": "c93aef0f.c6081",
-        "name": "Inject",
-        "func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get('bucket');\n    msg.key =msg.payload.key || msg.key || env.get('key');\n    msg.contentType =msg.payload.contentType || msg.contentType || env.get('contentType') || '';\n    msg.contentDisposition =msg.payload.contentDisposition || msg.contentDisposition || env.get('contentDisposition') || '';\n    msg.ifMatch =msg.payload.ifMatch || msg.ifMatch || env.get('ifMatch') || '';\n} else {\n    msg.bucket =msg.bucket || env.get('bucket');\n    msg.key =msg.key || env.get('key');\n    msg.contentType =msg.contentType || env.get('contentType') || '';\n    msg.contentDisposition =msg.contentDisposition || env.get('contentDisposition') || '';\n    msg.ifMatch =msg.ifMatch || env.get('ifMatch') || '';\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n    return (null);\n} else if ( !msg.key || msg.key === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid key name!'});\n    node.error('Provide a valid key name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'key' cannot be empty\"\n    };\n    return (null);\n}\n\nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 230,
-        "y": 180,
-        "wires": [
-            [
-                "8457e7df.678948"
-            ]
-        ],
-        "info": "Upload an object. If the specified object name already exists in \nthe bucket, the uploaded content will overwrite the existing content \nfor the bucket name/object name combination.\n\n### Parameters\n\n* **bucket**: bucket to upload object into\n\n* **key**: object name being uploaded\n\n* **contentType** [optional]: indicate the media type of the resource\n\n* **contentDisposition** [optional]: suggested default filename when \n  downloading this object\n\n* **ifMatch** [optional]: When overwriting an object, use the latest SHA-1 \n  hash to verify that you are overwriting the latest data.\n  A SHA-1 hash is returned every time you upload or overwrite an object. \n  If the SHA-1 hash in the header does not match the current SHA-1 hash \n  stored for this object in OSS, the request fails (status code 412).\n\n### Outputs: "
-    },
-    {
-        "id": "8457e7df.678948",
-        "type": "switch",
-        "z": "c93aef0f.c6081",
-        "name": "Params Ok?",
-        "property": "err",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "null"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 270,
-        "y": 240,
-        "wires": [
-            [
-                "dd35521f.f8b18"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "279b35cc.5bd67a",
-        "type": "subflow",
-        "name": "Translate and Wait",
-        "info": "\n\n### Parameters\n\n* **urn**: The design URN; returned when uploading the file to Forge. The URN needs to be safe base64 encoded.\n\n* **region** [optional]: Region in which to store outputs. Possible values: ```US```, ```EMEA```. By default, it is set to ```US```.\n\n* **xAdsForce** [optional]: ```true```: the endpoint replaces previously translated output file types with the newly generated derivatives\n  ```false``` (default): previously created derivatives are not replaced\n    \n## Outputs\n\n* **response**: the final manifest\n\n* **progress**: an object containing a status and progress field.\n  * status: Overall status for translation jobs in the “manifest”. Possible values: pending, ```success```, ```inprogress```, ```failed```, ```timeout```\n  * progress: Overall progress for all translation jobs in the “manifest”. Possible values: ```complete```, ```##% complete```\n\n\n* **error**: an error occured\n",
-        "category": "forge",
-        "in": [
-            {
-                "x": 80,
-                "y": 180,
-                "wires": [
-                    {
-                        "id": "ec1ff16b.974e7"
-                    }
-                ]
-            }
-        ],
-        "out": [
-            {
-                "x": 920,
-                "y": 520,
-                "wires": [
-                    {
-                        "id": "12fb1468.5d5d8c",
-                        "port": 0
-                    }
-                ]
-            },
-            {
-                "x": 920,
-                "y": 660,
-                "wires": [
-                    {
-                        "id": "30271f6c.8fb83",
-                        "port": 0
-                    }
-                ]
-            },
-            {
-                "x": 920,
-                "y": 360,
-                "wires": [
-                    {
-                        "id": "12fb1468.5d5d8c",
-                        "port": 1
-                    },
-                    {
-                        "id": "779c29a9.5eaee8",
-                        "port": 1
-                    },
-                    {
-                        "id": "9f6ff471.0ae0f8",
-                        "port": 1
-                    },
-                    {
-                        "id": "230af144.090c9e",
-                        "port": 1
-                    }
-                ]
-            }
-        ],
-        "env": [],
-        "outputLabels": [
-            "response",
-            "progress",
-            "error"
-        ],
-        "icon": "node-red-node-forge/forge.png",
-        "status": {
-            "x": 340,
-            "y": 40,
-            "wires": [
-                {
-                    "id": "4b257ec1.1b9e8",
-                    "port": 0
-                }
-            ]
-        }
-    },
-    {
-        "id": "fca7e07e.5ad71",
-        "type": "change",
-        "z": "279b35cc.5bd67a",
-        "name": "Inject",
-        "rules": [
-            {
-                "t": "delete",
-                "p": "err",
-                "pt": "msg"
-            },
-            {
-                "t": "delete",
-                "p": "payload",
-                "pt": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 190,
-        "y": 340,
-        "wires": [
-            [
-                "230af144.090c9e"
-            ]
-        ]
-    },
-    {
-        "id": "230af144.090c9e",
-        "type": "forge-model-derivative",
-        "z": "279b35cc.5bd67a",
-        "name": "",
-        "topic": "",
-        "forge": "",
-        "operation": "Translate",
-        "raw": false,
-        "all": false,
-        "urn": "",
-        "derivativeurn": "",
-        "guid": "autodesk",
-        "objectid": "",
-        "xAdsForce": false,
-        "forceget": false,
-        "rootFilename": "",
-        "range": "",
-        "width": 200,
-        "height": 200,
-        "jobs": [
-            {
-                "type": "svf",
-                "views": [
-                    "2d",
-                    "3d"
-                ],
-                "advanced": {
-                    "switchLoader": false
-                }
-            }
-        ],
-        "checkReferences": false,
-        "references": "[]",
-        "noerr": 0,
-        "ifModifiedSince": "",
-        "acceptEncoding": "",
-        "region": "US",
-        "x": 330,
-        "y": 340,
-        "wires": [
-            [
-                "80fdacbf.20a7",
-                "4db03c7e.3251b4"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "80fdacbf.20a7",
-        "type": "delay",
-        "z": "279b35cc.5bd67a",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "30",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 500,
-        "y": 400,
-        "wires": [
-            [
-                "779c29a9.5eaee8"
-            ]
-        ]
-    },
-    {
-        "id": "779c29a9.5eaee8",
-        "type": "forge-model-derivative",
-        "z": "279b35cc.5bd67a",
-        "name": "Manifest",
-        "topic": "",
-        "forge": "",
-        "operation": "GetManifest",
-        "raw": false,
-        "all": false,
-        "urn": "",
-        "derivativeurn": "",
-        "guid": "autodesk",
-        "objectid": "",
-        "xAdsForce": false,
-        "forceget": false,
-        "rootFilename": "",
-        "range": "",
-        "width": 200,
-        "height": 200,
-        "jobs": [
-            {
-                "type": "svf",
-                "views": [
-                    "2d",
-                    "3d"
-                ],
-                "advanced": {
-                    "switchLoader": false
-                }
-            }
-        ],
-        "checkReferences": false,
-        "references": "[]",
-        "noerr": 0,
-        "ifModifiedSince": "",
-        "acceptEncoding": "",
-        "region": "US",
-        "x": 680,
-        "y": 420,
-        "wires": [
-            [
-                "b40ea287.2aa9d"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "b40ea287.2aa9d",
-        "type": "while-loop",
-        "z": "279b35cc.5bd67a",
-        "name": "Wait for Translation",
-        "condi": "!['success' , 'failed', 'timeout'].includes (msg.payload.status)",
-        "x": 510,
-        "y": 600,
-        "wires": [
-            [
-                "12fb1468.5d5d8c"
-            ],
-            [
-                "18ae35b7.6110ba",
-                "30271f6c.8fb83"
-            ]
-        ]
-    },
-    {
-        "id": "18ae35b7.6110ba",
-        "type": "delay",
-        "z": "279b35cc.5bd67a",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "1",
-        "timeoutUnits": "minutes",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 500,
-        "y": 440,
-        "wires": [
-            [
-                "779c29a9.5eaee8"
-            ]
-        ]
-    },
-    {
-        "id": "12fb1468.5d5d8c",
-        "type": "switch",
-        "z": "279b35cc.5bd67a",
-        "name": "Ready?",
-        "property": "payload.status",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "success",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 760,
-        "y": 520,
-        "wires": [
-            [
-                "30271f6c.8fb83"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "4b257ec1.1b9e8",
-        "type": "status",
-        "z": "279b35cc.5bd67a",
-        "name": "",
-        "scope": null,
-        "x": 180,
-        "y": 40,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "ec1ff16b.974e7",
-        "type": "function",
-        "z": "279b35cc.5bd67a",
-        "name": "Inject",
-        "func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nmsg.urn = (msg.payload && msg.payload.urn) || msg.urn || env.get('urn');\nmsg.region = (msg.payload && msg.payload.region) || msg.region || env.get('region') || 'US';\nmsg.xAdsForce = (msg.payload && msg.payload.xAdsForce) || msg.xAdsForce || false;\nmsg.xAdsForce = msg.xAdsForce === true || msg.xAdsForce === 'true'|| msg.xAdsForce === 1 || msg.xAdsForce === '1';\n\nnode.status ({});\nif ( !msg.urn || msg.urn === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid urn!'});\n    node.error('Provide a urn!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"The parameter 'urn' should be a nonempty string.\"\n    };\n}\n    \nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 190,
-        "y": 180,
-        "wires": [
-            [
-                "9f6ff471.0ae0f8"
-            ]
-        ]
-    },
-    {
-        "id": "9f6ff471.0ae0f8",
-        "type": "switch",
-        "z": "279b35cc.5bd67a",
-        "name": "Params Ok?",
-        "property": "err",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "null"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 330,
-        "y": 180,
-        "wires": [
-            [
-                "fca7e07e.5ad71"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "4db03c7e.3251b4",
-        "type": "function",
-        "z": "279b35cc.5bd67a",
-        "name": "Requested",
-        "func": "msg.payload ={\n    status: 'pending',\n    progress: '0% complete'\n};\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 550,
-        "y": 300,
-        "wires": [
-            [
-                "30271f6c.8fb83"
-            ]
-        ]
-    },
-    {
-        "id": "30271f6c.8fb83",
-        "type": "function",
-        "z": "279b35cc.5bd67a",
-        "name": "",
-        "func": "node.status ({\n    fill: 'yellow',\n    shape: 'square',\n    text: msg.payload.progress\n});\n\nreturn (msg);",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 770,
-        "y": 660,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "4f3e1dd1.4c2764",
-        "type": "subflow:279b35cc.5bd67a",
-        "z": "2ee1364.2cb30ca",
-        "name": "",
-        "x": 230,
-        "y": 280,
-        "wires": [
-            [],
-            [],
-            []
-        ]
-    },
-    {
-        "id": "36790bd4.13cbd4",
-        "type": "subflow:c93aef0f.c6081",
-        "z": "2ee1364.2cb30ca",
-        "name": "",
-        "x": 220,
-        "y": 220,
-        "wires": [
-            [],
-            []
-        ]
-    },
-    {
-        "id": "69d0b99f.2da4a8",
-        "type": "subflow:3f75d555.5599aa",
-        "z": "2ee1364.2cb30ca",
-        "name": "",
-        "x": 260,
-        "y": 100,
-        "wires": [
-            [],
-            []
-        ]
-    },
-    {
-        "id": "61bedc03.910fc4",
-        "type": "subflow:4aecadf2.352044",
-        "z": "2ee1364.2cb30ca",
-        "name": "",
-        "x": 230,
-        "y": 160,
-        "wires": [
-            [],
-            [],
-            [],
-            []
-        ]
-    }
+	{
+		"id": "4aecadf2.352044",
+		"type": "subflow",
+		"name": "OSS Object Exists?",
+		"info": "Check if an object exists\n\n### Parameters\n\n* **bucket**: bucket key\n\n* **key**: object name to get details for\n\n* **sha1** [optional]: use the SHA-1 hash to know if the file is the same\n\n* **ifModifiedSince** [optional]: If the requested object has not been modified \n  since the time specified in this field, an entity will not be returned \n  from the server; instead, a 304 (not modified) response will be \n  returned without any message body. (HTTP date - UTC format)\n\n### Outputs\n\n* **sameObject**: SHA-1 code was provided and the object on the server match that code\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **needsUpdate**:  SHA-1 code was provided and the object on the server does not match that code\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **notFound**: the object was not found on the server\n\n* **error**: an error occured\n",
+		"category": "forge",
+		"in": [
+			{
+				"x": 80,
+				"y": 240,
+				"wires": [
+					{
+						"id": "cd4ca6bf.a91398"
+					}
+				]
+			}
+		],
+		"out": [
+			{
+				"x": 960,
+				"y": 160,
+				"wires": [
+					{
+						"id": "f378191f.bb72c8",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 960,
+				"y": 280,
+				"wires": [
+					{
+						"id": "5760de98.b3949",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 960,
+				"y": 400,
+				"wires": [
+					{
+						"id": "8d6819c6.ca4368",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 960,
+				"y": 500,
+				"wires": [
+					{
+						"id": "a30f5db5.f98de",
+						"port": 1
+					},
+					{
+						"id": "2fc8f4fa.244c3c",
+						"port": 1
+					}
+				]
+			}
+		],
+		"env": [
+			{
+				"name": "bucket",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "key",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "sha1",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "ifModifiedSince",
+				"type": "str",
+				"value": ""
+			}
+		],
+		"outputLabels": [
+			"sameObject",
+			"needUpdate",
+			"notFound",
+			"error"
+		],
+		"icon": "node-red-node-forge/forge.png",
+		"status": {
+			"x": 420,
+			"y": 80,
+			"wires": [
+				{
+					"id": "b48d897a.c9d238",
+					"port": 0
+				}
+			]
+		}
+	},
+	{
+		"id": "519554b5.c479ac",
+		"type": "forge-oss",
+		"z": "4aecadf2.352044",
+		"name": "File Exists?",
+		"topic": "",
+		"forge": "",
+		"operation": "ObjectDetails",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": [
+			"createdDate",
+			"lastModifiedDate"
+		],
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 450,
+		"y": 360,
+		"wires": [
+			[
+				"267a56b1.29195a"
+			],
+			[
+				"2fc8f4fa.244c3c"
+			]
+		]
+	},
+	{
+		"id": "2fc8f4fa.244c3c",
+		"type": "switch",
+		"z": "4aecadf2.352044",
+		"name": "File Missing",
+		"property": "err.statusCode",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "404",
+				"vt": "num"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 690,
+		"y": 380,
+		"wires": [
+			[
+				"8d6819c6.ca4368"
+			],
+			[]
+		]
+	},
+	{
+		"id": "267a56b1.29195a",
+		"type": "switch",
+		"z": "4aecadf2.352044",
+		"name": "sha1?",
+		"property": "payload.sha1",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "sha1",
+				"vt": "msg"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": true,
+		"outputs": 2,
+		"x": 430,
+		"y": 160,
+		"wires": [
+			[
+				"d7e513f3.2c9c1"
+			],
+			[
+				"7658925d.5f746c"
+			]
+		]
+	},
+	{
+		"id": "b48d897a.c9d238",
+		"type": "status",
+		"z": "4aecadf2.352044",
+		"name": "",
+		"scope": null,
+		"x": 280,
+		"y": 80,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "cd4ca6bf.a91398",
+		"type": "function",
+		"z": "4aecadf2.352044",
+		"name": "Inject",
+		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get('bucket');\n    msg.key =msg.payload.key || msg.key || env.get('key');\n    msg.sha1 =msg.payload.sha1 || msg.sha1 || env.get('sha1') || '';\n    msg.ifModifiedSince =msg.payload.ifModifiedSince || msg.ifModifiedSince || env.get('ifModifiedSince') || '';\n} else {\n    msg.bucket =msg.bucket || env.get('bucket');\n    msg.key =msg.key || env.get('key');\n    msg.sha1 =msg.sha1 || env.get('sha1') || '';\n    msg.ifModifiedSince =msg.ifModifiedSince || env.get('ifModifiedSince') || '';\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n} else if ( !msg.key || msg.key === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid key name!'});\n    node.error('Provide a valid key name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'key' cannot be empty\"\n    };\n}\n\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 130,
+		"y": 380,
+		"wires": [
+			[
+				"a30f5db5.f98de"
+			]
+		]
+	},
+	{
+		"id": "a30f5db5.f98de",
+		"type": "switch",
+		"z": "4aecadf2.352044",
+		"name": "Params Ok?",
+		"property": "err",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "null"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 290,
+		"y": 380,
+		"wires": [
+			[
+				"519554b5.c479ac"
+			],
+			[]
+		]
+	},
+	{
+		"id": "8d6819c6.ca4368",
+		"type": "change",
+		"z": "4aecadf2.352044",
+		"name": "Remove err",
+		"rules": [
+			{
+				"t": "delete",
+				"p": "err",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 890,
+		"y": 340,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "d7e513f3.2c9c1",
+		"type": "function",
+		"z": "4aecadf2.352044",
+		"name": "Get URN",
+		"func": "msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 580,
+		"y": 100,
+		"wires": [
+			[
+				"ab4a41e3.e383"
+			]
+		]
+	},
+	{
+		"id": "ab4a41e3.e383",
+		"type": "base64",
+		"z": "4aecadf2.352044",
+		"name": "base64 urn",
+		"action": "str",
+		"property": "urn",
+		"x": 730,
+		"y": 100,
+		"wires": [
+			[
+				"f378191f.bb72c8"
+			]
+		]
+	},
+	{
+		"id": "f378191f.bb72c8",
+		"type": "function",
+		"z": "4aecadf2.352044",
+		"name": "safe base64",
+		"func": "msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 890,
+		"y": 100,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "7658925d.5f746c",
+		"type": "function",
+		"z": "4aecadf2.352044",
+		"name": "Get URN",
+		"func": "msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 580,
+		"y": 220,
+		"wires": [
+			[
+				"6d3d3bd0.cea6f4"
+			]
+		]
+	},
+	{
+		"id": "6d3d3bd0.cea6f4",
+		"type": "base64",
+		"z": "4aecadf2.352044",
+		"name": "base64 urn",
+		"action": "str",
+		"property": "urn",
+		"x": 730,
+		"y": 220,
+		"wires": [
+			[
+				"5760de98.b3949"
+			]
+		]
+	},
+	{
+		"id": "5760de98.b3949",
+		"type": "function",
+		"z": "4aecadf2.352044",
+		"name": "safe base64",
+		"func": "msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 890,
+		"y": 220,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "3f75d555.5599aa",
+		"type": "subflow",
+		"name": "Check or Create OSS Bucket",
+		"info": "Check and Create OSS Bucket\n\n### Parameters\n\n* **bucket**: A unique name you assign to a bucket. It must be globally \n  unique across all applications and regions, otherwise the call will \n  fail. Possible values: -_.a-z0-9 (between 3-128 characters in\n  length). Note that you cannot change a bucket key.\n\n* **region** [optional]: The region where the bucket resides Acceptable values: \n  ```US```, ```EMEA``` Default: ```US```\n\n* **policyKey** [optional]: Data retention policy - Acceptable values: transient, temporary, persistent.\n  Default: ```transient```.\n\n* **forceBucketCreation** [optional] : In case the bucketKey is already used by another\n  application, you can force the node to iterate and find a name. The \n  node will append 6 random characters to the given key until it finds\n  one. Default: ```false```\n\n### Outputs\n\n* **response**: the bucket details\n\n* **error**: an error occured",
+		"category": "forge",
+		"in": [
+			{
+				"x": 60,
+				"y": 340,
+				"wires": [
+					{
+						"id": "16a24040.2a12a"
+					}
+				]
+			}
+		],
+		"out": [
+			{
+				"x": 920,
+				"y": 260,
+				"wires": [
+					{
+						"id": "3cdeb2c8.928e2e",
+						"port": 0
+					},
+					{
+						"id": "b331344f.d4c458",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 920,
+				"y": 520,
+				"wires": [
+					{
+						"id": "b331344f.d4c458",
+						"port": 1
+					},
+					{
+						"id": "29a66b9d.032624",
+						"port": 1
+					},
+					{
+						"id": "cb381637.2c08b8",
+						"port": 2
+					},
+					{
+						"id": "2f78371.5b87ac8",
+						"port": 1
+					}
+				]
+			}
+		],
+		"env": [
+			{
+				"name": "bucket",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "region",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "policyKey",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "forceBucketCreation",
+				"type": "bool",
+				"value": "false"
+			}
+		],
+		"outputLabels": [
+			"response",
+			"errors"
+		],
+		"icon": "node-red-node-forge/forge.png",
+		"status": {
+			"x": 360,
+			"y": 60,
+			"wires": [
+				{
+					"id": "9e9d5cb.1a203a",
+					"port": 0
+				}
+			]
+		}
+	},
+	{
+		"id": "3cdeb2c8.928e2e",
+		"type": "forge-oss",
+		"z": "3f75d555.5599aa",
+		"name": "Bucket Exists?",
+		"topic": "",
+		"forge": "",
+		"operation": "BucketDetails",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": [],
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 440,
+		"y": 380,
+		"wires": [
+			[],
+			[
+				"cb381637.2c08b8"
+			]
+		]
+	},
+	{
+		"id": "29a66b9d.032624",
+		"type": "switch",
+		"z": "3f75d555.5599aa",
+		"name": "",
+		"property": "forceBucketCreation",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "true"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 390,
+		"y": 260,
+		"wires": [
+			[
+				"f9e5b5d9.40e6a8"
+			],
+			[]
+		]
+	},
+	{
+		"id": "f9e5b5d9.40e6a8",
+		"type": "function",
+		"z": "3f75d555.5599aa",
+		"name": "Change Bucket Name",
+		"func": "msg.originalbucket = msg.originalbucket || msg.bucket,\nmsg.bucket = \n    msg.originalbucket + \n    Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 580,
+		"y": 260,
+		"wires": [
+			[
+				"3cdeb2c8.928e2e"
+			]
+		]
+	},
+	{
+		"id": "cb381637.2c08b8",
+		"type": "switch",
+		"z": "3f75d555.5599aa",
+		"name": "Bucket Taken/Missing",
+		"property": "err.statusCode",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "403",
+				"vt": "num"
+			},
+			{
+				"t": "eq",
+				"v": "404",
+				"vt": "num"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 3,
+		"x": 680,
+		"y": 380,
+		"wires": [
+			[
+				"29a66b9d.032624"
+			],
+			[
+				"5fca92da.ce863c"
+			],
+			[]
+		]
+	},
+	{
+		"id": "5fca92da.ce863c",
+		"type": "change",
+		"z": "3f75d555.5599aa",
+		"name": "Inject",
+		"rules": [
+			{
+				"t": "delete",
+				"p": "err",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 270,
+		"y": 500,
+		"wires": [
+			[
+				"b331344f.d4c458"
+			]
+		]
+	},
+	{
+		"id": "b331344f.d4c458",
+		"type": "forge-oss",
+		"z": "3f75d555.5599aa",
+		"name": "",
+		"topic": "bucket-ok",
+		"forge": "",
+		"operation": "CreateBucket",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": [],
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 430,
+		"y": 500,
+		"wires": [
+			[],
+			[]
+		]
+	},
+	{
+		"id": "9e9d5cb.1a203a",
+		"type": "status",
+		"z": "3f75d555.5599aa",
+		"name": "",
+		"scope": null,
+		"x": 240,
+		"y": 60,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "2f78371.5b87ac8",
+		"type": "switch",
+		"z": "3f75d555.5599aa",
+		"name": "Params Ok?",
+		"property": "err",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "null"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 250,
+		"y": 400,
+		"wires": [
+			[
+				"3cdeb2c8.928e2e"
+			],
+			[]
+		]
+	},
+	{
+		"id": "16a24040.2a12a",
+		"type": "function",
+		"z": "3f75d555.5599aa",
+		"name": "Inject",
+		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get ('bucket');\n    msg.region =msg.payload.region || msg.region || env.get ('region') || 'US';\n    msg.policyKey =msg.payload.policyKey || msg.policyKey || env.get ('policyKey') || 'transient';\n    msg.forceBucketCreation =false;\n    if (typeof msg.payload.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.payload.forceBucketCreation === true;\n    else if (typeof msg.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.forceBucketCreation === true;\n    else if (typeof env.get('forceBucketCreation') === 'boolean')\n        msg.forceBucketCreation =env.get('bucket') === true ;    \n} else {\n    msg.bucket =msg.bucket || env.get ('bucket');\n    msg.region =msg.region || env.get ('region') || 'US';\n    msg.policyKey =msg.policyKey || env.get ('policyKey') || 'transient';\n    if (typeof msg.forceBucketCreation === 'boolean')\n        msg.forceBucketCreation =msg.forceBucketCreation === true;\n    else if (typeof env.get('forceBucketCreation') === 'boolean')\n        msg.forceBucketCreation =env.get('bucket') === true ;    \n    else\n        msg.forceBucketCreation =false;\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n}\n    \nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 170,
+		"y": 340,
+		"wires": [
+			[
+				"2f78371.5b87ac8"
+			]
+		]
+	},
+	{
+		"id": "c93aef0f.c6081",
+		"type": "subflow",
+		"name": "Upload to OSS",
+		"info": "Upload an object. If the specified object name already exists in \nthe bucket, the uploaded content will overwrite the existing content \nfor the bucket name/object name combination.\n\n### Parameters\n\n* **bucket**: bucket to upload object into\n\n* **key**: object name being uploaded\n\n* **contentType** [optional]: media type\n\n* **contentDisposition** [optional]: suggested default filename when downloading this object to a file after it has been uploaded\n\n* **ifMatch** [optional]: When overwriting an object, use the latest SHA-1 hash \n  to verify that you are overwriting the latest data.\n  A SHA-1 hash is returned every time you upload or overwrite an object. \n  If the SHA-1 hash in the header does not match the current SHA-1 hash \n  stored for this object in OSS, the request fails (status code 412).\n\n### Outputs\n\n* **response**: the object details\n  The node will add the ```objectId```, ```base64``` and ```safe base64``` **```urn```** to the message.\n\n* **error**: an error occured",
+		"category": "forge",
+		"in": [
+			{
+				"x": 100,
+				"y": 180,
+				"wires": [
+					{
+						"id": "3e0684d2.fdf95c"
+					}
+				]
+			}
+		],
+		"out": [
+			{
+				"x": 880,
+				"y": 460,
+				"wires": [
+					{
+						"id": "23ff6b3.d21ac94",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 880,
+				"y": 240,
+				"wires": [
+					{
+						"id": "67c9a760.2b60d8",
+						"port": 1
+					},
+					{
+						"id": "8457e7df.678948",
+						"port": 1
+					}
+				]
+			}
+		],
+		"env": [
+			{
+				"name": "bucket",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "key",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "contentType",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "contentDisposition",
+				"type": "str",
+				"value": ""
+			},
+			{
+				"name": "ifMatch",
+				"type": "str",
+				"value": ""
+			}
+		],
+		"outputLabels": [
+			"response",
+			"error"
+		],
+		"icon": "node-red-node-forge/forge.png",
+		"status": {
+			"x": 360,
+			"y": 60,
+			"wires": [
+				{
+					"id": "5524a60f.f3f968",
+					"port": 0
+				}
+			]
+		}
+	},
+	{
+		"id": "dd35521f.f8b18",
+		"type": "switch",
+		"z": "c93aef0f.c6081",
+		"name": "",
+		"property": "filename",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "empty"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 230,
+		"y": 340,
+		"wires": [
+			[
+				"805d7a22.305ae8"
+			],
+			[
+				"485d2c2b.21f7d4"
+			]
+		]
+	},
+	{
+		"id": "805d7a22.305ae8",
+		"type": "change",
+		"z": "c93aef0f.c6081",
+		"name": "Buffer",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload",
+				"pt": "msg",
+				"to": "data",
+				"tot": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 430,
+		"y": 320,
+		"wires": [
+			[
+				"67c9a760.2b60d8"
+			]
+		]
+	},
+	{
+		"id": "485d2c2b.21f7d4",
+		"type": "change",
+		"z": "c93aef0f.c6081",
+		"name": "local filename",
+		"rules": [
+			{
+				"t": "set",
+				"p": "payload.localFilename",
+				"pt": "msg",
+				"to": "filename",
+				"tot": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "err",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 400,
+		"y": 360,
+		"wires": [
+			[
+				"67c9a760.2b60d8"
+			]
+		]
+	},
+	{
+		"id": "67c9a760.2b60d8",
+		"type": "forge-oss",
+		"z": "c93aef0f.c6081",
+		"name": "Upload file",
+		"topic": "details",
+		"forge": "",
+		"operation": "PutObject",
+		"raw": false,
+		"all": false,
+		"bucket": "",
+		"policyKey": "transient",
+		"key": "",
+		"contentType": "application/octet-stream",
+		"contentDisposition": "",
+		"copy": "",
+		"localFilename": "",
+		"limit": 10,
+		"startAt": "",
+		"beginsWith": "",
+		"with": null,
+		"ifMatch": "",
+		"ifNoneMatch": "",
+		"ifModifiedSince": "",
+		"range": "",
+		"access": "read",
+		"singleUse": false,
+		"minutesExpiration": 60,
+		"acceptEncoding": "",
+		"guid": "autodesk",
+		"region": "US",
+		"x": 630,
+		"y": 340,
+		"wires": [
+			[
+				"22c9fe1b.97fb72"
+			],
+			[]
+		]
+	},
+	{
+		"id": "22c9fe1b.97fb72",
+		"type": "change",
+		"z": "c93aef0f.c6081",
+		"name": "Add Force Translation",
+		"rules": [
+			{
+				"t": "set",
+				"p": "xAdsForce",
+				"pt": "msg",
+				"to": "true",
+				"tot": "bool"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 660,
+		"y": 400,
+		"wires": [
+			[
+				"bea009e.c90c9f8"
+			]
+		]
+	},
+	{
+		"id": "bea009e.c90c9f8",
+		"type": "function",
+		"z": "c93aef0f.c6081",
+		"name": "Get URN",
+		"func": "msg.objectId = msg.payload.objectId;\nmsg.urn = msg.payload.objectId;\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 280,
+		"y": 460,
+		"wires": [
+			[
+				"50bff6f3.e779c8"
+			]
+		]
+	},
+	{
+		"id": "50bff6f3.e779c8",
+		"type": "base64",
+		"z": "c93aef0f.c6081",
+		"name": "base64 urn",
+		"action": "str",
+		"property": "urn",
+		"x": 430,
+		"y": 460,
+		"wires": [
+			[
+				"23ff6b3.d21ac94"
+			]
+		]
+	},
+	{
+		"id": "23ff6b3.d21ac94",
+		"type": "function",
+		"z": "c93aef0f.c6081",
+		"name": "safe base64",
+		"func": "msg.base64 = msg.urn;\nmsg.urn = msg.urn\n\t\t\t\t.replace (/\\+/g, '-') // Convert '+' to '-'\n\t\t\t\t.replace (/\\//g, '_') // Convert '/' to '_'\n\t\t\t\t.replace (/=+$/, '');\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 590,
+		"y": 460,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "5524a60f.f3f968",
+		"type": "status",
+		"z": "c93aef0f.c6081",
+		"name": "",
+		"scope": null,
+		"x": 200,
+		"y": 60,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "3e0684d2.fdf95c",
+		"type": "function",
+		"z": "c93aef0f.c6081",
+		"name": "Inject",
+		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nif ( msg.payload ) {\n    msg.bucket =msg.payload.bucket || msg.bucket || env.get('bucket');\n    msg.key =msg.payload.key || msg.key || env.get('key');\n    msg.contentType =msg.payload.contentType || msg.contentType || env.get('contentType') || '';\n    msg.contentDisposition =msg.payload.contentDisposition || msg.contentDisposition || env.get('contentDisposition') || '';\n    msg.ifMatch =msg.payload.ifMatch || msg.ifMatch || env.get('ifMatch') || '';\n} else {\n    msg.bucket =msg.bucket || env.get('bucket');\n    msg.key =msg.key || env.get('key');\n    msg.contentType =msg.contentType || env.get('contentType') || '';\n    msg.contentDisposition =msg.contentDisposition || env.get('contentDisposition') || '';\n    msg.ifMatch =msg.ifMatch || env.get('ifMatch') || '';\n}\n\nnode.status ({});\nif ( !msg.bucket || msg.bucket === '' || !/^[-_.a-z0-9]{3,128}$/.test(msg.bucket) ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid bucket name!'});\n    node.error('Provide a valid bucket name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'bucket' must be of the form  [-_.a-z0-9]{3,128}\"\n    };\n    return (null);\n} else if ( !msg.key || msg.key === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid key name!'});\n    node.error('Provide a valid key name!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"Valid field 'key' cannot be empty\"\n    };\n    return (null);\n}\n\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 230,
+		"y": 180,
+		"wires": [
+			[
+				"8457e7df.678948"
+			]
+		],
+		"info": "Upload an object. If the specified object name already exists in \nthe bucket, the uploaded content will overwrite the existing content \nfor the bucket name/object name combination.\n\n### Parameters\n\n* **bucket**: bucket to upload object into\n\n* **key**: object name being uploaded\n\n* **contentType** [optional]: indicate the media type of the resource\n\n* **contentDisposition** [optional]: suggested default filename when \n  downloading this object\n\n* **ifMatch** [optional]: When overwriting an object, use the latest SHA-1 \n  hash to verify that you are overwriting the latest data.\n  A SHA-1 hash is returned every time you upload or overwrite an object. \n  If the SHA-1 hash in the header does not match the current SHA-1 hash \n  stored for this object in OSS, the request fails (status code 412).\n\n### Outputs: "
+	},
+	{
+		"id": "8457e7df.678948",
+		"type": "switch",
+		"z": "c93aef0f.c6081",
+		"name": "Params Ok?",
+		"property": "err",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "null"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 270,
+		"y": 240,
+		"wires": [
+			[
+				"dd35521f.f8b18"
+			],
+			[]
+		]
+	},
+	{
+		"id": "279b35cc.5bd67a",
+		"type": "subflow",
+		"name": "Translate and Wait",
+		"info": "\n\n### Parameters\n\n* **urn**: The design URN; returned when uploading the file to Forge. The URN needs to be safe base64 encoded.\n\n* **region** [optional, string]: Region in which to store outputs. Possible values: ```US```, ```EMEA```. By default, it is set to ```US```.\n\n* **xAdsForce** [optional, boolean]: ```true```: the endpoint replaces previously translated output file types with the newly generated derivatives\n  ```false``` (default): previously created derivatives are not replaced\n\n* **type** [optional, string]: The requested output type (default is ```svf```)\n\n* **views** [optional, string[]]: Required for ```svf``` and ```svf2``` output\n\n* **advanced** [optional: object]: A set of special options depending of the chosen format. See documentation for more details\n\n## Outputs\n\n* **response**: the final manifest\n\n* **progress**: an object containing a status and progress field.\n  * status: Overall status for translation jobs in the “manifest”. Possible values: pending, ```success```, ```inprogress```, ```failed```, ```timeout```\n  * progress: Overall progress for all translation jobs in the “manifest”. Possible values: ```complete```, ```##% complete```\n\n* **error**: an error occured\n",
+		"category": "forge",
+		"in": [
+			{
+				"x": 80,
+				"y": 180,
+				"wires": [
+					{
+						"id": "ec1ff16b.974e7"
+					}
+				]
+			}
+		],
+		"out": [
+			{
+				"x": 920,
+				"y": 520,
+				"wires": [
+					{
+						"id": "12fb1468.5d5d8c",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 920,
+				"y": 660,
+				"wires": [
+					{
+						"id": "30271f6c.8fb83",
+						"port": 0
+					}
+				]
+			},
+			{
+				"x": 920,
+				"y": 360,
+				"wires": [
+					{
+						"id": "12fb1468.5d5d8c",
+						"port": 1
+					},
+					{
+						"id": "779c29a9.5eaee8",
+						"port": 1
+					},
+					{
+						"id": "9f6ff471.0ae0f8",
+						"port": 1
+					},
+					{
+						"id": "230af144.090c9e",
+						"port": 1
+					}
+				]
+			}
+		],
+		"env": [],
+		"meta": {},
+		"color": "#DDAA99",
+		"outputLabels": [
+			"response",
+			"progress",
+			"error"
+		],
+		"icon": "node-red-node-forge/forge.png",
+		"status": {
+			"x": 340,
+			"y": 40,
+			"wires": [
+				{
+					"id": "4b257ec1.1b9e8",
+					"port": 0
+				}
+			]
+		}
+	},
+	{
+		"id": "fca7e07e.5ad71",
+		"type": "change",
+		"z": "279b35cc.5bd67a",
+		"name": "Inject",
+		"rules": [
+			{
+				"t": "delete",
+				"p": "err",
+				"pt": "msg"
+			},
+			{
+				"t": "delete",
+				"p": "payload",
+				"pt": "msg"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 190,
+		"y": 340,
+		"wires": [
+			[
+				"230af144.090c9e"
+			]
+		]
+	},
+	{
+		"id": "230af144.090c9e",
+		"type": "forge-model-derivative",
+		"z": "279b35cc.5bd67a",
+		"name": "",
+		"topic": "",
+		"forge": "",
+		"operation": "Translate",
+		"raw": false,
+		"all": false,
+		"urn": "",
+		"derivativeurn": "",
+		"guid": "autodesk",
+		"objectid": "",
+		"xAdsForce": false,
+		"forceget": false,
+		"rootFilename": "",
+		"range": "",
+		"width": 200,
+		"height": 200,
+		"jobs": [
+			{
+				"type": "svf",
+				"views": [
+					"2d",
+					"3d"
+				],
+				"advanced": {
+					"switchLoader": false
+				}
+			}
+		],
+		"checkReferences": false,
+		"references": "[]",
+		"noerr": 0,
+		"ifModifiedSince": "",
+		"acceptEncoding": "",
+		"region": "US",
+		"x": 330,
+		"y": 340,
+		"wires": [
+			[
+				"80fdacbf.20a7",
+				"4db03c7e.3251b4"
+			],
+			[]
+		]
+	},
+	{
+		"id": "80fdacbf.20a7",
+		"type": "delay",
+		"z": "279b35cc.5bd67a",
+		"name": "",
+		"pauseType": "delay",
+		"timeout": "30",
+		"timeoutUnits": "seconds",
+		"rate": "1",
+		"nbRateUnits": "1",
+		"rateUnits": "second",
+		"randomFirst": "1",
+		"randomLast": "5",
+		"randomUnits": "seconds",
+		"drop": false,
+		"outputs": 1,
+		"x": 500,
+		"y": 400,
+		"wires": [
+			[
+				"779c29a9.5eaee8"
+			]
+		]
+	},
+	{
+		"id": "779c29a9.5eaee8",
+		"type": "forge-model-derivative",
+		"z": "279b35cc.5bd67a",
+		"name": "Manifest",
+		"topic": "",
+		"forge": "",
+		"operation": "GetManifest",
+		"raw": false,
+		"all": false,
+		"urn": "",
+		"derivativeurn": "",
+		"guid": "autodesk",
+		"objectid": "",
+		"xAdsForce": false,
+		"forceget": false,
+		"rootFilename": "",
+		"range": "",
+		"width": 200,
+		"height": 200,
+		"jobs": [
+			{
+				"type": "svf",
+				"views": [
+					"2d",
+					"3d"
+				],
+				"advanced": {
+					"switchLoader": false
+				}
+			}
+		],
+		"checkReferences": false,
+		"references": "[]",
+		"noerr": 0,
+		"ifModifiedSince": "",
+		"acceptEncoding": "",
+		"region": "US",
+		"x": 680,
+		"y": 420,
+		"wires": [
+			[
+				"b40ea287.2aa9d"
+			],
+			[]
+		]
+	},
+	{
+		"id": "b40ea287.2aa9d",
+		"type": "while-loop",
+		"z": "279b35cc.5bd67a",
+		"name": "Wait for Translation",
+		"condi": "!['success' , 'failed', 'timeout'].includes (msg.payload.status)",
+		"x": 510,
+		"y": 600,
+		"wires": [
+			[
+				"12fb1468.5d5d8c"
+			],
+			[
+				"18ae35b7.6110ba",
+				"30271f6c.8fb83"
+			]
+		]
+	},
+	{
+		"id": "18ae35b7.6110ba",
+		"type": "delay",
+		"z": "279b35cc.5bd67a",
+		"name": "",
+		"pauseType": "delay",
+		"timeout": "1",
+		"timeoutUnits": "minutes",
+		"rate": "1",
+		"nbRateUnits": "1",
+		"rateUnits": "second",
+		"randomFirst": "1",
+		"randomLast": "5",
+		"randomUnits": "seconds",
+		"drop": false,
+		"outputs": 1,
+		"x": 500,
+		"y": 440,
+		"wires": [
+			[
+				"779c29a9.5eaee8"
+			]
+		]
+	},
+	{
+		"id": "12fb1468.5d5d8c",
+		"type": "switch",
+		"z": "279b35cc.5bd67a",
+		"name": "Ready?",
+		"property": "payload.status",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "success",
+				"vt": "str"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 760,
+		"y": 520,
+		"wires": [
+			[
+				"30271f6c.8fb83"
+			],
+			[]
+		]
+	},
+	{
+		"id": "4b257ec1.1b9e8",
+		"type": "status",
+		"z": "279b35cc.5bd67a",
+		"name": "",
+		"scope": null,
+		"x": 180,
+		"y": 40,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "ec1ff16b.974e7",
+		"type": "function",
+		"z": "279b35cc.5bd67a",
+		"name": "Inject",
+		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nmsg.urn = (msg.payload && msg.payload.urn) || msg.urn || env.get('urn');\nmsg.region = (msg.payload && msg.payload.region) || msg.region || env.get('region') || 'US';\nmsg.xAdsForce = (msg.payload && msg.payload.xAdsForce) || msg.xAdsForce || false;\nmsg.xAdsForce = msg.xAdsForce === true || msg.xAdsForce === 'true'|| msg.xAdsForce === 1 || msg.xAdsForce === '1';\nmsg.type = (msg.payload && msg.payload.type) || msg.type || env.get('type') || 'svf';\nmsg.views = (msg.payload && msg.payload.views) || msg.views || env.get('views') || [];\nmsg.advanced = (msg.payload && msg.payload.advanced) || msg.advanced || env.get('advanced') || {};\n\nnode.status ({});\nif ( !msg.urn || msg.urn === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid urn!'});\n    node.error('Provide a urn!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"The parameter 'urn' should be a nonempty string.\"\n    };\n}\n    \nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 190,
+		"y": 180,
+		"wires": [
+			[
+				"9f6ff471.0ae0f8"
+			]
+		]
+	},
+	{
+		"id": "9f6ff471.0ae0f8",
+		"type": "switch",
+		"z": "279b35cc.5bd67a",
+		"name": "Params Ok?",
+		"property": "err",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "null"
+			},
+			{
+				"t": "else"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 2,
+		"x": 330,
+		"y": 180,
+		"wires": [
+			[
+				"fca7e07e.5ad71"
+			],
+			[]
+		]
+	},
+	{
+		"id": "4db03c7e.3251b4",
+		"type": "function",
+		"z": "279b35cc.5bd67a",
+		"name": "Requested",
+		"func": "msg.payload ={\n    status: 'pending',\n    progress: '0% complete'\n};\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 550,
+		"y": 300,
+		"wires": [
+			[
+				"30271f6c.8fb83"
+			]
+		]
+	},
+	{
+		"id": "30271f6c.8fb83",
+		"type": "function",
+		"z": "279b35cc.5bd67a",
+		"name": "",
+		"func": "node.status ({\n    fill: 'yellow',\n    shape: 'square',\n    text: msg.payload.progress\n});\n\nreturn (msg);",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 770,
+		"y": 660,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "4f3e1dd1.4c2764",
+		"type": "subflow:279b35cc.5bd67a",
+		"z": "99e1f6c2a9ba6221",
+		"name": "",
+		"env": [],
+		"x": 510,
+		"y": 480,
+		"wires": [
+			[],
+			[],
+			[]
+		]
+	},
+	{
+		"id": "36790bd4.13cbd4",
+		"type": "subflow:c93aef0f.c6081",
+		"z": "99e1f6c2a9ba6221",
+		"name": "",
+		"x": 500,
+		"y": 420,
+		"wires": [
+			[],
+			[]
+		]
+	},
+	{
+		"id": "69d0b99f.2da4a8",
+		"type": "subflow:3f75d555.5599aa",
+		"z": "99e1f6c2a9ba6221",
+		"name": "",
+		"x": 540,
+		"y": 300,
+		"wires": [
+			[],
+			[]
+		]
+	},
+	{
+		"id": "61bedc03.910fc4",
+		"type": "subflow:4aecadf2.352044",
+		"z": "99e1f6c2a9ba6221",
+		"name": "",
+		"x": 510,
+		"y": 360,
+		"wires": [
+			[],
+			[],
+			[],
+			[]
+		]
+	}
 ]

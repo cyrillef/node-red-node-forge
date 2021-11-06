@@ -3,7 +3,7 @@
 		"id": "279b35cc.5bd67a",
 		"type": "subflow",
 		"name": "Translate and Wait",
-		"info": "\n\n### Parameters\n\n* **urn**: The design URN; returned when uploading the file to Forge. The URN needs to be safe base64 encoded.\n\n* **region** [optional]: Region in which to store outputs. Possible values: ```US```, ```EMEA```. By default, it is set to ```US```.\n\n* **xAdsForce** [optional]: ```true```: the endpoint replaces previously translated output file types with the newly generated derivatives\n  ```false``` (default): previously created derivatives are not replaced\n    \n## Outputs\n\n* **response**: the final manifest\n\n* **progress**: an object containing a status and progress field.\n  * status: Overall status for translation jobs in the “manifest”. Possible values: pending, ```success```, ```inprogress```, ```failed```, ```timeout```\n  * progress: Overall progress for all translation jobs in the “manifest”. Possible values: ```complete```, ```##% complete```\n\n\n* **error**: an error occured\n",
+		"info": "\n\n### Parameters\n\n* **urn**: The design URN; returned when uploading the file to Forge. The URN needs to be safe base64 encoded.\n\n* **region** [optional, string]: Region in which to store outputs. Possible values: ```US```, ```EMEA```. By default, it is set to ```US```.\n\n* **xAdsForce** [optional, boolean]: ```true```: the endpoint replaces previously translated output file types with the newly generated derivatives\n  ```false``` (default): previously created derivatives are not replaced\n\n* **type** [optional, string]: The requested output type (default is ```svf```)\n\n* **views** [optional, string[]]: Required for ```svf``` and ```svf2``` output\n\n* **advanced** [optional: object]: A set of special options depending of the chosen format. See documentation for more details\n\n## Outputs\n\n* **response**: the final manifest\n\n* **progress**: an object containing a status and progress field.\n  * status: Overall status for translation jobs in the “manifest”. Possible values: pending, ```success```, ```inprogress```, ```failed```, ```timeout```\n  * progress: Overall progress for all translation jobs in the “manifest”. Possible values: ```complete```, ```##% complete```\n\n* **error**: an error occured\n",
 		"category": "forge",
 		"in": [
 			{
@@ -11,7 +11,7 @@
 				"y": 180,
 				"wires": [
 					{
-						"id": "2bcc5d7c.00a452"
+						"id": "ec1ff16b.974e7"
 					}
 				]
 			}
@@ -22,7 +22,7 @@
 				"y": 520,
 				"wires": [
 					{
-						"id": "6e1dec20.96f0e4",
+						"id": "12fb1468.5d5d8c",
 						"port": 0
 					}
 				]
@@ -32,7 +32,7 @@
 				"y": 660,
 				"wires": [
 					{
-						"id": "e6e567df.820448",
+						"id": "30271f6c.8fb83",
 						"port": 0
 					}
 				]
@@ -42,25 +42,27 @@
 				"y": 360,
 				"wires": [
 					{
-						"id": "6e1dec20.96f0e4",
+						"id": "12fb1468.5d5d8c",
 						"port": 1
 					},
 					{
-						"id": "e2e64dd3.f193a",
+						"id": "779c29a9.5eaee8",
 						"port": 1
 					},
 					{
-						"id": "219663e5.19941c",
+						"id": "9f6ff471.0ae0f8",
 						"port": 1
 					},
 					{
-						"id": "acbf48d1.899768",
+						"id": "230af144.090c9e",
 						"port": 1
 					}
 				]
 			}
 		],
 		"env": [],
+		"meta": {},
+		"color": "#DDAA99",
 		"outputLabels": [
 			"response",
 			"progress",
@@ -68,18 +70,18 @@
 		],
 		"icon": "node-red-node-forge/forge.png",
 		"status": {
-			"x": 280,
-			"y": 80,
+			"x": 340,
+			"y": 40,
 			"wires": [
 				{
-					"id": "f847c215.4e561",
+					"id": "4b257ec1.1b9e8",
 					"port": 0
 				}
 			]
 		}
 	},
 	{
-		"id": "203d88e2.0ca018",
+		"id": "fca7e07e.5ad71",
 		"type": "change",
 		"z": "279b35cc.5bd67a",
 		"name": "Inject",
@@ -104,12 +106,12 @@
 		"y": 340,
 		"wires": [
 			[
-				"acbf48d1.899768"
+				"230af144.090c9e"
 			]
 		]
 	},
 	{
-		"id": "acbf48d1.899768",
+		"id": "230af144.090c9e",
 		"type": "forge-model-derivative",
 		"z": "279b35cc.5bd67a",
 		"name": "",
@@ -150,14 +152,14 @@
 		"y": 340,
 		"wires": [
 			[
-				"a7b33c56.bbc0d",
-				"28c77446.11d87c"
+				"80fdacbf.20a7",
+				"4db03c7e.3251b4"
 			],
 			[]
 		]
 	},
 	{
-		"id": "a7b33c56.bbc0d",
+		"id": "80fdacbf.20a7",
 		"type": "delay",
 		"z": "279b35cc.5bd67a",
 		"name": "",
@@ -171,16 +173,17 @@
 		"randomLast": "5",
 		"randomUnits": "seconds",
 		"drop": false,
+		"outputs": 1,
 		"x": 500,
 		"y": 400,
 		"wires": [
 			[
-				"e2e64dd3.f193a"
+				"779c29a9.5eaee8"
 			]
 		]
 	},
 	{
-		"id": "e2e64dd3.f193a",
+		"id": "779c29a9.5eaee8",
 		"type": "forge-model-derivative",
 		"z": "279b35cc.5bd67a",
 		"name": "Manifest",
@@ -221,13 +224,31 @@
 		"y": 420,
 		"wires": [
 			[
-				"6e1dec20.96f0e4"
+				"b40ea287.2aa9d"
 			],
 			[]
 		]
 	},
 	{
-		"id": "9cf919b3.bb9c28",
+		"id": "b40ea287.2aa9d",
+		"type": "while-loop",
+		"z": "279b35cc.5bd67a",
+		"name": "Wait for Translation",
+		"condi": "!['success' , 'failed', 'timeout'].includes (msg.payload.status)",
+		"x": 510,
+		"y": 600,
+		"wires": [
+			[
+				"12fb1468.5d5d8c"
+			],
+			[
+				"18ae35b7.6110ba",
+				"30271f6c.8fb83"
+			]
+		]
+	},
+	{
+		"id": "18ae35b7.6110ba",
 		"type": "delay",
 		"z": "279b35cc.5bd67a",
 		"name": "",
@@ -241,16 +262,17 @@
 		"randomLast": "5",
 		"randomUnits": "seconds",
 		"drop": false,
+		"outputs": 1,
 		"x": 500,
 		"y": 440,
 		"wires": [
 			[
-				"e2e64dd3.f193a"
+				"779c29a9.5eaee8"
 			]
 		]
 	},
 	{
-		"id": "6e1dec20.96f0e4",
+		"id": "12fb1468.5d5d8c",
 		"type": "switch",
 		"z": "279b35cc.5bd67a",
 		"name": "Ready?",
@@ -273,43 +295,44 @@
 		"y": 520,
 		"wires": [
 			[
-				"e6e567df.820448"
+				"30271f6c.8fb83"
 			],
-			[
-				"9cf919b3.bb9c28"
-			]
+			[]
 		]
 	},
 	{
-		"id": "f847c215.4e561",
+		"id": "4b257ec1.1b9e8",
 		"type": "status",
 		"z": "279b35cc.5bd67a",
 		"name": "",
 		"scope": null,
-		"x": 120,
-		"y": 80,
+		"x": 180,
+		"y": 40,
 		"wires": [
 			[]
 		]
 	},
 	{
-		"id": "2bcc5d7c.00a452",
+		"id": "ec1ff16b.974e7",
 		"type": "function",
 		"z": "279b35cc.5bd67a",
 		"name": "Inject",
-		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nmsg.urn = (msg.payload && msg.payload.urn) || msg.urn || env.get('urn');\nmsg.region = (msg.payload && msg.payload.region) || msg.region || env.get('region') || 'US';\nmsg.xAdsForce = (msg.payload && msg.payload.xAdsForce) || msg.xAdsForce || false;\nmsg.xAdsForce = msg.xAdsForce === true || msg.xAdsForce === 'true'|| msg.xAdsForce === 1 || msg.xAdsForce === '1';\n\nnode.status ({});\nif ( !msg.urn || msg.urn === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid urn!'});\n    node.error('Provide a urn!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"The parameter 'urn' should be a nonempty string.\"\n    };\n}\n    \nreturn (msg);",
+		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nmsg.urn = (msg.payload && msg.payload.urn) || msg.urn || env.get('urn');\nmsg.region = (msg.payload && msg.payload.region) || msg.region || env.get('region') || 'US';\nmsg.xAdsForce = (msg.payload && msg.payload.xAdsForce) || msg.xAdsForce || false;\nmsg.xAdsForce = msg.xAdsForce === true || msg.xAdsForce === 'true'|| msg.xAdsForce === 1 || msg.xAdsForce === '1';\nmsg.type = (msg.payload && msg.payload.type) || msg.type || env.get('type') || 'svf';\nmsg.views = (msg.payload && msg.payload.views) || msg.views || env.get('views') || [];\nmsg.advanced = (msg.payload && msg.payload.advanced) || msg.advanced || env.get('advanced') || {};\n\nnode.status ({});\nif ( !msg.urn || msg.urn === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid urn!'});\n    node.error('Provide a urn!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"The parameter 'urn' should be a nonempty string.\"\n    };\n}\n    \nreturn (msg);",
 		"outputs": 1,
 		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
 		"x": 190,
 		"y": 180,
 		"wires": [
 			[
-				"219663e5.19941c"
+				"9f6ff471.0ae0f8"
 			]
 		]
 	},
 	{
-		"id": "219663e5.19941c",
+		"id": "9f6ff471.0ae0f8",
 		"type": "switch",
 		"z": "279b35cc.5bd67a",
 		"name": "Params Ok?",
@@ -330,29 +353,29 @@
 		"y": 180,
 		"wires": [
 			[
-				"203d88e2.0ca018"
+				"fca7e07e.5ad71"
 			],
 			[]
 		]
 	},
 	{
-		"id": "28c77446.11d87c",
+		"id": "4db03c7e.3251b4",
 		"type": "function",
 		"z": "279b35cc.5bd67a",
 		"name": "Requested",
 		"func": "msg.payload ={\n    status: 'pending',\n    progress: '0% complete'\n};\nreturn msg;",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 430,
-		"y": 660,
+		"x": 550,
+		"y": 300,
 		"wires": [
 			[
-				"e6e567df.820448"
+				"30271f6c.8fb83"
 			]
 		]
 	},
 	{
-		"id": "e6e567df.820448",
+		"id": "30271f6c.8fb83",
 		"type": "function",
 		"z": "279b35cc.5bd67a",
 		"name": "",
@@ -368,143 +391,17 @@
 	{
 		"id": "2150cfdf.c426",
 		"type": "forge-default-credentials",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Dev Credentials",
 		"forge": "",
-		"x": 140,
+		"x": 120,
 		"y": 40,
-		"wires": []
-	},
-	{
-		"id": "6c3fa957.a88558",
-		"type": "forge-oss",
-		"z": "e4198978.1215c8",
-		"name": "",
-		"topic": "",
-		"operation": "GetObject",
-		"raw": false,
-		"all": false,
-		"bucket": "FORGE_BUCKET",
-		"policyKey": "transient",
-		"key": "",
-		"contentType": "application/octet-stream",
-		"contentDisposition": null,
-		"localFilename": "",
-		"limit": 10,
-		"startAt": null,
-		"beginsWith": null,
-		"with": null,
-		"ifMatch": null,
-		"ifNoneMatch": null,
-		"ifModifiedSince": null,
-		"range": null,
-		"access": "read",
-		"singleUse": false,
-		"minutesExpiration": 60,
-		"acceptEncoding": null,
-		"guid": null,
-		"region": "US",
-		"x": 1460,
-		"y": 1240,
-		"wires": [
-			[],
-			[]
-		]
-	},
-	{
-		"id": "957625b0.9d54f8",
-		"type": "forge-da",
-		"z": "e4198978.1215c8",
-		"name": "",
-		"topic": "",
-		"forge": "",
-		"operation": "CreateAppbundlesAlias",
-		"raw": false,
-		"page": "",
-		"all": false,
-		"description": "",
-		"alias": "",
-		"version": 1,
-		"activityId": "",
-		"receiver": "",
-		"appbundles": "",
-		"commandline": "",
-		"parameters": [
-			{
-				"id": "",
-				"localName": null,
-				"verb": "get",
-				"zip": false,
-				"ondemand": false,
-				"required": false,
-				"description": null
-			}
-		],
-		"settings": [],
-		"engine": "",
-		"appbundlesId": "",
-		"package": "",
-		"nickname": "me",
-		"exponent": "",
-		"modulus": "",
-		"workitemId": "",
-		"limitProcessingTimeSec": "",
-		"baseUrls": "",
-		"signature": "",
-		"arguments": [],
-		"limitPayloadSizeInKB": "",
-		"limitVersions": "",
-		"limitAliases": "",
-		"limitPublicAliases": "",
-		"limitAppUploadSizeInMB": "",
-		"limitMonthlyProcessingTimeInHours": "",
-		"backendLimits": [
-			{
-				"id": "",
-				"limitProcessingTimeSec": null
-			}
-		],
-		"x": 1480,
-		"y": 1320,
-		"wires": [
-			[],
-			[]
-		]
-	},
-	{
-		"id": "c9dfaa61.62d458",
-		"type": "debug",
-		"z": "e4198978.1215c8",
-		"name": "",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"x": 2270,
-		"y": 620,
-		"wires": []
-	},
-	{
-		"id": "1f2fc687.ed9e99",
-		"type": "debug",
-		"z": "e4198978.1215c8",
-		"name": "",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"x": 2270,
-		"y": 660,
 		"wires": []
 	},
 	{
 		"id": "5ba63921.9656b8",
 		"type": "forge-oss",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -532,7 +429,7 @@
 		"acceptEncoding": "",
 		"guid": "autodesk",
 		"region": "US",
-		"x": 470,
+		"x": 450,
 		"y": 160,
 		"wires": [
 			[],
@@ -542,12 +439,12 @@
 	{
 		"id": "9149a63c.ac2f98",
 		"type": "function",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "msg = msg.payload;\nreturn msg;",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 290,
+		"x": 270,
 		"y": 160,
 		"wires": [
 			[
@@ -559,7 +456,7 @@
 	{
 		"id": "4fa843d2.13915c",
 		"type": "debug",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Flow",
 		"active": true,
 		"tosidebar": true,
@@ -567,48 +464,33 @@
 		"tostatus": false,
 		"complete": "payload",
 		"targetType": "msg",
-		"x": 430,
+		"x": 410,
 		"y": 260,
-		"wires": []
-	},
-	{
-		"id": "ba14936d.19011",
-		"type": "debug",
-		"z": "e4198978.1215c8",
-		"name": "Error",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"x": 990,
-		"y": 160,
 		"wires": []
 	},
 	{
 		"id": "4ae27d7f.72cbe4",
 		"type": "comment",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Setup - Readme",
 		"info": "\nThe node below contains information to setup your environment.\n\n{\n    \"bucket\": \"your bucket name, should be unique\",\n    \"region\": \"US or EMEA - defines the region where you want to post the file\"\n}\n",
-		"x": 140,
+		"x": 120,
 		"y": 120,
 		"wires": []
 	},
 	{
 		"id": "9a301ad5.f2e938",
 		"type": "inject",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Settings",
-		"topic": "",
-		"payload": "{\"bucket\":\"cyrille-models\",\"region\":\"US\"}",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": true,
 		"onceDelay": 0.1,
-		"x": 140,
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-models\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"x": 120,
 		"y": 160,
 		"wires": [
 			[
@@ -617,62 +499,32 @@
 		]
 	},
 	{
-		"id": "5f2db427.29a03c",
-		"type": "debug",
-		"z": "e4198978.1215c8",
-		"name": "Results",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"x": 1000,
-		"y": 240,
-		"wires": []
-	},
-	{
-		"id": "c835ce82.bb6a3",
-		"type": "debug",
-		"z": "e4198978.1215c8",
-		"name": "Progress",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"x": 1000,
-		"y": 280,
-		"wires": []
-	},
-	{
 		"id": "ee6d100e.76e82",
 		"type": "comment",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "View my file",
 		"info": "",
-		"x": 130,
+		"x": 110,
 		"y": 820,
 		"wires": []
 	},
 	{
 		"id": "e214cc43.ab46a",
 		"type": "http response",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"statusCode": "200",
 		"headers": {
 			"content-type": "text/html"
 		},
-		"x": 960,
+		"x": 940,
 		"y": 860,
 		"wires": []
 	},
 	{
 		"id": "c6417a14.0f41d8",
 		"type": "template",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"field": "payload",
 		"fieldType": "msg",
@@ -680,7 +532,7 @@
 		"syntax": "mustache",
 		"template": "<!DOCTYPE html>\n<html>\n\n<head>\n\t<title>Sample</title>\n\t<meta charset=\"utf-8\" />\n\n\t<!-- Autodesk Forge Viewer files -->\n\t<link rel=\"stylesheet\" href=\"https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css\"\n\t\ttype=\"text/css\">\n\t<script src=\"https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js\"></script>\n\n\t<script>\n\t\tvar viewer = null;\n\n\t\tfunction launchViewer() {\n\t\t\tconst options = {\n\t\t\t\tenv: 'AutodeskProduction',\n\t\t\t\tgetAccessToken: getForgeToken\n\t\t\t};\n\n\t\t\tAutodesk.Viewing.Initializer(options, () => {\n\t\t\t\tviewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'));\n\t\t\t\tviewer.start();\n\t\t\t\tconst documentId = 'urn:{{payload.urn}}';\n\t\t\t\tAutodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);\n\t\t\t});\n\t\t}\n\n\t\tfunction onDocumentLoadSuccess(doc) {\n\t\t\tconst viewables = doc.getRoot().getDefaultGeometry();\n\t\t\tviewer.loadDocumentNode(doc, viewables).then(i => {\n\t\t\t\t// documented loaded, any action?\n\t\t\t});\n\t\t}\n\n\t\tfunction onDocumentLoadFailure(viewerErrorCode) {\n\t\t\tconsole.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);\n\t\t}\n\n\t\tfunction getForgeToken(callback) {\n\t\t\tfetch('/api/forge/oauth/token').then(res => {\n\t\t\t\tres.json().then(data => {\n\t\t\t\t    console.log (JSON.stringify(data));\n\t\t\t\t\tcallback(data.access_token, data.expires_in);\n\t\t\t\t});\n\t\t\t});\n\t\t}\n\n\t</script>\n</head>\n\n<body onload=\"launchViewer()\">\n\t<div id=\"forgeViewer\"></div>\n</body>\n\n</html>",
 		"output": "str",
-		"x": 580,
+		"x": 560,
 		"y": 860,
 		"wires": [
 			[
@@ -691,13 +543,13 @@
 	{
 		"id": "caea75dd.b4b8a8",
 		"type": "http in",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Get Token",
 		"url": "/api/forge/oauth/token",
 		"method": "get",
 		"upload": false,
 		"swaggerDoc": "",
-		"x": 120,
+		"x": 100,
 		"y": 900,
 		"wires": [
 			[
@@ -708,25 +560,25 @@
 	{
 		"id": "a80f3d49.a05a8",
 		"type": "http response",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"statusCode": "200",
 		"headers": {
 			"content-type": "application/json"
 		},
-		"x": 960,
+		"x": 940,
 		"y": 900,
 		"wires": []
 	},
 	{
 		"id": "7a754831.a5eea8",
 		"type": "function",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "msg.payload = msg.payload.token;\nreturn msg;",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 570,
+		"x": 550,
 		"y": 900,
 		"wires": [
 			[
@@ -737,11 +589,11 @@
 	{
 		"id": "8d4166be.e9b458",
 		"type": "forge-get-token",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
-		"x": 370,
+		"x": 350,
 		"y": 900,
 		"wires": [
 			[
@@ -752,13 +604,13 @@
 	{
 		"id": "c6973fc2.b4f91",
 		"type": "http in",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "/index.html",
 		"url": "/index.html",
 		"method": "get",
 		"upload": false,
 		"swaggerDoc": "",
-		"x": 120,
+		"x": 100,
 		"y": 860,
 		"wires": [
 			[
@@ -769,23 +621,23 @@
 	{
 		"id": "69c34066.d49f9",
 		"type": "comment",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Upload & Translate",
 		"info": "",
-		"x": 150,
+		"x": 130,
 		"y": 320,
 		"wires": []
 	},
 	{
 		"id": "6d04a6dc.41f4f8",
 		"type": "http in",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "/select.html",
 		"url": "/select.html",
 		"method": "get",
 		"upload": false,
 		"swaggerDoc": "",
-		"x": 130,
+		"x": 110,
 		"y": 360,
 		"wires": [
 			[
@@ -796,7 +648,7 @@
 	{
 		"id": "3bc77a60.9a9936",
 		"type": "template",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"field": "payload",
 		"fieldType": "msg",
@@ -804,7 +656,7 @@
 		"syntax": "mustache",
 		"template": "<!DOCTYPE html>\n<html>\n\n<head>\n\t<title>Sample</title>\n\t<meta charset=\"utf-8\" />\n</head>\n\n<body>\n\t<form action=\"/upload2bucket\" method=\"post\" enctype=\"multipart/form-data\">\n\t    <label for=\"uploadfile\">Choose file to upload</label>\n\t    <input type=\"file\" name=\"uploadfile\" id=\"uploadfile\" /><br />\n\t    <input type=\"submit\" value=\"Upload File\" />\n\t</form>\n</body>\n\n</html>",
 		"output": "str",
-		"x": 520,
+		"x": 500,
 		"y": 360,
 		"wires": [
 			[
@@ -815,26 +667,26 @@
 	{
 		"id": "a106e42c.13e3c8",
 		"type": "http response",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"statusCode": "200",
 		"headers": {
 			"content-type": "text/html"
 		},
-		"x": 960,
+		"x": 940,
 		"y": 360,
 		"wires": []
 	},
 	{
 		"id": "86e4fa86.8959c8",
 		"type": "http in",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "/upload2bucket",
 		"url": "/upload2bucket",
 		"method": "post",
 		"upload": true,
 		"swaggerDoc": "",
-		"x": 140,
+		"x": 120,
 		"y": 420,
 		"wires": [
 			[
@@ -846,12 +698,12 @@
 	{
 		"id": "6b1b3b63.ad5374",
 		"type": "function",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "msg.payload = {\n    key: msg.req.files[0].originalname,\n    buffer: msg.req.files[0].buffer\n}\nreturn (msg);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 310,
+		"x": 290,
 		"y": 420,
 		"wires": [
 			[
@@ -862,7 +714,7 @@
 	{
 		"id": "8db8f256.0fe12",
 		"type": "forge-oss",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -890,7 +742,7 @@
 		"acceptEncoding": "",
 		"guid": "autodesk",
 		"region": "US",
-		"x": 680,
+		"x": 660,
 		"y": 420,
 		"wires": [
 			[
@@ -904,23 +756,23 @@
 	{
 		"id": "678f8559.3c040c",
 		"type": "http response",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"statusCode": "301",
 		"headers": {
 			"location": "/wait.html"
 		},
-		"x": 320,
+		"x": 300,
 		"y": 480,
 		"wires": []
 	},
 	{
 		"id": "1839787b.71e508",
 		"type": "subflow:279b35cc.5bd67a",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"env": [],
-		"x": 650,
+		"x": 630,
 		"y": 540,
 		"wires": [
 			[
@@ -937,12 +789,12 @@
 	{
 		"id": "18673a30.b074d6",
 		"type": "function",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "msg.payload = {\n    urn: msg.payload.urn,\n    region: msg.payload.region,\n    xAdsForce: true\n}\nreturn (msg);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 330,
+		"x": 310,
 		"y": 540,
 		"wires": [
 			[
@@ -953,7 +805,7 @@
 	{
 		"id": "a3b42681.af93c8",
 		"type": "change",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Progress",
 		"rules": [
 			{
@@ -969,7 +821,7 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 620,
+		"x": 600,
 		"y": 600,
 		"wires": [
 			[]
@@ -978,12 +830,12 @@
 	{
 		"id": "f09eeea7.ff8a8",
 		"type": "function",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "if ( msg.payload.status === 'success' )\n    return ({\n        payload: {\n            progress: 100\n        }\n    });\n    \nif ( msg.payload.status === 'pending' )\n    return ({\n        payload: {\n            progress: 0\n        }\n    });\n    \n    \nif ( msg.payload.status === 'inprogress' )\n    return ({\n        payload: {   \n            progress: parseInt(msg.payload.progress)\n        }\n    });\n\nreturn ({\n    payload: {   \n        progress: -1,\n        status: msg.payload.status\n    }\n});\n",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 470,
+		"x": 450,
 		"y": 600,
 		"wires": [
 			[
@@ -994,7 +846,7 @@
 	{
 		"id": "3d9f18a9.16fdb8",
 		"type": "change",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "bucket/region on Flow",
 		"rules": [
 			{
@@ -1024,7 +876,7 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 480,
+		"x": 460,
 		"y": 200,
 		"wires": [
 			[]
@@ -1033,17 +885,17 @@
 	{
 		"id": "5013ad27.d539c4",
 		"type": "comment",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "We can ignore responses here",
 		"info": "",
-		"x": 720,
+		"x": 700,
 		"y": 160,
 		"wires": []
 	},
 	{
 		"id": "9680e0fa.5329f",
 		"type": "change",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"rules": [
 			{
@@ -1073,7 +925,7 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 480,
+		"x": 460,
 		"y": 420,
 		"wires": [
 			[
@@ -1084,7 +936,7 @@
 	{
 		"id": "c5971cb2.5f33c",
 		"type": "change",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"rules": [
 			{
@@ -1114,7 +966,7 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 540,
+		"x": 520,
 		"y": 480,
 		"wires": [
 			[
@@ -1125,12 +977,12 @@
 	{
 		"id": "662aa1c3.19634",
 		"type": "function",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "msg.payload.urn = msg.payload.urn\n    .replace(/\\+/g, '-') // Convert '+' to '-'\n\t.replace(/\\//g, '_') // Convert '/' to '_'\n\t.replace(/=+$/, '')\nreturn msg;",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 470,
+		"x": 450,
 		"y": 540,
 		"wires": [
 			[
@@ -1141,13 +993,13 @@
 	{
 		"id": "cc7b1f4.ccc95e",
 		"type": "http in",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "/wait.html",
 		"url": "/wait.html",
 		"method": "get",
 		"upload": true,
 		"swaggerDoc": "",
-		"x": 120,
+		"x": 100,
 		"y": 700,
 		"wires": [
 			[
@@ -1158,7 +1010,7 @@
 	{
 		"id": "d001296c.028b18",
 		"type": "template",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"field": "payload",
 		"fieldType": "msg",
@@ -1166,7 +1018,7 @@
 		"syntax": "mustache",
 		"template": "<!DOCTYPE html>\n<html>\n\n<head>\n\t<title>Sample</title>\n\t<meta charset=\"utf-8\" />\n\t<script>\n\t    async function wait() {\n\t        var result = await fetch('/wait');\n\t        if ( result )\n\t            result = await result.json();\n\t        else\n\t            result = { progress: -1 };\n\t        if ( !result || result.progress === -1 )\n\t            result = 'failed';\n\t        else\n\t            result = result.progress + ' %';\n\t        document.getElementById('wait').innerHTML = result;\n\t        if ( result === '100 %' )\n\t            window.location = \"/index.html\";\n\t    }\n\t    \n\t    setInterval(wait, 1000);\n\t</script>\n</head>\n\n<body>\n\t<div id=\"wait\">Waiting</div>\n</body>\n\n</html>",
 		"output": "str",
-		"x": 580,
+		"x": 560,
 		"y": 700,
 		"wires": [
 			[
@@ -1177,29 +1029,29 @@
 	{
 		"id": "b5625b21.350f48",
 		"type": "http response",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"statusCode": "200",
 		"headers": {
 			"content-type": "text/html"
 		},
-		"x": 960,
+		"x": 940,
 		"y": 700,
 		"wires": []
 	},
 	{
 		"id": "45ac44ae.feccdc",
 		"type": "inject",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Print Flow",
-		"topic": "",
-		"payload": "",
-		"payloadType": "date",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 140,
+		"topic": "",
+		"payload": "",
+		"payloadType": "date",
+		"x": 120,
 		"y": 260,
 		"wires": [
 			[
@@ -1210,12 +1062,12 @@
 	{
 		"id": "a146d25.4c6de3",
 		"type": "function",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "msg.payload = flow.get([\"bucket\", \"key\", \"region\", \"progress\", \"urn\"]);\nreturn (msg);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 290,
+		"x": 270,
 		"y": 260,
 		"wires": [
 			[
@@ -1226,7 +1078,7 @@
 	{
 		"id": "43fbddb9.5cdd94",
 		"type": "change",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Success",
 		"rules": [
 			{
@@ -1249,7 +1101,7 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 960,
+		"x": 940,
 		"y": 540,
 		"wires": [
 			[]
@@ -1258,7 +1110,7 @@
 	{
 		"id": "9477967a.d48508",
 		"type": "change",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Failed",
 		"rules": [
 			{
@@ -1274,7 +1126,7 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 950,
+		"x": 930,
 		"y": 580,
 		"wires": [
 			[]
@@ -1283,13 +1135,13 @@
 	{
 		"id": "f0a8c7fc.5ac6c8",
 		"type": "http in",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "/wait",
 		"url": "/wait",
 		"method": "get",
 		"upload": true,
 		"swaggerDoc": "",
-		"x": 110,
+		"x": 90,
 		"y": 740,
 		"wires": [
 			[
@@ -1300,20 +1152,20 @@
 	{
 		"id": "b990606b.0a031",
 		"type": "http response",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"statusCode": "200",
 		"headers": {
 			"content-type": "application/json"
 		},
-		"x": 960,
+		"x": 940,
 		"y": 740,
 		"wires": []
 	},
 	{
 		"id": "f86cd4eb.524f08",
 		"type": "template",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"field": "payload",
 		"fieldType": "msg",
@@ -1321,7 +1173,7 @@
 		"syntax": "mustache",
 		"template": "{ \"progress\": {{payload.progress}} }",
 		"output": "str",
-		"x": 580,
+		"x": 560,
 		"y": 740,
 		"wires": [
 			[
@@ -1332,7 +1184,7 @@
 	{
 		"id": "bb7afe44.213e4",
 		"type": "change",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"rules": [
 			{
@@ -1348,7 +1200,7 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 330,
+		"x": 310,
 		"y": 740,
 		"wires": [
 			[
@@ -1359,7 +1211,7 @@
 	{
 		"id": "dbc4cb7.f1d7e38",
 		"type": "change",
-		"z": "e4198978.1215c8",
+		"z": "edf2853a7bab3bb6",
 		"name": "Progress",
 		"rules": [
 			{
@@ -1375,7 +1227,7 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 380,
+		"x": 360,
 		"y": 860,
 		"wires": [
 			[

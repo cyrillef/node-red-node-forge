@@ -113,7 +113,6 @@
 		"raw": false,
 		"all": false,
 		"bucket": "",
-		"bucketType": "str",
 		"policyKey": "transient",
 		"key": "",
 		"contentType": "application/octet-stream",
@@ -380,7 +379,7 @@
 		"id": "279b35cc.5bd67a",
 		"type": "subflow",
 		"name": "Translate and Wait",
-		"info": "\n\n### Parameters\n\n* **urn**: The design URN; returned when uploading the file to Forge. The URN needs to be safe base64 encoded.\n\n* **region** [optional]: Region in which to store outputs. Possible values: ```US```, ```EMEA```. By default, it is set to ```US```.\n\n* **xAdsForce** [optional]: ```true```: the endpoint replaces previously translated output file types with the newly generated derivatives\n  ```false``` (default): previously created derivatives are not replaced\n    \n## Outputs\n\n* **response**: the final manifest\n\n* **progress**: an object containing a status and progress field.\n  * status: Overall status for translation jobs in the “manifest”. Possible values: pending, ```success```, ```inprogress```, ```failed```, ```timeout```\n  * progress: Overall progress for all translation jobs in the “manifest”. Possible values: ```complete```, ```##% complete```\n\n\n* **error**: an error occured\n",
+		"info": "\n\n### Parameters\n\n* **urn**: The design URN; returned when uploading the file to Forge. The URN needs to be safe base64 encoded.\n\n* **region** [optional, string]: Region in which to store outputs. Possible values: ```US```, ```EMEA```. By default, it is set to ```US```.\n\n* **xAdsForce** [optional, boolean]: ```true```: the endpoint replaces previously translated output file types with the newly generated derivatives\n  ```false``` (default): previously created derivatives are not replaced\n\n* **type** [optional, string]: The requested output type (default is ```svf```)\n\n* **views** [optional, string[]]: Required for ```svf``` and ```svf2``` output\n\n* **advanced** [optional: object]: A set of special options depending of the chosen format. See documentation for more details\n\n## Outputs\n\n* **response**: the final manifest\n\n* **progress**: an object containing a status and progress field.\n  * status: Overall status for translation jobs in the “manifest”. Possible values: pending, ```success```, ```inprogress```, ```failed```, ```timeout```\n  * progress: Overall progress for all translation jobs in the “manifest”. Possible values: ```complete```, ```##% complete```\n\n* **error**: an error occured\n",
 		"category": "forge",
 		"in": [
 			{
@@ -388,7 +387,7 @@
 				"y": 180,
 				"wires": [
 					{
-						"id": "2bcc5d7c.00a452"
+						"id": "ec1ff16b.974e7"
 					}
 				]
 			}
@@ -399,7 +398,7 @@
 				"y": 520,
 				"wires": [
 					{
-						"id": "6e1dec20.96f0e4",
+						"id": "12fb1468.5d5d8c",
 						"port": 0
 					}
 				]
@@ -409,7 +408,7 @@
 				"y": 660,
 				"wires": [
 					{
-						"id": "e6e567df.820448",
+						"id": "30271f6c.8fb83",
 						"port": 0
 					}
 				]
@@ -419,25 +418,27 @@
 				"y": 360,
 				"wires": [
 					{
-						"id": "6e1dec20.96f0e4",
+						"id": "12fb1468.5d5d8c",
 						"port": 1
 					},
 					{
-						"id": "e2e64dd3.f193a",
+						"id": "779c29a9.5eaee8",
 						"port": 1
 					},
 					{
-						"id": "219663e5.19941c",
+						"id": "9f6ff471.0ae0f8",
 						"port": 1
 					},
 					{
-						"id": "acbf48d1.899768",
+						"id": "230af144.090c9e",
 						"port": 1
 					}
 				]
 			}
 		],
 		"env": [],
+		"meta": {},
+		"color": "#DDAA99",
 		"outputLabels": [
 			"response",
 			"progress",
@@ -445,11 +446,11 @@
 		],
 		"icon": "node-red-node-forge/forge.png",
 		"status": {
-			"x": 280,
-			"y": 80,
+			"x": 340,
+			"y": 40,
 			"wires": [
 				{
-					"id": "f847c215.4e561",
+					"id": "4b257ec1.1b9e8",
 					"port": 0
 				}
 			]
@@ -548,6 +549,7 @@
 		"randomLast": "5",
 		"randomUnits": "seconds",
 		"drop": false,
+		"outputs": 1,
 		"x": 500,
 		"y": 400,
 		"wires": [
@@ -636,6 +638,7 @@
 		"randomLast": "5",
 		"randomUnits": "seconds",
 		"drop": false,
+		"outputs": 1,
 		"x": 500,
 		"y": 440,
 		"wires": [
@@ -690,9 +693,12 @@
 		"type": "function",
 		"z": "279b35cc.5bd67a",
 		"name": "Inject",
-		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nmsg.urn = (msg.payload && msg.payload.urn) || msg.urn || env.get('urn');\nmsg.region = (msg.payload && msg.payload.region) || msg.region || env.get('region') || 'US';\nmsg.xAdsForce = (msg.payload && msg.payload.xAdsForce) || msg.xAdsForce || false;\nmsg.xAdsForce = msg.xAdsForce === true || msg.xAdsForce === 'true'|| msg.xAdsForce === 1 || msg.xAdsForce === '1';\n\nnode.status ({});\nif ( !msg.urn || msg.urn === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid urn!'});\n    node.error('Provide a urn!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"The parameter 'urn' should be a nonempty string.\"\n    };\n}\n    \nreturn (msg);",
+		"func": "if ( msg.err )\n    delete msg.err;\n    \n//context.set / .get\n\n// Priority: payload, msg, env, default\nmsg.urn = (msg.payload && msg.payload.urn) || msg.urn || env.get('urn');\nmsg.region = (msg.payload && msg.payload.region) || msg.region || env.get('region') || 'US';\nmsg.xAdsForce = (msg.payload && msg.payload.xAdsForce) || msg.xAdsForce || false;\nmsg.xAdsForce = msg.xAdsForce === true || msg.xAdsForce === 'true'|| msg.xAdsForce === 1 || msg.xAdsForce === '1';\nmsg.type = (msg.payload && msg.payload.type) || msg.type || env.get('type') || 'svf';\nmsg.views = (msg.payload && msg.payload.views) || msg.views || env.get('views') || [];\nmsg.advanced = (msg.payload && msg.payload.advanced) || msg.advanced || env.get('advanced') || {};\n\nnode.status ({});\nif ( !msg.urn || msg.urn === '' ) {\n    node.status ({\n        fill: 'red',\n        shape: 'dot',\n        text: 'Invalid urn!'});\n    node.error('Provide a urn!');\n    delete msg.payload;\n    msg.err ={\n        reason: \"The parameter 'urn' should be a nonempty string.\"\n    };\n}\n    \nreturn (msg);",
 		"outputs": 1,
 		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
 		"x": 190,
 		"y": 180,
 		"wires": [
@@ -943,7 +949,6 @@
 		"raw": false,
 		"all": false,
 		"bucket": "",
-		"bucketType": "str",
 		"policyKey": "transient",
 		"key": "",
 		"contentType": "application/octet-stream",
@@ -1205,7 +1210,6 @@
 		"raw": false,
 		"all": false,
 		"bucket": "",
-		"bucketType": "str",
 		"policyKey": "transient",
 		"key": "",
 		"contentType": "application/octet-stream",
@@ -1215,7 +1219,7 @@
 		"limit": 10,
 		"startAt": "",
 		"beginsWith": "",
-		"with": null,
+		"with": [],
 		"ifMatch": "",
 		"ifNoneMatch": "",
 		"ifModifiedSince": "",
@@ -1351,7 +1355,6 @@
 		"raw": false,
 		"all": false,
 		"bucket": "",
-		"bucketType": "str",
 		"policyKey": "transient",
 		"key": "",
 		"contentType": "application/octet-stream",
@@ -1361,7 +1364,7 @@
 		"limit": 10,
 		"startAt": "",
 		"beginsWith": "",
-		"with": null,
+		"with": [],
 		"ifMatch": "",
 		"ifNoneMatch": "",
 		"ifModifiedSince": "",
@@ -1437,20 +1440,20 @@
 	{
 		"id": "73f61c76.978504",
 		"type": "forge-default-credentials",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"forge": "",
-		"x": 130,
+		"x": 150,
 		"y": 40,
 		"wires": []
 	},
 	{
 		"id": "bf034c00.6320a",
 		"type": "subflow:3f75d555.5599aa",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"env": [],
-		"x": 560,
+		"x": 580,
 		"y": 1080,
 		"wires": [
 			[
@@ -1465,16 +1468,16 @@
 	{
 		"id": "582ee719.1d8658",
 		"type": "inject",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "robot.f3d",
-		"topic": "config",
-		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 120,
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"x": 140,
 		"y": 1080,
 		"wires": [
 			[
@@ -1485,7 +1488,7 @@
 	{
 		"id": "629fa90c.024378",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Debug",
 		"active": false,
 		"tosidebar": true,
@@ -1493,14 +1496,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 630,
+		"x": 650,
 		"y": 1040,
 		"wires": []
 	},
 	{
 		"id": "b24b1657.3609d8",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -1508,29 +1511,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 1080,
 		"wires": []
 	},
 	{
 		"id": "4821ea04.4be024",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
-		"name": "Debug",
-		"active": false,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "true",
-		"targetType": "full",
-		"x": 550,
-		"y": 1140,
-		"wires": []
-	},
-	{
-		"id": "1dabcbd0.64e9a4",
-		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Debug",
 		"active": false,
 		"tosidebar": true,
@@ -1539,13 +1527,13 @@
 		"complete": "true",
 		"targetType": "full",
 		"x": 570,
-		"y": 1180,
+		"y": 1140,
 		"wires": []
 	},
 	{
-		"id": "78b5ba5b.06ace4",
+		"id": "1dabcbd0.64e9a4",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Debug",
 		"active": false,
 		"tosidebar": true,
@@ -1554,13 +1542,28 @@
 		"complete": "true",
 		"targetType": "full",
 		"x": 590,
+		"y": 1180,
+		"wires": []
+	},
+	{
+		"id": "78b5ba5b.06ace4",
+		"type": "debug",
+		"z": "edf2853a7bab3bb6",
+		"name": "Debug",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "true",
+		"targetType": "full",
+		"x": 610,
 		"y": 1220,
 		"wires": []
 	},
 	{
 		"id": "283a0e9b.206122",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -1568,17 +1571,17 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 610,
+		"x": 630,
 		"y": 1260,
 		"wires": []
 	},
 	{
 		"id": "246882ea.a9d43e",
 		"type": "subflow:c93aef0f.c6081",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"env": [],
-		"x": 360,
+		"x": 380,
 		"y": 1380,
 		"wires": [
 			[
@@ -1593,7 +1596,7 @@
 	{
 		"id": "8d571d02.7dd78",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Debug",
 		"active": false,
 		"tosidebar": true,
@@ -1601,14 +1604,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 410,
+		"x": 430,
 		"y": 1340,
 		"wires": []
 	},
 	{
 		"id": "a6fff41f.d97e98",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -1616,19 +1619,19 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 1380,
 		"wires": []
 	},
 	{
 		"id": "1fbdd269.0a9f3e",
 		"type": "function",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "return (msg.payload);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 330,
+		"x": 350,
 		"y": 1080,
 		"wires": [
 			[
@@ -1639,7 +1642,7 @@
 	{
 		"id": "3831e503.af0dba",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -1647,14 +1650,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 1460,
 		"wires": []
 	},
 	{
 		"id": "c78be2b9.574e",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -1662,14 +1665,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 1540,
 		"wires": []
 	},
 	{
 		"id": "71d22c55.862444",
 		"type": "forge-model-derivative",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Translated?",
 		"topic": "",
 		"forge": "",
@@ -1704,7 +1707,7 @@
 		"ifModifiedSince": "",
 		"acceptEncoding": "",
 		"region": "US",
-		"x": 630,
+		"x": 650,
 		"y": 1320,
 		"wires": [
 			[
@@ -1718,7 +1721,7 @@
 	{
 		"id": "d24430c8.6905f",
 		"type": "switch",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "SVF Missing",
 		"property": "err.statusCode",
 		"propertyType": "msg",
@@ -1735,7 +1738,7 @@
 		"checkall": "true",
 		"repair": false,
 		"outputs": 2,
-		"x": 610,
+		"x": 630,
 		"y": 1420,
 		"wires": [
 			[
@@ -1749,10 +1752,10 @@
 	{
 		"id": "675a0d8a.3127c4",
 		"type": "subflow:279b35cc.5bd67a",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"env": [],
-		"x": 370,
+		"x": 390,
 		"y": 1500,
 		"wires": [
 			[
@@ -1769,7 +1772,7 @@
 	{
 		"id": "91373648.c16bf8",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -1777,14 +1780,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 1300,
 		"wires": []
 	},
 	{
 		"id": "257083a7.16165c",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -1792,14 +1795,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 1420,
 		"wires": []
 	},
 	{
 		"id": "811ddc6b.33497",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -1807,16 +1810,16 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 1500,
 		"wires": []
 	},
 	{
 		"id": "ab9b7020.41601",
 		"type": "subflow:4aecadf2.352044",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
-		"x": 370,
+		"x": 390,
 		"y": 1220,
 		"wires": [
 			[
@@ -1839,26 +1842,26 @@
 	{
 		"id": "9eef676c.177af8",
 		"type": "comment",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Model Derivatives requires some OSS setup",
 		"info": "",
-		"x": 210,
+		"x": 230,
 		"y": 100,
 		"wires": []
 	},
 	{
 		"id": "8b49cdbb.f1166",
 		"type": "inject",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "bucket",
-		"topic": "config",
-		"payload": "{\"bucket\":\"cyrille-tests-buckets\" }",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 110,
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\" }",
+		"payloadType": "json",
+		"x": 130,
 		"y": 160,
 		"wires": [
 			[
@@ -1869,12 +1872,12 @@
 	{
 		"id": "85fe9b5a.0f61d8",
 		"type": "function",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "return (msg.payload);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 270,
+		"x": 290,
 		"y": 160,
 		"wires": [
 			[
@@ -1885,10 +1888,10 @@
 	{
 		"id": "636ea4dc.507bdc",
 		"type": "subflow:3f75d555.5599aa",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"env": [],
-		"x": 540,
+		"x": 560,
 		"y": 160,
 		"wires": [
 			[
@@ -1902,7 +1905,7 @@
 	{
 		"id": "24a4e985.44a5b6",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -1910,14 +1913,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 160,
 		"wires": []
 	},
 	{
 		"id": "f4690f67.525a9",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -1925,27 +1928,27 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 160,
 		"wires": []
 	},
 	{
 		"id": "9c221831.0cbf48",
 		"type": "comment",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Model Derivatives",
 		"info": "",
-		"x": 130,
+		"x": 150,
 		"y": 360,
 		"wires": []
 	},
 	{
 		"id": "7eef25a7.efcadc",
 		"type": "subflow:c93aef0f.c6081",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"env": [],
-		"x": 500,
+		"x": 520,
 		"y": 220,
 		"wires": [
 			[
@@ -1959,7 +1962,7 @@
 	{
 		"id": "2e79293.96441d6",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -1967,14 +1970,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 220,
 		"wires": []
 	},
 	{
 		"id": "80523ff9.351b5",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -1982,19 +1985,19 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 220,
 		"wires": []
 	},
 	{
 		"id": "e5174ccf.602a6",
 		"type": "function",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "return (msg.payload);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 270,
+		"x": 290,
 		"y": 220,
 		"wires": [
 			[
@@ -2005,16 +2008,16 @@
 	{
 		"id": "f6049526.8da478",
 		"type": "inject",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "robot.f3d",
-		"topic": "config",
-		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 120,
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"x": 140,
 		"y": 220,
 		"wires": [
 			[
@@ -2025,7 +2028,7 @@
 	{
 		"id": "f0dee1c7.a9845",
 		"type": "forge-oss",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -2033,7 +2036,6 @@
 		"raw": false,
 		"all": false,
 		"bucket": "",
-		"bucketType": "str",
 		"policyKey": "transient",
 		"key": "",
 		"contentType": "application/octet-stream",
@@ -2054,7 +2056,7 @@
 		"acceptEncoding": "",
 		"guid": "autodesk",
 		"region": "US",
-		"x": 510,
+		"x": 530,
 		"y": 280,
 		"wires": [
 			[
@@ -2068,7 +2070,7 @@
 	{
 		"id": "484de29d.e6dc6c",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -2076,14 +2078,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 280,
 		"wires": []
 	},
 	{
 		"id": "6b74c7a8.63bc78",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -2091,23 +2093,23 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 280,
 		"wires": []
 	},
 	{
 		"id": "5606ceeb.29edd",
 		"type": "inject",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "robot.f3d",
-		"topic": "config",
-		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 120,
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"sha1\":\"669c20f8f5c0e85b1141a98a660f471455f7c281\",\"filename\":\"/Users/cyrille/Box Sync/Models/robot.f3d\",\"region\":\"US\"}",
+		"payloadType": "json",
+		"x": 140,
 		"y": 280,
 		"wires": [
 			[
@@ -2118,12 +2120,12 @@
 	{
 		"id": "7c175483.4e6f6c",
 		"type": "function",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "return (msg.payload);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 270,
+		"x": 290,
 		"y": 280,
 		"wires": [
 			[
@@ -2134,7 +2136,7 @@
 	{
 		"id": "db55c003.4520f",
 		"type": "forge-model-derivative",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -2169,7 +2171,7 @@
 		"ifModifiedSince": "",
 		"acceptEncoding": "",
 		"region": "US",
-		"x": 490,
+		"x": 510,
 		"y": 420,
 		"wires": [
 			[
@@ -2183,7 +2185,7 @@
 	{
 		"id": "c139d122.99d68",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -2191,14 +2193,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 420,
 		"wires": []
 	},
 	{
 		"id": "9a777a80.2f99c8",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -2206,23 +2208,23 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 420,
 		"wires": []
 	},
 	{
 		"id": "bd26d6a3.5f8d48",
 		"type": "inject",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "robot.f3d",
-		"topic": "config",
-		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true}",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 120,
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true}",
+		"payloadType": "json",
+		"x": 140,
 		"y": 420,
 		"wires": [
 			[
@@ -2233,12 +2235,12 @@
 	{
 		"id": "dc9b802e.e8cc3",
 		"type": "function",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "return (msg.payload);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 270,
+		"x": 290,
 		"y": 420,
 		"wires": [
 			[
@@ -2249,7 +2251,7 @@
 	{
 		"id": "ca499b6b.7d1948",
 		"type": "forge-model-derivative",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -2284,7 +2286,7 @@
 		"ifModifiedSince": "",
 		"acceptEncoding": "",
 		"region": "US",
-		"x": 500,
+		"x": 520,
 		"y": 480,
 		"wires": [
 			[
@@ -2301,16 +2303,16 @@
 	{
 		"id": "62b5595a.3ce578",
 		"type": "inject",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "robot.f3d",
-		"topic": "config",
-		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true}",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 120,
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true}",
+		"payloadType": "json",
+		"x": 140,
 		"y": 480,
 		"wires": [
 			[
@@ -2321,12 +2323,12 @@
 	{
 		"id": "db8510d0.83d72",
 		"type": "function",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "return (msg.payload);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 270,
+		"x": 290,
 		"y": 480,
 		"wires": [
 			[
@@ -2337,7 +2339,7 @@
 	{
 		"id": "7b44dd85.6e4c64",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -2345,14 +2347,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 480,
 		"wires": []
 	},
 	{
 		"id": "e539ea8c.0bb558",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -2360,14 +2362,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 480,
 		"wires": []
 	},
 	{
 		"id": "a9dfcbc5.4f19d8",
 		"type": "forge-model-derivative",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -2402,7 +2404,7 @@
 		"ifModifiedSince": "",
 		"acceptEncoding": "",
 		"region": "US",
-		"x": 510,
+		"x": 530,
 		"y": 540,
 		"wires": [
 			[
@@ -2417,16 +2419,16 @@
 	{
 		"id": "ae1bae9f.d48fb",
 		"type": "inject",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
-		"topic": "",
-		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true,\"_msgid\":\"ab8020df.47334\",\"payload\":{\"type\":\"manifest\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"version\":\"1.0\",\"derivatives\":[{\"name\":\"robot\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"outputType\":\"svf\",\"children\":[{\"guid\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"type\":\"geometry\",\"role\":\"3d\",\"name\":\"Design\",\"viewableID\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"status\":\"success\",\"hasThumbnail\":\"true\",\"progress\":\"complete\",\"children\":[{\"guid\":\"b8909728-7fd4-48da-80c2-03916ca6f768\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/Design.svf\",\"role\":\"graphics\",\"mime\":\"application/autodesk-svf\"},{\"guid\":\"1dd41a90-0f51-4912-8d52-32ede72b0276\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/properties.db\",\"role\":\"Autodesk.CloudPlatform.PropertyDatabase\",\"mime\":\"application/autodesk-db\"},{\"guid\":\"818e4f81-d34b-4f61-b5c0-936b28184496\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_100x100.png\",\"resolution\":[100,100],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"7569c398-a648-4ade-b956-09b68aa0d178\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_200x200.png\",\"resolution\":[200,200],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"58128f7c-e7e7-4b6f-8093-60653ebcbd01\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_400x400.png\",\"resolution\":[400,400],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"fb4fd08b-4740-4c70-92f8-8b00f8055727\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"TOP\",\"camera\":[48.507450103759766,962.2550659179688,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,0,-1,1,45,303.2458801269531,1]},{\"guid\":\"1591e5e3-bd96-4a04-8dbe-4e8775763383\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"FRONT\",\"camera\":[48.507450103759766,52.43635940551758,1096.0977783203125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"8846abb0-a27f-44ec-b64f-0dc91e8ec590\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"RIGHT\",\"camera\":[806.6221923828125,52.43635940551758,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"19c4c817-bdf9-4c40-b1a2-d1fccfc4acfc\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"HOME\",\"camera\":[782.3663330078125,786.2952270507812,920.137939453125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,508.4323425292969,1]}]}]}]}}",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 110,
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true,\"_msgid\":\"ab8020df.47334\",\"payload\":{\"type\":\"manifest\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"version\":\"1.0\",\"derivatives\":[{\"name\":\"robot\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"outputType\":\"svf\",\"children\":[{\"guid\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"type\":\"geometry\",\"role\":\"3d\",\"name\":\"Design\",\"viewableID\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"status\":\"success\",\"hasThumbnail\":\"true\",\"progress\":\"complete\",\"children\":[{\"guid\":\"b8909728-7fd4-48da-80c2-03916ca6f768\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/Design.svf\",\"role\":\"graphics\",\"mime\":\"application/autodesk-svf\"},{\"guid\":\"1dd41a90-0f51-4912-8d52-32ede72b0276\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/properties.db\",\"role\":\"Autodesk.CloudPlatform.PropertyDatabase\",\"mime\":\"application/autodesk-db\"},{\"guid\":\"818e4f81-d34b-4f61-b5c0-936b28184496\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_100x100.png\",\"resolution\":[100,100],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"7569c398-a648-4ade-b956-09b68aa0d178\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_200x200.png\",\"resolution\":[200,200],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"58128f7c-e7e7-4b6f-8093-60653ebcbd01\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_400x400.png\",\"resolution\":[400,400],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"fb4fd08b-4740-4c70-92f8-8b00f8055727\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"TOP\",\"camera\":[48.507450103759766,962.2550659179688,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,0,-1,1,45,303.2458801269531,1]},{\"guid\":\"1591e5e3-bd96-4a04-8dbe-4e8775763383\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"FRONT\",\"camera\":[48.507450103759766,52.43635940551758,1096.0977783203125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"8846abb0-a27f-44ec-b64f-0dc91e8ec590\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"RIGHT\",\"camera\":[806.6221923828125,52.43635940551758,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"19c4c817-bdf9-4c40-b1a2-d1fccfc4acfc\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"HOME\",\"camera\":[782.3663330078125,786.2952270507812,920.137939453125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,508.4323425292969,1]}]}]}]}}",
+		"payloadType": "json",
+		"x": 130,
 		"y": 540,
 		"wires": [
 			[
@@ -2437,7 +2439,7 @@
 	{
 		"id": "bca34d3c.2425e",
 		"type": "switch",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"property": "payload.status",
 		"propertyType": "msg",
@@ -2454,7 +2456,7 @@
 		"checkall": "true",
 		"repair": false,
 		"outputs": 2,
-		"x": 270,
+		"x": 290,
 		"y": 540,
 		"wires": [
 			[],
@@ -2466,7 +2468,7 @@
 	{
 		"id": "2dc119d6.9edfb6",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -2474,14 +2476,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 540,
 		"wires": []
 	},
 	{
 		"id": "f7e330e5.20fa",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -2489,19 +2491,19 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 540,
 		"wires": []
 	},
 	{
 		"id": "df7e6936.0e3568",
 		"type": "function",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "return (msg.payload);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 110,
+		"x": 130,
 		"y": 580,
 		"wires": [
 			[
@@ -2512,7 +2514,7 @@
 	{
 		"id": "ab6fbbef.3f8998",
 		"type": "change",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"rules": [
 			{
@@ -2528,7 +2530,7 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 290,
+		"x": 310,
 		"y": 620,
 		"wires": [
 			[
@@ -2540,7 +2542,7 @@
 	{
 		"id": "ac71260c.caa968",
 		"type": "forge-model-derivative",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -2575,7 +2577,7 @@
 		"ifModifiedSince": "",
 		"acceptEncoding": "",
 		"region": "US",
-		"x": 510,
+		"x": 530,
 		"y": 620,
 		"wires": [
 			[
@@ -2589,7 +2591,7 @@
 	{
 		"id": "45cdc724.933058",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -2597,14 +2599,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 620,
 		"wires": []
 	},
 	{
 		"id": "d20b24c7.3fbb98",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -2612,14 +2614,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 620,
 		"wires": []
 	},
 	{
 		"id": "fb68df60.541b9",
 		"type": "forge-model-derivative",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -2654,7 +2656,7 @@
 		"ifModifiedSince": "",
 		"acceptEncoding": "",
 		"region": "US",
-		"x": 510,
+		"x": 530,
 		"y": 680,
 		"wires": [
 			[
@@ -2668,7 +2670,7 @@
 	{
 		"id": "53131108.9fb88",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -2676,14 +2678,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 680,
 		"wires": []
 	},
 	{
 		"id": "eb520f99.f35e5",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -2691,14 +2693,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 680,
 		"wires": []
 	},
 	{
 		"id": "e981a610.128438",
 		"type": "forge-model-derivative",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -2733,7 +2735,7 @@
 		"ifModifiedSince": "",
 		"acceptEncoding": "",
 		"region": "US",
-		"x": 530,
+		"x": 550,
 		"y": 740,
 		"wires": [
 			[
@@ -2747,7 +2749,7 @@
 	{
 		"id": "cea4aa2.42ea858",
 		"type": "change",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"rules": [
 			{
@@ -2763,7 +2765,7 @@
 		"from": "",
 		"to": "",
 		"reg": false,
-		"x": 300,
+		"x": 320,
 		"y": 740,
 		"wires": [
 			[
@@ -2774,16 +2776,16 @@
 	{
 		"id": "259173a5.2c931c",
 		"type": "inject",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
-		"topic": "",
-		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true,\"_msgid\":\"ab8020df.47334\",\"payload\":{\"type\":\"manifest\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"version\":\"1.0\",\"derivatives\":[{\"name\":\"robot\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"outputType\":\"svf\",\"children\":[{\"guid\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"type\":\"geometry\",\"role\":\"3d\",\"name\":\"Design\",\"viewableID\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"status\":\"success\",\"hasThumbnail\":\"true\",\"progress\":\"complete\",\"children\":[{\"guid\":\"b8909728-7fd4-48da-80c2-03916ca6f768\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/Design.svf\",\"role\":\"graphics\",\"mime\":\"application/autodesk-svf\"},{\"guid\":\"1dd41a90-0f51-4912-8d52-32ede72b0276\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/properties.db\",\"role\":\"Autodesk.CloudPlatform.PropertyDatabase\",\"mime\":\"application/autodesk-db\"},{\"guid\":\"818e4f81-d34b-4f61-b5c0-936b28184496\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_100x100.png\",\"resolution\":[100,100],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"7569c398-a648-4ade-b956-09b68aa0d178\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_200x200.png\",\"resolution\":[200,200],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"58128f7c-e7e7-4b6f-8093-60653ebcbd01\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_400x400.png\",\"resolution\":[400,400],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"fb4fd08b-4740-4c70-92f8-8b00f8055727\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"TOP\",\"camera\":[48.507450103759766,962.2550659179688,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,0,-1,1,45,303.2458801269531,1]},{\"guid\":\"1591e5e3-bd96-4a04-8dbe-4e8775763383\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"FRONT\",\"camera\":[48.507450103759766,52.43635940551758,1096.0977783203125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"8846abb0-a27f-44ec-b64f-0dc91e8ec590\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"RIGHT\",\"camera\":[806.6221923828125,52.43635940551758,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"19c4c817-bdf9-4c40-b1a2-d1fccfc4acfc\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"HOME\",\"camera\":[782.3663330078125,786.2952270507812,920.137939453125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,508.4323425292969,1]}]}]}]}}",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 110,
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true,\"_msgid\":\"ab8020df.47334\",\"payload\":{\"type\":\"manifest\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"version\":\"1.0\",\"derivatives\":[{\"name\":\"robot\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"outputType\":\"svf\",\"children\":[{\"guid\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"type\":\"geometry\",\"role\":\"3d\",\"name\":\"Design\",\"viewableID\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"status\":\"success\",\"hasThumbnail\":\"true\",\"progress\":\"complete\",\"children\":[{\"guid\":\"b8909728-7fd4-48da-80c2-03916ca6f768\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/Design.svf\",\"role\":\"graphics\",\"mime\":\"application/autodesk-svf\"},{\"guid\":\"1dd41a90-0f51-4912-8d52-32ede72b0276\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/properties.db\",\"role\":\"Autodesk.CloudPlatform.PropertyDatabase\",\"mime\":\"application/autodesk-db\"},{\"guid\":\"818e4f81-d34b-4f61-b5c0-936b28184496\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_100x100.png\",\"resolution\":[100,100],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"7569c398-a648-4ade-b956-09b68aa0d178\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_200x200.png\",\"resolution\":[200,200],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"58128f7c-e7e7-4b6f-8093-60653ebcbd01\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_400x400.png\",\"resolution\":[400,400],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"fb4fd08b-4740-4c70-92f8-8b00f8055727\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"TOP\",\"camera\":[48.507450103759766,962.2550659179688,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,0,-1,1,45,303.2458801269531,1]},{\"guid\":\"1591e5e3-bd96-4a04-8dbe-4e8775763383\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"FRONT\",\"camera\":[48.507450103759766,52.43635940551758,1096.0977783203125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"8846abb0-a27f-44ec-b64f-0dc91e8ec590\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"RIGHT\",\"camera\":[806.6221923828125,52.43635940551758,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"19c4c817-bdf9-4c40-b1a2-d1fccfc4acfc\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"HOME\",\"camera\":[782.3663330078125,786.2952270507812,920.137939453125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,508.4323425292969,1]}]}]}]}}",
+		"payloadType": "json",
+		"x": 130,
 		"y": 700,
 		"wires": [
 			[
@@ -2794,12 +2796,12 @@
 	{
 		"id": "80c52843.810518",
 		"type": "function",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "return (msg.payload);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 110,
+		"x": 130,
 		"y": 740,
 		"wires": [
 			[
@@ -2810,7 +2812,7 @@
 	{
 		"id": "8f650054.d2ad7",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -2818,14 +2820,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 740,
 		"wires": []
 	},
 	{
 		"id": "605e5ae0.9c8c14",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -2833,14 +2835,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 740,
 		"wires": []
 	},
 	{
 		"id": "38609625.961e9a",
 		"type": "forge-model-derivative",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -2875,7 +2877,7 @@
 		"ifModifiedSince": "",
 		"acceptEncoding": "",
 		"region": "US",
-		"x": 510,
+		"x": 530,
 		"y": 800,
 		"wires": [
 			[
@@ -2889,7 +2891,7 @@
 	{
 		"id": "c24fab0c.f12b98",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -2897,14 +2899,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 800,
 		"wires": []
 	},
 	{
 		"id": "dd7b4878.7a4008",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -2912,14 +2914,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 800,
 		"wires": []
 	},
 	{
 		"id": "c8f553af.ba899",
 		"type": "forge-model-derivative",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -2954,7 +2956,7 @@
 		"ifModifiedSince": "",
 		"acceptEncoding": "",
 		"region": "US",
-		"x": 500,
+		"x": 520,
 		"y": 860,
 		"wires": [
 			[
@@ -2968,7 +2970,7 @@
 	{
 		"id": "36bf38b9.089128",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -2976,14 +2978,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 860,
 		"wires": []
 	},
 	{
 		"id": "7e31598.8a628a8",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -2991,23 +2993,23 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 860,
 		"wires": []
 	},
 	{
 		"id": "d3b8fdc5.f5d78",
 		"type": "inject",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
-		"topic": "",
-		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true,\"_msgid\":\"ab8020df.47334\",\"payload\":{\"type\":\"manifest\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"version\":\"1.0\",\"derivatives\":[{\"name\":\"robot\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"outputType\":\"svf\",\"children\":[{\"guid\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"type\":\"geometry\",\"role\":\"3d\",\"name\":\"Design\",\"viewableID\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"status\":\"success\",\"hasThumbnail\":\"true\",\"progress\":\"complete\",\"children\":[{\"guid\":\"b8909728-7fd4-48da-80c2-03916ca6f768\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/Design.svf\",\"role\":\"graphics\",\"mime\":\"application/autodesk-svf\"},{\"guid\":\"1dd41a90-0f51-4912-8d52-32ede72b0276\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/properties.db\",\"role\":\"Autodesk.CloudPlatform.PropertyDatabase\",\"mime\":\"application/autodesk-db\"},{\"guid\":\"818e4f81-d34b-4f61-b5c0-936b28184496\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_100x100.png\",\"resolution\":[100,100],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"7569c398-a648-4ade-b956-09b68aa0d178\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_200x200.png\",\"resolution\":[200,200],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"58128f7c-e7e7-4b6f-8093-60653ebcbd01\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_400x400.png\",\"resolution\":[400,400],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"fb4fd08b-4740-4c70-92f8-8b00f8055727\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"TOP\",\"camera\":[48.507450103759766,962.2550659179688,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,0,-1,1,45,303.2458801269531,1]},{\"guid\":\"1591e5e3-bd96-4a04-8dbe-4e8775763383\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"FRONT\",\"camera\":[48.507450103759766,52.43635940551758,1096.0977783203125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"8846abb0-a27f-44ec-b64f-0dc91e8ec590\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"RIGHT\",\"camera\":[806.6221923828125,52.43635940551758,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"19c4c817-bdf9-4c40-b1a2-d1fccfc4acfc\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"HOME\",\"camera\":[782.3663330078125,786.2952270507812,920.137939453125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,508.4323425292969,1]}]}]}]}}",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 110,
+		"topic": "",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true,\"_msgid\":\"ab8020df.47334\",\"payload\":{\"type\":\"manifest\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"version\":\"1.0\",\"derivatives\":[{\"name\":\"robot\",\"hasThumbnail\":\"true\",\"status\":\"success\",\"progress\":\"complete\",\"outputType\":\"svf\",\"children\":[{\"guid\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"type\":\"geometry\",\"role\":\"3d\",\"name\":\"Design\",\"viewableID\":\"{\\\"type\\\":\\\"Design\\\",\\\"asset\\\":\\\"9f869d5e-cf0b-44f1-bf11-a9fe92a9a5dc\\\"}\",\"status\":\"success\",\"hasThumbnail\":\"true\",\"progress\":\"complete\",\"children\":[{\"guid\":\"b8909728-7fd4-48da-80c2-03916ca6f768\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/Design.svf\",\"role\":\"graphics\",\"mime\":\"application/autodesk-svf\"},{\"guid\":\"1dd41a90-0f51-4912-8d52-32ede72b0276\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/properties.db\",\"role\":\"Autodesk.CloudPlatform.PropertyDatabase\",\"mime\":\"application/autodesk-db\"},{\"guid\":\"818e4f81-d34b-4f61-b5c0-936b28184496\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_100x100.png\",\"resolution\":[100,100],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"7569c398-a648-4ade-b956-09b68aa0d178\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_200x200.png\",\"resolution\":[200,200],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"58128f7c-e7e7-4b6f-8093-60653ebcbd01\",\"type\":\"resource\",\"urn\":\"urn:adsk.viewing:fs.file:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA/output/0/1/thumbnails/01_thumb_400x400.png\",\"resolution\":[400,400],\"mime\":\"image/png\",\"role\":\"thumbnail\"},{\"guid\":\"fb4fd08b-4740-4c70-92f8-8b00f8055727\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"TOP\",\"camera\":[48.507450103759766,962.2550659179688,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,0,-1,1,45,303.2458801269531,1]},{\"guid\":\"1591e5e3-bd96-4a04-8dbe-4e8775763383\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"FRONT\",\"camera\":[48.507450103759766,52.43635940551758,1096.0977783203125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"8846abb0-a27f-44ec-b64f-0dc91e8ec590\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"RIGHT\",\"camera\":[806.6221923828125,52.43635940551758,186.27906799316406,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,289.1131896972656,1]},{\"guid\":\"19c4c817-bdf9-4c40-b1a2-d1fccfc4acfc\",\"type\":\"view\",\"role\":\"3d\",\"name\":\"HOME\",\"camera\":[782.3663330078125,786.2952270507812,920.137939453125,48.507450103759766,52.43635940551758,186.27906799316406,0,1,0,1,45,508.4323425292969,1]}]}]}]}}",
+		"payloadType": "json",
+		"x": 130,
 		"y": 860,
 		"wires": [
 			[
@@ -3018,16 +3020,16 @@
 	{
 		"id": "971dab18.3eace8",
 		"type": "inject",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "robot.f3d",
-		"topic": "config",
-		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true}",
-		"payloadType": "json",
 		"repeat": "",
 		"crontab": "",
 		"once": false,
 		"onceDelay": 0.1,
-		"x": 120,
+		"topic": "config",
+		"payload": "{\"bucket\":\"cyrille-tests-buckets\",\"key\":\"robot.f3d\",\"region\":\"US\",\"urn\":\"dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6Y3lyaWxsZS10ZXN0cy1idWNrZXRzL3JvYm90LmYzZA\",\"xAdsForce\":true}",
+		"payloadType": "json",
+		"x": 140,
 		"y": 920,
 		"wires": [
 			[
@@ -3038,12 +3040,12 @@
 	{
 		"id": "eb98a2d3.6f422",
 		"type": "function",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"func": "return (msg.payload);",
 		"outputs": 1,
 		"noerr": 0,
-		"x": 270,
+		"x": 290,
 		"y": 920,
 		"wires": [
 			[
@@ -3054,7 +3056,7 @@
 	{
 		"id": "55a44f4.b98c4b",
 		"type": "forge-model-derivative",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "",
 		"topic": "",
 		"forge": "",
@@ -3089,7 +3091,7 @@
 		"ifModifiedSince": "",
 		"acceptEncoding": "",
 		"region": "US",
-		"x": 510,
+		"x": 530,
 		"y": 920,
 		"wires": [
 			[
@@ -3103,7 +3105,7 @@
 	{
 		"id": "bfbd7cb.669138",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Results",
 		"active": true,
 		"tosidebar": true,
@@ -3111,14 +3113,14 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 800,
+		"x": 820,
 		"y": 920,
 		"wires": []
 	},
 	{
 		"id": "da0dc1a9.7e9dc",
 		"type": "debug",
-		"z": "6cd32787.4d1938",
+		"z": "edf2853a7bab3bb6",
 		"name": "Error",
 		"active": true,
 		"tosidebar": true,
@@ -3126,7 +3128,7 @@
 		"tostatus": false,
 		"complete": "true",
 		"targetType": "full",
-		"x": 950,
+		"x": 970,
 		"y": 920,
 		"wires": []
 	}

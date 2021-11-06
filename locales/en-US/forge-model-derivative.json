@@ -38,7 +38,17 @@
             "references": "References",
             "workflow": "Webhook",
             "workflowAttribute": "Webhook object",
-            "raw": "Raw Response"
+            "raw": "Raw Response",
+            "conversionMethod": "IFC Conversion Method",
+            "buildingStoreys": "Storeys",
+            "spaces": "Spaces",
+            "openingElements": "Opening Elements",
+            "generateMasterViews": "Create Revit Master View",
+            "materialMode": "SVF2 Materials",
+            "hiddenObjects": "Navisworks - Extract hidden objects",
+            "basicMaterialProperties": "Extract basic materials",
+            "autodeskMaterialProperties": "Extract Autodesk materials",
+            "timelinerProperties": "Extract timeliner"
         },
 		"placeholder": {
 			"name": "Name",
